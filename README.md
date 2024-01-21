@@ -1,1 +1,1 @@
-# Auto-Drop Full staack
+# Auto-Drop Full stack
