@@ -45,7 +45,7 @@ export default function LocaleLayout({
   children,
   params: { locale },
 }: {
-  children: any;
+  children: React.ReactNode;
   params: { locale: string };
 }) {
   return (
