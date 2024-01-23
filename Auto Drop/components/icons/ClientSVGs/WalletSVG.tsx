@@ -11,6 +11,7 @@ function Icon() {
     >
       <path
         stroke="#253439"
+        className="icon-path"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeOpacity="0.5"
@@ -20,6 +21,7 @@ function Icon() {
       <path
         stroke="#253439"
         strokeLinecap="round"
+        className="icon-path"
         strokeLinejoin="round"
         strokeOpacity="0.5"
         strokeWidth="1.5"
