@@ -24,6 +24,7 @@ export default function DashboardLayout({
             lang={t("lang")}
             planTitle={t("planTitle")}
             planValue={t("planValue")}
+            locale={locale}
           />
         </div>
 
