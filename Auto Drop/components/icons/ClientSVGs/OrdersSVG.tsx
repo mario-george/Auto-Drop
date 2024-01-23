@@ -15,7 +15,8 @@ function Icon() {
         strokeLinejoin="round"
         strokeMiterlimit="10"
         strokeOpacity="0.5"
-        strokeWidth="1.5"
+          className="icon-path"
+          strokeWidth="1.5"
         d="M12 5L7.6 2 2 6l4.4 3L12 5zm0 0l4.4-3L22 6l-4.4 3L12 5zm0 9l-4.4 3L2 13l4.4-3 5.6 4zm0 0l4.4 3 5.6-4-4.4-3-5.6 4z"
       ></path>
       <path
@@ -25,7 +26,8 @@ function Icon() {
         strokeMiterlimit="10"
         strokeOpacity="0.5"
         strokeWidth="1.5"
-        d="M19 15.5v3.3l-6.6 3c-.3.1-.6.1-.8 0l-6.6-3v-3.3"
+          className="icon-path"
+          d="M19 15.5v3.3l-6.6 3c-.3.1-.6.1-.8 0l-6.6-3v-3.3"
       ></path>
     </svg>
   );
