@@ -29,14 +29,13 @@ interface IconDataItem {
 }
 
 const iconData: IconDataItem[] = [
-  { icon: NavBarSVG, text: "Main Page" },
+  { icon: HomePageSVG, text: "Main Page" },
   { icon: ProductsSVG, text: "Products" },
   { icon: OwnedProductsSVG, text: "My Products" },
   { icon: CartSVG, text: "Cart" },
   { icon: OrdersSVG, text: "Orders" },
   { icon: PlansSVG, text: "Plans" },
   { icon: LinkingSVG, text: "Linking" },
-  { icon: CartSVG, text: "Cart" },
   { icon: SettingsSVG, text: "Settings" },
   { icon: WalletSVG, text: "Wallet" },
   { icon: ContactSVG, text: "Contact" },
