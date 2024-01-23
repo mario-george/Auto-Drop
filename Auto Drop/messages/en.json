@@ -210,5 +210,24 @@
     "autoDrop": "Auto Drop ",
     "contactUs": "Contact Us ",
     "aboutUs": "About Us "
+  },
+  "clientSideNav": {
+    "homepage": "Home page",
+    "products": "Products",
+    "orders": "Orders",
+    "myProducts": "My Products",
+    "linking": "Linking",
+    "settings": "Settings",
+    "wallet": "Wallet",
+    "contact": "Contact",
+    "plans": "Plans",
+    "cart": "Cart",
+    "logout": "Logout",
+    "whatsapp": "Contact in Whatsapp"
+  },
+  "ClientTopBar": {
+    "lang": "Arabic",
+    "planTitle": "Current Plan",
+    "planValue": "Plan Value"
   }
 }
