@@ -1,16 +1,16 @@
 .icon-path {
-    stroke: #253439;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 1.5;
-    transition: stroke-opacity 0.3s ease; /* Add transition for smooth hover effect */
-  }
-  
-  .icon:hover .icon-path {
-    stroke-opacity: 1;
-  }
-  
-  .icon-path:hover .icon-path {
-    stroke-opacity: 1;
-  }
-  
+
+  @apply transition-all duration-200
+}
+
+.icon:hover .icon-path {
+  stroke-opacity: 1;
+   fill-opacity: 1;
+
+}
+
+.icon-path:hover .icon-path {
+  stroke-opacity: 1;
+  fill-opacity: 1;
+
+}
