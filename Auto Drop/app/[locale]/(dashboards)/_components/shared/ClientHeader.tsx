@@ -1,6 +1,5 @@
 "use client";
 
-import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Link, usePathname } from "@/navigation";
@@ -9,13 +8,14 @@ import { cn } from "@/lib/utils";
 export default function WebsiteHeader({
   lang,
   planTitle,
-  planValue,
+  planValue,locale
 }: {
   lang: string;
   planTitle: string;
   planValue: string;
+  locale: string;
+  
 }) {
-  const locale = useLocale();
   const pathname = usePathname();
   const [scrolling, setScrolling] = useState(false);
 
@@ -30,7 +30,7 @@ export default function WebsiteHeader({
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
+let splittedButtonsClasses=locale === "ar"? "rotate-45 right-0 left-[10%]": "-rotate-45 right-[20%] bottom-0 top-0 left-0"
   return (
     <main
       className={cn(
@@ -60,7 +60,7 @@ export default function WebsiteHeader({
           <button className="bg-[#B29E84] text-white py-[6px] px-11  ">
             <span className=" relative z-30 text-white mr-4">{planValue}</span>{" "}
           </button>
-          <div className="absolute left-[10%] bottom-0 top-0 right-0 bg-white transform rotate-45"></div>
+          <div className={`absolute  bottom-0 top-0  bg-white transform ${splittedButtonsClasses}`}/>
         </div>
 
       </nav>
