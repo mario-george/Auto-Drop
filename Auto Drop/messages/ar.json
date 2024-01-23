@@ -210,5 +210,23 @@
     "autoDrop": "أوتــو دروب",
     "contactUs": "تواصل معنا",
     "aboutUs": "من نحن"
+  },
+  "clientSideNav": {
+    "homepage": "الصفحة الرئيسية",
+    "products": " المنتجات",
+    "orders": "الطلبات",
+    "myProducts": "منتجاتي",
+    "linking": "ربط الحساب",
+    "settings": "الإعدادت",
+    "wallet": "المحفظة",
+    "contact": "تواصل معنا",
+    "plans": "الخطط",
+    "cart": "السلة ",
+    "logout":"تسجيل خروج","whatsapp":"تواصل واتس اب"
+  },
+  "ClientTopBar": {
+    "lang": "الانجليزية",
+    "planTitle": "الباقة الحالية",
+    "planValue": "تفاصيل"
   }
 }
