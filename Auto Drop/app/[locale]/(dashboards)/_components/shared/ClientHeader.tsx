@@ -9,16 +9,16 @@ import { cn } from "@/lib/utils";
 
 export default function WebsiteHeader({
   lang,
-
+  planTitle,
+  planValue,
 }: {
   lang: string;
-
+  planTitle: string;
+  planValue: string;
 }) {
   const locale = useLocale();
   const pathname = usePathname();
   const [scrolling, setScrolling] = useState(false);
-
- 
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,7 +35,7 @@ export default function WebsiteHeader({
   return (
     <main
       className={cn(
-        "pt-2 left-4 text-xs lg:text-base  sticky top-0 z-[100000] max-w-[80%]",
+        "pt-2 left-4 text-xs lg:text-base   top-0 z-[100000]  max-w-[100%] flex-1",
         scrolling ? "opacity-90 transition-opacity duration-300" : ""
       )}
       dir={locale === "ar" ? "rtl" : "ltr"}
@@ -53,37 +53,16 @@ export default function WebsiteHeader({
             {lang}
           </Link>
         </div>
-        <div className="flex items-center  ">
-        <div className="flex border-4 rounded-md border-[#B29E84] relative overflow-hidden">
-  <button className="bg-white text-black py-[6px] px-4   ">
-    <span className="relative z-30">
 
-    Part 1
-    </span>
-  </button>
-  <button className="bg-[#B29E84] text-white py-[6px] px-9  ">
-  <span className=" relative z-30 text-white mr-4">
-
-Part 2
-</span>  </button><div className="absolute left-[30%] bottom-0 top-0 right-0 bg-white transform rotate-45"></div>
-</div>
-
-
-       
+        <div className="flex items-center border-4 rounded-md border-[#B29E84] relative overflow-hidden">
+          <button className="bg-white text-black py-[6px] px-4   ">
+            <span className="relative z-30">{planTitle}</span>
+          </button>
+          <button className="bg-[#B29E84] text-white py-[6px] px-11  ">
+            <span className=" relative z-30 text-white mr-4">{planValue}</span>{" "}
+          </button>
+          <div className="absolute left-[10%] bottom-0 top-0 right-0 bg-white transform rotate-45"></div>
         </div>
-       
-        <Link
-          href={"/home"}
-          className="w-9 h-9 lg:w-12 lg:h-12 order-2 md:order-3"
-        >
-          <Image
-            src={"/logo.svg"}
-            alt="logo"
-            width={60}
-            height={60}
-            className="w-full"
-          />
-        </Link>
       </nav>
     </main>
   );
