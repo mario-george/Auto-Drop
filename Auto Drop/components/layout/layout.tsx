@@ -10,9 +10,9 @@ import SettingsSVG from "../icons/ClientSVGs/SettingsSVG";
 import PlansSVG from "../icons/ClientSVGs/PlansSVG";
 import LinkingSVG from "../icons/ClientSVGs/LinkingSVG";
 import OrdersSVG from "../icons/ClientSVGs/OrdersSVG";
-import "@/components/icons/ClientSVGs/test.css";
+import "@/components/icons/ClientSVGs/strokeOpacityActive.css";
 import Image from "next/image";
-
+import iconData from '@/app/[locale]/(dashboards)/_components/constants/itemData'
 const SideNav = () => {
   return (
     <motion.div
@@ -36,7 +36,22 @@ const SideNav = () => {
       </div>
       <nav className="flex-grow">
         <ul className="flex flex-col mx-2 space-y-2">
-           <motion.li className="icon-path flex items-center py-2 px-4 hover:bg-[#F0F3F400] text-[#253439] hover:text-black hover:bg-[#f0f3f4] rounded-lg hover:shadow-md">
+
+        {iconData.map(link=>{
+          return  (<motion.li className="group icon-path flex items-center py-2 px-4 hover:bg-[#F0F3F400] text-[#253439] hover:text-black hover:bg-[#f0f3f4] rounded-lg hover:shadow-md">
+          <a href="#" className="flex items-center">
+            <link.icon />
+            <motion.span
+              className="ml-3 whitespace-nowrap"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              {link.text}
+            </motion.span>
+          </a>
+        </motion.li>)
+        })}
+           {/* <motion.li className="icon-path flex items-center py-2 px-4 hover:bg-[#F0F3F400] text-[#253439] hover:text-black hover:bg-[#f0f3f4] rounded-lg hover:shadow-md">
             <a href="#" className="group flex items-center  ">
               <HomePageSVG />
               <motion.span
@@ -171,7 +186,7 @@ const SideNav = () => {
                 Contact
               </motion.span>
             </a>
-          </motion.li>
+          </motion.li> */}
         </ul>
       </nav>
     </motion.div>
