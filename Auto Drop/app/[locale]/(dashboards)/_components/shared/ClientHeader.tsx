@@ -4,7 +4,6 @@ import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Link, usePathname } from "@/navigation";
-import DropMenu from "./ClientDropMenu";
 import { cn } from "@/lib/utils";
 
 export default function WebsiteHeader({
@@ -63,6 +62,7 @@ export default function WebsiteHeader({
           </button>
           <div className="absolute left-[10%] bottom-0 top-0 right-0 bg-white transform rotate-45"></div>
         </div>
+
       </nav>
     </main>
   );
