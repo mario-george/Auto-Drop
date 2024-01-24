@@ -4,8 +4,5 @@ export default function SettingsPage() {
   const t = useTranslations("settings");
   const locale = useLocale();
 
-  return (<>
-  
-  </>
-  );
+  return <></>;
 }
