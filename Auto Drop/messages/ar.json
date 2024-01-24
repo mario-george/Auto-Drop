@@ -228,5 +228,17 @@
     "lang": "الانجليزية",
     "planTitle": "الباقة الحالية",
     "planValue": "تفاصيل"
+  },
+  "clientPlans": {
+    "remainingProducts": "عدد المنتجات المتبقية ",
+    "remainingOrders": "عدد الطلبات المتبقية",
+    "subscriptionDate": "تاريخ الاشتراك",
+    "subscriptionExpirationDate": "تاريخ انتهاء الاشتراك",
+    "plansTitle":"باقاتي",
+    "productsNumber":"عدد المنتجات",
+    "ordersNumber":"عدد الطلبات",
+    "tryForFree":"جرب مجانا"
+
+    
   }
 }
