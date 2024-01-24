@@ -8,13 +8,13 @@ import { cn } from "@/lib/utils";
 export default function WebsiteHeader({
   lang,
   planTitle,
-  planValue,locale
+  planValue,
+  locale,
 }: {
   lang: string;
   planTitle: string;
   planValue: string;
   locale: string;
-  
 }) {
   const pathname = usePathname();
   const [scrolling, setScrolling] = useState(false);
@@ -30,7 +30,10 @@ export default function WebsiteHeader({
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-let splittedButtonsClasses=locale === "ar"? "rotate-45 right-0 left-[10%]": "-rotate-45 right-[20%] bottom-0 top-0 left-0"
+  let splittedButtonsClasses =
+    locale === "ar"
+      ? "rotate-45 right-0 left-[10%]"
+      : "-rotate-45 right-[20%] bottom-0 top-0 left-0";
   return (
     <main
       className={cn(
@@ -41,7 +44,7 @@ let splittedButtonsClasses=locale === "ar"? "rotate-45 right-0 left-[10%]": "-ro
     >
       <nav
         className="bg-[#F8F6F4] rounded-md shadow flex flex-row-reverse 
-      justify-between items-center lg:px-14 px-8 py-2 min-h-[50px]"
+      justify-between items-center lg:px-14 px-1 py-2 min-h-[50px]"
       >
         <div>
           <Link
@@ -60,9 +63,10 @@ let splittedButtonsClasses=locale === "ar"? "rotate-45 right-0 left-[10%]": "-ro
           <button className="bg-[#B29E84] text-white py-[6px] px-11  ">
             <span className=" relative z-30 text-white mr-4">{planValue}</span>{" "}
           </button>
-          <div className={`absolute  bottom-0 top-0  bg-white transform ${splittedButtonsClasses}`}/>
+          <div
+            className={`absolute  bottom-0 top-0  bg-white transform ${splittedButtonsClasses}`}
+          />
         </div>
-
       </nav>
     </main>
   );
