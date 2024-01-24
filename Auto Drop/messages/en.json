@@ -229,5 +229,16 @@
     "lang": "Arabic",
     "planTitle": "Current Plan",
     "planValue": "Plan Value"
+  },
+  "clientPlans": {
+    "remainingProducts": "Remaining Products",
+    "remainingOrders": "Remaining Orders",
+    "subscriptionDate": "Subscription Date",
+    "subscriptionExpirationDate": "Subscription Expiry Date",
+    "plansTitle":"Plans",
+    "productsNumber":"Products Number",
+    "ordersNumber":"Orders Number",
+    "tryForFree":"Try for free"
+    
   }
 }
