@@ -19,12 +19,11 @@ const Progress = React.forwardRef<
       clearInterval(interval);
     };
   }, [value]);
-
   return (
     <ProgressPrimitive.Root
       ref={ref}
       className={cn(
-        "relative h-4 w-full overflow-hidden rounded-md p-[5px] bg-[#eaecec] !px-6",
+        "relative h-6 w-full overflow-hidden rounded-md p-1 bg-[#eaecec]  border-2 border-[#bbc0c2]  ",
         className
       )}
       dir={dir}
@@ -34,10 +33,10 @@ const Progress = React.forwardRef<
         className="h-full w-full flex-1 transition-all overflow-hidden  "
         style={{ transform: dir === "rtl" ? `translateX(${100 - progress}%)` : `translateX(-${100 - progress}%)` }}
       >
-        <div className="h-full w-full bg-[#253439] rounded-md  "></div>
+        <div className="h-full w-full bg-[#b29e84] rounded-md  "></div>
       </ProgressPrimitive.Indicator>
-      <div className="absolute left-0 right-[90%] top-0 bottom-0   bg-[#eaecec] z-[100] rounded-r-lg  "></div>
-      <div className="absolute left-[1%] right-[90%] top-[30%] bottom-0  bg-[#253439] z-[101] h-[6px] rounded-l-lg  "></div>
+      <div className={`absolute  top-0 bottom-0   bg-[#eaecec] z-[100] rounded-r-lg ${ dir=="rtl"?`left-[90%] right-0 ` :`left-0 right-[90%]`}`}  ></div>
+      <div className={`absolute top-[20%] bottom-[10%]  bg-[#b29e84] z-[101] h-3 p-1 ${ dir=="rtl"?`rounded-r-lg  left-[90%] right-[1%] ` :`rounded-l-lg  left-[1%] right-[90%]`} `}></div>
 
     </ProgressPrimitive.Root>
   );
