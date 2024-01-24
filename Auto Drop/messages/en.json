@@ -240,5 +240,7 @@
     "ordersNumber":"Orders Number",
     "tryForFree":"Try for free"
     
+  },"clientSettings":{
+    "settings":""
   }
 }
