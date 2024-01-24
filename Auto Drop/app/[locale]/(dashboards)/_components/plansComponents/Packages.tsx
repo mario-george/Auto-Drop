@@ -24,7 +24,7 @@ export default function Annually({
   subscriptionExpirationDate,
 
   subscribtion,
-
+  free,
   monthly,
 
   SAR,
@@ -41,7 +41,7 @@ export default function Annually({
   PackagePlus: string;
   BasicPackage: string;
   tryForFree: string;
-
+free:string
   subscribtion: string;
   monthly: string;
   SAR: string;
@@ -283,7 +283,7 @@ export default function Annually({
               </div>
               <div className="flex flex-wrap justify-center px-8 mb-10 ">
                 <div className=" text-center text-gray-800 text-base font-bold mt-4">
-                  {tryForFree}
+                  {free}
                 </div>
               </div>
 
@@ -296,7 +296,7 @@ export default function Annually({
             </div>
             <div className="mb-5 lg:mb-0 cursor-pointer w-[100%] md:mt-2 mt-2 ">
               <p className="mx-auto w-[80%] pt-2 md:pt-3 md:w-[90%] h-[38px] md:h-[52px] bg-[#b29e84] rounded-xl shadow text-center text-white text-sm md:text-base font-bold">
-                {subscribtion}
+                {tryForFree}
               </p>
             </div>
           </div>
