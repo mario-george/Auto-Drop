@@ -17,6 +17,7 @@ export default function PlansPage() {
     BasicPackage={t("Basic Package")}
     subscribtion={t("subscribtion")}
     SAR={t("SAR")}
+    free={t("free")}
     remainingProducts={t2("remainingProducts")}
     remainingOrders={t2("remainingOrders")}
     subscriptionDate={t2("subscriptionDate")}
@@ -25,7 +26,6 @@ export default function PlansPage() {
     productsNumber={t2("productsNumber")}
     ordersNumber={t2("ordersNumber")}
     tryForFree={t2("tryForFree")}
-
     
   />
   </>
