@@ -21,7 +21,7 @@ const path = usePathname()
       whileHover={{ width: 250 }}
       onHoverEnd={() => {}}
       transition={{ duration: 0.1 }}
-      className="group transition-all duration-300 flex flex-col h-screen text-[#25343980] text-black bg-white border overflow-hidden"
+      className="group transition-all duration-300 flex flex-col h-screen text-[#25343980] text-black bg-white border overflow-hidden rounded-md"
     >
       <div className="flex items-center justify-center h-16">
         <h1 className="flex space-x-2 mr-[4rem] ">
