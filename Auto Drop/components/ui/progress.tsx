@@ -12,7 +12,7 @@ const Progress = React.forwardRef<
     // Animate progress from 0 to the actual value
     const interval = setInterval(() => {
       setProgress((prevProgress) =>
-        prevProgress < value ? prevProgress + 1 : value || 0
+        value && prevProgress < value ? prevProgress + 1 : value || 0
       );
     }, 20);
 
