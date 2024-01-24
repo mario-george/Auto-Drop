@@ -90,7 +90,7 @@ export default function Annually({
             remainingOrders={remainingOrders}
             locale={locale}
           >
-            <div className="relative flex flex-col flex-wrap bg-white rounded-xl shadow-lg m-auto max-[350px]:w-[100%] max-[426px]:w-[47%] w-[48%] lg:w-[20.5%] py-2 md:py-7 md:pt-11">
+            <div >
               <Image
                 src="/client/planStar.svg"
                 alt="star"
@@ -145,7 +145,14 @@ export default function Annually({
               </div>
             </div>
           </HoverCardWrapper>
-          <div className="relative flex flex-col flex-wrap bg-white rounded-xl shadow-lg m-auto max-[350px]:w-[100%] max-[426px]:w-[47%] w-[48%] lg:w-[20.5%] py-2 md:py-7 md:pt-11">
+      
+          <HoverCardWrapper
+            title={PackagePro}
+            remainingProducts={remainingProducts}
+            remainingOrders={remainingOrders}
+            locale={locale}
+          >
+              <div >
             <Image
               src="/client/planStar.svg"
               alt="star"
@@ -199,8 +206,15 @@ export default function Annually({
               </p>
             </div>
           </div>
+            </HoverCardWrapper>
 
-          <div className="relative flex flex-col flex-wrap bg-white rounded-xl shadow-lg m-auto max-[350px]:w-[100%] max-[426px]:w-[47%] w-[48%] lg:w-[20.5%] py-2 md:py-7 md:pt-11">
+            <HoverCardWrapper
+            title={PackagePro}
+            remainingProducts={remainingProducts}
+            remainingOrders={remainingOrders}
+            locale={locale}
+          >
+               <div >
             <div className={`max-[350px]:h-48  h-60`}>
               <div className="text-center text-gray-800 pt-1 md:pt-0 text-base md:text-lg font-bold mb-5 px-[.62rem] md:px-8">
                 {" "}
@@ -248,8 +262,20 @@ export default function Annually({
               </p>
             </div>
           </div>
+            </HoverCardWrapper>
+        
 
-          <div className="relative flex flex-col flex-wrap bg-white rounded-xl shadow-lg m-auto max-[350px]:w-[100%] max-[426px]:w-[47%] w-[48%] lg:w-[20.5%] py-2 md:py-7 md:pt-11">
+       
+
+            <HoverCardWrapper
+            title={PackagePro}
+            remainingProducts={remainingProducts}
+            remainingOrders={remainingOrders}
+            locale={locale}
+          >
+
+
+          <div >
             <div className={`max-[350px]:h-48  h-60`}>
               <div className="text-center text-gray-800 pt-1 md:pt-0 text-base md:text-lg font-bold mb-5 px-[.62rem] md:px-8">
                 {" "}
@@ -274,6 +300,7 @@ export default function Annually({
               </p>
             </div>
           </div>
+          </HoverCardWrapper>
         </div>
       </div>
     </motion.div>
