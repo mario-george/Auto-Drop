@@ -20,15 +20,19 @@ export default function DashboardLayout({
           dir={locale === "ar" ? "rtl" : "ltr"}
         >
           <SideNav locale={locale} />
+          <div className="flex flex-col flex-1">
+
+
           <ClientHeader
             lang={t("lang")}
             planTitle={t("planTitle")}
             planValue={t("planValue")}
             locale={locale}
           />
+        {children}
+          </div>
         </div>
 
-        {children}
       </div>
     </DashboardProtectWrapper>
   );
