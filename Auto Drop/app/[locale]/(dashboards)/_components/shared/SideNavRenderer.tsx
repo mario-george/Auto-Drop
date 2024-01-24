@@ -2,16 +2,18 @@
 import { iconData } from "@/app/[locale]/(dashboards)/_components/constants/itemData";
 import { motion } from "framer-motion";
 import NavBarSVG from "@/components/icons/ClientSVGs/NavBarSVG";
-import { Link } from "@/navigation";
+import { Link, usePathname } from '@/navigation';
 import "@/components/icons/ClientSVGs/strokeOpacityActive.css";
 import Image from "next/image";
 import LogoutHandler from './LogoutHandler'
+
 export default function SideNavRenderer({ iconInfo, logoutMsg, whatsappMsg ,locale}:{iconInfo:string[], logoutMsg:string, whatsappMsg:string,locale:string}) {
  console.log(locale)
  let marginDirection =locale==="ar"? 'mr-3':  'ml-3'
  let marginDirection2 =locale==="ar"? 'mr-4':  'ml-3'
  let marginDirection3 =locale==="ar"? 'mr-2':  'ml-1'
 let whatsappTranslate = locale==="ar"?"translate-x-[5px]":"-translate-x-1"
+const path = usePathname()
  return (
     <motion.div
       initial={{ x: -250, width: 63 }}
@@ -35,9 +37,10 @@ let whatsappTranslate = locale==="ar"?"translate-x-[5px]":"-translate-x-1"
       <nav className="flex flex-col justify-between ">
         <ul className="flex flex-col mx-2 space-y-2">
           {iconData.map((link, index) => {
+            let isActive= link.route == path
             return (
               <motion.li
-                className="group icon-path flex items-center py-2 px-4 hover:bg-[#F0F3F400] text-[#253439] hover:text-black hover:bg-[#f0f3f4] rounded-lg hover:shadow-md"
+                className={`group icon-path flex items-center py-2 px-4 hover:bg-[#F0F3F400] text-opacity-50  ${isActive ? "bg-[#F0F3F4] !icon-path-active shadow-md !text-opacity-100 icon ":""} text-[#253439] hover:text-opacity-100 hover:bg-[#f0f3f4] rounded-lg hover:shadow-md`}
                 key={index}
               >
                 <Link href={link.route} className="flex items-center">
