@@ -6,11 +6,11 @@ let aliexpressData = {
   appSecret: "2c5bcc0958a9d9abd339232f1b31712e",
 };
 export const aliexpressAuth = (req: Request, res: Response) => {
-  const url = `https://oauth.aliexpress.com/authorize?client_id=${
+  const url = `https://api-sg.aliexpress.com/oauth/authorize?client_id=${
     aliexpressData.appKey
   }&sp=ae&redirect_uri=${
     aliexpressData.callbackUrl
-  }&state=1212&view=web&response_type=code`;
+  }&state=1212&&response_type=code`;
   res.redirect(url);
 };
 
