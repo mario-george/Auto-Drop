@@ -8,7 +8,7 @@ let aliexpressData = {
 export const aliexpressAuth = (req: Request, res: Response) => {
   const url = `https://api-sg.aliexpress.com/oauth/authorize?client_id=${
     aliexpressData.appKey
-  }&sp=ae&redirect_uri=${
+  }&redirect_uri=${
     aliexpressData.callbackUrl
   }&state=1212&&response_type=code`;
   res.redirect(url);
