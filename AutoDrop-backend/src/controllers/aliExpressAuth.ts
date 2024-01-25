@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Request, Response } from "express";
 let aliexpressData = {
-  callbackUrl: "http://localhost:10000/api/v1/auth/auth-aliexpress/callback",
+  callbackUrl: "https://auto-drop-rtxb.onrender.com/api/v1/auth/auth-aliexpress/callback",
   appKey: "34271827",
   appSecret: "2c5bcc0958a9d9abd339232f1b31712e",
 };
