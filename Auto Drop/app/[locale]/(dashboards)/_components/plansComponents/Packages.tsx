@@ -57,13 +57,17 @@ export default function Annually({
   return (
     <motion.div initial="hidden" animate="visible" variants={variants}>
       <div
-        className="pb-14 flex flex-col container "
+        className=" flex flex-col container "
         dir={`${locale == "ar" ? "ltr" : "rtl"}`}
       >
         <span
-        dir={`${locale == "ar" ? "rtl" : "ltr"}`} className="text-3xl  font-semibold font-poppins">{plansTitle}</span>
+          dir={`${locale == "ar" ? "rtl" : "ltr"}`}
+          className="text-md py-2 lap:text-3xl  mb-5 mt-3"
+        >
+          {plansTitle}
+        </span>
 
-        <div className="flex flex-row  mt-16 flex-wrap gap-y-4 max-[662px]:gap-x-0 max-[426px]:gap-4 md:gap-x-0 mx-auto w-full px-0">
+        <div className="flex flex-row mt-2 flex-wrap gap-y-4 max-[662px]:gap-x-0 max-[426px]:gap-4 !tab:gap-x-0 tab:px- md:gap-x-0 mx-auto w-full px-0">
           <HoverCardWrapper
             title={PackagePro}
             remainingProducts={remainingProducts}
@@ -85,7 +89,7 @@ export default function Annually({
                   {PackagePro}{" "}
                 </div>
                 <div
-                  className="flex flex-wrap justify-center px-0 md:px-8"
+                  className="flex flex-wrap justify-center px-0 md:px-8  mm:pt-3 "
                   dir="ltr"
                 >
                   <div className="text-gray-800 text-sm md:text-base font-bold ">
@@ -103,7 +107,7 @@ export default function Annually({
                     349.00
                   </div>
                 </div>
-                <div className="h-[70%] lg:h-[75%]">
+                <div className="h-[70%] lg:h-[75%] !mb-0 ">
                   <div className="text-center text-gray-800 text-sm md:text-base mt-5 font-bold px-8">
                     {monthly}
                   </div>
@@ -120,17 +124,18 @@ export default function Annually({
                   </div>
                 </div>
               </div>
-              <div className="mb-5 lg:mb-0 cursor-pointer w-[100%] mt-2 ">
-                <p className="mx-auto w-[80%] pt-2 md:pt-3 md:w-[90%] h-[38px] md:h-[52px] bg-[#b29e84] rounded-xl shadow text-center text-white text-sm md:text-base font-bold">
+              <div className="mb-5 lg:mb-0  cursor-pointer w-[100%] mt-2 ">
+                <p className="package ">
                   {subscribtion}
                 </p>
               </div>
+    
             </div>
           </HoverCardWrapper>
 
           <HoverCardWrapper
-                  subscriptionDate={subscriptionDate}
-                  subscriptionExpirationDate={subscriptionExpirationDate}
+            subscriptionDate={subscriptionDate}
+            subscriptionExpirationDate={subscriptionExpirationDate}
             title={PackagePro}
             remainingProducts={remainingProducts}
             remainingOrders={remainingOrders}
@@ -185,7 +190,7 @@ export default function Annually({
                 </div>
               </div>
               <div className="mb-5 lg:mb-0 cursor-pointer w-[100%] mt-2 ">
-                <p className="mx-auto w-[80%] pt-2 md:pt-3 md:w-[90%] h-[38px] md:h-[52px] bg-[#b29e84] rounded-xl shadow text-center text-white text-sm md:text-base font-bold">
+                <p className="package">
                   {subscribtion}
                 </p>
               </div>
@@ -243,7 +248,7 @@ export default function Annually({
                 </div>
               </div>
               <div className="mb-5 lg:mb-0 cursor-pointer w-[100%] mt-2 md:mt-2 ">
-                <p className="mx-auto w-[80%] pt-2 md:pt-3 md:w-[90%] h-[38px] md:h-[52px] bg-[#b29e84] rounded-xl shadow text-center text-white text-sm md:text-base font-bold">
+                <p className="package">
                   {subscribtion}
                 </p>
               </div>
@@ -265,7 +270,7 @@ export default function Annually({
                   {BasicPackage}{" "}
                 </div>
                 <div className="flex flex-wrap justify-center px-8 mb-10 ">
-                  <div className=" text-center text-gray-800 text-base font-bold mt-4">
+                  <div className=" text-center text-gray-800 text-base font-bold tab:mt-10">
                     {free}
                   </div>
                 </div>
@@ -278,7 +283,7 @@ export default function Annually({
                 </div>
               </div>
               <div className="mb-5 lg:mb-0 cursor-pointer w-[100%] md:mt-2 mt-2 ">
-                <p className="mx-auto w-[80%] pt-2 md:pt-3 md:w-[90%] h-[38px] md:h-[52px] bg-[#b29e84] rounded-xl shadow text-center text-white text-sm md:text-base font-bold">
+                <p className="package">
                   {tryForFree}
                 </p>
               </div>
