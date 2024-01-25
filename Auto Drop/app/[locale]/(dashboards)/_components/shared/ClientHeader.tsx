@@ -37,7 +37,7 @@ export default function WebsiteHeader({
   return (
     <main
       className={cn(
-        "pt-2 left-4 text-xs lg:text-base   top-0 z-[100000]  max-w-[100%] flex-1",
+        "pt-2 left-4 text-xs lg:text-base   top-0 z-[30]  max-w-[100%]",
         scrolling ? "opacity-90 transition-opacity duration-300" : ""
       )}
       dir={locale === "ar" ? "rtl" : "ltr"}
@@ -50,17 +50,17 @@ export default function WebsiteHeader({
           <Link
             locale={locale === "ar" ? "en" : "ar"}
             href={pathname}
-            className=" text-[16px] font-medium"
+            className="text-sm md:text-[16px] font-medium"
           >
             {lang}
           </Link>
         </div>
 
-        <div className="flex items-center border-4 rounded-md border-[#B29E84] relative overflow-hidden">
-          <button className="bg-white text-black py-[6px] px-4   ">
+        <div className="flex items-center border-4 rounded-md border-[#B29E84] relative overflow-hidden ">
+          <button className="bg-white text-black ms:py-[6px]  ms:px-1 mm:px-2 tap:px-3  lap:px-4  ">
             <span className="relative z-30">{planTitle}</span>
           </button>
-          <button className="bg-[#B29E84] text-white py-[6px] px-11  ">
+          <button className="bg-[#B29E84] text-white py-[6px] px-2 ms:px-3 mm:px-4 tap:px-11 lap:px-11 ">
             <span className=" relative z-30 text-white mr-4">{planValue}</span>{" "}
           </button>
           <div
