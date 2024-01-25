@@ -7,7 +7,6 @@ export default function PlansPage() {
   const locale = useLocale();
 
   return (<>
-  
   <Monthly
     locale={locale}
 
