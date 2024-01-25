@@ -198,7 +198,7 @@ export default function Annually({
           </HoverCardWrapper>
 
           <HoverCardWrapper
-            title={PackagePro}
+            title={PackagePlus}
             remainingProducts={remainingProducts}
             remainingOrders={remainingOrders}
             locale={locale}
@@ -256,7 +256,7 @@ export default function Annually({
           </HoverCardWrapper>
 
           <HoverCardWrapper
-            title={PackagePro}
+            title={BasicPackage}
             remainingProducts={remainingProducts}
             remainingOrders={remainingOrders}
             locale={locale}

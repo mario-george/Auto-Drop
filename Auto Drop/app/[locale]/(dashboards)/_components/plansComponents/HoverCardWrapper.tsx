@@ -44,7 +44,7 @@ export default function HoverCardWrapper({
       <span>{remainingOrders}</span>
       <Progress
         dir={`${locale == "ar" ? "rtl" : "ltr"}`}
-        value={33}
+        value={66}
         className="w-[60%]"
       />
     </div>
@@ -72,7 +72,7 @@ let mobileContent= <div className="flex lap:hidden relative z-[10000] flex-col !
     <span>{remainingOrders}</span>
     <Progress
       dir={`${locale == "ar" ? "rtl" : "ltr"}`}
-      value={33}
+      value={66}
       className="w-[60%]"
     />
   </div>
