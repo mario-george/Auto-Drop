@@ -17,6 +17,15 @@ module.exports = {
       },
     },
     extend: {
+      screens: {
+        ms: "320px",
+        mm: "375px",
+        ml: "425px",
+        tab: "768px",
+        lap: "1024px",
+        lapl: "1440px",
+        k4: "2560px",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
