@@ -15,6 +15,10 @@ import upload from "../assits/multer";
 import { Strategy, VerifyCallback } from "passport-google-oauth2";
 import { Request } from "express";
 import { IProfileGoogle } from "../types/auth";
+import {
+  aliexpressAuth,
+  aliexpressCallback,
+} from "../controllers/aliExpressAuth";
 
 const router = Router();
 
@@ -61,8 +65,11 @@ router.get(
 router.get("/error", (req: any, res: any) => {
   res.send("Something went wrong. try again");
 });
-
+//salla
 router.get("/auth-salla", sallaAuth);
 router.get("/auth-salla/callback", sallaCallback);
+//aliexpress
+router.get("/auth-aliexpress", aliexpressAuth);
+router.get("/auth-aliexpress/callback", aliexpressCallback);
 
 export default router;
