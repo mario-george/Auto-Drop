@@ -91,3 +91,7 @@ body,
 .PhoneInputInput {
   @apply outline-none
 }
+.package{
+@apply mx-auto w-[80%] pt-2 md:pt-3 md:w-[90%] h-[38px] md:h-[52px] bg-[#b29e84] rounded-xl shadow text-center text-white text-sm md:text-base font-bold ms:mt-11 mm:mt-0 lap:mt-11
+
+}
