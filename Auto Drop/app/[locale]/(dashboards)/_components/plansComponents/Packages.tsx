@@ -85,11 +85,11 @@ export default function Annually({
                 className="absolute top-3 left-4 hidden md:block"
               ></Image>
               <div className={`max-[350px]:h-48  h-60`}>
-                <div className="text-center text-gray-800 pt-3 lg:pt-2 md:pt-0 text-base md:text-lg font-bold mb-5 px-[.9rem] md:px-8">
+                <div className="packageTitle">
                   {PackagePro}{" "}
                 </div>
                 <div
-                  className="flex flex-wrap justify-center px-0 md:px-8  mm:pt-3 "
+                  className="flex flex-wrap justify-center px-0 md:px-8   "
                   dir="ltr"
                 >
                   <div className="text-gray-800 text-sm md:text-base font-bold ">
@@ -107,24 +107,36 @@ export default function Annually({
                     349.00
                   </div>
                 </div>
-                <div className="h-[70%] lg:h-[75%] !mb-0 ">
-                  <div className="text-center text-gray-800 text-sm md:text-base mt-5 font-bold px-8">
+                <div className="h-[70%] lg:h-[75%]  ">
+                  <div className="monthly">
                     {monthly}
                   </div>
-                  <div className="text-center text-gray-950 text-sm md:text-base w-full font-medium px-8 pt-[1rem] md:pt-[2rem]">
+                  <div className="productsInfoWrapper">
                     {" "}
-                    {productsNumber} 99999
+                    <div className="whitespace-nowrap">
+                    {productsNumber} 
+                    </div>
+                    <div className="whitespace-nowrap">
+                      
+                  99999
+                    </div>
                   </div>
                   <div
-                    className={`text-center text-gray-950 text-sm md:text-base ${
+                    className={`ordersInfoWrapper ${
                       locale == "en" ? "w-[82%]" : "w-[85%]"
-                    } mt-3 md:mt-5 font-medium px-6 mx-auto`}
+                    } `}
                   >
-                    {productsNumber} 99999
+                     <div className="whitespace-nowrap">
+                    {ordersNumber} 
+                    </div>
+                    <div className="whitespace-nowrap">
+                      
+                  99999
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="mb-5 lg:mb-0  cursor-pointer w-[100%] mt-2 ">
+              <div className="subscriptionButton ">
                 <p className="package ">
                   {subscribtion}
                 </p>
@@ -150,7 +162,7 @@ export default function Annually({
                 className="absolute top-3 left-4 hidden md:block"
               ></Image>
               <div className={`max-[350px]:h-48  h-60`}>
-                <div className="text-center text-gray-800 pt-3 lg:pt-2 md:pt-0 text-base md:text-lg font-bold mb-5 px-[.9rem] md:px-8">
+                <div className="packageTitle">
                   {PackagePro}{" "}
                 </div>
                 <div
@@ -173,23 +185,36 @@ export default function Annually({
                   </div>
                 </div>
                 <div className="h-[70%] lg:h-[75%]">
-                  <div className="text-center text-gray-800 text-sm md:text-base mt-5 font-bold px-8">
+                  <div className="monthly">
                     {monthly}
                   </div>
-                  <div className="text-center text-gray-950 text-sm md:text-base w-full font-medium px-8 pt-[1rem] md:pt-[2rem]">
+                  <div className="productsInfoWrapper">
                     {" "}
-                    {productsNumber} 99999
+                    <div className="whitespace-nowrap">
+                    {productsNumber} 
+                    </div>
+                    <div className="whitespace-nowrap">
+                      
+                  99999
+                    </div>
                   </div>
                   <div
-                    className={`text-center text-gray-950 text-sm md:text-base ${
+                    className={`ordersInfoWrapper ${
                       locale == "en" ? "w-[82%]" : "w-[85%]"
-                    } mt-3 md:mt-5 font-medium px-6 mx-auto`}
+                    } `}
                   >
-                    {productsNumber} 99999
+                      <div className="whitespace-nowrap">
+                    {ordersNumber} 
+                    </div>
+                    <div className="whitespace-nowrap">
+                      
+                  99999
+                    </div>
+              
                   </div>
                 </div>
               </div>
-              <div className="mb-5 lg:mb-0 cursor-pointer w-[100%] mt-2 ">
+              <div className="subscriptionButton">
                 <p className="package">
                   {subscribtion}
                 </p>
@@ -207,7 +232,7 @@ export default function Annually({
           >
             <div>
               <div className={`max-[350px]:h-48  h-60`}>
-                <div className="text-center text-gray-800 pt-1 md:pt-0 text-base md:text-lg font-bold mb-5 px-[.62rem] md:px-8">
+                <div className="packageTitle">
                   {" "}
                   {PackagePlus}{" "}
                 </div>
@@ -231,23 +256,34 @@ export default function Annually({
                   </div>
                 </div>
                 <div className="h-[70%] lg:h-[75%]">
-                  <div className="text-center text-gray-800 text-sm md:text-base mt-5 font-bold px-8">
+                  <div className="monthly">
                     {monthly}
                   </div>
-                  <div className="text-center text-gray-950 text-sm md:text-base w-full font-medium px-8 pt-[1rem] md:pt-[2rem]">
+                  <div className="productsInfoWrapper">
                     {" "}
-                    {productsNumber} 99999
-                  </div>
+                    <div className="whitespace-nowrap">
+                    {productsNumber} 
+                    </div>
+                    <div className="whitespace-nowrap">
+                      
+                  99999
+                    </div>                  </div>
                   <div
-                    className={`text-center text-gray-950 text-sm md:text-base ${
+                    className={`ordersInfoWrapper ${
                       locale == "en" ? "w-[82%]" : "w-[85%]"
-                    } mt-3 md:mt-5 font-medium px-6 mx-auto`}
+                    } `}
                   >
-                    {ordersNumber} 99999
+                      <div className="whitespace-nowrap">
+                    {ordersNumber} 
+                    </div>
+                    <div className="whitespace-nowrap">
+                      
+                  99999
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="mb-5 lg:mb-0 cursor-pointer w-[100%] mt-2 md:mt-2 ">
+              <div className="subscriptionButton ">
                 <p className="package">
                   {subscribtion}
                 </p>
@@ -269,20 +305,30 @@ export default function Annually({
                   {" "}
                   {BasicPackage}{" "}
                 </div>
-                <div className="flex flex-wrap justify-center px-8 mb-10 ">
-                  <div className=" text-center text-gray-800 text-base font-bold tab:mt-10">
+                <div className="flex flex-wrap justify-center px-8 my-9  ">
+                  <div className={`${locale=='ar'?`lap:!mt-[26px]`:``} text-center text-gray-800 text-base font-bold tab:mt-6 lap:mt-0`}>
                     {free}
                   </div>
                 </div>
 
-                <div className="text-center text-gray-950 text-sm md:text-base font-medium px-8 pt-[0rem] md:pt-[1.5rem]">
-                  {productsNumber} 1
+                <div className="flex flex-col text-center text-gray-950 text-sm md:text-base font-medium px-8 mb-3 whitespace-nowrap   ">
+                  {productsNumber}
+                  
+                  <div>
+                   1
+                  </div>
                 </div>
-                <div className="text-center text-gray-950 text-sm md:text-base mt-4 md:mt-5 font-medium px-8">
-                  {productsNumber} 1
+                <div className="ordersInfoWrapper">
+                <div className="whitespace-nowrap">
+                    {ordersNumber} 
+                    </div>
+                    <div className="whitespace-nowrap">
+                      
+                  1
+                    </div>
                 </div>
               </div>
-              <div className="mb-5 lg:mb-0 cursor-pointer w-[100%] md:mt-2 mt-2 ">
+              <div className="subscriptionButton ">
                 <p className="package">
                   {tryForFree}
                 </p>
