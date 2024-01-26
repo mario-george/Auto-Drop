@@ -17,17 +17,14 @@ export const aliexpressAuth = (req: Request, res: Response) => {
 export const aliexpressCallback = async (req: Request, res: Response) => {
   const code = req.query.code;
   const data = {
-    client_id: aliexpressData.appKey,
-    client_secret: aliexpressData.appSecret,
-    grant_type: "authorization_code",
+    appKey: aliexpressData.appKey,
+    appSecret: aliexpressData.appSecret,
     code: req.query.code,
-    redirect_url: aliexpressData.callbackUrl,
-    sp: "ae",
   };
 
   try {
     const response = await axios.post(
-      "https://oauth.aliexpress.com/token",
+      "https://api-sg.aliexpress.com/auth/token/create",
       data
     );
 
