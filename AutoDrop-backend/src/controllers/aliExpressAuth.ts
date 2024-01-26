@@ -6,7 +6,7 @@ import { spawn } from "child_process";
 
 let aliexpressData = {
   callbackUrl:
-    "https://auto-drop-rtxb.onrender.com/api/v1/auth/auth-aliexpress/callback/",
+    "https://auto-drop-rtxb.onrender.com/api/v1/auth/auth-aliexpress/callback",
   appKey: "34271827",
   appSecret: "2c5bcc0958a9d9abd339232f1b31712e",
 };
