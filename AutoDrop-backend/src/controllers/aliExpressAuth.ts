@@ -16,6 +16,7 @@ export const aliexpressAuth = (req: Request, res: Response) => {
 };
 
 
+
 export const aliexpressCallback = async (req: Request, res: Response) => {
   const aliexpressData = {
     appKey: "34271827",
@@ -23,43 +24,37 @@ export const aliexpressCallback = async (req: Request, res: Response) => {
   };
 
   const code = req.query.code;
-  const timestamp = Date.now();
-
-  let params = {
+  const timestamp = Date.now().toString();
+  
+  let params: { [key: string]: any } = {
     app_key: aliexpressData.appKey,
-    code,
+    code: code as string,
     sign_method: "sha256",
-    timestamp: timestamp,
+    timestamp,
   };
-
   // Step 1: Sort all request parameters
-  const sortedParams = Object.fromEntries(Object.entries(params).sort());
+  const keys = Object.keys(params).sort();
+  let paramString = keys.map(key => key + params[key]).join('');
 
   // Step 2: Concatenate the sorted parameters and their values into a string
-  let paramString = "";
-  for (const [key, value] of Object.entries(sortedParams)) {
-    paramString += key + value;
-  }
-let testS= '/auth/token/createapp_key12345678code3_500102_JxZ05Ux3cnnSSUm6dCxYg6Q26sign_methodsha256timestamp1517820392000'
+  let signString = paramString;
 
-// Step 3: Add the API name in front of the concatenated string
-const signString = "/auth/token/create" + paramString;
-console.log("here")
-console.log(signString)
-console.log(testS)
-console.log("here")
-// Step 4: Encode the concatenated string in UTF-8 format and make a digest by the signature algorithm
-const signature = CryptoJS.HmacSHA256(signString, aliexpressData.appSecret).toString(CryptoJS.enc.Hex);
-console.log(CryptoJS.HmacSHA256(testS,"helloworld").toString(CryptoJS.enc.Hex))
+  // Step 3: Add the API name in front of the concatenated string
+  const apiName = "/auth/token/create";
+  if (apiName) {
+    signString = apiName + paramString;
+  }
+
+  // Step 4: Encode the concatenated string in UTF-8 format and make a digest by the signature algorithm
+  const signature = CryptoJS.HmacSHA256(signString, aliexpressData.appSecret).toString(CryptoJS.enc.Hex);
 
   // Assemble HTTP request
-  let url = `https://api-sg.aliexpress.com/rest/auth/token/create?app_key=${
-    aliexpressData.appKey
-  }&code=${code}&timestamp=${timestamp}&sign_method=sha256&sign=${signature}`;
-console.log(url)
+  let url = `https://api-sg.aliexpress.com/rest/auth/token/create?${keys.map(key => `${key}=${encodeURIComponent(params[key])}`).join('&')}&sign=${signature}`;
+
   try {
     const response = await axios.post(
       url,
+      undefined, // No need to send data since parameters are already in the URL
       {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
