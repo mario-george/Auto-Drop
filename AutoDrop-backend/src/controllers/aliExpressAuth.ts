@@ -1,5 +1,8 @@
 import axios from "axios";
 import { Request, Response } from "express";
+import crypto from "crypto";
+import CryptoJS from "crypto-js";
+
 let aliexpressData = {
   callbackUrl:
     "https://auto-drop-rtxb.onrender.com/api/v1/auth/auth-aliexpress/callback/",
@@ -12,19 +15,40 @@ export const aliexpressAuth = (req: Request, res: Response) => {
 };
 
 export const aliexpressCallback = async (req: Request, res: Response) => {
+  const aliexpressData = {
+    appKey: "34271827",
+    appSecret: "2c5bcc0958a9d9abd339232f1b31712e",
+  };
+
   const code = req.query.code;
-  const data = {
+  const timestamp = Date.now(); // Unix timestamp in seconds
+
+  // Sort parameters and values according to the parameter name in ASCII table
+  const sortedParams = {
     app_key: aliexpressData.appKey,
-    timestamp: "1706227916858",
+    code,
     sign_method: "sha256",
-    sign: "D13F2A03BE94D9AAE9F933FFA7B13E0A5AD84A3DAEBC62A458A3C382EC2E91EC",
-    code: code,
-    uuid: "uuid",
+    timestamp,
+  };
+
+  // Concatenate the sorted parameters and their values into a string
+  let signString = "/auth/token/create";
+  for (const [key, value] of Object.entries(sortedParams)) {
+    signString += key + value;
+  }
+
+  // Generate signature
+  const sign = crypto.createHash("sha256").update(signString).digest("hex");
+
+  const data = {
+    ...sortedParams,
+    sign,
+    uuid: "uuid", 
   };
 
   const formData = new URLSearchParams();
   for (const [key, value] of Object.entries(data)) {
-    formData.append(key, value as string);
+    if (value) formData.append(key, value.toString());
   }
 
   try {
@@ -38,7 +62,7 @@ export const aliexpressCallback = async (req: Request, res: Response) => {
       }
     );
 
-    const respData = await response.data;
+    const respData = response.data;
     console.log(respData);
 
     res.status(200).json(respData);
