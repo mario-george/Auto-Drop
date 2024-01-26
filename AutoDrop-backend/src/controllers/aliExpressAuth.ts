@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Request, Response } from "express";
 import crypto from "crypto";
-import CryptoJS from "crypto-js";
+import * as CryptoJS from 'crypto-js';
 import { spawn } from "child_process";
 
 let aliexpressData = {
@@ -15,6 +15,62 @@ export const aliexpressAuth = (req: Request, res: Response) => {
   res.redirect(url);
 };
 
+
+
+export const aliexpressCallback = async (req: Request, res: Response) => {
+  const aliexpressData = {
+    appKey: "34271827",
+    appSecret: "2c5bcc0958a9d9abd339232f1b31712e",
+  };
+
+  const code = req.query.code;
+  const timestamp = Date.now();
+
+  let params = {
+    app_key: aliexpressData.appKey,
+    code,
+    sign_method: "sha256",
+    timestamp: timestamp,
+  };
+
+  // Step 1: Sort all request parameters
+  const sortedParams = Object.fromEntries(Object.entries(params).sort());
+
+  // Step 2: Concatenate the sorted parameters and their values into a string
+  let paramString = "";
+  for (const [key, value] of Object.entries(sortedParams)) {
+    paramString += key + value;
+  }
+
+  // Step 3: Add the API name in front of the concatenated string
+  const signString = "/auth/token/create" + paramString;
+
+  // Step 4: Encode the concatenated string in UTF-8 format and make a digest by the signature algorithm
+  const signature = CryptoJS.SHA256(signString).toString(CryptoJS.enc.Hex);
+
+  // Assemble HTTP request
+  let url = `https://api-sg.aliexpress.com/rest/auth/token/create?app_key=${
+    aliexpressData.appKey
+  }&code=${code}&timestamp=${timestamp}&sign_method=sha256&sign=${signature}`;
+console.log(url)
+  try {
+    const response = await axios.post(
+      url,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+        },
+      }
+    );
+
+    const respData = response.data;
+    res.status(200).json(respData);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+/* 
 export const aliexpressCallback = async (req: Request, res: Response) => {
   const aliexpressData = {
     appkey: "34271827",
@@ -40,70 +96,5 @@ export const aliexpressCallback = async (req: Request, res: Response) => {
   python.stdin.write(JSON.stringify(aliexpressData));
   python.stdin.end();
 };
-
-/* 
-export const aliexpressCallback = async (req: Request, res: Response) => {
-  const aliexpressData = {
-    appKey: "34271827",
-    appSecret: "2c5bcc0958a9d9abd339232f1b31712e",
-  };
-
-  const code = req.query.code;
-  const timestamp = Date.now();
-  function computeSha256Hash(secret: string, message: string): string {
-    const hmac = crypto.createHmac("sha256", secret);
-    hmac.update(message);
-    return hmac.digest("hex");
-  }
-  let params = {
-    app_key: aliexpressData.appKey,
-    code,
-    sign_method: "sha256",
-    timestamp: timestamp,
-  };
-  const sortedParams = Object.fromEntries(Object.entries(params).sort());
-  console.log(sortedParams);
-
-  let signString = "/auth/token/create";
-  for (const [key, value] of Object.entries(sortedParams)) {
-    signString += key + value;
-  }
-  console.log("here");
-  console.log(
-    computeSha256Hash(
-      "helloworld",
-      "/auth/token/createapp_key12345678code3_500102_JxZ05Ux3cnnSSUm6dCxYg6Q26sign_methodsha256timestamp1517820392000"
-    )
-  );
-  console.log("here");
-  console.log("there");
-  console.log(signString);
-  console.log("there");
-  // Assemble HTTP request
-  let url = `https://api-sg.aliexpress.com/rest/auth/token/create?app_key=${
-    aliexpressData.appKey
-  }&code=${code}&uuid=uuid&timestamp=${timestamp}&sign_method=sha256&sign=${computeSha256Hash(
-    aliexpressData.appSecret,
-    signString
-  )}`;
-  console.log(url);
-  try {
-    const response = await axios.post(
-      url,
-
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-        },
-      }
-    );
-
-    const respData = response.data;
-    console.log(respData);
-
-    res.status(200).json(respData);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
-  }
-};
  */
+
