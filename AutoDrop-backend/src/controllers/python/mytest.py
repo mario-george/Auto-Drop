@@ -1,7 +1,6 @@
 
 
 try:
-    print("121232123")
     import sys
     import json
     import iop
