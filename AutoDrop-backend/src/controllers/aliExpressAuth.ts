@@ -42,28 +42,31 @@ export const aliexpressCallback = async (req: Request, res: Response) => {
 
   // Step 4: Generate signature
   const hmac = createHmac("sha256", aliexpressData.appSecret);
-  hmac.update(Buffer.from(signString, "utf-8")); // Encode the string in UTF-8 format
-  const signature = hmac.digest("hex").toUpperCase();
+hmac.update(Buffer.from(signString, "utf-8")); // Encode the string in UTF-8 format
+const signature = hmac.digest("hex").toUpperCase();
 
-  let url = `https://api-sg.aliexpress.com/rest/auth/token/create?code=${code}&app_key=34271827&sign_method=sha256&timestamp=${timestamp}&sign=${signature}`;
-  /* for (const key in params) {
-    url += `&${key}=${encodeURIComponent(params[key])}`;
-  } */
-  console.log(url);
-  try {
-    const response = await axios.post(url, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-      },
-    });
+let formData = new FormData();
+formData.append('code', code);
+formData.append('app_key', '34271827');
+formData.append('sign_method', 'sha256');
+formData.append('timestamp', timestamp.toString());
+formData.append('sign', signature);
 
-    const respData = response.data;
-    console.log(respData);
+try {
+  const response = await axios.post('https://api-sg.aliexpress.com/rest/auth/token/create', formData, {
+    headers: {
+      // ...formData.getHeaders(),
+      "Content-Type": "multipart/form-data; charset=utf-8",
+    },
+  });
 
-    res.status(200).json(respData);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
-  }
+  const respData = response.data;
+  console.log(respData);
+
+  res.status(200).json(respData);
+} catch (error: any) {
+  res.status(400).json({ error: error.message });
+}
 };
 
 /* 
