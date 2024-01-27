@@ -23,14 +23,14 @@ export const aliexpressCallback = async (req: Request, res: Response) => {
   };
 
   const code: any = req.query.code;
-
+  let timestamp = Date.now();
   let params: any = {
     app_key: aliexpressData.appKey,
     code,
     sign_method: "sha256",
-    timestamp: Date.now(),
+    timestamp: timestamp,
   };
-console.log(Date.now())
+  console.log(Date.now());
   // Step 2: Sort all parameters and values according to the parameter name in ASCII table
   const sortedParams = Object.fromEntries(Object.entries(params).sort());
 
@@ -45,13 +45,11 @@ console.log(Date.now())
   hmac.update(Buffer.from(signString, "utf-8")); // Encode the string in UTF-8 format
   const signature = hmac.digest("hex").toUpperCase();
 
-  let url = `https://api-sg.aliexpress.com/rest/auth/token/create?sign=${encodeURIComponent(
-    signature
-  )}`;
-  for (const key in params) {
+  let url = `https://api-sg.aliexpress.com/rest/auth/token/create?code=${code}&app_key=34271827&sign_method=sha256&timestamp=${timestamp}&sign=${signature}`;
+  /* for (const key in params) {
     url += `&${key}=${encodeURIComponent(params[key])}`;
-  }
-console.log(url)
+  } */
+  console.log(url);
   try {
     const response = await axios.post(url, {
       headers: {
