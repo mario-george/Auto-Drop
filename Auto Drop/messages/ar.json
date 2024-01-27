@@ -222,7 +222,8 @@
     "contact": "تواصل معنا",
     "plans": "الخطط",
     "cart": "السلة ",
-    "logout":"تسجيل خروج","whatsapp":"تواصل واتس اب"
+    "logout": "تسجيل خروج",
+    "whatsapp": "تواصل واتس اب"
   },
   "ClientTopBar": {
     "lang": "الانجليزية",
@@ -234,15 +235,23 @@
     "remainingOrders": "عدد الطلبات المتبقية",
     "subscriptionDate": "تاريخ الاشتراك",
     "subscriptionExpirationDate": "تاريخ انتهاء الاشتراك",
-    "plansTitle":"باقاتي",
-    "productsNumber":"عدد المنتجات",
-    "ordersNumber":"عدد الطلبات",
-    "tryForFree":"جرب مجانا"
-
-    
-  },"linkAccount":{
-    "availablePlatforms":"المنصات المتاحة",
-    "availbleStores":"المتاجر المتاحة",
-    "link":"ربط"
+    "plansTitle": "باقاتي",
+    "productsNumber": "عدد المنتجات",
+    "ordersNumber": "عدد الطلبات",
+    "tryForFree": "جرب مجانا"
+  },
+  "settings": {
+    "settings": "الإعدادت",
+    "currentPassword": "كلمة المرور الحالية",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "saveChanges": "حفظ التغييرات",
+    "changePassword": "تغيير كلمة المرور",
+    "changeAccountDetails": "تعديل بيانات الحساب"
+  },
+  "linkAccount": {
+    "availablePlatforms": "المنصات المتاحة",
+    "availableStores": "المتاجر المتاحة",
+    "link": "ربط"
   }
 }
