@@ -240,5 +240,9 @@
     "tryForFree":"جرب مجانا"
 
     
+  },"linkAccount":{
+    "availablePlatforms":"المنصات المتاحة",
+    "availbleStores":"المتاجر المتاحة",
+    "link":"ربط"
   }
 }
