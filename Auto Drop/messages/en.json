@@ -235,16 +235,23 @@
     "remainingOrders": "Remaining Orders",
     "subscriptionDate": "Subscription Date",
     "subscriptionExpirationDate": "Subscription Expiry Date",
-    "plansTitle":"Plans",
-    "productsNumber":"Products Number",
-    "ordersNumber":"Orders Number",
-    "tryForFree":"Try for free"
-    
-  },"clientSettings":{
-    "settings":""
-  },"linkAccount":{
-    "availablePlatforms":"Available Platforms",
-    "availableStores":"Available Stores",
-    "link":"Link"
+    "plansTitle": "Plans",
+    "productsNumber": "Products Number",
+    "ordersNumber": "Orders Number",
+    "tryForFree": "Try for free"
+  },
+  "clientSettings": {
+    "settings": "Settings",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "saveChanges": "Save Changes",
+    "changePassword": "Change Password",
+    "changeAccountDetails": "Change Account Details"
+  },
+  "linkAccount": {
+    "availablePlatforms": "Available Platforms",
+    "availableStores": "Available Stores",
+    "link": "Link"
   }
 }
