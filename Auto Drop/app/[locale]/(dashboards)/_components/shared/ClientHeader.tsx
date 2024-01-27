@@ -37,7 +37,7 @@ export default function WebsiteHeader({
   return (
     <main
       className={cn(
-        "pt-2 left-4 text-xs lg:text-base   top-0 z-[30]  max-w-[100%]",
+        "pt-2 left-4 text-xs lg:text-base  tab:mx-3 top-0 z-[30]  max-w-[100%]",
         scrolling ? "opacity-90 transition-opacity duration-300" : ""
       )}
       dir={locale === "ar" ? "rtl" : "ltr"}
