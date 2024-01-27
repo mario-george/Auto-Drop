@@ -242,5 +242,9 @@
     
   },"clientSettings":{
     "settings":""
+  },"linkAccount":{
+    "availablePlatforms":"Available Platforms",
+    "availableStores":"Available Stores",
+    "link":"Link"
   }
 }
