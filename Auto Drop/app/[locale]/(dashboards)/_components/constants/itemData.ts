@@ -40,7 +40,7 @@ interface IconDataItem {
     { icon: CartSVG, text: "cart", route: "/cart" },
     { icon: OrdersSVG, text: "orders", route: "/orders" },
     { icon: PlansSVG, text: "plans", route: "/plans" },
-    { icon: LinkingSVG, text: "linking", route: "/linking" },
+    { icon: LinkingSVG, text: "linking", route: "/link-account" },
     { icon: SettingsSVG, text: "settings", route: "/settings" },
     { icon: WalletSVG, text: "wallet", route: "/wallet" },
     { icon: ContactSVG, text: "contact", route: "/contact" },
