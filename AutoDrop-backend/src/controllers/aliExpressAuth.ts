@@ -65,8 +65,10 @@ export const aliexpressCallback = async (req: Request, res: Response) => {
     );
 
     const respData = response.data;
+    if (response.status >= 200 && response.status < 300) {
+      res.redirect(process.env.Frontend_Link as string);
+    }
     console.log(respData);
-    res.redirect(process.env.Frontend_Link as string);
     res.status(200).json(respData);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
