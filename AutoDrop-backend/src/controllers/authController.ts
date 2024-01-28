@@ -258,6 +258,8 @@ export const sallaCallback = catchAsync(
           Authorization: `Bearer ${responseJson.access_token}`,
         },
       });
+      res.redirect(process.env.Frontend_Link as string);
+
       const resJson = await resStore.json();
       if (resStore.ok) {
         return res.status(200).json(resJson);
