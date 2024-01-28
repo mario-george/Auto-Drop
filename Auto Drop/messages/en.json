@@ -247,7 +247,14 @@
     "confirmPassword": "Confirm Password",
     "saveChanges": "Save Changes",
     "changePassword": "Change Password",
-    "changeAccountDetails": "Change Account Details"
+    "changeAccountDetails": "Change Account Details",
+    "merchantID": "Merchant ID",
+    "name": "Client Name",
+    "marketName": "Store Name",
+    "marketLink": "Store Link",
+    "email": "Email",
+    "phone": "Phone Number",
+    "country": "Country"
   },
   "linkAccount": {
     "availablePlatforms": "Available Platforms",
