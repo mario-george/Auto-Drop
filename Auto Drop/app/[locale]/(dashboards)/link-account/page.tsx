@@ -59,9 +59,9 @@ export default function LinkAccount() {
         linkButton={t("linkButton")}
         soon={t("soon")}
         Cards={StoreCards}
-        className="lap:max-w-[67.5%]"
-        cardClassName={`pt-12 ms:!pt-[3rem] `}
-        soonButtonClasses="mt-6"
+        className="tab:max-w-[75%]"
+        cardClassName={`pt-12 tab:!pt-2 ms:!pt-[3rem] `}
+        soonButtonClasses="mt-6 tab:mt-auto tab:pt-4"
         connectButtonClasses="mt-  mt-auto"
         store={true}
       />
