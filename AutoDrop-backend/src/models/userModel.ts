@@ -17,6 +17,10 @@ const userModel = new mongoose.Schema(
     storeName: { type: String, default: null, maxLength: 50 },
     storeLink: { type: String, default: null, maxLength: 50 },
     OTP: { type: String, maxLength: 10 },
+    aliExpressToken: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "AliExpressToken",
+    },
   },
   { timestamps: true }
 );
