@@ -11,7 +11,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import HoverCardWrapper from "./HoverCardWrapper";
 import React from "react";
-export default function Annually({
+export default function Monthly({
   locale,
   tryForFree,
 
@@ -67,7 +67,7 @@ export default function Annually({
           {plansTitle}
         </span>
 
-        <div className="flex flex-row mt-2 flex-wrap gap-y-4 max-[662px]:gap-x-0 max-[426px]:gap-4 !tab:gap-x-0 tab:px- md:gap-x-0 mx-auto w-full px-0">
+        <div className="flex flex-row lap:mt-16 flex-wrap gap-y-4 max-[662px]:gap-x-0 max-[426px]:gap-4 !tab:gap-x-0 tab:px- md:gap-x-0 mx-auto w-full px-0">
           <HoverCardWrapper
             title={PackagePro}
             remainingProducts={remainingProducts}
@@ -85,9 +85,7 @@ export default function Annually({
                 className="absolute top-3 left-4 hidden md:block"
               ></Image>
               <div className={`max-[350px]:h-48  h-60`}>
-                <div className="packageTitle">
-                  {PackagePro}{" "}
-                </div>
+                <div className="packageTitle">{PackagePro} </div>
                 <div
                   className="flex flex-wrap justify-center px-0 md:px-8   "
                   dir="ltr"
@@ -108,40 +106,25 @@ export default function Annually({
                   </div>
                 </div>
                 <div className="h-[70%] lg:h-[75%]  ">
-                  <div className="monthly">
-                    {monthly}
-                  </div>
+                  <div className="monthly">{monthly}</div>
                   <div className="productsInfoWrapper">
                     {" "}
-                    <div className="whitespace-nowrap">
-                    {productsNumber} 
-                    </div>
-                    <div className="whitespace-nowrap">
-                      
-                  99999
-                    </div>
+                    <div className="whitespace-nowrap">{productsNumber}</div>
+                    <div className="whitespace-nowrap">99999</div>
                   </div>
                   <div
                     className={`ordersInfoWrapper ${
                       locale == "en" ? "w-[82%]" : "w-[85%]"
                     } `}
                   >
-                     <div className="whitespace-nowrap">
-                    {ordersNumber} 
-                    </div>
-                    <div className="whitespace-nowrap">
-                      
-                  99999
-                    </div>
+                    <div className="whitespace-nowrap">{ordersNumber}</div>
+                    <div className="whitespace-nowrap">99999</div>
                   </div>
                 </div>
               </div>
               <div className="subscriptionButton ">
-                <p className="package ">
-                  {subscribtion}
-                </p>
+                <p className="package ">{subscribtion}</p>
               </div>
-    
             </div>
           </HoverCardWrapper>
 
@@ -162,9 +145,7 @@ export default function Annually({
                 className="absolute top-3 left-4 hidden md:block"
               ></Image>
               <div className={`max-[350px]:h-48  h-60`}>
-                <div className="packageTitle">
-                  {PackagePro}{" "}
-                </div>
+                <div className="packageTitle">{PackagePro} </div>
                 <div
                   className="flex flex-wrap justify-center px-0 md:px-8"
                   dir="ltr"
@@ -185,39 +166,24 @@ export default function Annually({
                   </div>
                 </div>
                 <div className="h-[70%] lg:h-[75%]">
-                  <div className="monthly">
-                    {monthly}
-                  </div>
+                  <div className="monthly">{monthly}</div>
                   <div className="productsInfoWrapper">
                     {" "}
-                    <div className="whitespace-nowrap">
-                    {productsNumber} 
-                    </div>
-                    <div className="whitespace-nowrap">
-                      
-                  99999
-                    </div>
+                    <div className="whitespace-nowrap">{productsNumber}</div>
+                    <div className="whitespace-nowrap">99999</div>
                   </div>
                   <div
                     className={`ordersInfoWrapper ${
                       locale == "en" ? "w-[82%]" : "w-[85%]"
                     } `}
                   >
-                      <div className="whitespace-nowrap">
-                    {ordersNumber} 
-                    </div>
-                    <div className="whitespace-nowrap">
-                      
-                  99999
-                    </div>
-              
+                    <div className="whitespace-nowrap">{ordersNumber}</div>
+                    <div className="whitespace-nowrap">99999</div>
                   </div>
                 </div>
               </div>
               <div className="subscriptionButton">
-                <p className="package">
-                  {subscribtion}
-                </p>
+                <p className="package">{subscribtion}</p>
               </div>
             </div>
           </HoverCardWrapper>
@@ -232,10 +198,7 @@ export default function Annually({
           >
             <div>
               <div className={`max-[350px]:h-48  h-60`}>
-                <div className="packageTitle">
-                  {" "}
-                  {PackagePlus}{" "}
-                </div>
+                <div className="packageTitle"> {PackagePlus} </div>
                 <div
                   className="flex flex-wrap justify-center px-0 md:px-8"
                   dir="ltr"
@@ -256,37 +219,24 @@ export default function Annually({
                   </div>
                 </div>
                 <div className="h-[70%] lg:h-[75%]">
-                  <div className="monthly">
-                    {monthly}
-                  </div>
+                  <div className="monthly">{monthly}</div>
                   <div className="productsInfoWrapper">
                     {" "}
-                    <div className="whitespace-nowrap">
-                    {productsNumber} 
-                    </div>
-                    <div className="whitespace-nowrap">
-                      
-                  99999
-                    </div>                  </div>
+                    <div className="whitespace-nowrap">{productsNumber}</div>
+                    <div className="whitespace-nowrap">99999</div>{" "}
+                  </div>
                   <div
                     className={`ordersInfoWrapper ${
                       locale == "en" ? "w-[82%]" : "w-[85%]"
                     } `}
                   >
-                      <div className="whitespace-nowrap">
-                    {ordersNumber} 
-                    </div>
-                    <div className="whitespace-nowrap">
-                      
-                  99999
-                    </div>
+                    <div className="whitespace-nowrap">{ordersNumber}</div>
+                    <div className="whitespace-nowrap">99999</div>
                   </div>
                 </div>
               </div>
               <div className="subscriptionButton ">
-                <p className="package">
-                  {subscribtion}
-                </p>
+                <p className="package">{subscribtion}</p>
               </div>
             </div>
           </HoverCardWrapper>
@@ -306,32 +256,27 @@ export default function Annually({
                   {BasicPackage}{" "}
                 </div>
                 <div className="flex flex-wrap justify-center px-8 my-9  ">
-                  <div className={`${locale=='ar'?`lap:!mt-[26px]`:``} text-center text-gray-800 text-base font-bold tab:mt-6 lap:mt-0`}>
+                  <div
+                    className={`${
+                      locale == "ar" ? `lap:!mt-[26px]` : ``
+                    } text-center text-gray-800 text-base font-bold tab:mt-6 lap:mt-0`}
+                  >
                     {free}
                   </div>
                 </div>
 
                 <div className="flex flex-col text-center text-gray-950 text-sm md:text-base font-medium px-8 mb-3 whitespace-nowrap   ">
                   {productsNumber}
-                  
-                  <div>
-                   1
-                  </div>
+
+                  <div>1</div>
                 </div>
                 <div className="ordersInfoWrapper">
-                <div className="whitespace-nowrap">
-                    {ordersNumber} 
-                    </div>
-                    <div className="whitespace-nowrap">
-                      
-                  1
-                    </div>
+                  <div className="whitespace-nowrap">{ordersNumber}</div>
+                  <div className="whitespace-nowrap">1</div>
                 </div>
               </div>
               <div className="subscriptionButton ">
-                <p className="package">
-                  {tryForFree}
-                </p>
+                <p className="package">{tryForFree}</p>
               </div>
             </div>
           </HoverCardWrapper>
