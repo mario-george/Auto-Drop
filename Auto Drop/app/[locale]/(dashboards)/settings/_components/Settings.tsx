@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import HeaderContainer from "../../_components/shared/HeaderContainer";
+import SettingsSVG from "@/components/icons/ClientSVGs/SettingsSVG";
 interface SettingsProps {
   settings: string;
   currentPassword: string;
@@ -38,6 +40,11 @@ export default function Settings({
       <div
         className={`bg-white   text-[#253439]  px-6 py-2 my-12 rounded-lg shadow tab:!mx-3 `}
       >
+        <HeaderContainer
+          title={settings}
+          IconComponent={SettingsSVG}
+          className="flex-1 !px-0 !mx-0 rounded-none border-b-2 border-black"
+        />
         <div className="flex space-s-6">
           <Button className=" max-w-[12rem] bg-[#f0f3f4] rounded-lg text-[#253439] ">
             {changePassword}
@@ -77,7 +84,7 @@ export default function Settings({
           </div>
         </div>
 
-        <Button className=" max-w-[5rem] bg-[#253439] rounded-lg  ">
+        <Button className=" max-w-[12rem] bg-[#253439] rounded-lg  ">
           {saveChanges}
         </Button>
       </div>
