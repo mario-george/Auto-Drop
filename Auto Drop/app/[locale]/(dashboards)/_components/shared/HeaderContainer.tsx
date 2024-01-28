@@ -13,7 +13,7 @@ export default function HeaderContainer({
 }: CardHeader) {
   return (
     <div
-      className={`bg-white  !mx-6 text-[#253439]  px-6 py-2 my-12 rounded-lg shadow  ${
+      className={`bg-white  mx-1 lap:!mx-6 text-[#253439]  px-6 py-2 my-12 rounded-lg shadow  ${
         className ? className : null
       }`}
     >

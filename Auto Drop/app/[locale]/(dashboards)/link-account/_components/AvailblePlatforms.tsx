@@ -28,7 +28,7 @@ export default function AvailablePlatforms({
     <>
       <div className={``}>
         <div
-          className={`flex flex-wrap  max-w-[90%] w-full tab:space-s-8 space-y-6 tab:space-y-0 flex-col tab:flex-row tab:mx-24 justify-center items-stretch ${className}`}
+          className={`flex flex-wrap mm:mx-6 tab: max-w-[90%] w-full tab:space-s-8 space-y-6 tab:space-y-0 flex-col tab:flex-row tab:mx- justify-center items-stretch ${className}`}
         >
           {Cards.map((card: any, index: string) => {
             return (
@@ -38,7 +38,7 @@ export default function AvailablePlatforms({
               >
                 <div
                   className={`${
-                    card.circleLink && store && `pb-6 mm:pb-10 lap:pt-6`
+                    card.circleLink && store && `pb-6 mm:pb-10 tab:pt-6`
                   }`}
                 >
                   <Image
