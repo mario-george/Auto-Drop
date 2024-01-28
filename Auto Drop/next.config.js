@@ -6,6 +6,7 @@ const nextConfig = {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_BACK_URL: process.env.NEXT_PUBLIC_BACK_URL,
   },
 };
 
