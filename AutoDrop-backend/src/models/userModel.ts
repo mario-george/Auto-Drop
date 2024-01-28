@@ -21,6 +21,10 @@ const userModel = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "AliExpressToken",
     },
+    sallaToken: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "SallaToken",
+    },
   },
   { timestamps: true }
 );
