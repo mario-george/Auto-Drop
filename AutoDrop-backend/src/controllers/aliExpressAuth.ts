@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import crypto from "crypto";
 import * as CryptoJS from "crypto-js";
 import { spawn } from "child_process";
+import AliExpressToken from "../models/AliExpressTokenModel";
 
 let aliexpressData = {
   callbackUrl:
@@ -58,7 +59,6 @@ export const aliexpressCallback = async (req: Request, res: Response) => {
       formData,
       {
         headers: {
-          // ...formData.getHeaders(),
           "Content-Type": "multipart/form-data; charset=utf-8",
         },
       }
@@ -66,7 +66,21 @@ export const aliexpressCallback = async (req: Request, res: Response) => {
 
     const respData = response.data;
     if (response.status >= 200 && response.status < 300) {
-      res.redirect(process.env.Frontend_Link as string);
+      const accessToken = respData.access_token;
+      const refreshToken = respData.refresh_token;
+
+      const aliExpressToken = new AliExpressToken({
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      });
+      aliExpressToken
+        .save()
+        .then(() => {
+          res.redirect(process.env.Frontend_Link as string);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
     console.log(respData);
     res.status(200).json(respData);
