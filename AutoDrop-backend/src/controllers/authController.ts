@@ -215,7 +215,7 @@ const sallaData = {
   client_secret: "2520f91a575d0bb07579341bea3e10ff",
   auth_url: "https://accounts.salla.sa/oauth2/auth",
   token_url: "https://accounts.salla.sa/oauth2/token",
-  callback_url: "http://localhost:10000/api/v1/auth/auth-salla/callback",
+  callback_url: "https://auto-drop-rtxb.onrender.com/api/v1/auth/auth-salla/callback",
   salla_api_url: "https://api.salla.dev/admin/v2",
 };
 
