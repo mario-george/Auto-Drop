@@ -3,59 +3,85 @@ import Image from "next/image";
 export default function AvailablePlatforms({
   soon,
   linkButton,
+  Cards,
+  className,
+  cardClassName,
+  soonButtonClasses,
+  connectButtonClasses,store
 }: {
   soon: string;
   linkButton: string;
+  Cards: any;
+  className?: string;
+  cardClassName?: string;
+  soonButtonClasses?: string;
+  connectButtonClasses?: string;
+  store?: boolean;
 }) {
-  const cards = [
-    { image: "/salla.svg", alt: "salla", circleLink: true },
-    { image: "/shopify.svg", alt: "shopify" },
-    { image: "/wix.svg", alt: "wix" },
-    { image: "/twilio.svg", alt: "twilio" },
-  ];
+  /*   const cards = [
+    {
+      image: "/salla.svg",
+      alt: "salla",
+      circleLink: true,
+      imageW: 222,
+      imageH: 125,
+    },
+    { image: "/shopify.svg", alt: "shopify", imageW: 240, imageH: 131 },
+    { image: "/client/wix.svg", alt: "wix", imageW: 240, imageH: 131 },
+    { image: "/client/twilio.svg", alt: "twilio", imageW: 240, imageH: 131 },
+  ]; */
   return (
     <>
-      <div
-        className={`flex flex-row !flex-1 gap-4 md:gap-0 justify-between lg:px-0 px-8 !mx-16  min-w-full`}
-      >
-        <div className="flex w-full">
-          <div className="flex flex-wrap flex-1 w-full gap-8 mx-24">
-            {cards.map((card) => {
-              return (
-                <div className="bg-white rounded-lg  flex flex-col justify-center items-center flex-1 py-6">
+      <div className={``}>
+        <div
+          className={`flex flex-wrap  max-w-[90%] w-full tab:space-s-8 space-y-6 tab:space-y-0 flex-col tab:flex-row tab:mx-24 justify-center items-stretch ${className}`}
+        >
+          {Cards.map((card: any, index: string) => {
+            return (
+              <div
+                key={index}
+                className={`bg-white rounded-lg  flex flex-col justify-center items-center flex-1 pt-6 ${cardClassName}`}
+              >
+                <div className={`${card.circleLink &&store&& `pb-6 mm:pb-10 lap:pt-6`}`}>
                   <Image
-                    width={100}
-                    height={100}
+                    width={card.imageW}
+                    height={card.imageH}
                     src={card.image}
                     alt={card.alt}
-                    className="w-36 h-24"
+                    className=""
                   />
-                  {card.circleLink ? (
-                    <Button className="w-[100%]  border border-gray-500 bg-[#253439] flex-1 p-1 rounded-lg">
-                      <div className="flex justify-center items-center cursor-pointer px-4 space-s-2 ">
-                        <Image
-                          width={100}
-                          height={100}
-                          src="/circleLink.svg"
-                          alt="circleLink"
-                          className="w-4 h-4 text-white bg-white"
-                        />
-                        <button className="text-white">{linkButton}</button>
-                      </div>
-                    </Button>
-                  ) : (
-                    <div className="w-[100%] bg-neutral-200 h-fit p-1 rounded-lg">
-                      <div className="flex justify-center">
-                        <button className="mr-2 text-neutral-400">
-                          {soon}
-                        </button>
+                </div>
+                {card.circleLink ? (
+                  <Button
+                    className={`min-w-full  bg-[#253439] hover:bg-[#253439]  !rounded-t-none ${connectButtonClasses}`}
+                  >
+                    <div className="flex justify-center items-center cursor-pointer space-s-2  ">
+                      <Image
+                        width={24}
+                        height={24}
+                        src="/client/circleLink.svg"
+                        alt="circleLink"
+                        className=""
+                      />
+                      <button className="text-white text-[20px] font-bold">
+                        {linkButton}
+                      </button>
+                    </div>
+                  </Button>
+                ) : (
+                  <Button
+                    className={` hover:bg-neutral-200  min-w-full !rounded-t-none  bg-neutral-200 cursor-auto !py-[1.2rem] ${soonButtonClasses}`}
+                  >
+                    <div className="flex justify-center items-center cursor-pointer space-s-2">
+                      <div className=" text-neutral-400 text-[20px]">
+                        {soon}
                       </div>
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                  </Button>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </>
