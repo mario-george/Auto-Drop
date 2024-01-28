@@ -240,14 +240,21 @@
     "ordersNumber": "عدد الطلبات",
     "tryForFree": "جرب مجانا"
   },
-  "settings": {
+  "clientSettings": {
     "settings": "الإعدادت",
     "currentPassword": "كلمة المرور الحالية",
     "newPassword": "كلمة المرور الجديدة",
     "confirmPassword": "تأكيد كلمة المرور",
     "saveChanges": "حفظ التغييرات",
     "changePassword": "تغيير كلمة المرور",
-    "changeAccountDetails": "تعديل بيانات الحساب"
+    "changeAccountDetails": "تعديل بيانات الحساب",
+    "merchantID": "رقم التاجر ID",
+    "name": "اسم العميل",
+    "marketName": "اسم المتجر",
+    "marketLink": "رابط المتجر",
+    "email": "البريد الالكتروني",
+    "phone": "رقم الهاتف",
+    "country": "الدولة"
   },
   "linkAccount": {
     "availablePlatforms": "المنصات المتاحة",
