@@ -22,8 +22,7 @@ export default function AvailablePlatforms({
 }) {
   const authHandler = async (link: string) => {
     const url = process.env.NEXT_PUBLIC_BACK_URL + link;
-    const response = await fetch(url);
-    console.log(await response.json());
+    window.location.href = url;
   };
   return (
     <>
