@@ -19,8 +19,6 @@ export const aliexpressAuth = (req: Request, res: Response) => {
 import { createHmac } from "crypto";
 
 export const aliexpressCallback = async (req: Request, res: Response) => {
-  console.log(req.user);
-  console.log(req.session);
   const aliexpressData = {
     appKey: "34271827",
     appSecret: "2c5bcc0958a9d9abd339232f1b31712e",
@@ -72,18 +70,12 @@ export const aliexpressCallback = async (req: Request, res: Response) => {
       const accessToken = respData.access_token;
       const refreshToken = respData.refresh_token;
 
-      const aliExpressToken = new AliExpressToken({
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      });
-      aliExpressToken
-        .save()
-        .then(() => {
-          res.redirect(process.env.Frontend_Link as string);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      const frontendLink = new URL(process.env.Frontend_Link+"/auth/aliexpress" as string);
+      frontendLink.searchParams.append("accessToken", accessToken);
+      frontendLink.searchParams.append("refreshToken", refreshToken);
+      res.redirect(frontendLink.toString());
+
+    
     }
     console.log(respData);
     res.status(200).json(respData);
