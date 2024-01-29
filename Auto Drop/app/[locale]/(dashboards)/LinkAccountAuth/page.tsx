@@ -2,9 +2,13 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import { useDispatch } from "react-redux";
+import { userActions } from "@/store/user-slice";
 
 const TokenExtractor: React.FC = () => {
   const userId = useSelector((state: RootState) => state.user.id);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     // Send a request to the API when the component mounts
     // Get the user token from the Redux store
@@ -37,7 +41,25 @@ const TokenExtractor: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log(data);
+        console.log("tokenType", tokenType);
+        console.log("data.sallaToken", data.data.user.sallaToken);
+        console.log("data.aliExpressToken", data.data.user.aliExpressToken);
+        console.log("data", data);
+        if (tokenType === "Salla") {
+          dispatch(
+            userActions.updateToken({
+              tokenType: "Salla",
+              token: data.data.user.sallaToken,
+            })
+          );
+        } else if (tokenType === "AliExpress") {
+          dispatch(
+            userActions.updateToken({
+              tokenType: "AliExpress",
+              token: data.data.user.aliExpressToken,
+            })
+          );
+        }
       } catch (error) {
         console.error(
           "There has been a problem with your fetch operation: ",
@@ -47,7 +69,7 @@ const TokenExtractor: React.FC = () => {
     };
 
     sendData();
-    window.location.href = "/";
+    // window.location.href = "/";
   }, []);
 
   return <div></div>;

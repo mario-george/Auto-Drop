@@ -39,6 +39,18 @@ const userSlice = createSlice({
       state.sallaToken = "";
       state.aliExpressToken = "";
     },
+    updateToken(state, action) {
+      const { tokenType, token } = action.payload;
+      console.log("here");
+      console.log(token);
+      console.log(tokenType);
+      if (tokenType === "Salla") {
+        state.sallaToken = token;
+      } else if (tokenType === "AliExpress") {
+        state.aliExpressToken = token;
+      }
+      console.log(state.aliExpressToken);
+    },
   },
 });
 
