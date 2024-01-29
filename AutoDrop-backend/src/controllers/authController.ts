@@ -255,13 +255,25 @@ export const sallaCallback = catchAsync(
     console.log(responseJson);
 
     if (response.ok) {
+      const respData = responseJson.data;
+
+      const accessToken = respData.access_token;
+      const refreshToken = respData.refresh_token;
+
+      const frontendLink = new URL(
+        (process.env.Frontend_Link + "/LinkAccountAuth") as string
+      );
+      frontendLink.searchParams.append("accessToken", accessToken);
+      frontendLink.searchParams.append("refreshToken", refreshToken);
+      frontendLink.searchParams.append("tokenType", "Salla");
+      return res.redirect(frontendLink.toString());
+
       const resStore = await fetch(`${sallaData.salla_api_url}/store/info`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${responseJson.access_token}`,
         },
       });
-      res.redirect(process.env.Frontend_Link as string);
 
       const resJson = await resStore.json();
       if (resStore.ok) {
