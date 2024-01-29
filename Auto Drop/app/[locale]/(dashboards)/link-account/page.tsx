@@ -42,6 +42,7 @@ export default function LinkAccount() {
       />
       <AvailablePlatforms
         linkButton={t("linkButton")}
+        linkButtonConnected={t("linkButtonConnected")}
         soon={t("soon")}
         Cards={PlatformCards}
       />
@@ -57,9 +58,10 @@ export default function LinkAccount() {
       /> */}
       <AvailablePlatforms
         linkButton={t("linkButton")}
+        linkButtonConnected={t("linkButtonConnected")}
         soon={t("soon")}
         Cards={StoreCards}
-        className="tab:max-w-[75%]"
+        className="tab:!max-w-[76%]"
         cardClassName={`pt-12 tab:!pt-2 ms:!pt-[3rem] `}
         soonButtonClasses="mt-6 tab:mt-auto tab:pt-4"
         connectButtonClasses="mt-  mt-auto"

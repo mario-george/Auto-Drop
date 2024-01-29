@@ -1,6 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+
 export default function AvailablePlatforms({
   soon,
   linkButton,
@@ -10,6 +13,7 @@ export default function AvailablePlatforms({
   soonButtonClasses,
   connectButtonClasses,
   store,
+  linkButtonConnected,
 }: {
   soon: string;
   linkButton: string;
@@ -19,7 +23,15 @@ export default function AvailablePlatforms({
   soonButtonClasses?: string;
   connectButtonClasses?: string;
   store?: boolean;
+  linkButtonConnected?: string;
 }) {
+  const sallaToken = useSelector((state: RootState) => state.user.sallaToken);
+  const aliExpressToken = useSelector(
+    (state: RootState) => state.user.aliExpressToken
+  );
+  console.log(sallaToken);
+  console.log(aliExpressToken);
+
   const authHandler = async (link: string) => {
     const url = process.env.NEXT_PUBLIC_BACK_URL + link;
     window.location.href = url;
@@ -55,12 +67,23 @@ export default function AvailablePlatforms({
                 </div>
                 {card.circleLink ? (
                   <Button
-                    className={`min-w-full  bg-[#253439] hover:bg-[#253439]  !rounded-t-none ${connectButtonClasses}`}
+                    className={`min-w-full  bg-[#253439] hover:bg-[#253439]  !rounded-t-none ${connectButtonClasses} ${
+                      card.alt == "salla" && sallaToken && `bg-green-700`
+                    } ${
+                      card.alt == "aliexpress" &&
+                      aliExpressToken &&
+                      `bg-green-700`
+                    }`}
                     onClick={() => {
                       if (card.authLink) {
                         authHandler(card.authLink);
                       }
                     }}
+                    // @ts-ignore
+                    disabled={
+                      (card.alt == "aliexpress" && aliExpressToken) ||
+                      (card.alt == "salla" && sallaToken)
+                    }
                   >
                     <div className="flex justify-center items-center cursor-pointer space-s-2  ">
                       <Image
@@ -71,7 +94,10 @@ export default function AvailablePlatforms({
                         className=""
                       />
                       <button className="text-white text-[20px] font-bold">
-                        {linkButton}
+                        {(card.alt == "salla" && sallaToken) ||
+                        (card.alt == "aliexpress" && aliExpressToken)
+                          ? linkButtonConnected
+                          : linkButton}
                       </button>
                     </div>
                   </Button>
