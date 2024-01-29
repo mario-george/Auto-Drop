@@ -26,12 +26,7 @@ app.use(cookieParser());
 //Allow cors for all domains
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://auto-drop-one.vercel.app",
-      "https://accounts.salla.sa' ",
-      "https://auto-drop-rtxb.onrender.com/",
-    ],
+    origin: "*",
     credentials: true,
   }) as any
 );
