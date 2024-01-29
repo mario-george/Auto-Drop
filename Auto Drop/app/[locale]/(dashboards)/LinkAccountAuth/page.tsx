@@ -50,7 +50,7 @@ const TokenExtractor: React.FC = () => {
     window.location.href = "/";
   }, []);
 
-  return <div>hi</div>;
+  return <div></div>;
 };
 
 export default TokenExtractor;
