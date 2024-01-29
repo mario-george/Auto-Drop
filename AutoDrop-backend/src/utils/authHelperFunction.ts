@@ -36,9 +36,9 @@ export const responseAndToken = (
       Date.now() +
         Number(process.env.JWT_ACCESS_COOKIE_EXPIRES_IN) * 24 * 60 * 60 * 1000
     ),
-    secure: process.env.NODE_ENV === "production",
+    // secure: process.env.NODE_ENV === "production",
+    secure: true,
   };
-
   res.cookie("accessToken", accessToken, cookieOptions);
 
   res.status(statusCode).json({
