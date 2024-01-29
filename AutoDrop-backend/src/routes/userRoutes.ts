@@ -28,7 +28,7 @@ router.post("/signin", signIn);
 router.patch("/edit", upload.single("file"), editProfile);
 router.post("/sendmail", sendForgetMail);
 router.patch("/forgetpassword", forgetPassword);
-router.patch("/save/token", saveTokenToUser);
+router.post("/saveToken", saveTokenToUser);
 
 /*  Google AUTH  */
 let userProfile: IProfileGoogle;

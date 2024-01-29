@@ -17,7 +17,7 @@ const TokenExtractor: React.FC = () => {
     const sendData = async () => {
       try {
         const response = await fetch(
-          process.env.NEXT_PUBLIC_BACK_URL + "auth/save/token",
+          process.env.NEXT_PUBLIC_BACK_URL + "auth/saveToken",
           {
             method: "POST",
             headers: {
