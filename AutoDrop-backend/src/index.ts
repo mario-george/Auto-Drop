@@ -26,11 +26,9 @@ app.use(cookieParser());
 //Allow cors for all domains
 app.use(
   cors({
-    origin: function (origin, callback) {
-      callback(null, true);
-    },
+    origin: "*",
     credentials: true,
-  })
+  }) as any
 );
 
 //Session middleware

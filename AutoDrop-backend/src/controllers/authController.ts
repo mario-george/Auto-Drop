@@ -242,7 +242,7 @@ export const sallaCallback = catchAsync(
     };
     const formData = new URLSearchParams();
     for (const [key, value] of Object.entries(data)) {
-      formData.append(key, value as string);
+      formData.append(key, value as string);  
     }
     const response = await fetch(`${sallaData.token_url}`, {
       method: "POST",
