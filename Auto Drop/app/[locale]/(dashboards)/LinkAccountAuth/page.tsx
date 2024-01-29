@@ -69,7 +69,7 @@ const TokenExtractor: React.FC = () => {
     };
 
     sendData();
-    window.location.href = "/";
+    // window.location.href = "/";
   }, []);
 
   return <div></div>;
