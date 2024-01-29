@@ -10,6 +10,7 @@ const TokenExtractor: React.FC = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const accessToken = urlParams.get("accessToken");
   const refreshToken = urlParams.get("refreshToken");
+  const tokenType = urlParams.get("tokenType");
 
   useEffect(() => {
     // Send a request to the API when the component mounts
@@ -26,6 +27,8 @@ const TokenExtractor: React.FC = () => {
               accessToken,
               refreshToken,
               userId,
+              tokenType
+
             }),
           }
         );
