@@ -1,5 +1,4 @@
 import HeaderContainer from "../_components/shared/HeaderContainer";
-import CardsSection from "./_components/AvailableStores";
 import { useLocale, useTranslations } from "next-intl";
 import Platforms from "@/components/icons/clientPages/Platforms";
 import CartSVG from "@/components/icons/clientPages/CartSVG";
@@ -33,30 +32,31 @@ export default function LinkAccount() {
     { image: "/amazon.svg", alt: "amazon", imageW: 188.65, imageH: 99.94 },
     { image: "/cj.svg", alt: "cj", imageW: 116.08, imageH: 99.94 },
   ];
+
   return (
     <>
       <HeaderContainer
         IconComponent={Platforms}
         title={t2("availablePlatforms")}
         className=" "
+        locale={locale}
       />
       <AvailablePlatforms
         linkButton={t("linkButton")}
         linkButtonConnected={t("linkButtonConnected")}
         soon={t("soon")}
         Cards={PlatformCards}
+        locale={locale}
       />
 
-      <HeaderContainer IconComponent={CartSVG} title={t2("availableStores")} />
-      {/*       <CardsSection
+      <HeaderContainer
+        IconComponent={CartSVG}
+        title={t2("availableStores")}
         locale={locale}
-        linkHeader={t("linkHeader")}
-        subLink1={t("subLink1")}
-        subLink2={t("subLink2")}
-        linkButton={t("linkButton")}
-        soon={t("soon")}
-      /> */}
+      />
+
       <AvailablePlatforms
+        locale={locale}
         linkButton={t("linkButton")}
         linkButtonConnected={t("linkButtonConnected")}
         soon={t("soon")}
