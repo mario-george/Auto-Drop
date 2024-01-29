@@ -26,7 +26,7 @@ app.use(cookieParser());
 //Allow cors for all domains
 app.use(
   cors({
-    origin: "*",
+    origin: ["http://localhost:3000", "https://auto-drop-one.vercel.app"],
     credentials: true,
   }) as any
 );
