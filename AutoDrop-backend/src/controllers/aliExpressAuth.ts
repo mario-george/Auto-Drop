@@ -20,6 +20,7 @@ export const aliexpressAuth = (req: Request, res: Response) => {
 import { createHmac } from "crypto";
 
 export const aliexpressCallback = async (req: Request, res: Response) => {
+  console.log(req.user);
   console.log(req.session);
   const aliexpressData = {
     appKey: "34271827",
