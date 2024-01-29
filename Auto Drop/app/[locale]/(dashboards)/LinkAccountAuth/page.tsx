@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -17,7 +17,7 @@ const TokenExtractor: React.FC = () => {
     const sendData = async () => {
       try {
         const response = await fetch(
-          process.env.NEXT_PUBLIC_BACK_URL + "/auth/save/token",
+          process.env.NEXT_PUBLIC_BACK_URL + "auth/save/token",
           {
             method: "POST",
             headers: {
