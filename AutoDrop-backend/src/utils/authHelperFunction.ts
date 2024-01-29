@@ -73,5 +73,10 @@ export const createPasswordResetToken = () => {
     .update(resetToken)
     .digest("hex");
   const resetTokenExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
-  return { resetToken, hashedResetToken, resetTokenExpiresAt };
+  return {
+    resetToken,
+    hashedResetToken,
+    resetTokenExpiresAt,
+    verifyAccessToken,
+  };
 };
