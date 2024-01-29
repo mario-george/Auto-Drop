@@ -10,6 +10,7 @@ import {
   hashPassword,
   comparePassword,
   responseAndToken,
+  verifyAccessToken,
 } from "../utils/authHelperFunction";
 
 const secret = speakeasy.generateSecret({ length: 20 });
@@ -215,12 +216,14 @@ const sallaData = {
   client_secret: "2520f91a575d0bb07579341bea3e10ff",
   auth_url: "https://accounts.salla.sa/oauth2/auth",
   token_url: "https://accounts.salla.sa/oauth2/token",
-  callback_url: "https://auto-drop-rtxb.onrender.com/api/v1/auth/auth-salla/callback",
+  callback_url:
+    "https://auto-drop-rtxb.onrender.com/api/v1/auth/auth-salla/callback",
   salla_api_url: "https://api.salla.dev/admin/v2",
 };
 
 export const sallaAuth = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log(verifyAccessToken(req.cookies.accessToken));
     const url = `${sallaData.auth_url}?client_id=${sallaData.client_id}&redirect_url=${sallaData.callback_url}&response_type=code&state=125478950&scope=offline_access&client_secret=${sallaData.client_secret}`;
     res.redirect(url);
   }
