@@ -32,11 +32,20 @@ export const saveTokenToUser = catchAsync(
     await token.save();
 
     // Update the user's token field
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { [tokenType + "Token"]: token._id },
-      { new: true }
-    );
+    let update = {};
+    switch (tokenType) {
+      case "AliExpress":
+        update = { aliexpressToken: token._id };
+        break;
+      case "Salla":
+        update = { sallaToken: token._id };
+        break;
+      // Add more cases as needed
+      default:
+        return next(new AppError("Invalid token type", 400));
+    }
+
+    const user = await User.findByIdAndUpdate(userId, update, { new: true });
     if (!user) {
       return next(new AppError("User not found", 404));
     }
