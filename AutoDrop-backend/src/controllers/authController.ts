@@ -223,7 +223,7 @@ const sallaData = {
 
 export const sallaAuth = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log(await verifyAccessToken(req.cookies.accessToken));
+    console.log(req.cookies.accessToken);
     const url = `${sallaData.auth_url}?client_id=${sallaData.client_id}&redirect_url=${sallaData.callback_url}&response_type=code&state=125478950&scope=offline_access&client_secret=${sallaData.client_secret}`;
     res.redirect(url);
   }
