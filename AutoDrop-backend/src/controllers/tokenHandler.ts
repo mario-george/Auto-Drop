@@ -35,7 +35,7 @@ export const saveTokenToUser = catchAsync(
     let update = {};
     switch (tokenType) {
       case "AliExpress":
-        update = { aliexpressToken: token._id };
+        update = { aliExpressToken: token._id };
         break;
       case "Salla":
         update = { sallaToken: token._id };
