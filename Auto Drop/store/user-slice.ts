@@ -11,6 +11,8 @@ const userSlice = createSlice({
     role: "",
     image: "",
     phone: "",
+    sallaToken: "",
+    aliExpressToken: "",
   },
   reducers: {
     login(state, action) {
@@ -22,6 +24,8 @@ const userSlice = createSlice({
       state.token = action.payload.token;
       state.id = action.payload.id;
       state.phone = action.payload.phone;
+      state.sallaToken = action.payload.sallaToken;
+      state.aliExpressToken = action.payload.aliExpressToken;
     },
     logout(state) {
       state.isLoggedIn = false;
@@ -32,6 +36,8 @@ const userSlice = createSlice({
       state.token = "";
       state.id = "";
       state.phone = "";
+      state.sallaToken = "";
+      state.aliExpressToken = "";
     },
   },
 });

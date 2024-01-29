@@ -108,6 +108,8 @@ export default function LoginForm({
             role: responseData.data.user.role,
             image: responseData.data.user.image,
             Phone: responseData.data.user.Phone,
+            sallaToken: responseData.data.user.sallaToken,
+            aliExpressToken: responseData.data.user.aliExpressToken,
             isLoggedin: true,
           })
         );

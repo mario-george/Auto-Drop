@@ -179,6 +179,8 @@ export default function SignupForm({
             image: data.data.user.image,
             role: data.data.user.role,
             phone: data.data.user.phone,
+            sallaToken: data.data.user.sallaToken,
+            aliExpressToken: data.data.user.aliExpressToken,
           })
         );
         router.push(`/`);
