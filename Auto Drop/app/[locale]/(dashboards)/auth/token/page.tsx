@@ -27,8 +27,7 @@ const TokenExtractor: React.FC = () => {
               accessToken,
               refreshToken,
               userId,
-              tokenType
-
+              tokenType,
             }),
           }
         );
@@ -48,6 +47,7 @@ const TokenExtractor: React.FC = () => {
     };
 
     sendData();
+    window.location.href = "/";
   }, [accessToken, refreshToken, userId]);
 
   return <div></div>;
