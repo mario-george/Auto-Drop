@@ -30,6 +30,7 @@ app.use(
       "http://localhost:3000",
       "https://auto-drop-one.vercel.app",
       "https://accounts.salla.sa' ",
+      "https://auto-drop-rtxb.onrender.com/",
     ],
     credentials: true,
   }) as any
