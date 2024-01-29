@@ -261,6 +261,19 @@ export const sallaCallback = catchAsync(
           Authorization: `Bearer ${responseJson.access_token}`,
         },
       });
+
+      if (response.ok) {
+        const accessToken = responseJson.access_token;
+        const refreshToken = responseJson.refresh_token;
+
+        const frontendLink = new URL(
+          (process.env.Frontend_Link + "/LinkAccountAuth") as string
+        );
+        frontendLink.searchParams.append("accessToken", accessToken);
+        frontendLink.searchParams.append("refreshToken", refreshToken);
+        frontendLink.searchParams.append("tokenType", "Salla");
+        return res.redirect(frontendLink.toString());
+      }
       res.redirect(process.env.Frontend_Link as string);
 
       const resJson = await resStore.json();
