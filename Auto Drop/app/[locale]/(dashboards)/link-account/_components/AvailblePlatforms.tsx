@@ -22,7 +22,8 @@ export default function AvailablePlatforms({
 }) {
   const authHandler = async (link: string) => {
     const url = process.env.NEXT_PUBLIC_BACK_URL + link;
-    window.location.href = url;
+    const response = await fetch(url, { credentials: "include" });
+    console.log(await response.json());
   };
   return (
     <>
