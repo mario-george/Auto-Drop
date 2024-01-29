@@ -14,8 +14,7 @@ let aliexpressData = {
 export const aliexpressAuth = (req: Request, res: Response) => {
   const url = `https://api-sg.aliexpress.com/oauth/authorize?client_id=${aliexpressData.appKey}&redirect_uri=${aliexpressData.callbackUrl}&response_type=code&force_auth=true`;
 
-  res.send({ url });
-  // res.redirect(url);
+  res.redirect(url);
 };
 import { createHmac } from "crypto";
 
