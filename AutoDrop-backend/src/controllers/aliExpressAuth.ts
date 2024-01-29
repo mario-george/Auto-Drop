@@ -76,7 +76,7 @@ export const aliexpressCallback = async (req: Request, res: Response) => {
       frontendLink.searchParams.append("accessToken", accessToken);
       frontendLink.searchParams.append("refreshToken", refreshToken);
       frontendLink.searchParams.append("tokenType", "AliExpress");
-      res.redirect(frontendLink.toString());
+      return res.redirect(frontendLink.toString());
     }
     console.log(respData);
     res.status(200).json(respData);
