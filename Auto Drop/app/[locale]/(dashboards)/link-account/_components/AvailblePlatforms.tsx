@@ -102,12 +102,12 @@ export default function AvailablePlatforms({
                         alt="circleLink"
                         className=""
                       />
-                      <button className="text-white text-[20px] font-bold">
+                      <div className="text-white text-[20px] font-bold">
                         {(card.alt == "salla" && sallaToken) ||
                         (card.alt == "aliexpress" && aliExpressToken)
                           ? linkButtonConnected
                           : linkButton}
-                      </button>
+                      </div>
                     </div>
                   </Button>
                 ) : (
