@@ -47,6 +47,8 @@ export default function LinkAccount() {
         soon={t("soon")}
         Cards={PlatformCards}
         locale={locale}
+        soonButtonClasses="tab:mt-auto "
+
       />
 
       <HeaderContainer
@@ -63,8 +65,9 @@ export default function LinkAccount() {
         Cards={StoreCards}
         className="tab:!max-w-[76%]"
         cardClassName={`pt-12 tab:!pt-2 ms:!pt-[3rem] `}
-        soonButtonClasses="mt-6 tab:mt-auto tab:pt-4"
-        connectButtonClasses="mt-  mt-auto"
+        imageWrapperClasses={`!mb-auto `}
+        soonButtonClasses="mt-6 tab:mt-auto tab:pt-4 lapl:mt-6"
+        connectButtonClasses="mt-  !mt-auto lapl:mt-12 "
         store={true}
       />
     </>

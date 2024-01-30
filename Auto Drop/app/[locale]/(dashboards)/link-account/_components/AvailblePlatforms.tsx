@@ -16,6 +16,7 @@ export default function AvailablePlatforms({
   store,
   linkButtonConnected,
   locale,
+  imageWrapperClasses,
 }: {
   soon: string;
   linkButton: string;
@@ -27,6 +28,7 @@ export default function AvailablePlatforms({
   store?: boolean;
   linkButtonConnected?: string;
   locale?: string;
+  imageWrapperClasses?: string;
 }) {
   const sallaToken = useSelector((state: RootState) => state.user.sallaToken);
   const aliExpressToken = useSelector(
@@ -53,16 +55,16 @@ export default function AvailablePlatforms({
             return (
               <div
                 key={index}
-                className={`bg-white rounded-lg  flex flex-col justify-center items-center flex-1 pt-6 ${cardClassName}`}
+                className={`bg-white rounded-lg  flex flex-col justify-center items-center flex-1 pt-6 shadow ${cardClassName}`}
               >
                 <div
                   className={`${
                     card.circleLink &&
                     store &&
-                    `pb-6 mm:pb-10 tab:!pb-[0rem] tab:pt-9 lap:pt-11 lapl:my-9 lapl:pb-9 lapl:mb-16 `
-                  } ${card.alt == "amazon" ? `tab:pt-4` : ``}  ${
+                    `!mb-12 ms:pb-12 ms:pt-4 tab:!pb-[0rem] tab:pt-9 lap:pt-11 lapl:my-9 lapl:pb-24 lapl:!pt-[25px]  lapl:mb-22  `
+                  } ${card.alt == "amazon" ? `tab:pt-4` : ``}    ${
                     store && `lapl:pt-10`
-                  } `}
+                  } lapl:mb-auto ${imageWrapperClasses} `}
                 >
                   <Image
                     width={card.imageW}
