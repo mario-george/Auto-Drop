@@ -14,7 +14,10 @@ export default function DashboardLayout({
 
   return (
     <DashboardProtectWrapper>
-      <div className="bg-[#F0F3F4] py-4" dir={locale === "ar" ? "rtl" : "ltr"}>
+      <div
+        className="bg-[#F0F3F4] py-4 transition-all duration-300"
+        dir={locale === "ar" ? "rtl" : "ltr"}
+      >
         <div className="flex space-s-3 " dir={locale === "ar" ? "rtl" : "ltr"}>
           <SideNav locale={locale} />
           <div className="flex flex-col flex-1 space-s-0 !my-0">
