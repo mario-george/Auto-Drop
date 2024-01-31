@@ -118,7 +118,7 @@ export default function SideNavRenderer({
         transition={{ duration: 0.2, ease: "easeInOut" }}
         className={`group transition-all duration-200 flex flex-col min-h-full text-[#25343980] text-black bg-white border overflow-hidden rounded-md ${navClass} `}
       >
-        <button className={`${isAr ? `` : `ml-5 mt-5`}`}>
+        <button className={`${isAr ? `mr-5` : `ml-5`} mt-5`}>
           {" "}
           <motion.svg
             initial="closed"
@@ -148,7 +148,7 @@ export default function SideNavRenderer({
           </motion.svg>
         </button>
         <div className="flex items-center justify-center h-16">
-          <h1 className="flex space-x-2 mr-[4rem] ">
+          <h1 className={`flex space-x-2 ${isAr ? `mr-[5rem]` : `mr-[4.8rem]`}`}>
             <div className="">
               <div className="relative">
                 <div className="absolute z-30  left-0 right-12 top-0 bottom-0 group-hover:bg-transparent transition-all duration-300" />

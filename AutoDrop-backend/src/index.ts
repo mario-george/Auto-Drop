@@ -12,6 +12,7 @@ import xss from "xss";
 import compression from "compression";
 import { conect } from "./utils/DBConnection";
 import userRoutes from "./routes/userRoutes";
+import tokenRoutes from "./routes/tokenRoutes";
 import globalErrorHandler from "./controllers/errorController";
 import AppError from "./utils/appError";
 
@@ -69,6 +70,7 @@ conect();
 
 //Global resources
 app.use("/api/v1/auth", userRoutes);
+app.use("/api/v1/token", tokenRoutes);
 
 // Handle requests from wrong urls
 app.all("*", (req, res, next) => {

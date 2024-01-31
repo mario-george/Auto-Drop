@@ -10,6 +10,7 @@ export default function SettingsPage() {
   return (
     <>
       <Settings
+        locale={locale}
         settings={t("settings")}
         currentPassword={t("currentPassword")}
         newPassword={t("newPassword")}

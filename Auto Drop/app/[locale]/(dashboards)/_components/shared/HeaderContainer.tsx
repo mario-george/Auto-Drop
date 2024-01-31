@@ -8,6 +8,8 @@ interface CardHeader {
   IconComponent?: React.ComponentType;
   className?: string;
   locale?: string;
+  mdClasses?: string;
+  headerClasses?: string;
 }
 export default function HeaderContainer({
   title,
@@ -15,13 +17,16 @@ export default function HeaderContainer({
   IconComponent,
   className,
   locale,
+  mdClasses,
+  headerClasses,
 }: CardHeader) {
+  const isAr = locale==="ar"
   return (
-    <MotionWrapper locale={locale}>
+    <MotionWrapper locale={locale} mdClasses={mdClasses}>
       <div
-        className={`bg-white  mx-1 lap:!mx-6 text-[#253439]  px-6 py-2 my-12 rounded-lg shadow  ${
+        className={`bg-white  text-[#253439]  px-6 py-2 my-12 rounded-lg shadow ${isAr?`ml-3 tab:ml-3 tab:mr-3`:`mr-3 tab:mr-3 tab:ml-3`}   ${
           className ? className : null
-        }`}
+        } ${headerClasses ? headerClasses : ``}`}
       >
         {icon && <Image src={icon} width={24} height={24} alt="icon" />}
         {IconComponent ? (

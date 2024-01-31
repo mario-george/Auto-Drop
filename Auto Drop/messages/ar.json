@@ -255,7 +255,9 @@
     "marketLink": "رابط المتجر",
     "email": "البريد الالكتروني",
     "phone": "رقم الهاتف",
-    "country": "الدولة"
+    "country": "الدولة",
+    "backToSettings":"الرجوع إلى الإعدادت"
+
   },
   "linkAccount": {
     "availablePlatforms": "المنصات المتاحة",

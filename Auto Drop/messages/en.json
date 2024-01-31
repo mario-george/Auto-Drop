@@ -256,6 +256,7 @@
     "email": "Email",
     "phone": "Phone Number",
     "country": "Country"
+    ,"backToSettings":"Back to settings"
   },
   "linkAccount": {
     "availablePlatforms": "Available Platforms",

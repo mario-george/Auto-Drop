@@ -47,8 +47,15 @@ export default function LinkAccount() {
         soon={t("soon")}
         Cards={PlatformCards}
         locale={locale}
-        soonButtonClasses="tab:mt-auto "
-
+        soonButtonClasses="tab:mt-auto  ms:h-[30px] ms:mt-auto  tab:h-[40px]"
+        cardClassName={`w-[45%] min-w-[45%] tab:min-w-0 mx-1 !my-1 ml:mx-2 ml:my-2 `}
+        connectButtonClasses={`!px-0 text-sm ms:h-[30px] ms:mt-auto tab:h-[40px]`}
+        imageWrapperClasses={`!mb-2 `}
+        className={`tab:px-3  ${
+          locale === "ar"
+            ? `ms:pl-1 mm:pl-3 ml:pl-2`
+            : `ms:pr-1 mm:pr-2 ml:pr-1`
+        }`}
       />
 
       <HeaderContainer
@@ -63,11 +70,15 @@ export default function LinkAccount() {
         linkButtonConnected={t("linkButtonConnected")}
         soon={t("soon")}
         Cards={StoreCards}
-        className="tab:!max-w-[76%]"
-        cardClassName={`pt-12 tab:!pt-2 ms:!pt-[3rem] `}
-        imageWrapperClasses={`!mb-auto `}
-        soonButtonClasses="mt-6 tab:mt-auto tab:pt-4 lapl:mt-6"
-        connectButtonClasses="mt-  !mt-auto lapl:mt-12 "
+        className= {`tab:!max-w-[76%] tab:px-3  ${
+          locale === "ar"
+            ? `ms:pl-1 mm:pl-3 ml:pl-2`
+            : `ms:pr-1 mm:pr-2 ml:pr-1`
+        }`}
+        cardClassName={`pt-12  tab:!pt-2 ms:!pt-[1.5rem] w-[45%] min-w-[45%] tab:min-w-0  mx-1 !my-1 ml:mx-2 ml:my-2`}
+        imageWrapperClasses={`!mb-2 `}
+        soonButtonClasses="mt-6 ms:h-[30px] tab:h-[40px] ms:mt-auto tab:mt-auto tab:pt-4 lapl:mt-6"
+        connectButtonClasses="!mt-auto lapl:mt-12 ms:h-[30px] tab:h-[40px] ms:mt-auto "
         store={true}
       />
     </>

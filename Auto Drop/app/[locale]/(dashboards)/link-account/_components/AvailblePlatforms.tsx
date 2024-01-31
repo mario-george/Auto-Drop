@@ -4,7 +4,10 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { motion } from "framer-motion";
-
+import { FaUnlink } from "react-icons/fa";
+import { userActions } from "@/store/user-slice";
+import { useDispatch } from "react-redux";
+import { cn } from "@/lib/utils";
 export default function AvailablePlatforms({
   soon,
   linkButton,
@@ -30,13 +33,46 @@ export default function AvailablePlatforms({
   locale?: string;
   imageWrapperClasses?: string;
 }) {
+  const dispatch = useDispatch();
   const sallaToken = useSelector((state: RootState) => state.user.sallaToken);
   const aliExpressToken = useSelector(
     (state: RootState) => state.user.aliExpressToken
   );
+  const isAr = locale == "ar";
   console.log(sallaToken);
   console.log(aliExpressToken);
-
+  const deleteTokenHandler = async (tokenType: string) => {
+    let path = "token";
+    let token;
+    if (tokenType == "salla") {
+      token = sallaToken;
+      path += `/sallaToken/${token}`;
+      tokenType = "Salla";
+    } else if (tokenType == "aliexpress") {
+      token = aliExpressToken;
+      path += `/aliExpressToken/${token}`;
+      tokenType = "AliExpress";
+    } else {
+      return;
+    }
+    try {
+      const response = await fetch("http://localhost:10000/api/v1/" + path, {
+        method: "DELETE",
+      });
+      const data = await response.json();
+      console.log(data);
+      if (response.ok) {
+        dispatch(
+          userActions.updateToken({
+            tokenType,
+            token: "",
+          })
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   const authHandler = async (link: string) => {
     const url = process.env.NEXT_PUBLIC_BACK_URL + link;
     window.location.href = url;
@@ -49,73 +85,110 @@ export default function AvailablePlatforms({
     <>
       <motion.div initial="hidden" animate="visible" variants={variants}>
         <div
-          className={`flex flex-wrap mm:mx-3 ml:px-6 tab:max-w-full max-w-[90%] w-full tab:space-s-8 tab:mx-0 space-y-6 tab:space-y-0 flex-col tab:flex-row justify-center items-stretch ${className}`}
+          className={`flex flex-wrap  tab:max-w-full  w-full tab:space-s-8 tab:mx-0 space-y-6 tab:space-y-0  tab:flex-row justify-center items-stretch ${className}`}
         >
           {Cards.map((card: any, index: string) => {
             return (
               <div
                 key={index}
-                className={`bg-white rounded-lg  flex flex-col justify-center items-center flex-1 pt-6 shadow ${cardClassName}`}
+                className={`bg-white rounded-lg  flex flex-col justify-center items-center flex-1 pt-6 shadow ${
+                  card.alt == "cj"
+                    ? `flex-grow-0 min-w-[45%]   tab:min-w-0 tab:flex-1  !pt-0 !py-0 !my-0 ${
+                        locale === `ar` ? `!ml-auto` : `!mr-auto`
+                      } `
+                    : ``
+                } ${cardClassName}`}
               >
                 <div
                   className={`${
                     card.circleLink &&
                     store &&
-                    `!mb-12 ms:pb-12 ms:pt-4 tab:!pb-[0rem] tab:pt-9 lap:pt-11 lapl:my-9 lapl:pb-24 lapl:!pt-[25px]  lapl:mb-22  `
+                    ` tab:!pb-[0rem] tab:pt-9 lap:pt-11 lapl:my-9 lapl:pb-24 lapl:!pt-[25px]  lapl:mb-22  `
                   } ${card.alt == "amazon" ? `tab:pt-4` : ``}    ${
                     store && `lapl:pt-10`
-                  } lapl:mb-auto ${imageWrapperClasses} `}
+                  } lapl:mb-auto ${imageWrapperClasses}`}
                 >
                   <Image
                     width={card.imageW}
                     height={card.imageH}
                     src={card.image}
                     alt={card.alt}
-                    className=""
+                    className="ms:w-24 ms:h-12 tab:h-auto tab:w-auto"
                   />
                 </div>
                 {card.circleLink ? (
-                  <Button
-                    className={`min-w-full  bg-[#253439] hover:bg-[#253439]  !rounded-t-none ${connectButtonClasses} ${
-                      card.alt == "salla" && sallaToken && `bg-green-700`
-                    } ${
-                      card.alt == "aliexpress" &&
-                      aliExpressToken &&
-                      `bg-green-700`
-                    }`}
-                    onClick={() => {
-                      if (card.authLink) {
-                        authHandler(card.authLink);
-                      }
-                    }}
-                    // @ts-ignore
-                    disabled={
-                      (card.alt == "aliexpress" && aliExpressToken) ||
-                      (card.alt == "salla" && sallaToken)
-                    }
-                  >
-                    <div className="flex justify-center items-center cursor-pointer space-s-2  ">
-                      <Image
-                        width={24}
-                        height={24}
-                        src="/client/circleLink.svg"
-                        alt="circleLink"
-                        className=""
-                      />
-                      <div className="text-white text-[20px] font-bold">
+                  <>
+                    <div className="relative min-w-full mt-auto">
+                      {((card.alt == "salla" && sallaToken) ||
+                        (card.alt == "aliexpress" && aliExpressToken)) && (
+                        <div
+                          onClick={() => {
+                            deleteTokenHandler(card.alt);
+                          }}
+                          className={`absolute  ${
+                            isAr
+                              ? `top-[9px] ms:right-[15px] mm:right-[30px] tab:right-[23px] tab:top-[11px] lap:top-[9px] lap:right-[30px] lapl:right-[85px] k4:right-[220px]`
+                              : `top-2 ms:left-[15px] mm:left-[30px] tab:left-[18px] tab:top-[10px] lap:top-[8px] lap:left-[25px] lapl:left-[80px] k4:left-[200px] `
+                          }  x left-20 cursor-pointer z-[2]`}
+                        >
+                          <FaUnlink className="bg-white  ms:text-sm rounded-full lap:w-6 lap:h-6 text-red-500 tab:text-[18px] lap:text-[20px] " />
+                        </div>
+                      )}
+
+                      <Button
+                        className={`  bg-[#253439] min-w-full hover:bg-[#253439]  !rounded-t-none ${connectButtonClasses} ${
+                          card.alt == "salla" && sallaToken && `bg-green-700`
+                        } ${
+                          card.alt == "aliexpress" &&
+                          aliExpressToken &&
+                          `bg-green-700`
+                        }`}
+                        onClick={() => {
+                          if (card.authLink) {
+                            authHandler(card.authLink);
+                          }
+                        }}
+                        // @ts-ignore
+                        disabled={
+                          (card.alt == "aliexpress" && aliExpressToken) ||
+                          (card.alt == "salla" && sallaToken)
+                        }
+                      >
                         {(card.alt == "salla" && sallaToken) ||
-                        (card.alt == "aliexpress" && aliExpressToken)
-                          ? linkButtonConnected
-                          : linkButton}
-                      </div>
+                        (card.alt == "aliexpress" && aliExpressToken) ? (
+                          <div className="flex justify-center items-center cursor-pointer space-s-2 ">
+                            <div
+                              className={cn(
+                                "text-white text-xs ml:text-[15px] lap:text-[20px] font-bold ",
+                                `${isAr ? `mr-2` : `ml-5`}`
+                              )}
+                            >
+                              {linkButtonConnected}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex justify-center items-center cursor-pointer space-s-2  ">
+                            <Image
+                              width={24}
+                              height={24}
+                              src="/client/circleLink.svg"
+                              alt="circleLink"
+                              className="ms:w-5 ms:h-5"
+                            />
+                            <div className="text-white text-xs ml:text-[15px] lap:text-[20px] font-bold ">
+                              {linkButton}
+                            </div>
+                          </div>
+                        )}
+                      </Button>
                     </div>
-                  </Button>
+                  </>
                 ) : (
                   <Button
-                    className={` hover:bg-neutral-200  min-w-full !rounded-t-none  bg-neutral-200 cursor-auto !py-[1.2rem]  tab:!py-[1.3rem] ${soonButtonClasses}`}
+                    className={` hover:bg-neutral-200  min-w-full  !rounded-t-none  bg-neutral-200 cursor-auto ${soonButtonClasses}`}
                   >
                     <div className="flex justify-center items-center space-s-2">
-                      <div className=" text-neutral-400 text-[20px]">
+                      <div className=" text-neutral-400 ms:text-sm ml:text-lg mm:px-3 tab:text-[20px]">
                         {soon}
                       </div>
                     </div>
