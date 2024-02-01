@@ -25,6 +25,13 @@ const userModel = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "SallaToken",
     },
+    code: {
+      type: String,
+    },
+    active: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
