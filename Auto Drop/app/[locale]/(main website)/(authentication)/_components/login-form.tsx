@@ -110,6 +110,7 @@ export default function LoginForm({
             Phone: responseData.data.user.Phone,
             sallaToken: responseData.data.user.sallaToken,
             aliExpressToken: responseData.data.user.aliExpressToken,
+            country: responseData.data.user.country,
             isLoggedin: true,
           })
         );

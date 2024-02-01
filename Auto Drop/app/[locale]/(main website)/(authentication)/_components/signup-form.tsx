@@ -194,6 +194,7 @@ export default function SignupForm({
           phone: data.data.user.phone,
           sallaToken: data.data.user.sallaToken,
           aliExpressToken: data.data.user.aliExpressToken,
+          country: data.data.user.country,
         })
       );
       router.push(`/`);

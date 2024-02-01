@@ -16,6 +16,7 @@ import {
   generateVerificationCode,
   sendVerificationCode,
 } from "../utils/verifyEmail";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 const secret = speakeasy.generateSecret({ length: 20 });
 
@@ -26,7 +27,7 @@ let validateEmail = function (email: string) {
 
 export const signUp = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, phone } = req.body;
     if (!name) {
       return next(new AppError("please enter your name", 400));
     }
@@ -49,21 +50,28 @@ export const signUp = catchAsync(
 
     let hashed = await hashPassword(password);
     let user;
+    console.log(parsePhoneNumberFromString(phone)!.country!);
+    console.log(parsePhoneNumberFromString(phone)!);
     if (existingUser) {
       // Update the existing user
       existingUser.password = hashed;
       existingUser.role = role;
       existingUser.code = code;
+      existingUser.phone = phone;
+      existingUser.country = parsePhoneNumberFromString(phone)!.country!;
       await existingUser.save();
       user = existingUser;
     } else {
       // Create a new user
+      console.log(req.body);
       user = await User.create({
         name,
         email,
         password: hashed,
         role,
         code,
+        phone,
+        country: parsePhoneNumberFromString(phone)!.country,
       });
     }
     res.status(201).json({

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const userModel = new mongoose.Schema(
   {
     name: { type: String, required: true, maxLength: 40 },
-    email: { type: String, required: true, maxLength: 40 },
+    email: { type: String, required: true, maxLength: 40, unique: true },
     password: { type: String, required: true, maxLength: 150 },
     role: { type: String, default: "client", enum: ["admin", "client"] },
     image: {

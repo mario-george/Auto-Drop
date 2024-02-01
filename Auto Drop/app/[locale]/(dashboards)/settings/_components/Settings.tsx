@@ -47,7 +47,7 @@ export default function Settings({
   let userId = user.id;
   let userEmail = user.email;
   let userPhone = user.phone;
-  // let userCountry = user.country;
+  let userCountry = user.country;
   let userImage = user.image;
   console.log(user);
   const isAr = locale === "ar";
@@ -134,7 +134,7 @@ export default function Settings({
               <div>{country}</div>
               <Input
                 className="bg-[#f0f3f4] rounded-lg text-[#253439]  tab:max-w-[45%]"
-                // value={userCountry}
+                value={userCountry}
               />
             </div>
           </div>
