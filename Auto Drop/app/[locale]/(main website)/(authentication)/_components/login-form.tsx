@@ -107,7 +107,7 @@ export default function LoginForm({
             email: responseData.data.user.email,
             role: responseData.data.user.role,
             image: responseData.data.user.image,
-            Phone: responseData.data.user.Phone,
+            phone: responseData.data.user.phone,
             sallaToken: responseData.data.user.sallaToken,
             aliExpressToken: responseData.data.user.aliExpressToken,
             country: responseData.data.user.country,
