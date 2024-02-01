@@ -127,8 +127,8 @@ export default function AvailablePlatforms({
                           }}
                           className={`absolute  ${
                             isAr
-                              ? `top-[9px] ms:right-[15px] mm:right-[30px] tab:right-[23px] tab:top-[11px] lap:top-[9px] lap:right-[30px] lapl:right-[85px] k4:right-[220px]`
-                              : `top-2 ms:left-[15px] mm:left-[30px] tab:left-[18px] tab:top-[10px] lap:top-[8px] lap:left-[25px] lapl:left-[80px] k4:left-[200px] `
+                              ? `top-[9px] ms:right-[15px] mm:right-[30px] tab:right-[23px] tab:top-[11px] lap:top-[20%] lap:right-[10%] lapl:right-[25%] k4:right-[220px]`
+                              : `top-2 ms:left-[15px] mm:left-[30px] tab:left-[18px] tab:top-[10px] lap:top-[20%] lap:left-[7%] lapl:left-[20%] k4:left-[200px] `
                           }  x left-20 cursor-pointer z-[2]`}
                         >
                           <FaUnlink className="bg-white  ms:text-sm rounded-full lap:w-6 lap:h-6 text-red-500 tab:text-[18px] lap:text-[20px] " />
