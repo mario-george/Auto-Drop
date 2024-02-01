@@ -54,6 +54,7 @@ export default function SignupForm({
   code,
   codePlaceholder,
   confirm,
+  invalidCode,
 }: {
   classes?: string;
   locale: string;
@@ -82,6 +83,7 @@ export default function SignupForm({
   code: string;
   confirm: string;
   codePlaceholder: string;
+  invalidCode: string;
 }) {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -144,7 +146,7 @@ export default function SignupForm({
       path: ["passwordConfirmation"],
     });
   const codeSchema = z.object({
-    code: z.string().min(2, invalidFName).max(100),
+    code: z.string().min(2, invalidCode).max(100),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({

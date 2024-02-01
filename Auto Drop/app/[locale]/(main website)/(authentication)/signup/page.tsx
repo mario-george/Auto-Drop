@@ -34,14 +34,13 @@ export default function Signup() {
           invalidPassword={t("invalidPassword")}
           invalidFName={t("invalidFName")}
           invalidLName={t("invalidLName")}
+          invalidCode={t("invalidCode")}
           phone={t("phone")}
           phonePlaceholder={t("phonePlaceholder")}
           invalidPhone={t("invalidPhone")}
-          
           code={t("code")}
           codePlaceholder={t("codePlaceholder")}
           confirm={t("confirm")}
-          
           locale={locale}
           classes="basis-1/2"
         />
