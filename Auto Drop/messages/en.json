@@ -28,15 +28,14 @@
     "invalidPassword": "Password must match the following: 8 characters long, 1 uppercase, 1 special character",
     "invalidFName": "First name must be at least 2 characters long",
     "invalidLName": "Last name must be at least 2 characters long",
+    "invalidCode": "Code must be at least 2 numbers long",
     "phone": "Phone",
     "phonePlaceholder": "Enter your phone",
     "invalidPhone": "Phone number is required",
     "welcome": "Welcome to Auto Drop",
-    "confirm":"Confirm",
-    "code":"Code",
+    "confirm": "Confirm",
+    "code": "Code",
     "codePlaceholder": "Enter your code"
-
-
   },
   "loginForm": {
     "email": "Email",
@@ -260,8 +259,8 @@
     "marketLink": "Store Link",
     "email": "Email",
     "phone": "Phone Number",
-    "country": "Country"
-    ,"backToSettings":"Back to settings"
+    "country": "Country",
+    "backToSettings": "Back to settings"
   },
   "linkAccount": {
     "availablePlatforms": "Available Platforms",
