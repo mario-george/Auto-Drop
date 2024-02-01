@@ -31,7 +31,11 @@
     "phone": "رقم الهاتف",
     "phonePlaceholder": "أدخل رقم الهاتف",
     "invalidPhone": "رقم الهاتف مطلوب",
-    "welcome": "أهلا بك في أوتـو دروب"
+    "welcome": "أهلا بك في أوتـو دروب",
+    "confirm":"تأكيد",
+    "code":"كود",
+    "codePlaceholder": "أدخل الكود"
+
   },
   "loginForm": {
     "email": "البريد الإلكتروني",

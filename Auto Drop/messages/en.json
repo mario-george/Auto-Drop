@@ -31,7 +31,12 @@
     "phone": "Phone",
     "phonePlaceholder": "Enter your phone",
     "invalidPhone": "Phone number is required",
-    "welcome": "Welcome to Auto Drop"
+    "welcome": "Welcome to Auto Drop",
+    "confirm":"Confirm",
+    "code":"Code",
+    "codePlaceholder": "Enter your code"
+
+
   },
   "loginForm": {
     "email": "Email",
