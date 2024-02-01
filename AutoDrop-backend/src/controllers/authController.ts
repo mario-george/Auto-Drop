@@ -12,6 +12,10 @@ import {
   responseAndToken,
   verifyAccessToken,
 } from "../utils/authHelperFunction";
+import {
+  generateVerificationCode,
+  sendVerificationCode,
+} from "../utils/verifyEmail";
 
 const secret = speakeasy.generateSecret({ length: 20 });
 
@@ -35,19 +39,47 @@ export const signUp = catchAsync(
     if (!password) {
       return next(new AppError("please enter your password", 400));
     }
-    let check = await User.findOne({ email: email });
-    if (check) {
+    let existingUser = await User.findOne({ email: email });
+    if (existingUser && existingUser.active) {
       return next(new AppError("email already exists", 400));
     }
 
+    const code = generateVerificationCode();
+    await sendVerificationCode(email, code);
+
     let hashed = await hashPassword(password);
-    let user = await User.create({
-      name,
-      email,
-      password: hashed,
-      role,
+    let user;
+    if (existingUser) {
+      // Update the existing user
+      existingUser.password = hashed;
+      existingUser.role = role;
+      existingUser.code = code;
+      await existingUser.save();
+      user = existingUser;
+    } else {
+      // Create a new user
+      user = await User.create({
+        name,
+        email,
+        password: hashed,
+        role,
+        code,
+      });
+    }
+    res.status(201).json({
+      status: "success",
+      message:
+        "User registered successfully. Please check your email for the verification code.",
+      data: {
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          active: user.active,
+        },
+      },
     });
-    responseAndToken(user, res, 201);
   }
 );
 
@@ -65,11 +97,39 @@ export const signIn = catchAsync(
     if (!user || !(await comparePassword(password, user.password))) {
       return next(new AppError("Invalid email or password", 401));
     }
+    if (!user.active) {
+      return next(
+        new AppError("please sign up instead and verify your email.", 401)
+      );
+    }
+    responseAndToken(user, res, 200);
+  }
+);
+export const verify = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, code } = req.body;
+    console.log("here");
+    // Find the user with the provided email
+    let user = await User.findOne({ email: email });
+    //@ts-ignore
+    console.log(user.code);
+    console.log(code);
+    if (!user) {
+      return next(new AppError("User not found", 404));
+    }
+
+    // Check if the verification code matches the one in the database
+    if (user.code !== code) {
+      return next(new AppError("Invalid verification code", 400));
+    }
+
+    // If the codes match, activate the user's account
+    user.active = true;
+    await user.save();
 
     responseAndToken(user, res, 200);
   }
 );
-
 export const editProfile = catchAsync(
   async (req: any, res: Response, next: NextFunction) => {
     if (
