@@ -10,6 +10,7 @@ import {
   generateProfile,
   sallaAuth,
   sallaCallback,
+  verify,
 } from "../controllers/authController";
 import upload from "../assits/multer";
 import { Strategy, VerifyCallback } from "passport-google-oauth2";
@@ -24,6 +25,7 @@ import { saveTokenToUser } from "../controllers/tokenHandler";
 const router = Router();
 
 router.post("/signup", signUp);
+router.post("/verify", verify);
 router.post("/signin", signIn);
 router.patch("/edit", upload.single("file"), editProfile);
 router.post("/sendmail", sendForgetMail);
