@@ -53,7 +53,7 @@ export default function ClientHeader({
       justify-between items-center lg:px-14 px-1 py-2 min-h-[50px]"
       >
         <div className="flex flex-row space-s-3 items-center">
-          <Avatar>
+          <Avatar className="w-12 h-12">
             <AvatarImage src={image} />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
