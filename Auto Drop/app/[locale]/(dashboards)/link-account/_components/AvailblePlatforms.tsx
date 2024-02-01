@@ -56,7 +56,7 @@ export default function AvailablePlatforms({
       return;
     }
     try {
-      const response = await fetch("http://localhost:10000/api/v1/" + path, {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + path, {
         method: "DELETE",
       });
       const data = await response.json();
