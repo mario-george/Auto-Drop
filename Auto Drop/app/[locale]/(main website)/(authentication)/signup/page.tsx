@@ -37,6 +37,11 @@ export default function Signup() {
           phone={t("phone")}
           phonePlaceholder={t("phonePlaceholder")}
           invalidPhone={t("invalidPhone")}
+          
+          code={t("code")}
+          codePlaceholder={t("codePlaceholder")}
+          confirm={t("confirm")}
+          
           locale={locale}
           classes="basis-1/2"
         />
