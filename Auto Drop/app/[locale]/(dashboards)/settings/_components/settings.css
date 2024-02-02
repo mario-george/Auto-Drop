@@ -1,0 +1,20 @@
+.formFieldWrapper {
+  @apply flex items-center justify-between flex-col tab:flex-row space-y-3 tab:space-y-0  max-w-[90%] space-s-3 tab:max-w-[80%] lap:max-w-[70%] lapl:max-w-[60%];
+}
+.inputFieldDisabled {
+  @apply bg-[#f0f3f4] rounded-lg text-[#253439] tab:max-w-[45%] disabled:opacity-100 disabled:bg-[#f0f3f4] disabled:text-[#808b8d];
+}
+.inputField {
+  @apply bg-[#f0f3f4] rounded-lg text-[#253439] tab:max-w-[45%];
+}
+.FormItemWrapper {
+  @apply grid grid-cols-1 space-y-3 tab:space-y-0 tab:grid-cols-2 min-w-full space-s-0 lap:space-s-3 tab:max-w-[80%] lap:max-w-[70%] lapl:max-w-[80%] mb-2;
+}
+
+.FormLabel {
+  @apply text-sm md:text-base mx-auto tab:mx-0;
+}
+
+.changePwLabel {
+  @apply text-sm md:text-base bg-[#f0f3f4] rounded-lg text-[#253439] min-w-full;
+}
