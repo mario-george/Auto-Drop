@@ -42,7 +42,9 @@ export const signUp = catchAsync(
     }
     let existingUser = await User.findOne({ email: email });
     if (existingUser && existingUser.active) {
-      return next(new AppError("email already exists", 400));
+      return next(
+        new AppError("Email already exists please sign in instead.", 400)
+      );
     }
 
     const code = generateVerificationCode();
@@ -58,12 +60,12 @@ export const signUp = catchAsync(
       existingUser.role = role;
       existingUser.code = code;
       existingUser.phone = phone;
+      existingUser.name = name;
       existingUser.country = parsePhoneNumberFromString(phone)!.country!;
       await existingUser.save();
       user = existingUser;
     } else {
       // Create a new user
-      console.log(req.body);
       user = await User.create({
         name,
         email,
@@ -346,6 +348,10 @@ export const sallaCallback = catchAsync(
 
       const resJson = await resStore.json();
       if (resStore.ok) {
+        console.log(resJson);
+        console.log(resJson);
+        console.log(resJson);
+
         return res.status(200).json(resJson);
       }
     }
