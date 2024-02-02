@@ -5,6 +5,9 @@ import Settings from "./_components/Settings";
 
 export default function SettingsPage() {
   const t = useTranslations("clientSettings");
+  const t2 = useTranslations("loginForm");
+  const t3 = useTranslations("signupForm");
+
   const locale = useLocale();
 
   return (
@@ -24,7 +27,11 @@ export default function SettingsPage() {
         marketLink={t("marketLink")}
         email={t("email")}
         phone={t("phone")}
+        currentPasswordPlaceholder={t2("currentPasswordPlaceholder")}
+        passwordPlaceholder={t2("passwordPlaceholder")}
+        confirmPasswordPlaceholder={t3("confirmPasswordPlaceholder")}
         country={t("country")}
+        passwordNotMatch={t3("passwordNotMatch")}
       />{" "}
     </>
   );
