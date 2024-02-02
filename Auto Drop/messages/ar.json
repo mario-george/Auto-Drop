@@ -46,6 +46,7 @@
     "or": "أو",
     "emailPlaceholder": "أدخل البريد الإلكتروني",
     "passwordPlaceholder": "أدخل كلمة المرور",
+    "currentPasswordPlaceholder": "أدخل كلمة المرور الحاليه",
     "invalidEmail": "البريد الإلكتروني غير صحيح",
     "invalidPassword": "كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل",
     "forgetPassword": "هل نسيت كلمة المرور؟",
