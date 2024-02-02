@@ -16,6 +16,29 @@ export async function sendVerificationCode(email: string, code: string) {
     to: email,
     subject: "Verification Code",
     text: `Your verification code is ${code}`,
+    html: `
+      <style>
+        .email-content {
+          font-family: Arial, sans-serif;
+        }
+        .email-content h1 {
+          color: #333;
+        }
+        .email-content p {
+          color: #666;
+        }
+        .code {
+          font-weight: bold;
+          color: #f00;
+        }
+      </style>
+      <div class="email-content">
+        <h1>Welcome to AutoDrop!</h1>
+        <p>Your verification code is: <span class="code">${code}</span></p>
+        <p>Please enter this code to verify your email address.</p>
+        <p>Thank you.</p>
+      </div>
+    `,
   };
 
   await transporter.sendMail(mailOptions);
