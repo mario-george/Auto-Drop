@@ -8,6 +8,9 @@ const nextConfig = {
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_BACK_URL: process.env.NEXT_PUBLIC_BACK_URL,
   },
+  images: {
+    domains: ["www.shutterstock.com"],
+  },
 };
 
 const withNextIntl = require("next-intl/plugin")();
