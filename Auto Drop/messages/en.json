@@ -47,6 +47,8 @@
     "or": "OR",
     "emailPlaceholder": "Enter your email",
     "passwordPlaceholder": "Enter your password",
+    "currentPasswordPlaceholder": "Enter your current password",
+
     "invalidEmail": "Invalid email",
     "invalidPassword": "Password must be at least 8 characters long",
     "welcome": "Welcome to Auto Drop"
