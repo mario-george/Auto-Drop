@@ -40,7 +40,7 @@ export function TotalProfits({
 }: any) {
   return (
     <>
-      <div className="flex justify-between bg-white rounded-md min-w-[200px] max-w-[350px] shadow h-fit ">
+      <div className="flex justify-between bg-white rounded-md min-w-[200px] max-w-[350px] shadow min-h-full ">
         <div className="flex flex-col space-y-2">
           <div className="whitespace-nowrap">{firstEl}</div>
           <div className="whitespace-nowrap opacity-50">{last60Days}</div>
