@@ -92,35 +92,53 @@ export default function ClientHeader({
           <Link
             locale={locale === "ar" ? "en" : "ar"}
             href={pathname}
-            className="text-sm md:text-[16px] font-medium border-l-2 px-2 py-2"
+            className={`text-sm md:text-[16px] font-medium ${isAr? `border-l-2` : `border-r-2`} px-2 py-2`}
           >
             {lang}
           </Link>
           <div
             className={`bg-[#f0f3f4] rounded-lg text-[#626d72] text-[12px] flex space-s-3 px-1 py-[2px]`}
+            dir="ltr"
           >
-            {isAr ? (
-              <>
-                <Image
-                  src={`/client/header/calender.svg`}
-                  alt={"calender"}
-                  width="16"
-                  height="16"
-                />
-                {formatDate(createdAt)}
-              </>
-            ) : (
-              <>
-                {" "}
-                {formatDate(createdAt)}{" "}
-                <Image
-                  src={`/client/header/calender.svg`}
-                  alt={"calender"}
-                  width="16"
-                  height="16"
-                />
-              </>
-            )}
+            <Image
+              src={`/client/header/notification.svg`}
+              alt={"notification"}
+              width="24"
+              height="24"
+            />
+          </div>
+
+          <div
+            className={`bg-[#f0f3f4] rounded-lg text-[#626d72] text-[12px] flex space-s-2 px-1 py-[2px]`}
+            dir="ltr"
+          >
+            <Image
+              src={`/client/header/wallet.svg`}
+              alt={"wallet"}
+              width="24"
+              height="22"
+            />
+            <div>
+
+            0.00 SAR
+
+            </div>
+          </div>
+          <div
+            className={`bg-[#f0f3f4] rounded-lg text-[#626d72] text-[12px] flex space-s-2 px-1 py-[2px]`}
+            dir="ltr"
+          >
+            <Image
+              src={`/client/header/calender.svg`}
+              alt={"calender"}
+              width="16"
+              height="16"
+            />
+                <div>
+
+
+            {formatDate(createdAt)}
+</div>
           </div>
         </div>
         <div></div>
