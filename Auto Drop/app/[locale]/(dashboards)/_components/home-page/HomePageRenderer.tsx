@@ -39,8 +39,10 @@ export default function HomePageRenderer(props: any) {
 
   return (
     <>
-      <div className="flex">
-        <WelcomeComponent goodMorning={goodMorning} />
+      <div className="grid grid-cols-8 max-w-[97%] gap-4">
+        <div className="col-span-2">
+          <WelcomeComponent goodMorning={goodMorning} />
+        </div>
       </div>
 
       <div className="grid grid-cols-8 gap-4 max-w-[97%] grid-rows-5">
