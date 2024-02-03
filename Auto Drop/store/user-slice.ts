@@ -13,7 +13,8 @@ const userSlice = createSlice({
     phone: "",
     sallaToken: "",
     aliExpressToken: "",
-    country:""
+    country: "",
+    createdAt: "",
   },
   reducers: {
     login(state, action) {
@@ -28,6 +29,7 @@ const userSlice = createSlice({
       state.sallaToken = action.payload.sallaToken;
       state.aliExpressToken = action.payload.aliExpressToken;
       state.country = action.payload.country;
+      state.createdAt = action.payload.createdAt;
     },
     logout(state) {
       state.isLoggedIn = false;
@@ -41,6 +43,7 @@ const userSlice = createSlice({
       state.sallaToken = "";
       state.aliExpressToken = "";
       state.country = "";
+      state.createdAt = "";
     },
     updateToken(state, action) {
       const { tokenType, token } = action.payload;
