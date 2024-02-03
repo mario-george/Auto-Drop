@@ -5,6 +5,7 @@ import ApexCharts from "apexcharts";
 interface ProgressProps {
   gradientType?: string;
   height?: string;
+  value?: number;
 }
 
 export default function Progress(props: ProgressProps) {
@@ -14,14 +15,20 @@ export default function Progress(props: ProgressProps) {
   if (props.gradientType) {
     gradientType = props.gradientType;
   }
+  let value = 70;
 
+  if (props.value) {
+    value = props.value;
+  }
   let gradArr = ["#5bb0ff", "#3c8ef6"];
   if (gradientType === "blue") {
     gradArr = ["#5bb0ff", "#3c8ef6"];
   } else if (gradientType === "orange") {
-    gradArr = ["#fd5c51", "#ff8777"];
+    gradArr = ["#ff8723", "#ffb374"];
   } else if (gradientType === "green") {
     gradArr = ["#39e35e", "#a0ffb5"];
+  } else if (gradientType === "red") {
+    gradArr = ["#fd5c52", "#ff8877"];
   }
 
   useEffect(() => {
@@ -34,16 +41,16 @@ export default function Progress(props: ProgressProps) {
 
       var options = {
         chart: {
-          height: 110,
+          height: 160,
           type: "radialBar",
         },
-        series: [70],
+        series: [value],
         colors: [gradArr[0]],
 
         plotOptions: {
           radialBar: {
             hollow: {
-              size: "5%",
+              size: "15%",
             },
             track: {
               background: "#f1f1f1", // Set the background color of the unprogressed part
@@ -89,5 +96,5 @@ export default function Progress(props: ProgressProps) {
     };
   }, []);
 
-  return <div ref={chartRef}></div>;
+  return <div ref={chartRef} className=" -my-12"></div>;
 }
