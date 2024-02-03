@@ -111,6 +111,7 @@ export default function LoginForm({
             sallaToken: responseData.data.user.sallaToken,
             aliExpressToken: responseData.data.user.aliExpressToken,
             country: responseData.data.user.country,
+            createdAt: responseData.data.user.createdAt,
             isLoggedin: true,
           })
         );
