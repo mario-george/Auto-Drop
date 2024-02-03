@@ -268,5 +268,26 @@
     "availablePlatforms": "Available Platforms",
     "availableStores": "Available Stores",
     "link": "Link"
+  },
+  "clientHomePage": {
+    "prodNotLinked": "Products not linked",
+    "numOfSales": "Number of sales",
+    "numOfOrders": "Number of orders",
+    "Platform": "Platform",
+    "prodLinked": "Products that have been linked",
+    "numOfProd": "Number of products",
+    "gm": "Good morning",
+    "tp": "Total profits",
+    "p": "Profits",
+    "w": "Wallet",
+    "lr": "Latest requests",
+    "cn": "Customer Name",
+    "os": "Order status",
+    "d": "Date",
+    "a": "Amount",
+    "d2": "Details",
+    "done": "Done",
+    "being-paid": "being paid",
+    "Canceled": "Canceled"
   }
 }
