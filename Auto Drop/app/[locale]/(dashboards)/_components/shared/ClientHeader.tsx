@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
+import Image from "next/image";
 
 export default function ClientHeader({
   lang,
@@ -19,7 +20,37 @@ export default function ClientHeader({
   locale: string;
 }) {
   const image = useSelector((state: RootState) => state.user.image);
+  const createdAt = useSelector((state: RootState) => state.user.createdAt);
   const name = useSelector((state: RootState) => state.user.name);
+  console.log(createdAt);
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  const getOrdinalSuffix = (date: number) => {
+    if (date > 3 && date < 21) return "th";
+    switch (date % 10) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const weekday = date.toLocaleString("en-US", { weekday: "long" });
+    const month = date.toLocaleString("en-US", { month: "short" });
+
+    return `${weekday} ${day}${getOrdinalSuffix(day)} ${month}`;
+  };
 
   const pathname = usePathname();
   const [scrolling, setScrolling] = useState(false);
@@ -57,7 +88,7 @@ export default function ClientHeader({
             <AvatarImage src={image} />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
-
+          {name}
           <Link
             locale={locale === "ar" ? "en" : "ar"}
             href={pathname}
@@ -65,6 +96,32 @@ export default function ClientHeader({
           >
             {lang}
           </Link>
+          <div
+            className={`bg-[#f0f3f4] rounded-lg text-[#626d72] text-[12px] flex space-s-3 px-1 py-[2px]`}
+          >
+            {isAr ? (
+              <>
+                <Image
+                  src={`/client/header/calender.svg`}
+                  alt={"calender"}
+                  width="16"
+                  height="16"
+                />
+                {formatDate(createdAt)}
+              </>
+            ) : (
+              <>
+                {" "}
+                {formatDate(createdAt)}{" "}
+                <Image
+                  src={`/client/header/calender.svg`}
+                  alt={"calender"}
+                  width="16"
+                  height="16"
+                />
+              </>
+            )}
+          </div>
         </div>
         <div></div>
 
