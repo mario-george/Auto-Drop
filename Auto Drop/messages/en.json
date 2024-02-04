@@ -289,5 +289,24 @@
     "done": "Done",
     "being-paid": "being paid",
     "Canceled": "Canceled"
+  },
+  "myProducts": {
+    "products": "Products",
+    "searchByProd": "Search by product name..",
+    "price": "Price",
+    "unAvProd": "Unavailable Products",
+    "apply": "Apply",
+    "unUpProd": "Not uploaded Products",
+    "aliExpress": "Ali Express",
+    "percentage": "Percentage",
+    "profitType": "Profit Type",
+    "sellPrice": "Sell Price",
+    "platform": "Platform",
+    "upProducts": "Upload Products",
+    "category": "Category",
+    "prodName": "Product Name",
+    "inv": "Inventory",
+    "val": "Value....",
+    "next": "Next"
   }
 }

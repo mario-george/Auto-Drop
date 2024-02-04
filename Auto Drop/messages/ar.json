@@ -288,5 +288,24 @@
     "done": "مكتمل",
     "being-paid": "قيد الدفع",
     "Canceled": "ملغي"
+  },
+  "myProducts": {
+    "products": "المنتجات",
+    "searchByProd": "ادخل اسم المنتج ...",
+    "sellPrice": "سعر البيع",
+    "category": "الفئة",
+    "platform": "المنصة",
+    "val": "القيمة....",
+    "inv": "المخزون",
+    "prodName": "اسم المنتج",
+    "upProducts": "رفع المنتجات",
+    "apply": "تطبيق",
+    "price": "السعر",
+    "profitType": "نوع الربح",
+    "unAvProd": "منتجات غير متوفرة",
+    "unUpProd": "منتجات لم ترفع بعد",
+    "aliExpress": "علي اكسبرس",
+    "percentage": "نسبة"
+    ,"next":"التالي"
   }
 }
