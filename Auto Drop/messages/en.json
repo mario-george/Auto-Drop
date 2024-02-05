@@ -288,7 +288,10 @@
     "d2": "Details",
     "done": "Done",
     "being-paid": "being paid",
-    "Canceled": "Canceled"
+    "Canceled": "Canceled",
+    "totalProfits": "Total Profits",
+    "suspendedProfits": "Suspended Profits",
+    "availableCredits": "Available Credits"
   },
   "myProducts": {
     "products": "Products",

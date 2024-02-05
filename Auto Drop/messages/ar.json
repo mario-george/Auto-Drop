@@ -287,7 +287,10 @@
     "d2": "التفاصيل",
     "done": "مكتمل",
     "being-paid": "قيد الدفع",
-    "Canceled": "ملغي"
+    "Canceled": "ملغي",
+    "totalProfits": "إجمالي الأرباح",
+    "suspendedProfits": "أرباح معلقة",
+    "availableCredits": "الرصيد المتاح"
   },
   "myProducts": {
     "products": "المنتجات",
@@ -305,7 +308,7 @@
     "unAvProd": "منتجات غير متوفرة",
     "unUpProd": "منتجات لم ترفع بعد",
     "aliExpress": "علي اكسبرس",
-    "percentage": "نسبة"
-    ,"next":"التالي"
+    "percentage": "نسبة",
+    "next": "التالي"
   }
 }
