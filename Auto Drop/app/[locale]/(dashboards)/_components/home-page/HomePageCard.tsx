@@ -103,27 +103,58 @@ export function SallaCard({ firstEl, ThirdEl, smallText }: HomePageCardProps) {
 
 export function ProfitsCard({
   firstEl,
-  ThirdEl,
+  totalProfits,
+  suspendedProfits,
+  availableCredits,
   firstVal = 52,
   secondVal = 21,
   thirdVal = 74,
 }: any) {
   return (
     <>
-      <div className="flex flex-col bg-white rounded-md min-w-[200px] max-w-[350px] shadow max-h-full px-2 py-5 space-y-3">
+      <div className="flex flex-col bg-white rounded-md min-w-[200px] max-w-[350px] shadow max-h-full px-4 py-5 space-y-3">
         <div className="flex">{firstEl}</div>
         <Separator />
-        <div className="flex justify-between">
+        <div className="flex justify-between   text-[23.98px] space-s-3 items-center">
           <div className="font-bold">{firstVal}%</div>
-          <Progress color="bg-[#f99c55]" value={firstVal} />
+          <Progress color="bg-[#f99c55]" value={firstVal} className="-py-2" />
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between text-[23.98px] space-s-3 items-center">
           <div className="font-bold">{secondVal}%</div>
           <Progress color="bg-[#26b34e]" value={secondVal} />
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between text-[23.98px] space-s-3 items-center">
           <div className="font-bold">{thirdVal}%</div>
           <Progress value={thirdVal} color="bg-[#70A6E8]" />
+        </div>
+        <div className="flex space-s-6 whitespace-nowrap text-[12px]">
+          <div className="flex space-s-1">
+            <span>{totalProfits}</span>
+            <Image
+              src={`/client/home/blue-circle.svg`}
+              alt={`blue-circle`}
+              width={19}
+              height={19}
+            />
+          </div>
+          <div className="flex space-s-1">
+            <span>{suspendedProfits}</span>
+            <Image
+              src={`/client/home/orange-circle.svg`}
+              alt={`orange-circle`}
+              width={19}
+              height={19}
+            />
+          </div>
+          <div className="flex space-s-1">
+            <span>{availableCredits}</span>
+            <Image
+              src={`/client/home/green-circle.svg`}
+              alt={`green-circle`}
+              width={19}
+              height={19}
+            />
+          </div>
         </div>
       </div>
     </>
