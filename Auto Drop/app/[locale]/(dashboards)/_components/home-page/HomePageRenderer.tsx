@@ -36,7 +36,10 @@ export default function HomePageRenderer(props: any) {
   let done = t("done");
   let beingPaid = t("being-paid");
   let canceled = t("Canceled");
-
+  let totalProfits2 = t("totalProfits");
+  let suspendedProfits = t("suspendedProfits");
+  let availableCredits = t("availableCredits");
+  console.log(availableCredits);
   return (
     <>
       <div className="grid grid-cols-8 max-w-[97%] gap-4">
@@ -73,7 +76,12 @@ export default function HomePageRenderer(props: any) {
           />
         </div>
         <div className="col-span-2 row-span-2">
-          <ProfitsCard firstEl={profits} />
+          <ProfitsCard
+            firstEl={profits}
+            totalProfits={totalProfits2}
+            suspendedProfits={suspendedProfits}
+            availableCredits={availableCredits}
+          />
         </div>
         <div className="col-span-2">
           <SallaCard
