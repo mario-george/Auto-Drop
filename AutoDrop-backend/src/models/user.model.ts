@@ -1,5 +1,22 @@
-import mongoose from "mongoose";
-
+import { hash, compare } from "bcrypt";
+import mongoose, { Document, ObjectId } from "mongoose";
+interface IUser extends Document {
+  name: string;
+  email: string;
+  password: string;
+  role: "admin" | "client";
+  image: string;
+  phone: string;
+  country: string;
+  merchantID: number;
+  storeName: string;
+  aliExpressToken: ObjectId;
+  sallaToken: ObjectId;
+  active: boolean;
+  OTP: string;
+  code: string;
+  comparePassword: (pw: string) => Promise<boolean>;
+}
 const userModel = new mongoose.Schema(
   {
     name: { type: String, required: true, maxLength: 40 },
@@ -20,10 +37,12 @@ const userModel = new mongoose.Schema(
     aliExpressToken: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "AliExpressToken",
+      unique: true,
     },
     sallaToken: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "SallaToken",
+      unique: true,
     },
     code: {
       type: String,
@@ -35,6 +54,21 @@ const userModel = new mongoose.Schema(
   },
   { timestamps: true }
 );
-const User = mongoose.model("User", userModel);
+
+userModel.pre(/^save$/, async function (next: (err?: Error) => void) {
+  let user = this as any;
+  if (user.isModified("password")) {
+    user.password = await hash(user.password, 12);
+  }
+
+  next();
+});
+
+userModel.methods.comparePassword = async function (
+  password: string
+): Promise<boolean> {
+  return await compare(password, this.password);
+};
+const User = mongoose.model<IUser>("User", userModel);
 
 export default User;
