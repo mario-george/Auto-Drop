@@ -17,6 +17,9 @@ import {
 import { Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
+import useHttp from "@/components/helpers/useHttp";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 interface SettingsPassword {
   settings: string;
@@ -52,6 +55,7 @@ export default function SettingsPassword(props: SettingsPassword) {
     passwordPlaceholder,
     passwordNotMatch,
   } = props;
+  const token = useSelector((state: RootState) => state.user.token);
 
   const passwordRegex =
     /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
@@ -80,13 +84,35 @@ export default function SettingsPassword(props: SettingsPassword) {
     },
   });
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+    let http = await useHttp(
+      "handler/change-password",
+      token,
+      JSON.stringify({
+        newPassword: data.password,
+        confirmPassword: data.passwordConfirmation,
+        currentPassword: data.currentPassword,
+      }),
+      {
+        method: "POST",
+      }
+    );
+    console.log(http.responseData);
+    console.log(http.responseData.message);
+    if (!http.responseIsOk) {
+      setErrorMsg(http.responseData.message);
+    } else {
+      setSuccessMessage("Password changed successfully");
+    }
+    /* let respData = http.data;
 
-    /*     const data = await resp.json();
-    if (data.message) setErrorMsg(data.message);
+    let isLoading = http.isLoading;
+    let error = http.error; */
+    /* 
+    if (respData.message) setErrorMsg(respData.message);
     else setErrorMsg("Something went wrong"); */
   };
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMessage] = useState<string | null>(null);
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] =
@@ -310,6 +336,9 @@ export default function SettingsPassword(props: SettingsPassword) {
             </div>{" "}
             {errorMsg && (
               <div className="text-center text-red-400">{errorMsg}</div>
+            )}
+            {successMsg && (
+              <div className="text-center text-green-400">{successMsg}</div>
             )}
           </form>
         </Form>
