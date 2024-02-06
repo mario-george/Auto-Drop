@@ -1,7 +1,6 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Task } from "../data/schema";
 import { myProduct } from "../data/myProductsSchema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import ButtonsRenderer from "./Buttons/ButtonsRenderer";
