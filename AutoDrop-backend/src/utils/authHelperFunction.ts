@@ -1,6 +1,6 @@
 import { sign, verify } from "jsonwebtoken";
 import crypto from "crypto";
-import { Response } from "express";
+import { Request, Response } from "express";
 import { hash, compare } from "bcrypt";
 import { promisify } from "util";
 
@@ -26,7 +26,8 @@ export const createAccessToken = (id: number) => {
 export const responseAndToken = (
   user: any,
   res: Response,
-  statusCode: number
+  statusCode: number,
+  req?: Request
 ) => {
   const accessToken = createAccessToken(user.id);
 
@@ -40,6 +41,24 @@ export const responseAndToken = (
     secure: true,
   };
   res.cookie("accessToken", accessToken, cookieOptions);
+  if (req) {
+    //@ts-ignore
+    req.session.user = {
+      accessToken,
+    };
+
+    req.session.save((err) => {
+      if (err) {
+        // handle error
+        console.log(err);
+      } else {
+        // session saved
+        console.log("session saved");
+        //@ts-ignore
+        console.log(req.session.user.accessToken);
+      }
+    });
+  }
 
   res.status(statusCode).json({
     status: "success",
