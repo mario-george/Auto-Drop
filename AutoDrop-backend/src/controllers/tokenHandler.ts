@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/appError";
-import User from "../models/userModel";
+import User from "../models/user.model";
 import AliExpressToken from "../models/AliExpressTokenModel";
 import SallaToken from "../models/SallaTokenModel";
 
