@@ -15,7 +15,7 @@ import userRoutes from "./routes/userRoutes";
 import tokenRoutes from "./routes/tokenRoutes";
 import globalErrorHandler from "./controllers/errorController";
 import AppError from "./utils/appError";
-
+import handlerRoutes from "./routes/handler.routes";
 const app = express();
 
 //Parse json bodies
@@ -40,7 +40,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       // secure: process.env.NODE_ENV === "production",
-      secure: true,
+      secure: false,
       httpOnly: true,
     },
   })
@@ -70,6 +70,7 @@ conect();
 
 //Global resources
 app.use("/api/v1/auth", userRoutes);
+app.use("/api/v1/handler", handlerRoutes);
 app.use("/api/v1/token", tokenRoutes);
 
 // Handle requests from wrong urls
