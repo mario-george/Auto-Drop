@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import AliExpressToken from "../models/AliExpressTokenModel";
-import User from "../models/userModel";
+import User from "../models/user.model";
 import catchAsync from "../utils/catchAsync";
 import SallaToken from "../models/SallaTokenModel";
 
 export const deleteAliExpressToken = catchAsync(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    console.log(id)
+    console.log(id);
 
     // Delete the AliExpressToken document
     await AliExpressToken.findByIdAndDelete(id);
