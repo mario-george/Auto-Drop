@@ -5,7 +5,7 @@ import speakeasy from "speakeasy";
 import sendMail from "../assits/sendMails";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/appError";
-import User from "../models/userModel";
+import User from "../models/user.model";
 import {
   hashPassword,
   comparePassword,
@@ -112,7 +112,7 @@ export const signIn = catchAsync(
         new AppError("please sign up instead and verify your email.", 401)
       );
     }
-    responseAndToken(user, res, 200);
+    responseAndToken(user, res, 200, req);
   }
 );
 export const verify = catchAsync(
@@ -137,7 +137,7 @@ export const verify = catchAsync(
     user.active = true;
     await user.save();
 
-    responseAndToken(user, res, 200);
+    responseAndToken(user, res, 200, req);
   }
 );
 export const editProfile = catchAsync(
