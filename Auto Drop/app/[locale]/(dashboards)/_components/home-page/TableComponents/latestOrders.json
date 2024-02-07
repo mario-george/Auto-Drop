@@ -1,0 +1,26 @@
+[
+  {
+    "CustomerName": "أحمد محمد",
+    "orderStatus": "مكتمل",
+    "date": "Apr 16th,2023",
+    "amount": "SAR 2540.58"
+  },
+  {
+    "CustomerName": "محمود  يوسف",
+    "orderStatus": "قيد الدفع",
+    "date": "Apr 26th,2022",
+    "amount": "SAR 2540.58"
+  },
+  {
+    "CustomerName": "عبدالله احمد",
+    "orderStatus": "ملغي",
+    "date": "Apr 17th,2021",
+    "amount": "SAR 9999.58"
+  },
+  {
+    "CustomerName": "أحمد محمد",
+    "orderStatus": "مكتمل",
+    "date": "Apr 16th,2023",
+    "amount": "SAR 2540.58"
+  }
+]
