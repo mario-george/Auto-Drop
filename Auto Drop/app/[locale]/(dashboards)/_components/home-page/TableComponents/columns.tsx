@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { latestOrder } from "./latestOrdersSchema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import ButtonsRenderer from "./Buttons/ButtonsRenderer";
+import OrderStatusButton from "./Buttons/OrderStatusButton";
 
 interface ColProps {
   CustomerName: string;
@@ -67,7 +68,7 @@ export default function Cols(props: ColProps): ColumnDef<latestOrder>[] {
       cell: ({ row }) => {
         return (
           <div className="flex items-center justify-center">
-            {row.getValue("orderStatus")}
+            <OrderStatusButton orderStatus={row.getValue("orderStatus")} />
           </div>
         );
       },
