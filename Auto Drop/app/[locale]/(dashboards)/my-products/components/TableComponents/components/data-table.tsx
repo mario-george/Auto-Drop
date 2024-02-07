@@ -87,7 +87,9 @@ export function DataTable<TData, TValue>({
         category={category}
         unUpProd={unUpProd}
       />
-      <div className="rounded-md border">
+      <div
+        className=""
+      >
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
