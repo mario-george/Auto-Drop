@@ -1,4 +1,4 @@
-export default async function useHttp(
+export default async function CustomHttp(
   path: string,
   token: string,
   body?: any,
