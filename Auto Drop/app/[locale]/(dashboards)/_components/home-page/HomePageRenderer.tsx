@@ -122,7 +122,7 @@ export default function HomePageRenderer(props: any) {
             details={details}
             amount={amount}
             orderStatus={orderStatus}
-          latestRequests={latestRequests}
+            latestRequests={latestRequests}
           />
         </div>
       </div>
