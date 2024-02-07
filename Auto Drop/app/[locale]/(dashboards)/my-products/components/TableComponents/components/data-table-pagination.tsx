@@ -30,12 +30,11 @@ export function DataTablePagination<TData>({
         <div className="flex space-s-3">
           <Pagination>
             <PaginationContent className="space-s-4 mx-auto">
-              <PaginationItem></PaginationItem>
               {Array.from({ length: table.getPageCount() }, (_, i) => {
                 return i + 1;
               }).map((page) => {
                 return (
-                  <PaginationItem>
+                  <PaginationItem key={page}>
                     <PaginationLink
                       isActive={
                         table.getState().pagination.pageIndex + 1 === page
@@ -52,13 +51,15 @@ export function DataTablePagination<TData>({
                   </PaginationItem>
                 );
               })}{" "}
-              <Button
-                onClick={() => table.nextPage()}
-                className="bg-white text-[#253439] hover:bg-white/90 shadow-md"
-                disabled={!table.getCanNextPage()}
-              >
-                Next
-              </Button>
+              <PaginationItem>
+                <Button
+                  onClick={() => table.nextPage()}
+                  className="bg-white text-[#253439] hover:bg-white/90 shadow-md"
+                  disabled={!table.getCanNextPage()}
+                >
+                  Next
+                </Button>
+              </PaginationItem>
             </PaginationContent>
           </Pagination>
         </div>
