@@ -3,10 +3,12 @@ import HomePageCard, {
   ProfitsCard,
   SallaCard,
   TotalProfits,
+  WalletComponent,
   WelcomeComponent,
 } from "./HomePageCard";
 import Progress from "./Progress";
 import Image from "next/image";
+import TableRenderer from "./TableComponents/TableRenderer";
 
 export default function HomePageRenderer(props: any) {
   const { t } = props;
@@ -48,7 +50,7 @@ export default function HomePageRenderer(props: any) {
         </div>
       </div>
 
-      <div className="grid grid-cols-8 gap-4 max-w-[97%] grid-rows-5">
+      <div className="grid grid-cols-8 gap-4 max-w-[97%] grid-rows-7">
         <div className="col-span-2">
           <TotalProfits firstEl={totalProfits} />
         </div>
@@ -108,6 +110,19 @@ export default function HomePageRenderer(props: any) {
             firstEl={numOfSales}
             secondEl={"22"}
             ThirdEl={<Progress gradientType="blue" value={22} />}
+          />
+        </div>
+        <div className="col-span-2 row-start-4">
+          <WalletComponent wallet={wallet} value={"0.0"} />
+        </div>
+        <div className="col-span-6 row-span-3">
+          <TableRenderer
+            date={date}
+            CustomerName={CustomerName}
+            details={details}
+            amount={amount}
+            orderStatus={orderStatus}
+          latestRequests={latestRequests}
           />
         </div>
       </div>
