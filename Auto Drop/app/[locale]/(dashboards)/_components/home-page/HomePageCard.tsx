@@ -160,3 +160,25 @@ export function ProfitsCard({
     </>
   );
 }
+
+export function WalletComponent({ wallet, value }: any) {
+  return (
+    <>
+      <div className="flex justify-between items-center bg-white rounded-md min-w-[200px] max-w-[350px] shadow max-h-full px-2 py-5 ">
+        <div className={`flex flex-col space-y-1 px-3`}>
+          <div className="whitespace-nowrap">{wallet}</div>
+          <div className="flex space-s-1">
+            <span>SAR</span>
+            <span>{value}</span>
+          </div>
+        </div>
+        <Image
+          src={`/client/home/wallet.svg`}
+          alt={`wallet`}
+          width={32}
+          height={32}
+        />{" "}
+      </div>
+    </>
+  );
+}
