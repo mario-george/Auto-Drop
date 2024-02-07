@@ -17,7 +17,7 @@ import {
 import { Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import useHttp from "@/components/helpers/useHttp";
+import CustomHttp from "@/components/helpers/CustomHttp";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 
@@ -84,7 +84,7 @@ export default function SettingsPassword(props: SettingsPassword) {
     },
   });
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    let http = await useHttp(
+    let http = await CustomHttp(
       "handler/change-password",
       token,
       JSON.stringify({
