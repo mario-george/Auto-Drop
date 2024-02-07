@@ -47,8 +47,8 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
       ),
       cell: ({ row }) => {
         return (
-          <div className="flex space-x-2">
-            <span className="max-w-[500px] truncate font-medium">
+          <div className="">
+            <span className="flex justify-center">
               {row.getValue("prodName")}
             </span>
           </div>
@@ -62,7 +62,7 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
       ),
       cell: ({ row }) => {
         return (
-          <div className="flex items-center">{row.getValue("sellPrice")}</div>
+          <div className="flex justify-center">{row.getValue("sellPrice")}</div>
         );
       },
       filterFn: (row, id, value) => {
@@ -77,7 +77,7 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
       cell: ({ row }) => {
         // row.getValue('category')
         return (
-          <div className="flex w-[100px] items-center">
+          <div className="flex justify-center items-center">
             {row.getValue("category")}
           </div>
         );
@@ -92,7 +92,7 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
         <DataTableColumnHeader column={column} title={platform} />
       ),
       cell: ({ row }) => (
-        <div className="w-[80px]">{row.getValue("platform")}</div>
+        <div className="flex justify-center">{row.getValue("platform")}</div>
       ),
       enableSorting: false,
       enableHiding: false,
@@ -103,7 +103,7 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
         <DataTableColumnHeader column={column} title={inventory} />
       ),
       cell: ({ row }) => (
-        <div className="w-[80px]">{row.getValue("inventory")}</div>
+        <div className="flex justify-center">{row.getValue("inventory")}</div>
       ),
       enableSorting: false,
       enableHiding: false,
