@@ -44,17 +44,17 @@ export default function HomePageRenderer(props: any) {
   console.log(availableCredits);
   return (
     <>
-      <div className="grid grid-cols-8 max-w-[97%] gap-4">
-        <div className="col-span-2">
+      <div className="grid tab:grid-cols-8 max-w-[97%] gap-4">
+        <div className="col-span-1 tab:col-span-2">
           <WelcomeComponent goodMorning={goodMorning} />
         </div>
       </div>
 
-      <div className="grid grid-cols-8 gap-4 max-w-[97%] grid-rows-7">
-        <div className="col-span-2">
+      <div className="grid grid-cols-1 grid-rows-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-4 max-w-[97%] lg:grid-rows-7">
+        <div className="tab:col-span-2">
           <TotalProfits firstEl={totalProfits} />
         </div>
-        <div className="col-span-2">
+        <div className="tab:col-span-2">
           <HomePageCard
             firstEl={numOfProd}
             secondEl={"68"}
@@ -63,21 +63,21 @@ export default function HomePageRenderer(props: any) {
           />
         </div>
 
-        <div className="col-span-2">
+        <div className="tab:col-span-2">
           <HomePageCard
             firstEl={prodLinked}
             secondEl={"13"}
             ThirdEl={<Progress gradientType="orange" value={13} />}
           />
         </div>
-        <div className="col-span-2">
+        <div className="tab:col-span-2">
           <HomePageCard
             firstEl={prodNotLinked}
             secondEl={"10"}
             ThirdEl={<Progress gradientType="red" value={10} />}
           />
         </div>
-        <div className="col-span-2 row-span-2">
+        <div className="tab:col-span-2 row-span-2">
           <ProfitsCard
             firstEl={profits}
             totalProfits={totalProfits2}
@@ -85,7 +85,7 @@ export default function HomePageRenderer(props: any) {
             availableCredits={availableCredits}
           />
         </div>
-        <div className="col-span-2">
+        <div className="tab:col-span-2">
           <SallaCard
             firstEl={platform}
             ThirdEl={
@@ -98,24 +98,24 @@ export default function HomePageRenderer(props: any) {
             }
           />
         </div>
-        <div className="col-span-2">
+        <div className="tab:col-span-2">
           <HomePageCard
             firstEl={numOfOrders}
             secondEl={"34"}
             ThirdEl={<Progress gradientType="green" value={34} />}
           />
         </div>
-        <div className="col-span-2">
+        <div className="tab:col-span-2">
           <HomePageCard
             firstEl={numOfSales}
             secondEl={"22"}
             ThirdEl={<Progress gradientType="blue" value={22} />}
           />
         </div>
-        <div className="col-span-2 row-start-4">
+        <div className="tab:col-span-2 tab:row-start-4">
           <WalletComponent wallet={wallet} value={"0.0"} />
         </div>
-        <div className="col-span-6 row-span-3">
+        <div className="col-span-1 tab:col-span-6 row-span-3">
           <TableRenderer
             date={date}
             CustomerName={CustomerName}
