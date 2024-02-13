@@ -36,6 +36,7 @@ interface DataTableProps<TData, TValue> {
   unUpProd: string;
   price: string;
   category: string;
+  locale: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -46,6 +47,7 @@ export function DataTable<TData, TValue>({
   unUpProd,
   columns,
   data,
+  locale,
 }: DataTableProps<TData, TValue>) {
   console.log(columns);
   const [rowSelection, setRowSelection] = React.useState({});
@@ -86,10 +88,9 @@ export function DataTable<TData, TValue>({
         price={price}
         category={category}
         unUpProd={unUpProd}
+        locale={locale}
       />
-      <div
-        className=""
-      >
+      <div className="">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
