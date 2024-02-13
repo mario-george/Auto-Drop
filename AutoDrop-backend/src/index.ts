@@ -16,6 +16,7 @@ import tokenRoutes from "./routes/tokenRoutes";
 import globalErrorHandler from "./controllers/errorController";
 import AppError from "./utils/appError";
 import handlerRoutes from "./routes/handler.routes";
+import productsRoutes from "./routes/products.routes";
 const app = express();
 
 //Parse json bodies
@@ -72,6 +73,7 @@ conect();
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/handler", handlerRoutes);
 app.use("/api/v1/token", tokenRoutes);
+app.use("/api/v1/aliexpress", productsRoutes);
 
 // Handle requests from wrong urls
 app.all("*", (req, res, next) => {
