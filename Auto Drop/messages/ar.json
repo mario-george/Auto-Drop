@@ -310,5 +310,26 @@
     "aliExpress": "علي اكسبرس",
     "percentage": "نسبة",
     "next": "التالي"
+  },
+  "productsPage": {
+    "accessories": "اكسسوارات",
+    "smartDevices": "أجهزة ذكية ",
+    "electronics": "الكترونيات",
+    "clothes": "ملابس",
+    "perfumes": "عطور",
+    "decor": "ديكور",
+    "categories": "التصنيفات",
+    "shops": "المتاجر",
+    "searchByProd": "ابحث برابط المنتج...",
+    "stationary": "قرطاسية",
+    "cosmeticProducts": "منتجات تجميل",
+    "sportsSupplies": "مستلزمات رياضية",
+    "allProducts": "كل المنتجات",
+    "next": "التالي",
+    "shippingInfo": "معلومات و طرق الشحن للمنتج",
+    "shippingType": "نوع الشحن",
+    "duration": "المدة",
+    "profitAfter": "الربح بعد خصم الشحن",
+    "price": "السعر"
   }
 }
