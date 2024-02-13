@@ -92,7 +92,9 @@ export default function ClientHeader({
           <Link
             locale={locale === "ar" ? "en" : "ar"}
             href={pathname}
-            className={`text-sm md:text-[16px] font-medium ${isAr? `border-l-2` : `border-r-2`} px-2 py-2`}
+            className={`text-sm md:text-[16px] font-medium ${
+              isAr ? `border-l-2` : `border-r-2`
+            } px-2 py-2`}
           >
             {lang}
           </Link>
@@ -109,7 +111,7 @@ export default function ClientHeader({
           </div>
 
           <div
-            className={`bg-[#f0f3f4] rounded-lg text-[#626d72] text-[12px] flex space-s-2 px-1 py-[2px]`}
+            className={`bg-[#f0f3f4]  rounded-lg text-[#626d72] text-[12px] flex space-s-2 px-1 py-[2px]`}
             dir="ltr"
           >
             <Image
@@ -118,14 +120,10 @@ export default function ClientHeader({
               width="24"
               height="22"
             />
-            <div>
-
-            0.00 SAR
-
-            </div>
+            <div>0.00 SAR</div>
           </div>
           <div
-            className={`bg-[#f0f3f4] rounded-lg text-[#626d72] text-[12px] flex space-s-2 px-1 py-[2px]`}
+            className={`hidden tab:flex bg-[#f0f3f4] rounded-lg text-[#626d72] text-[12px] flex space-s-2 px-1 py-[2px]`}
             dir="ltr"
           >
             <Image
@@ -133,12 +131,9 @@ export default function ClientHeader({
               alt={"calender"}
               width="16"
               height="16"
+              className=""
             />
-                <div>
-
-
-            {formatDate(createdAt)}
-</div>
+            <div>{formatDate(createdAt)}</div>
           </div>
         </div>
         <div></div>
