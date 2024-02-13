@@ -9,7 +9,7 @@ const nextConfig = {
     NEXT_PUBLIC_BACK_URL: process.env.NEXT_PUBLIC_BACK_URL,
   },
   images: {
-    domains: ["www.shutterstock.com"],
+    domains: ["www.shutterstock.com", "ae01.alicdn.com"],
   },
 };
 
