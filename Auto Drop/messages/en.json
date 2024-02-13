@@ -295,7 +295,7 @@
   },
   "myProducts": {
     "products": "Products",
-    "searchByProd": "Search by product name..",
+    "searchByProd": "Search by product Link..",
     "price": "Price",
     "unAvProd": "Unavailable Products",
     "apply": "Apply",
@@ -311,5 +311,26 @@
     "inv": "Inventory",
     "val": "Value....",
     "next": "Next"
+  },
+  "productsPage": {
+    "allProducts": "All Products",
+    "smartDevices": "Smart Devices",
+    "electronics": "Electronics",
+    "clothes": "Clothes",
+    "accessories": "Accessories",
+    "perfumes": "Perfumes",
+    "categories": "Categories",
+    "shops": "Shops",
+    "decor": "Decor",
+    "sportsSupplies": "Sports Supplies",
+    "stationary": "Stationary",
+    "searchByProd": "Search by product name..",
+    "cosmeticProducts": "Cosmetic Products",
+    "next": "Next",
+    "duration": "Duration",
+    "shippingType": "Shipping Type",
+    "price": "Price",
+    "profitAfter": "Profit after shipping discount",
+    "shippingInfo": "Shipping Information for the product"
   }
 }
