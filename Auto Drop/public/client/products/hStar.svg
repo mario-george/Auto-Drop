@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<svg width="14" height="12" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <g class="layer">
+  <title>Layer 1</title>
+  <path clip-rule="evenodd" d="m6.8,9.64l0.03,0.05l0.51,-4.15l-0.56,-5.42l-0.15,-0.03l0.17,-0.09l-1.8,4.19l-4.6,0.38l3.49,2.99l-1.04,4.44l3.95,-2.36z" fill="#FF9017" fill-rule="evenodd" id="svg_1"/>
+  <polyline fill="none" id="svg_13" opacity="0.5" points="-13.173411981828817,8.398843960861651 " stroke-linecap="round"/>
+  <rect fill="none" height="11.62" id="svg_15" transform="matrix(1 0 0 1 0 0)" width="6.82" x="18.21" y="2.73"/>
+  <rect fill="none" height="11.62" id="svg_16" width="6.82" x="9.25" y="2.5"/>
+  <rect fill="none" height="11.62" id="svg_17" width="6.82" x="10.41" y="3.66"/>
+  <rect fill="none" height="11.62" id="svg_18" transform="matrix(1 0 0 1 0 0)" width="6.82" x="11.57" y="4.82"/>
+  <rect fill="none" height="11.62" id="svg_19" width="6.82" x="12.72" y="5.97"/>
+ </g>
+
+</svg>
