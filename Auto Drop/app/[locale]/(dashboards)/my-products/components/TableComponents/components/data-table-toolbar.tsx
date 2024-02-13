@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -14,6 +15,7 @@ interface DataTableToolbarProps<TData> {
   price: string;
   category: string;
   unUpProd: string;
+  locale: string;
 }
 
 export function DataTableToolbar<TData>({
@@ -23,9 +25,11 @@ export function DataTableToolbar<TData>({
   price,
   category,
   unUpProd,
+  locale,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
   let filterHandler = () => {};
+  let isAr = locale === "ar";
   return (
     <div className="flex items-center justify-between bg-[#f0f3f4] px-3 py-4 rounded-md">
       <div className="flex flex-1 items-center space-x-2">
@@ -38,9 +42,14 @@ export function DataTableToolbar<TData>({
             onChange={(event) =>
               table.getColumn("prodName")?.setFilterValue(event.target.value)
             }
-            className=" w-[150px] lg:w-[350px] shadow-md rounded-lg"
+            className=" w-[150px] lg:w-[350px] shadow-md rounded-lg !placeholder-opacity-1  placeholder:text-[#b0b0b0]"
           />
-          <div className="absolute left-[5%] top-[25%]">
+          <div
+            className={cn(
+              isAr ? ` left-[5%] ` : `right-[5%]`,
+              "absolute top-[20%]"
+            )}
+          >
             <Image
               src={`/client/my-products/searchbar.svg`}
               alt={`search-bar`}
@@ -57,7 +66,6 @@ export function DataTableToolbar<TData>({
       >
         Confirm
       </Button>
-
     </div>
   );
 }
