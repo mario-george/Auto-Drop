@@ -41,7 +41,7 @@ export function DataTablePagination<TData>({
                       }
                       className={`shadow-md ${
                         table.getState().pagination.pageIndex + 1 === page
-                          ? `bg-[#253439] text-white`
+                          ? `bg-[#253439] text-white hover:bg-[#253439] hover:text-white`
                           : ``
                       }`}
                       onClick={() => table.setPageIndex(page - 1)}
