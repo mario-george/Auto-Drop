@@ -30,6 +30,7 @@ const userSlice = createSlice({
       state.aliExpressToken = action.payload.aliExpressToken;
       state.country = action.payload.country;
       state.createdAt = action.payload.createdAt;
+      localStorage.setItem("token", action.payload.token);
     },
     logout(state) {
       state.isLoggedIn = false;
