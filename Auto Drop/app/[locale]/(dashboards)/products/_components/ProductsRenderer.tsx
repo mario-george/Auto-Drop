@@ -42,11 +42,15 @@ export default function ProductsRenderer({
   const [lang, setLang] = useState<string>("en");
   const [products, setProducts] = useState<any[]>([]);
   const [productsAR, setProductsAR] = useState<any[]>([]);
-
+  interface ShippingInfo {}
+  const [showShipping, setShowShipping] = useState();
   const dispatch = useDispatch();
 
   const fetchProducts = useCallback(async () => {
-    const resp = await fetch(
+    const resp = await axiosInstance.post("/aliexpress/products?lang=en", {
+      page: 1,
+    });
+    /*   const resp = await fetch(
       `http://localhost:10000/api/v1/aliexpress/products?lang=en`,
       {
         headers: {
@@ -56,9 +60,13 @@ export default function ProductsRenderer({
         method: "POST",
         body: JSON.stringify({ page: 1 }),
       }
-    );
-    const respData = await resp.json();
-    return respData.result;
+    ); */
+    // const respData = await resp.json();
+    // return respData.result;
+
+    console.log(resp);
+    //@ts-ignore
+    return resp.data.result;
   }, [token]);
 
   const fetchAndSet2 = useCallback(async () => {
@@ -103,8 +111,8 @@ export default function ProductsRenderer({
       setProductsAR((oldProducts) => [...oldProducts, ...additionalProducts]);
     }
   }, [fetchProducts, lang, productsAR]);
-  const shoppingCartHandler = async (url:string) => {
-    console.log(url)
+  const shoppingCartHandler = async (url: string) => {
+    console.log(url);
     const resp = await fetch(
       `http://localhost:10000/api/v1/aliexpress/getProductDetails?lang=en`,
       {
@@ -118,6 +126,7 @@ export default function ProductsRenderer({
     );
     const respData = await resp.json();
     console.log(respData);
+    console.log(respData.shipping);
     // return respData;
   };
   const pagesProducts = useSelector((state: RootState) => state.products.pages);
@@ -264,10 +273,6 @@ export default function ProductsRenderer({
                       <Image
                         src={`/client/products/shoppingCart.svg`}
                         className=" rounded-full cursor-pointer "
-                        // style={{ height: "70%" }}
-                        //   layout="fill"
-                        //   objectFit="cover"
-
                         height={45}
                         width={45}
                         alt="shoppingCart"
@@ -297,9 +302,6 @@ export default function ProductsRenderer({
                         product.product_small_image_urls.productSmallImageUrl[0]
                       }
                       className="p-0 w-full min-h-[67.5%] mb-auto "
-                      // style={{ height: "70%" }}
-                      //   layout="fill"
-                      //   objectFit="cover"
                       height={300}
                       width={300}
                       alt="aliexpressProduct"
@@ -307,29 +309,24 @@ export default function ProductsRenderer({
                   </div>
                   <div className="p-3 flex flex-col  gap-y-3">
                     <div
-                      className={`flex justify-between gap-x-2 items-center ${
-                        locale === "ar" && "flex-row-reverse "
-                      }`}
+                      className=" flex items-center justify-between"
+                      dir="ltr"
                     >
-                      <div
-                        className={`flex w-full items-center ${
-                          locale === "ar" && "justify-end "
-                        }`}
-                      >
-                        <span
-                          className={`w-fit text-neutral-500 text-xs ${
-                            locale === "ar" && "text-right "
-                          }`}
-                        >
-                          {locale === "ar" && "..."}
-                          {locale === "en"
-                            ? product.product_title.substring(0, 25)
-                            : product.product_title.substring(0, 35)}
-                          {locale === "en" && "..."}
-                        </span>
+                      <div className={` text-[#253439] text-xs`}>
+                        {product.product_title.substring(0, 35)}
+                        ...
                       </div>
-                      {/*   {loadingAdd.includes(i) ? (
-                    <div className=" flex items-center justify-center">
+                      <div>
+                        <Image
+                          src={"/client/products/cart.svg"}
+                          alt={`cart`}
+                          width={24}
+                          height={24}
+                        />
+                      </div>
+                    </div>
+                    {/*   {loadingAdd.includes(i) ? (
+                    <div className=" flex items-cen ter justify-center">
                       <TailSpin
                         height="20"
                         width="20"
@@ -349,17 +346,10 @@ export default function ProductsRenderer({
                       <FontAwesomeIcon icon={faPlus} className="text-sm " />
                     </button>
                   )} */}
-                    </div>
                     <div
-                      className={`flex justify-between items-center w-full ${
-                        locale === "ar" && "flex-row-reverse "
-                      }`}
+                      className={`flex justify-between items-center w-full `}
                     >
-                      <div
-                        className={`flex gap-x-2 items-center w-11/12  ${
-                          locale === "ar" && "justify-end "
-                        }`}
-                      >
+                      <div className={`flex gap-x-2 items-center w-11/12 `}>
                         <span className="text-sm text-[#253439]">
                           {CurrencyFormatter(product.target_sale_price)}
                         </span>
@@ -379,18 +369,8 @@ export default function ProductsRenderer({
                         copied === i && "text-green-700"
                       }`}
                     /> */}
-                      <Image
-                        src={"/client/products/cart.svg"}
-                        alt={`cart`}
-                        width={24}
-                        height={24}
-                      />
                     </div>
-                    <div
-                      className={`flex justify-between items-center ${
-                        locale === "ar" && "flex-row-reverse "
-                      }`}
-                    >
+                    <div className={`flex justify-between items-center `}>
                       <div className="flex flex-1 z-30">
                         {product.evaluate_rate
                           ? renderRatingStars(
@@ -629,6 +609,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import axiosInstance from "../../_components/shared/AxiosInstance";
 
 function Dialog({
   children,
