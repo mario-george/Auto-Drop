@@ -6,9 +6,13 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 import { userActions } from "@/store/user-slice";
-const { BASE_URL } = {
-  BASE_URL: "http://localhost:10000/api/v1/",
+let { BASE_URL } = {
+  BASE_URL: process.env.NEXT_PUBLIC_BACK_URL,
 };
+if (process.env.NEXT_PUBLIC_ENVIRONMENT === "dev") {
+  BASE_URL = "http://localhost:10000/api/v1/";
+}
+
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
 });
