@@ -1,7 +1,9 @@
 "use client";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
-import CurrencyFormatter from "./CurrencyFormatter";
+import CurrencyFormatter, {
+  CurrencyFormatterShippingInfo,
+} from "./CurrencyFormatter";
 import renderRatingStars from "./RenderRatingStarts";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -16,9 +18,16 @@ import PaginationRenderer from "./PaginationRenderer";
 import { unstable_batchedUpdates } from "react-dom";
 import { resetPagesProducts } from "@/store/productsSlice";
 import ProductsSpinner from "./ProductsSpinner";
-import { FaPlus } from "react-icons/fa6";
+import axiosInstance from "../../_components/shared/AxiosInstance";
+import SubmitProducts from "./Dialog";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
+import { BiSend } from "react-icons/bi";
+import { FetchSpinner } from "./ProductsSpinner";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import MotionWrapperExit from "../../_components/shared/MotionWrapperExit";
+import MotionWrapper from "../../_components/shared/MotionWrapper";
 // pages / products  state
 
 export default function ProductsRenderer({
@@ -34,40 +43,52 @@ export default function ProductsRenderer({
   searchByProd: string;
   allProducts: string;
 }) {
-  const token: string = useSelector((state: RootState) => {
-    return state.user.token;
-  });
-  const [loading, setLoading] = useState(false);
   const [currPage, setCurrPage] = useState("1");
+  const [shippingInfoPending, setShippingInfoPending] =
+    useState<boolean>(false);
   const [lang, setLang] = useState<string>("en");
   const [products, setProducts] = useState<any[]>([]);
   const [productsAR, setProductsAR] = useState<any[]>([]);
-  interface ShippingInfo {}
-  const [showShipping, setShowShipping] = useState();
+  const [productsShippingInfo, setProductsShippingInfo] = useState(
+    Array(products.length).fill([
+      {
+        shippingType: "",
+        price: "",
+        profitAfterDiscount: "",
+        duration: "",
+        activated: false,
+        loading: false,
+      },
+    ])
+  );
+  useEffect(() => {
+    if (products.length !== productsShippingInfo.length) {
+      setProductsShippingInfo(
+        Array(products.length).fill([
+          {
+            shippingType: "",
+            price: "",
+            profitAfterDiscount: "",
+            duration: "",
+            activated: false,
+            loading: false,
+          },
+        ])
+      );
+    }
+  }, [products.length]);
   const dispatch = useDispatch();
-
+  const [commissionV, setCommissionV] = useState(
+    Array(products.length).fill("")
+  );
   const fetchProducts = useCallback(async () => {
     const resp = await axiosInstance.post("/aliexpress/products?lang=en", {
       page: 1,
     });
-    /*   const resp = await fetch(
-      `http://localhost:10000/api/v1/aliexpress/products?lang=en`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        method: "POST",
-        body: JSON.stringify({ page: 1 }),
-      }
-    ); */
-    // const respData = await resp.json();
-    // return respData.result;
 
-    console.log(resp);
     //@ts-ignore
     return resp.data.result;
-  }, [token]);
+  }, []);
 
   const fetchAndSet2 = useCallback(async () => {
     let productCount = products.length;
@@ -84,19 +105,11 @@ export default function ProductsRenderer({
   }, [fetchProducts, products]);
 
   let fetchProductsAR = async () => {
-    const resp = await fetch(
-      `http://localhost:10000/api/v1/aliexpress/products?lang=ar`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        method: "POST",
-        body: JSON.stringify({ page: 1 }),
-      }
-    );
-    const respData = await resp.json();
-    return respData.result;
+    const resp = await axiosInstance.post("/aliexpress/products?lang=ar", {
+      page: 1,
+    });
+
+    return resp.data.result;
   };
   const fetchAndSetAR = useCallback(async () => {
     let productCount = productsAR.length;
@@ -111,36 +124,41 @@ export default function ProductsRenderer({
       setProductsAR((oldProducts) => [...oldProducts, ...additionalProducts]);
     }
   }, [fetchProducts, lang, productsAR]);
-  const shoppingCartHandler = async (url: string) => {
-    console.log(url);
-    const resp = await fetch(
-      `http://localhost:10000/api/v1/aliexpress/getProductDetails?lang=en`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        method: "POST",
-        body: JSON.stringify({ url }),
-      }
-    );
-    const respData = await resp.json();
-    console.log(respData);
-    console.log(respData.shipping);
-    // return respData;
+  const shoppingCartHandler = async (product_id: string) => {
+    const resp = await axiosInstance.post("/aliexpress/getShippingDetails", {
+      product_id,
+    });
+
+    console.log(resp.data.shipping);
+    console.log(resp.data);
+    return resp.data.shipping;
   };
+  const toggleShoppingCartActivated = (index: number) => {
+    setProductsShippingInfo((productsShipping) => {
+      return productsShipping.map((shipping, shippingIndex) => {
+        if (shippingIndex === index) {
+          return [
+            {
+              ...shipping[0],
+              activated: !shipping[0].activated,
+            },
+            ...shipping.slice(1),
+          ];
+        } else {
+          return shipping;
+        }
+      });
+    });
+  };
+
   const pagesProducts = useSelector((state: RootState) => state.products.pages);
 
   useEffect(() => {
     const productsPage = pagesProducts.find(
       (p) => p.page === currPage && p.lang === lang
     );
-    console.log(pagesProducts);
-    console.log(lang);
+
     if (productsPage) {
-      console.log(pagesProducts);
-      console.log(productsPage!.lang);
-      console.log(productsPage!.page);
       if (productsPage.products.length === 0) {
         if (lang == "en") {
           fetchAndSet2();
@@ -174,6 +192,7 @@ export default function ProductsRenderer({
       })
     );
   };
+
   const handleCheckChangeAR = (index: number) => {
     setProductsAR((products) =>
       products.map((product, i) => {
@@ -200,48 +219,104 @@ export default function ProductsRenderer({
       fetchAndSet2();
     }
     return;
-
-    if (language !== "ar") {
-      setProductsAR([]);
-    } else {
-      setProducts([]);
-
-      let fetchProductsAR = async () => {
-        const resp = await fetch(
-          `http://localhost:10000/api/v1/aliexpress/products?lang=${language}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + token,
-            },
-            method: "POST",
-            body: JSON.stringify({ page: 1 }),
-          }
-        );
-        const respData = await resp.json();
-        console.log(respData);
-        return respData.result;
-      };
-      let fetchAndSetAR = async () => {
-        let productCount = 0;
-
-        while (productCount < 20) {
-          const newProducts = await fetchProductsAR(); // Assume this always fetches 2 products
-          productCount += newProducts.length;
-
-          // Add new products to the array
-          setProductsAR((oldProducts) => [...oldProducts, ...newProducts]);
-          console.log(productCount);
-        }
-      };
-      console.log(lang);
-      console.log(language);
-      // fetchAndSetAR();
-      // fetchAndSet2();
-    }
-    fetchAndSet2();
   };
 
+  const addCommissionHandler = async (
+    index: number,
+    product: any,
+    value: any
+  ) => {
+    setShippingInfoPending(true);
+    if (!value) {
+      value = 0;
+    }
+
+    setProducts((products) =>
+      products.map((product, i) => {
+        if (i === index) {
+          return { ...product, commission: value };
+        }
+        return product;
+      })
+    );
+    setProductsShippingInfo((productsShipping) => {
+      return productsShipping.map((shipping, shippingIndex) => {
+        if (shippingIndex === index) {
+          return [{ ...shipping[0], loading: "pending" }];
+        } else {
+          return shipping;
+        }
+      });
+    });
+    console.log(product.product_id);
+    const shippingArr = await shoppingCartHandler(product.product_id);
+
+    if (shippingArr.length !== 0) {
+      shippingArr.forEach((element: any, shippingIndexNumber: number) => {
+        let profitAfterDiscount =
+          (product.target_sale_price * value) / 100 -
+          element.freight.cent / 100; //subtract the shipping cost
+        let price = product.target_sale_price;
+        let shipping_method = element.shipping_method;
+        let duration = element.estimated_delivery_time;
+
+        setProductsShippingInfo((productsShipping) => {
+          return productsShipping.map((shipping, shippingIndex) => {
+            if (shippingIndex === index) {
+              if (shippingIndexNumber == 0) {
+                return [
+                  {
+                    shippingType: shipping_method,
+                    duration,
+                    activated: true,
+                    price,
+                    profitAfterDiscount,
+                    loading: false,
+                  },
+                ];
+              }
+              return [
+                ...shipping,
+                {
+                  shippingType: shipping_method,
+                  duration,
+                  activated: true,
+                  price,
+                  profitAfterDiscount,
+                  loading: false,
+                },
+              ];
+            } else {
+              return shipping;
+            }
+          });
+        });
+      });
+    } else {
+      console.log("a7aaaaaaaaaaa");
+      setProductsShippingInfo((productsShipping: any): any => {
+        return productsShipping.map((shipping: any, shippingIndex: number) => {
+          if (index === shippingIndex) {
+            return [
+              {
+                ...shipping[0],
+                loading: false,
+                noShipping: true,
+                activated: true,
+              },
+            ];
+          } else {
+            return shipping;
+          }
+        });
+      });
+    }
+    setShippingInfoPending(false);
+
+    console.log(shippingArr);
+
+    console.log((product.target_sale_price * value) / 100);
+  };
   return (
     <div>
       <Header toogleLang={toogleLang} shops={shops} />
@@ -251,151 +326,280 @@ export default function ProductsRenderer({
       {lang == "en" ? (
         <>
           {" "}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-3 overflow-hidden">
-            {products?.map((product: any, i: number) => {
-              return (
-                <Card
-                  className="relative flex flex-col !p-0 my-3 shadow-md rounded-lg justify-between overflow-hidden"
-                  key={i}
-                >
-                  <div
-                    className={cn(
-                      "absolute top-[1rem] ",
-                      locale == "ar" ? `right-[1rem]` : `left-[1rem]`
-                    )}
-                  >
-                    <div
-                      className="overflow-hidden"
-                      onClick={() => {
-                        shoppingCartHandler(product.product_detail_url);
-                      }}
-                    >
-                      <Image
-                        src={`/client/products/shoppingCart.svg`}
-                        className=" rounded-full cursor-pointer "
-                        height={45}
-                        width={45}
-                        alt="shoppingCart"
-                      />
-                    </div>
-                  </div>
+          <MotionWrapper locale="en">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-3 overflow-hidden">
+              {products?.map((product: any, i: number) => {
+                let shippingInfoActive =
+                  productsShippingInfo &&
+                  productsShippingInfo.length == products.length &&
+                  productsShippingInfo[i] &&
+                  productsShippingInfo[i][0] &&
+                  productsShippingInfo[i][0].activated;
 
-                  <div
-                    className={
-                      (cn("absolute top-[10rem] left-[6rem]"),
-                      locale == "aar" ? `right-[10%]` : `left-[10%]`)
-                    }
+                return (
+                  <Card
+                    className="relative flex flex-col !p-0 my-3 shadow-md rounded-lg justify-between overflow-hidden"
+                    key={i}
                   >
-                    <Checkbox
-                      checked={product.checked || false}
-                      onCheckedChange={() => handleCheckChange(i)}
-                      classNameIndicator="bg-blue-500 overflow-hidden"
-                      className={cn(
-                        "absolute top-[5%]  tab:h-[18px] tab:w-[18px] overflow-hidden border-black border-2 shadow-lg",
-                        locale == "ar" ? `left-[5%]` : `right-[5%]`
+                    {productsShippingInfo &&
+                      productsShippingInfo[i] &&
+                      productsShippingInfo[i][0].loading === "pending" && (
+                        <FetchSpinner />
                       )}
-                    />
-                  </div>
-                  <div className="">
-                    <Image
-                      src={
-                        product.product_small_image_urls.productSmallImageUrl[0]
-                      }
-                      className="p-0 w-full min-h-[67.5%] mb-auto "
-                      height={300}
-                      width={300}
-                      alt="aliexpressProduct"
-                    />
-                  </div>
-                  <div className="p-3 flex flex-col  gap-y-3">
+                    {productsShippingInfo &&
+                      productsShippingInfo[i] &&
+                      productsShippingInfo[i][0].activated && (
+                        <>
+                          <MotionWrapperExit locale="en">
+                            <div className="text-[#253439] " dir="ltr">
+                              <div className="mx-auto bg-[#f0f3f4] text-center pt-16 p-6   ">
+                                Information and shipping methods for the product
+                              </div>
+                              <ScrollArea className="h-[18rem]">
+                                {productsShippingInfo[i].map(
+                                  (shipping: any, ind: number) => {
+                                    if (shipping.noShipping) {
+                                      return (
+                                        <div className="flex flex-col space-y-2 pl-2 mt-6">
+                                          <div className="flex space-s-3">
+                                            <span>Shipping Method:</span>
+                                            <span className="text-[#008767]">
+                                              No Shipping Found.
+                                            </span>
+                                          </div>
+                                        </div>
+                                      );
+                                    }
+
+                                    return (
+                                      <>
+                                        <div className="flex flex-col space-y-2 pl-2 mt-6 ">
+                                          <div className="flex space-s-3">
+                                            <span>Shipping Method:</span>
+                                            <span className="text-[#008767]">
+                                              {
+                                                productsShippingInfo[i][0]
+                                                  .shippingType
+                                              }{" "}
+                                            </span>
+                                          </div>
+                                          <div className="flex space-s-3">
+                                            {" "}
+                                            <span>Duration:</span>{" "}
+                                            <span className="text-[#008767]">
+                                              {
+                                                productsShippingInfo[i][0]
+                                                  .duration
+                                              }
+                                            </span>
+                                          </div>
+                                          <div className="flex space-s-3">
+                                            {" "}
+                                            <span>
+                                              Profit After Discount:
+                                            </span>{" "}
+                                            <span className="text-[#008767]">
+                                              {CurrencyFormatterShippingInfo(
+                                                productsShippingInfo[i][0]
+                                                  .profitAfterDiscount
+                                              )}
+                                            </span>{" "}
+                                          </div>
+                                          <div className="flex space-s-3 text-[#C1121F]">
+                                            {" "}
+                                            <span>Price:</span>{" "}
+                                            <span>
+                                              {CurrencyFormatter(
+                                                productsShippingInfo[i][0].price
+                                              )}
+                                            </span>{" "}
+                                          </div>
+                                          {ind !==
+                                            productsShippingInfo[i].length -
+                                              1 && <Separator />}
+                                        </div>
+                                      </>
+                                    );
+                                  }
+                                )}
+                              </ScrollArea>
+                            </div>
+                          </MotionWrapperExit>
+                        </>
+                      )}
                     <div
-                      className=" flex items-center justify-between"
-                      dir="ltr"
+                      className={cn(
+                        "absolute top-[1rem] ",
+                        locale == "ar" ? `right-[1rem]` : `left-[1rem]`
+                      )}
                     >
-                      <div className={` text-[#253439] text-xs`}>
-                        {product.product_title.substring(0, 35)}
-                        ...
-                      </div>
-                      <div>
-                        <Image
-                          src={"/client/products/cart.svg"}
-                          alt={`cart`}
-                          width={24}
-                          height={24}
-                        />
-                      </div>
-                    </div>
-                    {/*   {loadingAdd.includes(i) ? (
-                    <div className=" flex items-cen ter justify-center">
-                      <TailSpin
-                        height="20"
-                        width="20"
-                        color="#253439"
-                        ariaLabel="tail-spin-loading"
-                        radius="1"
-                        wrapperStyle={{}}
-                        wrapperClass=""
-                        visible={true}
-                      />
-                    </div>
-                  ) : (
-                    <button
-                      className="bg-gray-300 rounded-full p-2 w-6 h-6 flex items-center justify-center text-white hover:text-orange-400 hover:bg-slate-300"
-                      onClick={() => setAddButton(i)}
-                    >
-                      <FontAwesomeIcon icon={faPlus} className="text-sm " />
-                    </button>
-                  )} */}
-                    <div
-                      className={`flex justify-between items-center w-full `}
-                    >
-                      <div className={`flex gap-x-2 items-center w-11/12 `}>
-                        <span className="text-sm text-[#253439]">
-                          {CurrencyFormatter(product.target_sale_price)}
-                        </span>
-                        {product.target_original_price !==
-                        product.target_sale_price ? (
-                          <span className="text-xs text-[#d64d57] line-through">
-                            {CurrencyFormatter(product.target_original_price)}
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                      {/* <button onClick={() => copy(i)}> */}
-                      {/*           <FontAwesomeIcon
-                      icon={faCopy}
-                      className={`cursor-pointer mr-1 ${
-                        copied === i && "text-green-700"
-                      }`}
-                    /> */}
-                    </div>
-                    <div className={`flex justify-between items-center `}>
-                      <div className="flex flex-1 z-30">
-                        {product.evaluate_rate
-                          ? renderRatingStars(
-                              product.evaluate_rate.split("%")[0]
-                            )
-                          : renderRatingStars(90)}
-                      </div>
-                      <a
-                        href={product.product_detail_url}
-                        target="_blank"
-                        className=" "
+                      <div
+                        className="overflow-hidden"
+                        onClick={() => {
+                          if (
+                            product.checked &&
+                            (product.commission || product.commission === 0)
+                          ) {
+                            toggleShoppingCartActivated(i);
+                          }
+                        }}
                       >
                         <Image
-                          src={`/client/products/aliexpressCard.svg`}
-                          width={66}
-                          height={21}
-                          alt="aliexpressCard"
+                          src={`/client/products/shoppingCart.svg`}
+                          className=" rounded-full cursor-pointer "
+                          height={45}
+                          width={45}
+                          alt="shippingCart"
                         />
-                      </a>
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
+
+                    {!shippingInfoActive && (
+                      <div
+                        className={
+                          (cn("absolute top-[10rem] left-[6rem]"),
+                          locale == "aar" ? `right-[10%]` : `left-[10%]`)
+                        }
+                      >
+                        <Checkbox
+                          checked={product.checked || false}
+                          onCheckedChange={() => handleCheckChange(i)}
+                          classNameIndicator="bg-blue-500 overflow-hidden"
+                          className={cn(
+                            "absolute top-[5%]  tab:h-[18px] tab:w-[18px] overflow-hidden border-black border-2 shadow-lg",
+                            locale == "ar" ? `left-[5%]` : `right-[5%]`
+                          )}
+                        />
+                      </div>
+                    )}
+                    {!shippingInfoActive && (
+                      <div className="">
+                        <Image
+                          src={
+                            product.product_small_image_urls
+                              .productSmallImageUrl[0]
+                          }
+                          className="p-0 w-full min-h-[67.5%] mb-auto "
+                          height={300}
+                          width={300}
+                          alt="aliexpressProduct"
+                        />
+                      </div>
+                    )}
+                    {product.checked && !shippingInfoActive ? (
+                      <>
+                        <div className="space-y-3 flex flex-col pt-7">
+                          <span className="mx-auto">
+                            Please Enter your commision
+                          </span>
+                          <div className="flex space-x-3 items-center justify-between px-3 pb-2">
+                            <Button
+                              className="bg-blue-500 text-white hover:bg-blue-600 rounded-full "
+                              onClick={() => {
+                                addCommissionHandler(
+                                  i,
+                                  product,
+                                  commissionV[i]
+                                );
+                              }}
+                              disabled={shippingInfoPending}
+                            >
+                              <BiSend />
+                            </Button>
+                            <div className="relative mt-auto">
+                              <Input
+                                type="number"
+                                className="pr-6"
+                                value={commissionV[i]}
+                                onChange={(e) => {
+                                  const newValues = [...commissionV];
+                                  newValues[i] = e.target.value;
+                                  setCommissionV(newValues);
+                                }}
+                              />
+                              <span className="absolute inset-y-0 right-0 pr-2 flex items-center text-gray-500">
+                                %
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    ) : shippingInfoActive ? (
+                      <></>
+                    ) : (
+                      <>
+                        <div className="p-3 flex flex-col  gap-y-3">
+                          <div
+                            className=" flex items-center justify-between"
+                            dir="ltr"
+                          >
+                            <div className={` text-[#253439] text-xs`}>
+                              {product.product_title.substring(0, 35)}
+                              ...
+                            </div>
+                            <div>
+                              <Image
+                                src={"/client/products/cart.svg"}
+                                alt={`cart`}
+                                width={24}
+                                height={24}
+                              />
+                            </div>
+                          </div>
+
+                          <div
+                            className={`flex justify-between items-center w-full `}
+                          >
+                            <div
+                              className={`flex gap-x-2 items-center w-11/12 `}
+                            >
+                              <span className="text-sm text-[#253439]">
+                                {CurrencyFormatter(product.target_sale_price)}
+                              </span>
+                              {product.target_original_price !==
+                              product.target_sale_price ? (
+                                <span className="text-xs text-[#d64d57] line-through">
+                                  {CurrencyFormatter(
+                                    product.target_original_price
+                                  )}
+                                </span>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          </div>
+                          <div
+                            className={`flex justify-between items-center `}
+                            dir="ltr"
+                          >
+                            <div className="flex flex-1 z-30">
+                              {product.evaluate_rate
+                                ? renderRatingStars(
+                                    product.evaluate_rate.split("%")[0]
+                                  )
+                                : renderRatingStars(90)}
+                            </div>
+                            <a
+                              href={product.product_detail_url}
+                              target="_blank"
+                              className=" "
+                            >
+                              <Image
+                                src={`/client/products/aliexpressCard.svg`}
+                                width={66}
+                                height={21}
+                                alt="aliexpressCard"
+                              />
+                            </a>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </Card>
+                );
+              })}
+            </div>
+          </MotionWrapper>
         </>
       ) : (
         <>
@@ -549,113 +753,5 @@ export default function ProductsRenderer({
         />
       </>
     </div>
-  );
-}
-function SubmitProducts({
-  lang,
-  pagesProducts,
-  currPageProdEN,
-  currPageProdAR,
-  currPage,
-}: any) {
-  let toBeSentPages = pagesProducts.filter((element: any) => {
-    return element.lang === lang && element.page !== currPage;
-  });
-  let toBeSentProducts = toBeSentPages.map((element: any) => {
-    return element.products;
-  });
-  let toBeSentProductsArr = toBeSentProducts.flat().filter((element: any) => {
-    return element.checked === true;
-  });
-  if (lang == "en") {
-    currPageProdEN.forEach((element: any) => {
-      if (element.checked) {
-        toBeSentProductsArr.push(element);
-      }
-    });
-  } else {
-    currPageProdAR.forEach((element: any) => {
-      if (element.checked) {
-        toBeSentProductsArr.push(element);
-      }
-    });
-  }
-  const submitProductsHandler = () => {
-    console.log(toBeSentProductsArr);
-    console.log(toBeSentProductsArr.length);
-  };
-  return (
-    <>
-      <Dialog toBeSentProductsArr={toBeSentProductsArr}>
-        <Button
-          className="fixed bottom-12 !bg-blue-300 rounded-full min-w-[3rem] min-h-[3rem] shadow"
-          onClick={submitProductsHandler}
-          disabled={toBeSentProductsArr.length === 0}
-        >
-          <FaPlus className="text-black" />
-        </Button>
-      </Dialog>
-    </>
-  );
-}
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import axiosInstance from "../../_components/shared/AxiosInstance";
-
-function Dialog({
-  children,
-  toBeSentProductsArr,
-}: {
-  children: React.ReactNode;
-  toBeSentProductsArr: any;
-}) {
-  return (
-    <>
-      <AlertDialog>
-        <AlertDialogTrigger>{children}</AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Do you want to add these products to your list ?
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              You can save these products to your list
-              {toBeSentProductsArr.map((product: any, i: number) => {
-                return (
-                  <>
-                    <div
-                      key={i}
-                      className="flex justify-between items-center text-[#253439] min-w-full my-4 border-2 rounded-lg p-2"
-                    >
-                      <span className="max-w-[80%]">
-                        {product.product_title}
-                      </span>
-                      <span>
-                        {CurrencyFormatter(product.target_sale_price)}
-                      </span>
-                    </div>
-                  </>
-                );
-              })}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction className="bg-green-500 hover:bg-green-600">
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
   );
 }
