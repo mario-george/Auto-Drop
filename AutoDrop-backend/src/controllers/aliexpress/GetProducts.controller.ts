@@ -201,7 +201,7 @@ async function GetProductOptions(SKUs: object[]) {
     concatValues: any[] = [],
     collectOptions: any[] = [],
     collectValues: any[] = [];
-  // console.log(SKUs)
+
   collectValues = SKUs.map((sku: any) => {
     return sku?.ae_sku_property_dtos?.ae_sku_property_d_t_o?.map((ev: any) => {
       const {
@@ -341,7 +341,7 @@ export async function GetDetails({
         const errorMessage =
           aeResponse?.error_response?.msg ||
           "There is something went wrong while getting product details or maybe this product is not available to shipping to SA, try another product or contact support.";
-
+        console.log(result);
         if (!result) return resolve(false);
         else {
           const {
@@ -441,7 +441,8 @@ export async function GetProductDetails(
       },
       tokenInfo
     );
-
+    console.log(result);
+    console.log(product);
     return res.json({ product, shipping: result });
   } catch (error) {
     console.log(error);
