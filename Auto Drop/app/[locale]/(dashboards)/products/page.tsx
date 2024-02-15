@@ -10,10 +10,13 @@ export default function Page() {
     <>
       <MotionWrapper locale={locale}>
         <div className="px-3">
-        
-          <ProductsRenderer locale={locale}  categories={t("categories")}
+          <ProductsRenderer
+            locale={locale}
+            categories={t("categories")}
             allProducts={t("allProducts")}
-            searchByProd={t("searchByProd")} shops={t("shops")} />
+            searchByProd={t("searchByProd")}
+            shops={t("shops")}
+          />
         </div>
       </MotionWrapper>
       {/*   <Header title={t("products")} />
