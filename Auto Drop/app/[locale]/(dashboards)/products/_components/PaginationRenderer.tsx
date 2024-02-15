@@ -34,9 +34,9 @@ export default function PaginationRenderer({
   const dispatch = useDispatch();
   const savePageProductsHandler = () => {
     if (lang === "en") {
-      dispatch(setPageProducts({ page:currPage, products: products, lang }));
+      dispatch(setPageProducts({ page: currPage, products: products, lang }));
     } else {
-      dispatch(setPageProducts({ page:currPage, products: productsAR, lang }));
+      dispatch(setPageProducts({ page: currPage, products: productsAR, lang }));
     }
     unstable_batchedUpdates(() => {
       setProductsAR([]);
@@ -44,7 +44,7 @@ export default function PaginationRenderer({
     });
   };
 
-console.log(currPage)
+  console.log(currPage);
   return (
     <div className="flex items-center justify-center px-2">
       <div className="flex items-center space-x-6 lg:space-x-8">
@@ -58,7 +58,7 @@ console.log(currPage)
                   <PaginationItem key={page}>
                     <PaginationLink
                       isActive={currPage === page.toString()}
-                      className={`shadow-md text-[#253439] bg-white ${
+                      className={`shadow-md text-[#253439] hover:text-white hover:bg-[#253439] hover:cursor-pointer bg-white ${
                         currPage === page.toString()
                           ? `bg-[#253439] text-white`
                           : ``
