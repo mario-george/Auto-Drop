@@ -7,6 +7,7 @@ const nextConfig = {
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_BACK_URL: process.env.NEXT_PUBLIC_BACK_URL,
+    NEXT_PUBLIC_ENVIRONMENT: process.env.NEXT_PUBLIC_ENVIRONMENT,
   },
   images: {
     domains: ["www.shutterstock.com", "ae01.alicdn.com"],
