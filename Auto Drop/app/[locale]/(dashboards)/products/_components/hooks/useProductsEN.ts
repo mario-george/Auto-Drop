@@ -1,17 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 import axiosInstance from "../../../_components/shared/AxiosInstance";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 
 export default function useProducts({
   currPage,
   fetchAndSetAR,
   lang,
-  setProductsAR,
+  setProductsAR,productsAR
 }: any) {
   const [products, setProducts] = useState<any[]>([]);
+  const [shippingInfoPending, setShippingInfoPending] =
+    useState<boolean>(false);
   const [commissionV, setCommissionV] = useState(
-    Array(products.length).fill("")
+    Array(products.length).fill(0)
   );
   const [productsShippingInfo, setProductsShippingInfo] = useState(
     Array(products.length).fill([
@@ -34,7 +36,43 @@ export default function useProducts({
 
     return resp.data.result;
   }, []);
+useEffect(()=>{
+if(lang=="en"&& products.length !== commissionV.length){
+  setCommissionV(Array(products.length).fill(0))
+}
+if(lang=="ar"&& productsAR.length !== commissionV.length){
+  setCommissionV(Array(productsAR.length).fill(0))
+}
+if (products.length !== productsShippingInfo.length &&lang=="en") {
+  setProductsShippingInfo(
+    Array(products.length).fill([
+      {
+        shippingType: "",
+        price: "",
+        profitAfterDiscount: "",
+        duration: "",
+        activated: false,
+        loading: false,
+      },
+    ])
+  );
+}
+if (productsAR.length !== productsShippingInfo.length&&lang=='ar') {
+  setProductsShippingInfo(
+    Array(products.length).fill([
+      {
+        shippingType: "",
+        price: "",
+        profitAfterDiscount: "",
+        duration: "",
+        activated: false,
+        loading: false,
+      },
+    ])
+  );
+}
 
+},[lang,productsAR.length,products.length])
   const fetchAndSet2 = useCallback(async () => {
     let productCount = products.length;
     const targetCount = 20;
@@ -59,7 +97,7 @@ export default function useProducts({
       })
     );
   };
-  useEffect(() => {
+/*   useEffect(() => {
     if (products.length !== productsShippingInfo.length) {
       setProductsShippingInfo(
         Array(products.length).fill([
@@ -74,7 +112,7 @@ export default function useProducts({
         ])
       );
     }
-  }, [products.length]);
+  }, [products.length]); */
   useEffect(() => {
     const productsPage = pagesProducts.find(
       (p) => p.page === currPage && p.lang === lang
@@ -110,9 +148,11 @@ export default function useProducts({
     product: any,
     value: any
   ) => {
+    setShippingInfoPending(true);
     if (!value) {
       value = 0;
     }
+
     setProducts((products) =>
       products.map((product, i) => {
         if (i === index) {
@@ -130,11 +170,11 @@ export default function useProducts({
         }
       });
     });
+    console.log(product.product_id);
+    const shippingArr = await shoppingCartHandler(product.product_id);
 
-    const resp = await shoppingCartHandler(product.product_detail_url);
-
-    if (resp) {
-      resp.forEach((element: any, shippingIndexNumber: number) => {
+    if (shippingArr.length !== 0) {
+      shippingArr.forEach((element: any, shippingIndexNumber: number) => {
         let profitAfterDiscount =
           (product.target_sale_price * value) / 100 -
           element.freight.cent / 100; //subtract the shipping cost
@@ -175,8 +215,9 @@ export default function useProducts({
         });
       });
     } else {
+      console.log("a7aaaaaaaaaaa");
       setProductsShippingInfo((productsShipping: any): any => {
-        productsShipping.map((shipping: any, shippingIndex: number) => {
+        return productsShipping.map((shipping: any, shippingIndex: number) => {
           if (index === shippingIndex) {
             return [
               {
@@ -192,16 +233,19 @@ export default function useProducts({
         });
       });
     }
+    setShippingInfoPending(false);
+
+    console.log(shippingArr);
+
+    console.log((product.target_sale_price * value) / 100);
   };
-  const shoppingCartHandler = async (url: string) => {
-    const resp = await axiosInstance.post(
-      "/aliexpress/getProductDetails?lang=en",
-      { url }
-    );
-      
-    if (!resp.data.shipping) {
-      return null;
-    }
+  const shoppingCartHandler = async (product_id: string) => {
+    const resp = await axiosInstance.post("/aliexpress/getShippingDetails", {
+      product_id,
+    });
+
+    console.log(resp.data.shipping);
+    console.log(resp.data);
     return resp.data.shipping;
   };
   return {
@@ -211,5 +255,9 @@ export default function useProducts({
     setCommissionV,
     handleCheckChange,
     productsShippingInfo,
+    shippingInfoPending,
+    setProducts,
+    fetchAndSet2,
+    setProductsShippingInfo,
   };
 }
