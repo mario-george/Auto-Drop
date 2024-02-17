@@ -86,17 +86,14 @@ export default function ProductsListEN({
                                       <div className="flex space-s-3">
                                         <span>Shipping Method:</span>
                                         <span className="text-[#008767]">
-                                          {
-                                            productsShippingInfo[i][0]
-                                              .shippingType
-                                          }{" "}
+                                          {shipping.shippingType}{" "}
                                         </span>
                                       </div>
                                       <div className="flex space-s-3">
                                         {" "}
                                         <span>Duration:</span>{" "}
                                         <span className="text-[#008767]">
-                                          {productsShippingInfo[i][0].duration}
+                                          {shipping.duration}
                                         </span>
                                       </div>
                                       <div className="flex space-s-3">
@@ -104,8 +101,7 @@ export default function ProductsListEN({
                                         <span>Profit After Discount:</span>{" "}
                                         <span className="text-[#008767]">
                                           {CurrencyFormatterShippingInfo(
-                                            productsShippingInfo[i][0]
-                                              .profitAfterDiscount
+                                            shipping.profitAfterDiscount
                                           )}
                                         </span>{" "}
                                       </div>
@@ -114,7 +110,7 @@ export default function ProductsListEN({
                                         <span>Price:</span>{" "}
                                         <span>
                                           {CurrencyFormatter(
-                                            productsShippingInfo[i][0].price
+                                            shipping.price
                                           )}
                                         </span>{" "}
                                       </div>
