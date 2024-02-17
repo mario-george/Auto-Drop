@@ -56,11 +56,11 @@ export default function ProductsListAR({
                   productsShippingInfo[i][0].activated && (
                     <>
                       <MotionWrapperExit locale="en">
-                        <div className="text-[#253439] " dir="rtl">
+                        <div className="text-[#253439]" dir="rtl">
                           <div className="mx-auto bg-[#f0f3f4] text-center pt-16 p-6   ">
                             معلومات و طرق الشحن للمنتج{" "}
                           </div>
-                          <ScrollArea className="h-[18rem]">
+                          <ScrollArea className="h-[18rem]  p-6">
                             {productsShippingInfo[i].map(
                               (shipping: any, ind: number) => {
                                 if (shipping.noShipping) {
@@ -81,24 +81,22 @@ export default function ProductsListAR({
 
                                 return (
                                   <>
-                                    <div dir="rtl"
+                                    <div
+                                      dir="rtl"
                                       key={ind}
                                       className="flex flex-col space-y-2 pl-2 mt-6 "
                                     >
                                       <div className="flex space-s-3">
                                         <span>نوع الشحن:</span>
                                         <span className="text-[#008767]">
-                                          {
-                                            productsShippingInfo[i][0]
-                                              .shippingType
-                                          }{" "}
+                                          {shipping.shippingType}{" "}
                                         </span>
                                       </div>
                                       <div className="flex space-s-3">
                                         {" "}
                                         <span>المدة:</span>{" "}
                                         <span className="text-[#008767]">
-                                          {productsShippingInfo[i][0].duration}
+                                          {shipping.duration}
                                         </span>
                                       </div>
                                       <div className="flex space-s-3">
@@ -106,8 +104,7 @@ export default function ProductsListAR({
                                         <span>الربح بعد خصم الشحن: </span>{" "}
                                         <span className="text-[#008767]">
                                           {CurrencyFormatterShippingInfo(
-                                            productsShippingInfo[i][0]
-                                              .profitAfterDiscount
+                                            shipping.profitAfterDiscount
                                           )}
                                         </span>{" "}
                                       </div>
@@ -115,9 +112,7 @@ export default function ProductsListAR({
                                         {" "}
                                         <span>السعر:</span>{" "}
                                         <span>
-                                          {CurrencyFormatter(
-                                            productsShippingInfo[i][0].price
-                                          )}
+                                          {CurrencyFormatter(shipping.price)}
                                         </span>{" "}
                                       </div>
                                       {ind !==
