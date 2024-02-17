@@ -29,7 +29,7 @@ export async function GetSKUId({
         const errorMessage =
           aeResponse?.error_response?.msg ||
           "There is something went wrong while getting product details or maybe this product is not available to shipping to SA, try another product or contact support.";
-        console.log(result);
+        // console.log(result);
         if (!result) return resolve(false);
         else {
           const {
@@ -126,7 +126,7 @@ export async function GetProductShippingDetailsByID(
       },
       tokenInfo
     );
-    console.log(result);
+    // console.log(result);
     if (!result) {
       result = [];
     }
