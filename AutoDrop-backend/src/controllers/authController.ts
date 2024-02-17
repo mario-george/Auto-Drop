@@ -337,7 +337,7 @@ export const sallaCallback = catchAsync(
         const refreshToken = responseJson.refresh_token;
 
         const frontendLink = new URL(
-          (process.env.Frontend_Link + "/LinkAccountAuth") as string
+          (process.env.Frontend_Link + "/en/LinkAccountAuth") as string
         );
         frontendLink.searchParams.append("accessToken", accessToken);
         frontendLink.searchParams.append("refreshToken", refreshToken);
