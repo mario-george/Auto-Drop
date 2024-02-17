@@ -1,5 +1,4 @@
 //@ts-nocheck
-
 import axios, { AxiosError } from "axios";
 import { NextFunction, Request, Response } from "express";
 import { pick } from "lodash";
@@ -29,13 +28,14 @@ export async function CreateProductController(
     console.log(req.user.sallaToken);
     console.log(req.user.role); */
     const sallaTokenDocument = await SallaToken.findOne({
-      userId: req.user._id,
+      _id: req.user.sallaToken,
     });
-    let { accessToken } = sallaTokenDocument;
+    let { accessToken } = sallaTokenDocument!;
     let token = accessToken;
-    let access_token = token;
+    let access_token = accessToken;
     console.log(access_token);
     console.log(token);
+    console.log(req.user.sallaToken);
     /*    const { access_token, user_id, userType } = pick(req.local, [
       "user_id",
       "access_token",
@@ -158,8 +158,6 @@ export async function CreateProductController(
       throw new AppError("Values count should be smaller than 100", 400);
 
     const { data: productResult } = await axios.request(options_1);
-    console.log(productResult);
-    return;
     product.options = await Promise.all(
       // @ts-ignore
       jsonProduct.options?.map(async (option: OptionType, index: number) => {
