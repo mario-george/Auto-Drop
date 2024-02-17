@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useDispatch } from "react-redux";
 import { userActions } from "@/store/user-slice";
+import axiosInstance from "../_components/shared/AxiosInstance";
 
 const TokenExtractor: React.FC = () => {
   const userId = useSelector((state: RootState) => state.user.id);
@@ -20,7 +21,14 @@ const TokenExtractor: React.FC = () => {
     const tokenType = urlParams.get("tokenType");
     const sendData = async () => {
       try {
-        const response = await fetch(
+        const resp = await axiosInstance.post("/auth/saveToken", {
+          tokenType,
+          accessToken,
+          refreshToken,
+          userId,
+        });
+        console.log("resp", resp);
+      /*   const response = await fetch(
           process.env.NEXT_PUBLIC_BACK_URL + "auth/saveToken",
           {
             method: "POST",
@@ -34,13 +42,13 @@ const TokenExtractor: React.FC = () => {
               tokenType,
             }),
           }
-        );
+        ); */
 
-        if (!response.ok) {
+        if (resp.status >= 200 && resp.status < 300)  {
           throw new Error("Network response was not ok");
         }
 
-        const data = await response.json();
+        const data = resp
         console.log("tokenType", tokenType);
         console.log("data.sallaToken", data.data.user.sallaToken);
         console.log("data.aliExpressToken", data.data.user.aliExpressToken);
