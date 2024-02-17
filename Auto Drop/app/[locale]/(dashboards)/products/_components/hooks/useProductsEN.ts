@@ -7,7 +7,8 @@ export default function useProducts({
   currPage,
   fetchAndSetAR,
   lang,
-  setProductsAR,productsAR
+  setProductsAR,
+  productsAR,
 }: any) {
   const [products, setProducts] = useState<any[]>([]);
   const [shippingInfoPending, setShippingInfoPending] =
@@ -15,8 +16,14 @@ export default function useProducts({
   const [commissionV, setCommissionV] = useState(
     Array(products.length).fill(0)
   );
-  const [productsShippingInfo, setProductsShippingInfo] = useState(
-    Array(products.length).fill([
+
+  let lengthOfProducts = products.length;
+  if (lang == "ar") {
+    lengthOfProducts = productsAR.length;
+  }
+
+  const [productsShippingInfo, setProductsShippingInfo] = useState([
+    Array(lengthOfProducts).fill([
       {
         shippingType: "",
         price: "",
@@ -25,8 +32,8 @@ export default function useProducts({
         activated: false,
         loading: false,
       },
-    ])
-  );
+    ]),
+  ]);
   const pagesProducts = useSelector((state: RootState) => state.products.pages);
 
   const fetchProducts = useCallback(async () => {
@@ -36,43 +43,43 @@ export default function useProducts({
 
     return resp.data.result;
   }, []);
-useEffect(()=>{
-if(lang=="en"&& products.length !== commissionV.length){
-  setCommissionV(Array(products.length).fill(0))
-}
-if(lang=="ar"&& productsAR.length !== commissionV.length){
-  setCommissionV(Array(productsAR.length).fill(0))
-}
-if (products.length !== productsShippingInfo.length &&lang=="en") {
-  setProductsShippingInfo(
-    Array(products.length).fill([
-      {
-        shippingType: "",
-        price: "",
-        profitAfterDiscount: "",
-        duration: "",
-        activated: false,
-        loading: false,
-      },
-    ])
-  );
-}
-if (productsAR.length !== productsShippingInfo.length&&lang=='ar') {
-  setProductsShippingInfo(
-    Array(products.length).fill([
-      {
-        shippingType: "",
-        price: "",
-        profitAfterDiscount: "",
-        duration: "",
-        activated: false,
-        loading: false,
-      },
-    ])
-  );
-}
-
-},[lang,productsAR.length,products.length])
+  useEffect(() => {
+    console.log("use effect reset is active");
+    if (lang == "en" && products.length !== commissionV.length) {
+      setCommissionV(Array(products.length).fill(0));
+    }
+    if (lang == "ar" && productsAR.length !== commissionV.length) {
+      setCommissionV(Array(productsAR.length).fill(0));
+    }
+    if (products.length !== productsShippingInfo.length && lang == "en") {
+      setProductsShippingInfo(
+        Array(products.length).fill([
+          {
+            shippingType: "",
+            price: "",
+            profitAfterDiscount: "",
+            duration: "",
+            activated: false,
+            loading: false,
+          },
+        ])
+      );
+    }
+    if (productsAR.length !== productsShippingInfo.length && lang == "ar") {
+      setProductsShippingInfo(
+        Array(productsAR.length).fill([
+          {
+            shippingType: "",
+            price: "",
+            profitAfterDiscount: "",
+            duration: "",
+            activated: false,
+            loading: false,
+          },
+        ])
+      );
+    }
+  }, [lang, productsAR.length, products.length]);
   const fetchAndSet2 = useCallback(async () => {
     let productCount = products.length;
     const targetCount = 20;
@@ -97,7 +104,7 @@ if (productsAR.length !== productsShippingInfo.length&&lang=='ar') {
       })
     );
   };
-/*   useEffect(() => {
+  /*   useEffect(() => {
     if (products.length !== productsShippingInfo.length) {
       setProductsShippingInfo(
         Array(products.length).fill([
@@ -152,15 +159,27 @@ if (productsAR.length !== productsShippingInfo.length&&lang=='ar') {
     if (!value) {
       value = 0;
     }
-
-    setProducts((products) =>
-      products.map((product, i) => {
-        if (i === index) {
-          return { ...product, commission: value };
-        }
-        return product;
-      })
-    );
+    console.log(lang);
+    console.log(product);
+    if (lang == "en") {
+      setProducts((products) =>
+        products.map((product, i) => {
+          if (i === index) {
+            return { ...product, vendor_commission: value };
+          }
+          return product;
+        })
+      );
+    } else {
+      setProductsAR((products: any) => {
+        return productsAR.map((product: any, i: number) => {
+          if (i === index) {
+            return { ...product, vendor_commission: value };
+          }
+          return product;
+        });
+      });
+    }
     setProductsShippingInfo((productsShipping) => {
       return productsShipping.map((shipping, shippingIndex) => {
         if (shippingIndex === index) {
@@ -172,6 +191,7 @@ if (productsAR.length !== productsShippingInfo.length&&lang=='ar') {
     });
     console.log(product.product_id);
     const shippingArr = await shoppingCartHandler(product.product_id);
+    console.log(productsShippingInfo);
 
     if (shippingArr.length !== 0) {
       shippingArr.forEach((element: any, shippingIndexNumber: number) => {
@@ -215,7 +235,6 @@ if (productsAR.length !== productsShippingInfo.length&&lang=='ar') {
         });
       });
     } else {
-      console.log("a7aaaaaaaaaaa");
       setProductsShippingInfo((productsShipping: any): any => {
         return productsShipping.map((shipping: any, shippingIndex: number) => {
           if (index === shippingIndex) {
@@ -236,6 +255,7 @@ if (productsAR.length !== productsShippingInfo.length&&lang=='ar') {
     setShippingInfoPending(false);
 
     console.log(shippingArr);
+    console.log(productsShippingInfo);
 
     console.log((product.target_sale_price * value) / 100);
   };
