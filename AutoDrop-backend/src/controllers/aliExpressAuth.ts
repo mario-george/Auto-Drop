@@ -71,7 +71,7 @@ export const aliexpressCallback = async (req: Request, res: Response) => {
       const refreshToken = respData.refresh_token;
 
       const frontendLink = new URL(
-        (process.env.Frontend_Link + "/LinkAccountAuth") as string
+        (process.env.Frontend_Link + "/en/LinkAccountAuth") as string
       );
       frontendLink.searchParams.append("accessToken", accessToken);
       frontendLink.searchParams.append("refreshToken", refreshToken);
