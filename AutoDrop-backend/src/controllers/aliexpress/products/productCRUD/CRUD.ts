@@ -1,4 +1,5 @@
-// @ts-nocheck
+//@ts-nocheck
+
 import axios, { AxiosError } from "axios";
 import { NextFunction, Request, Response } from "express";
 import { pick } from "lodash";
@@ -10,6 +11,7 @@ import {
   ProductSchema,
   ValueType,
 } from "../../../../models/product.model";
+import SallaToken from "../../../../models/SallaTokenModel";
 
 export async function CreateProductController(
   req: Request & any,
@@ -20,13 +22,20 @@ export async function CreateProductController(
     //   let token: string | undefined, account: UserDocument | null;
     //   let subscription: SubscriptionDocument | null;
     //console.log(req.user);
-    console.log(req.user._id.toString());
-
+    /*     console.log(req.user._id.toString());
+     */
     const { role, _id } = req.user;
-    console.log(req.user.aliExpressToken);
+    /*     console.log(req.user.aliExpressToken);
     console.log(req.user.sallaToken);
-    console.log(req.user.role);
-    let token = req.user.sallaToken;
+    console.log(req.user.role); */
+    const sallaTokenDocument = await SallaToken.findOne({
+      userId: req.user._id,
+    });
+    let { accessToken } = sallaTokenDocument;
+    let token = accessToken;
+    let access_token = token;
+    console.log(access_token);
+    console.log(token);
     /*    const { access_token, user_id, userType } = pick(req.local, [
       "user_id",
       "access_token",
@@ -114,6 +123,7 @@ export async function CreateProductController(
         userType: "vendor",
       }).exec();
     } */
+
     const options_1 = {
       method: "POST",
       url: "https://api.salla.dev/admin/v2/products",
@@ -141,12 +151,15 @@ export async function CreateProductController(
     const jsonProduct = product.toJSON();
 
     const valuesStock = new Array().concat(
+      //@ts-ignore
       ...jsonProduct.options?.map((option: any) => option.values)
     );
     if (valuesStock.length > 100)
       throw new AppError("Values count should be smaller than 100", 400);
 
     const { data: productResult } = await axios.request(options_1);
+    console.log(productResult);
+    return;
     product.options = await Promise.all(
       // @ts-ignore
       jsonProduct.options?.map(async (option: OptionType, index: number) => {
@@ -172,6 +185,7 @@ export async function CreateProductController(
     );
 
     const finalOptions = await Promise.all(
+      //@ts-ignore
       jsonProduct.options.map(async (option: OptionType, idx: number) => {
         const values = await Promise.all(
           option.values.map(async (optionValue: any, i: number) => {
@@ -222,7 +236,7 @@ export async function CreateProductController(
 
     product.options = finalOptions;
     product.salla_product_id = productResult.data?.id;
-    (async () => await updateVariantFinalOption(product, access_token))().then(
+    /* (async () => await updateVariantFinalOption(product, access_token))().then(
       async () => {
         if (subscription.products_limit)
           subscription.products_limit = subscription.products_limit - 1;
@@ -234,24 +248,47 @@ export async function CreateProductController(
           },
         });
       }
-    );
+    ); */
   } catch (error: AxiosError | any) {
     const isAxiosError = error instanceof AxiosError;
     const values = error?.response?.data;
-    console.log(error);
+    console.log(error + "\n\n\n");
+    console.log(values);
     next(
       isAxiosError ? new AppError("UnprocessableEntity " + values, 400) : error
     );
   }
 }
-function getRandomInt(min, max) {
+function getRandomInt(min: any, max: any) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 }
-
+export const getProductVariants = async (
+  id: any,
+  pages: any,
+  access_token: any
+) => {
+  const options = {
+    method: "GET",
+    url: `https://api.salla.dev/admin/v2/products/${id}/variants?page=${pages}`,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${access_token}`,
+    },
+  };
+  try {
+    const { data } = await axios.request(options);
+    if (data.status === 200) {
+      return data;
+    } else return;
+  } catch (error) {
+    console.log(error);
+  }
+};
 const allVaraint = async (id: any, token: any) => {
-  let all = [];
+  let all: any = [];
   await getProductVariants(id, 1, token).then(async (variantResult) => {
     if (variantResult) {
       if (variantResult?.pagination?.totalPages > 1) {
@@ -265,4 +302,48 @@ const allVaraint = async (id: any, token: any) => {
     }
   });
   return all;
+};
+const UpdateProductVariant = async (
+  variantId,
+  barcode,
+  price,
+  stock_quantity,
+  mpn,
+  gtin,
+  sku,
+  token
+) => {
+  const options = {
+    method: "PUT",
+    url: `https://api.salla.dev/admin/v2/products/variants/${variantId}`,
+    params: {
+      sku,
+      barcode,
+      price,
+      stock_quantity,
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: {
+      sku,
+      barcode,
+      price,
+      stock_quantity,
+      mpn,
+      gtin,
+    },
+  };
+  try {
+    const { data } = await axios.request(options);
+    return data;
+  } catch (error: any) {
+    if (error.response?.data?.error?.fields) {
+      console.log(error.response?.data?.error.fields);
+    } else {
+      console.log(error.response?.data);
+    }
+  }
 };
