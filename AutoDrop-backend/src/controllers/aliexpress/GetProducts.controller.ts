@@ -9,6 +9,7 @@ import { pick, map, uniqBy, filter, uniq } from "lodash";
 import slugify from "slugify";
 import { ImageType, Product, ProductSchema } from "../../models/product.model";
 import { v4 as uuid } from "uuid";
+import fetchCategoryName from "./products/Category/FetchNameOfCategory";
 
 function generateRandomNumber(start: any, end: any) {
   // Generate a random decimal between 0 and 1
@@ -392,9 +393,22 @@ export async function GetDetails({
             shipping: { name: "default", price: 0 },
             sku_id: SKUs[0].sku_id,
             vat: false,
+            category_id: ae_item_base_info_dto.category_id,
           };
-          const product = new Product(data).toJSON();
+          console.log(data.category_id);
 
+          let category_name = await fetchCategoryName({
+            category_id: data.category_id,
+            metadata_title: data.metadata_title,
+            original_product_id: data.original_product_id,
+            tokenInfo,
+          });
+          //@ts-ignore
+          data.category_name = category_name;
+          console.log("cat name", category_name);
+          console.log(category_name);
+          console.log(category_name);
+          const product = new Product(data).toJSON();
           resolve(product);
         }
       })
