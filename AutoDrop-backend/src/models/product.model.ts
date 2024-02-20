@@ -64,12 +64,14 @@ interface ProductSchema {
   shipping: ShippingAttributes;
   sku_id: string;
   vat: any;
+  category_id?: number;
+  category_name?: string;
 }
 
 interface ProductDocument extends Document, ProductSchema {}
 
 const options = {
-  name: { type: String, default: null, trim: true }, 
+  name: { type: String, default: null, trim: true },
   sku_id: { type: String, default: null, trim: true },
   description: { type: String, default: null, trim: true },
   price: { type: Number, default: 0, integer: true },
@@ -112,6 +114,8 @@ const options = {
     type: Boolean,
     default: false,
   },
+  category_id: { type: Number, default: null },
+  category_name: { type: String, default: null },
 };
 
 const schema = new Schema<ProductSchema>(options, { timestamps: true });
