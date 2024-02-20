@@ -3,11 +3,15 @@ import { DataTable } from "./components/data-table";
 import Cols from "./components/columns";
 
 export default function ColsExtract(props: any) {
-
-
-  
-  const { myProducts, productName, sellPrice, category, platform, inventory } =
-    props;
+  const {
+    myProducts,
+    productName,
+    sellPrice,
+    category,
+    platform,
+    inventory,
+    setMyProducts,
+  } = props;
   console.log(myProducts);
   return (
     <DataTable
@@ -18,6 +22,7 @@ export default function ColsExtract(props: any) {
         category,
         platform,
         inventory,
+        setMyProducts,
       })}
       {...props}
     />
