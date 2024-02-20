@@ -31,19 +31,30 @@ export default function SubmitProducts({
 
     const productsDetails = await Promise.all(promises);
     console.log(productsDetails);
-    const promises2 = productsDetails.map((prodDetail: any,index:number): any => {
-      console.log(prodDetail.data);
-      let price
-      if(prodDetail.data.product.options){
-        const collectValues =  new Array().concat(...prodDetail.data.product.options.map((option: any) => option.values))
-        let total = collectValues && collectValues[0]?.original_price || 0;
-        const commissionPrice = total * ((Number(toBeSentProductsArr[index].vendor_commission) || 0) / 100);
-         price = parseFloat((total + commissionPrice).toFixed(2));
+    const promises2 = productsDetails.map(
+      (prodDetail: any, index: number): any => {
+        console.log(prodDetail.data);
+
+        let price;
+        if (prodDetail.data.product.options) {
+          const collectValues = new Array().concat(
+            ...prodDetail.data.product.options.map(
+              (option: any) => option.values
+            )
+          );
+          let total = (collectValues && collectValues[0]?.original_price) || 0;
+          const commissionPrice =
+            total *
+            ((Number(toBeSentProductsArr[index].vendor_commission) || 0) / 100);
+          price = parseFloat((total + commissionPrice).toFixed(2));
+        }
+        return axiosInstance.post("/aliexpress/product/createProduct", {
+          ...prodDetail.data.product,
+          vendor_commission: prodDetail.data.product.vendor_commission,
+          price,
+        });
       }
-      return axiosInstance.post("/aliexpress/product/create", {
-        ...prodDetail.data.product,vendor_commission:toBeSentProductsArr[index].vendor_commission,price
-      });
-    });
+    );
     const res = await Promise.all(promises2);
     console.log(res);
   };
