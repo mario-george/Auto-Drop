@@ -38,7 +38,7 @@ export default function ProductsFetch(props: any) {
     <>
       {" "}
       <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex bg-white">
-        <ColsExtract {...props} myProducts={myProducts} />
+        <ColsExtract {...props} myProducts={myProducts} setMyProducts={setMyProducts}/>
       </div>
     </>
   );
