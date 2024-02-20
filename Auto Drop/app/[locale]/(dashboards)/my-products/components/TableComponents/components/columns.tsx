@@ -10,10 +10,10 @@ interface ColProps {
   sellPrice: string;
   category: string;
   platform: string;
-  inventory: string;
+  inventory: string;setMyProducts:any
 }
 export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
-  const { productName, sellPrice, category, platform, inventory } = props;
+  const { productName, sellPrice, category, platform, inventory,setMyProducts } = props;
   return [
     {
       id: "select",
@@ -131,7 +131,7 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
         let {_id:id} = row.original;
         return (
         <div>
-          <ButtonsRenderer id={id} />
+          <ButtonsRenderer setMyProducts={setMyProducts} id={id} />
         </div>
       )
     }
