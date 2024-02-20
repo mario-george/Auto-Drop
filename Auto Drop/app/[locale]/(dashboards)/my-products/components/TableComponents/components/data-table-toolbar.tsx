@@ -29,6 +29,7 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
   let filterHandler = () => {};
+ 
   let isAr = locale === "ar";
   return (
     <div className="flex items-center justify-between bg-[#f0f3f4] px-3 py-4 rounded-md">
