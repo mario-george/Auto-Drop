@@ -33,7 +33,6 @@ import useProductsEN from "./hooks/useProductsEN";
 import ProductsListEN from "./ui/ProductsListEN";
 import ProductsListAR from "./ui/ProductsListAR";
 
-
 // pages / products  state
 
 export default function ProductsRenderer({
@@ -65,11 +64,18 @@ export default function ProductsRenderer({
     setProducts,
     fetchAndSet2,
     setProductsShippingInfo,
-  } = useProductsEN({ currPage, fetchAndSetAR, lang, setProductsAR,productsAR });
+  } = useProductsEN({
+    currPage,
+    fetchAndSetAR,
+    lang,
+    setProductsAR,
+    productsAR,
+  });
 
   const dispatch = useDispatch();
 
   const toggleShoppingCartActivated = (index: number) => {
+    console.log(productsShippingInfo[index][0].activated);
     setProductsShippingInfo((productsShipping) => {
       return productsShipping.map((shipping, shippingIndex) => {
         if (shippingIndex === index) {
@@ -95,7 +101,7 @@ export default function ProductsRenderer({
       setLang(language);
       setProductsAR([]);
       setProducts([]);
-      setCommissionV([])
+      setCommissionV([]);
     });
 
     dispatch(resetPagesProducts());
@@ -127,11 +133,10 @@ export default function ProductsRenderer({
             setCommissionV={setCommissionV}
             addCommissionHandler={addCommissionHandler}
           />
-   
         </>
       ) : (
         <>
-           <ProductsListAR
+          <ProductsListAR
             productsAR={productsAR}
             productsShippingInfo={productsShippingInfo}
             toggleShoppingCartActivated={toggleShoppingCartActivated}
