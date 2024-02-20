@@ -4,7 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { myProduct } from "../data/myProductsSchema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import ButtonsRenderer from "./Buttons/ButtonsRenderer";
-
+import Image from "next/image";
 interface ColProps {
   productName: string;
   sellPrice: string;
@@ -46,10 +46,22 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
         <DataTableColumnHeader column={column} title={productName} />
       ),
       cell: ({ row }) => {
+        console.log(row);
+        //@ts-ignore
+        console.log(row.original.prodImage);
         return (
-          <div className="">
-            <span className="flex justify-center">
-              {row.getValue("prodName")}
+          <div className="flex justify-center space-s-1 items-center">
+            <span className="">
+              {(row.getValue("prodName") as any).substring(0, 35)}...
+            </span>
+            <span>
+              <Image
+        //@ts-ignore
+                src={row.original.prodImage}
+                width={25}
+                height={25}
+                alt="Product Image"
+              />
             </span>
           </div>
         );
@@ -62,7 +74,10 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
       ),
       cell: ({ row }) => {
         return (
-          <div className="flex justify-center">{row.getValue("sellPrice")}</div>
+          <div className="flex justify-center space-s-1 ">
+            <span>{row.getValue("sellPrice")}</span>
+            <span>SAR</span>
+          </div>
         );
       },
       filterFn: (row, id, value) => {
@@ -111,11 +126,16 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
 
     {
       id: "actions",
-      cell: ({ row }) => (
+      cell: ({ row }) => {
+        //@ts-ignore
+        let {_id:id} = row.original;
+        return (
         <div>
-          <ButtonsRenderer />
+          <ButtonsRenderer id={id} />
         </div>
-      ),
+      )
+    }
+
     },
   ];
 }
