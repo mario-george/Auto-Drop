@@ -332,5 +332,30 @@
     "price": "Price",
     "profitAfter": "Profit after shipping discount",
     "shippingInfo": "Shipping Information for the product"
+  },
+  "myProductsEdit": {
+    "shippingIncluded": "Included Shipping",
+    "profitType": "Profit Type",
+    "availableQuantity": "Available Quantity",
+    "prodName": "Product Name",
+    "originalPrice": "Original Price",
+    "piecePrice": "Piece Price",
+    "profit": "Profit",
+    "withoutShipping": "WithoutShipping",
+    "percentage": "Percentage",
+    "number": "Number",
+    "uploadProduct": "Upload Product",
+    "category": "Category",
+    "description": "Description",
+    "editedPrice": "Edited Price",
+    "size": "Size",
+    "nameOfShippingComp": "Name of shipping company",
+    "durationToDeliver": "Duration till product deliver",
+    "sku": "Stock Keeping Unit",
+    "tage": "Tags",
+    "value": "Value",
+    "with": "with:",
+    "price": "Price",
+    "currentPiece": "Current Piece"
   }
 }
