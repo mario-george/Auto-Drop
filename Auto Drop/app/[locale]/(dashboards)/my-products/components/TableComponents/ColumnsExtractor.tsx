@@ -12,9 +12,9 @@ export default function ColsExtract(props: any) {
     inventory,
     setMyProducts,
   } = props;
-  console.log(myProducts);
   return (
     <DataTable
+    setMyProducts={setMyProducts}
       data={myProducts}
       columns={Cols({
         productName,
