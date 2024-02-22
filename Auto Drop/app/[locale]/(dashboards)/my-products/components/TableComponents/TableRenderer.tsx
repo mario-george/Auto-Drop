@@ -27,7 +27,7 @@ interface myProductProps {
   unAvProd: string;
   unUpProd: string;
   price: string;
-  locale: string;
+  locale: string;apply:string
 }
 export default async function TaskPage(props: myProductProps) {
   const getMyProductsData = async () => {
