@@ -331,5 +331,32 @@
     "duration": "المدة",
     "profitAfter": "الربح بعد خصم الشحن",
     "price": "السعر"
+  },
+  "myProductsEdit": {
+    "uploadProduct": "رفع المنتج",
+    "prodName": "اسم المنتج",
+    "availableQuantity": "الكمية المتاحة",
+    "piecePrice": "سعر القطعة",
+    "originalPrice": "السعر الأصلي",
+    "profitType": "نوع الربح",
+    "shippingIncluded": "شامل الشحن",
+    "withoutShipping": "بدون  شحن",
+    "profit": "الربح",
+    "percentage": "نسبة",
+    "number": "رقم",
+    "category": "الفئة",
+    "nameOfShippingComp": "اسم شركة الشحن:",
+    "editedPrice": "السعر المعدل",
+    "description": "الوصف",
+    "size": "القياس",
+    "durationToDeliver": "المدة المقدرة للتسليم خلال",
+    "price": "السعر",
+    "price": "Price",
+    "tage": "الوسوم",
+    "value": "القيمة",
+    "sku": "رقم التخزين للمنتج",
+    "with": "مع:",
+    "withoutShipping": " بدون شحن",
+    "currentPiece": "قطعة حالية"
   }
 }
