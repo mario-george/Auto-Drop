@@ -19,6 +19,7 @@ export default function Page() {
         price={t("price")}
         unUpProd={t("unUpProd")}
         locale={locale}
+        apply={t("apply")}
       />
     </>
   );
