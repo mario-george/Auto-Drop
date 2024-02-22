@@ -9,11 +9,12 @@ import { GetProductShippingDetailsByID } from "../controllers/aliexpress/product
 import Authentication from "../assits/Authentication";
 import { CreateProductController } from "../controllers/aliexpress/products/productCRUD/CRUD";
 import { CheckValidationSchema } from "../validate/CheckValidation";
-import { CreateProduct, DeleteProduct } from "../validate/products";
+import { CreateProduct } from "../validate/products";
 import { CreateAndSaveProduct } from "../controllers/aliexpress/products/productCRUD/createProduct";
 import { getUserProducts } from "../controllers/aliexpress/products/productCRUD/getUserProducts";
 import { LinkProductSalla } from "../controllers/aliexpress/products/productCRUD/LinkProduct";
 import { DeleteProductById } from "../controllers/aliexpress/products/productCRUD/DeleteProduct";
+import GetProductInfo from "../controllers/aliexpress/products/productCRUD/GetProductInfo";
 const router = Router();
 router.get("/products", GetRecommendedProducts);
 router.post("/products", GetRecommendedProductsPost);
@@ -31,20 +32,16 @@ router.post(
   [Authentication(), ...CreateProduct, CheckValidationSchema],
   CreateAndSaveProduct
 );
-router.post(
-  "/product/linkProductSalla",
-  [Authentication()],
-  LinkProductSalla
-);
-router.get(
-  "/product/getProducts",
-  [Authentication()],
-  getUserProducts
-);
+router.post("/product/linkProductSalla", [Authentication()], LinkProductSalla);
+router.get("/product/getProducts", [Authentication()], getUserProducts);
 router.delete(
   "/product/deleteProduct/:productId",
   [Authentication()],
   DeleteProductById
 );
-
+router.get(
+  "/product/getProductInfo/:productId",
+  [Authentication()],
+  GetProductInfo
+);
 export default router;
