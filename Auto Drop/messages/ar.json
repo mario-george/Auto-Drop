@@ -351,12 +351,10 @@
     "size": "القياس",
     "durationToDeliver": "المدة المقدرة للتسليم خلال",
     "price": "السعر",
-    "price": "Price",
     "tage": "الوسوم",
     "value": "القيمة",
     "sku": "رقم التخزين للمنتج",
     "with": "مع:",
-    "withoutShipping": " بدون شحن",
     "currentPiece": "قطعة حالية"
   }
 }
