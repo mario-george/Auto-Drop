@@ -337,7 +337,8 @@
     "shippingIncluded": "Included Shipping",
     "profitType": "Profit Type",
     "availableQuantity": "Available Quantity",
-    "prodName": "Product Name",
+    "prodNameTitle": "Product Name",
+    "prodNameTitlePlaceholder": "Please Enter Product Name here.",
     "originalPrice": "Original Price",
     "piecePrice": "Piece Price",
     "profit": "Profit",
@@ -345,6 +346,7 @@
     "percentage": "Percentage",
     "number": "Number",
     "uploadProduct": "Upload Product",
+    "addToCart": "Add To Cart",
     "category": "Category",
     "description": "Description",
     "editedPrice": "Edited Price",
@@ -352,11 +354,21 @@
     "nameOfShippingComp": "Name of shipping company",
     "durationToDeliver": "Duration till product deliver",
     "sku": "Stock Keeping Unit",
-    "tage": "Tags",
+    "tag": "Tags",
     "value": "Value",
     "with": "with:",
+    "to": "To:",
+
     "price": "Price",
     "currentPiece": "Current Piece",
-    "shipping": "Shipping"
+    "shipping": "Shipping",
+    "invalidProdName": "Product Name is invalid at least enter 2 characters",
+    "invalidSEODescription": "Product SEO Description is invalid at least enter 2 characters",
+    "invalidSEOTitle": "Product SEO Title is invalid at least enter 2 characters",
+    "invalidDescription": "Product Description is invalid at least enter 2 characters",
+
+    "SEOTitle":"SEO Title",
+    "SEODescription":"SEO Description",
+    "color":"Color"
   }
 }
