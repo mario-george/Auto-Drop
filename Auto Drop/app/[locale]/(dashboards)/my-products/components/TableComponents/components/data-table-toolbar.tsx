@@ -19,7 +19,7 @@ interface DataTableToolbarProps<TData> {
   unUpProd: string;
   locale: string;
   setMyProducts: any;
-  apply:string
+  apply: string;
 }
 
 export function DataTableToolbar<TData>({
@@ -30,7 +30,8 @@ export function DataTableToolbar<TData>({
   category,
   unUpProd,
   locale,
-  setMyProducts,apply
+  setMyProducts,
+  apply,
 }: DataTableToolbarProps<TData>) {
   const [checked, setChecked] = useState(false);
   const [oldProducts, setOldProducts] = useState([]);
@@ -38,7 +39,16 @@ export function DataTableToolbar<TData>({
   const isFiltered = table.getState().columnFilters.length > 0;
   let filterHandler = () => {
     if (checked) {
+      let alreadyFiltered = true;
       setMyProducts((prevProducts: any) => {
+        prevProducts.forEach((prod: any) => {
+          if (prod.inventory === 0) {
+            alreadyFiltered = false;
+          }
+        });
+        if (alreadyFiltered) {
+          return prevProducts;
+        }
         setOldProducts(prevProducts);
         return prevProducts.filter((prod: any) => {
           return prod.inventory !== 0;
