@@ -49,12 +49,13 @@ export default function ProductEdit(props: { params: { productId: string } }) {
         profit={t("profit")}
         percentage={t("percentage")}
         value={t("value")}
+        nameOfShippingComp={t("nameOfShippingComp")}
+        durationToDeliver={t("durationToDeliver")}
       >
-     
-          <ProductEditHeader
-            uploadProduct={t("uploadProduct")}
-            addToCart={t("addToCart")}
-          />
+        <ProductEditHeader
+          uploadProduct={t("uploadProduct")}
+          addToCart={t("addToCart")}
+        />
       </ProductEditRenderer>
     </>
   );
