@@ -31,6 +31,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import ProductOptions from "./ui/ProductOptions";
+import ProductImageRenderer from "./ui/ProductImageRenderer";
 
 import { cn } from "@/lib/utils";
 interface ProductEditFormProps {
@@ -58,8 +60,6 @@ interface ProductEditFormProps {
   withoutShipping: string;
   percentage: string;
   number: string;
-  uploadProduct: string;
-  addToCart: string;
   category: string;
   editedPrice: string;
   nameOfShippingComp: string;
@@ -71,7 +71,27 @@ interface ProductEditFormProps {
   SEODescription: string;
   color: string;
 }
+
 export default function ProductEditForm(props: ProductEditFormProps) {
+  const [categoriesList, setCategoriesList] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState<string|null>(null);
+console.log(selectedCategory)
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const resp = await axiosInstance.get("/salla/categories");
+        console.log(resp.data);
+        if (resp.status < 300 && resp.status >= 200) {
+          setCategoriesList(resp.data.data);
+        }
+      } catch (err: any) {
+        console.log(err?.response.data);
+        console.log(err?.response.status);
+        console.log(err?.response.headers);
+      }
+    };
+    fetchCategories();
+  }, []);
   const [error, setError] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
@@ -152,15 +172,16 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   return (
     <>
       <div className="bg-white rounded-lg shadow container p-6 lap:flex min-w-full justify-between  ">
-        <div>
+        {/* <div>
           <Image
             src={product?.images[0].original}
             alt="Product Image"
             width={518}
             height={691}
-            className="rounded-md"
+            className="rounded-md mx-auto"
           />{" "}
-        </div>
+        </div> */}
+        <ProductImageRenderer product={product} />
         <div className="flex flex-col min-w-[55%]">
           <Form {...form}>
             <form
@@ -272,17 +293,21 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                   <div className="border-l border-gray-400">
                     <span>{category}</span>{" "}
                     <Select>
-                      <SelectTrigger className="mt-3 max-w-[90%] bg-[#edf5f9]">
+                      <SelectTrigger className="mt-3 max-w-[90%] bg-[#edf5f9] text-black text-right">
                         <SelectValue placeholder={category} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          <SelectLabel>Categories</SelectLabel>
-                          <SelectItem value="apple">Apple</SelectItem>
-                          <SelectItem value="banana">Banana</SelectItem>
-                          <SelectItem value="blueberry">Blueberry</SelectItem>
-                          <SelectItem value="grapes">Grapes</SelectItem>
-                          <SelectItem value="pineapple">Pineapple</SelectItem>
+                          <SelectLabel>{category}</SelectLabel>
+
+                          {categoriesList.map(
+                            (category: { id: string; name: string }) => (
+                              <SelectItem key={category.id} value={category.name}           onClick={() => setSelectedCategory(category.name)}
+                              >
+                                {category.name}
+                              </SelectItem>
+                            )
+                          )}
                         </SelectGroup>
                       </SelectContent>
                     </Select>{" "}
@@ -295,12 +320,12 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          <SelectLabel>Categories</SelectLabel>
-                          <SelectItem value="apple">Apple</SelectItem>
+                          <SelectLabel>{tag}</SelectLabel>
+                          {/*           <SelectItem value="apple">Apple</SelectItem>
                           <SelectItem value="banana">Banana</SelectItem>
                           <SelectItem value="blueberry">Blueberry</SelectItem>
                           <SelectItem value="grapes">Grapes</SelectItem>
-                          <SelectItem value="pineapple">Pineapple</SelectItem>
+                          <SelectItem value="pineapple">Pineapple</SelectItem> */}
                         </SelectGroup>
                       </SelectContent>
                     </Select>{" "}
@@ -326,6 +351,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                     <div></div>
                   </div>
                 </div>
+                <Separator />
+                <ProductOptions options={product.options} />
               </div>
             </form>
           </Form>
