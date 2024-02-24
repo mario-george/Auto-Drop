@@ -334,7 +334,8 @@
   },
   "myProductsEdit": {
     "uploadProduct": "رفع المنتج",
-    "prodName": "اسم المنتج",
+    "prodNameTitle": "اسم المنتج",
+    "prodNameTitlePlaceholder": "ادخل اسم المنتج",
     "availableQuantity": "الكمية المتاحة",
     "piecePrice": "سعر القطعة",
     "originalPrice": "السعر الأصلي",
@@ -345,18 +346,27 @@
     "percentage": "نسبة",
     "number": "رقم",
     "category": "الفئة",
+    "addToCart": "أضف للسلة",
     "nameOfShippingComp": "اسم شركة الشحن:",
     "editedPrice": "السعر المعدل",
     "description": "الوصف",
     "size": "القياس",
     "durationToDeliver": "المدة المقدرة للتسليم خلال",
     "price": "السعر",
-    "tage": "الوسوم",
+    "tag": "الوسوم",
     "value": "القيمة",
     "sku": "رقم التخزين للمنتج",
     "with": "مع:",
+    "to": "الي",
     "currentPiece": "قطعة حالية",
-    "shipping":"الشحن"
+    "shipping": "الشحن",
+    "invalidProdName": "Product Name is invalid at least enter 2 characters",
+    "invalidSEODescription": "Product SEO Description is invalid at least enter 2 characters",
+    "invalidSEOTitle": "Product SEO Title is invalid at least enter 2 characters",
+    "invalidDescription": "Product Description is invalid at least enter 2 characters",
+    "SEOTitle":"عنوان السيو",
+    "SEODescription":"وصف السيو",
+    "color":"اللون"
 
   }
 }
