@@ -13,6 +13,7 @@ import CurrencyFormatter from "./CurrencyFormatter";
 import { Button } from "@/components/ui/button";
 import { FaPlus } from "react-icons/fa6";
 import axiosInstance from "../../_components/shared/AxiosInstance";
+import { useRouter } from "next/navigation";
 
 export default function SubmitProducts({
   lang,
@@ -20,7 +21,9 @@ export default function SubmitProducts({
   currPageProdEN,
   currPageProdAR,
   currPage,
+  locale,
 }: any) {
+  const router = useRouter();
   let submitHandler = async () => {
     console.log(toBeSentProductsArr);
     const promises = toBeSentProductsArr.map((prod: any) => {
@@ -57,6 +60,15 @@ export default function SubmitProducts({
     );
     const res = await Promise.all(promises2);
     console.log(res);
+    let valid = true;
+    res.forEach((oneRes) => {
+      if (oneRes.data.success === false) {
+        valid = false;
+      }
+    });
+    if (valid) {
+      router.push(`/${locale || "en"}/my-products`);
+    }
   };
   let toBeSentPages = pagesProducts.filter((element: any) => {
     return element.lang === lang && element.page !== currPage;
