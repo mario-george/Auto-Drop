@@ -1,21 +1,23 @@
+"use client"
 import { Button } from "@/components/ui/button";
 
-export default function ProductEditHeader({ UploadProduct, AddToCart }: any) {
+export default function ProductEditHeader({ uploadProduct, addToCart }: any) {
   const uploadProductHandler = () => {};
   const addToCartHandler = () => {};
   const toggleLang = (lang: string) => {};
+
   return (
     <>
-    <div className="flex space-s-3">
+    <div className="flex space-s-3 py-3">
 
       <Button
         className="bg-[#40a58d] text-white"
         onClick={uploadProductHandler}
       >
-        {UploadProduct}
+        {uploadProduct}
       </Button>
       <Button className="bg-white text-black" onClick={addToCartHandler}>
-        {AddToCart}
+        {addToCart}
       </Button>
 
       <Button
