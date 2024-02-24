@@ -32,8 +32,6 @@ export default function ProductEditRenderer(props: {
   withoutShipping: string;
   percentage: string;
   number: string;
-  uploadProduct: string;
-  addToCart: string;
   category: string;
   editedPrice: string;
   nameOfShippingComp: string;
