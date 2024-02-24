@@ -109,9 +109,7 @@ export default function ProductsListEN({
                                         {" "}
                                         <span>Price:</span>{" "}
                                         <span>
-                                          {CurrencyFormatter(
-                                            shipping.price
-                                          )}
+                                          {CurrencyFormatter(shipping.price)}
                                         </span>{" "}
                                       </div>
                                       {ind !==
@@ -139,7 +137,7 @@ export default function ProductsListEN({
                     onClick={() => {
                       if (
                         product.checked &&
-                        (product.commission || product.commission === 0)
+                        (product.vendor_commission || product.vendor_commission === 0)
                       ) {
                         toggleShoppingCartActivated(i);
                       }
