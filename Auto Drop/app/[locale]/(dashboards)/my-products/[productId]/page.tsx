@@ -1,44 +1,61 @@
-"use client";
-import { useEffect, useState } from "react";
 import axiosInstance from "../../_components/shared/AxiosInstance";
 import ProductEditHeader from "./_components/ProductEditHeader";
 import MotionWrapperExit from "../../_components/shared/MotionWrapperExit";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ProductEditForm from "./_components/ProductEditForm";
+import ProductEditRenderer from "./_components/ProductEditRenderer";
 
 export default function ProductEdit(props: { params: { productId: string } }) {
-  const [product, setProduct] = useState<any>(null);
-  const [error, setError] = useState(false);
   const locale = useLocale();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `/aliexpress/product/getProductInfo/${props.params.productId}`
-        );
-        console.log(response);
-        setProduct(response.data.product);
-      } catch (error) {
-        console.error("Failed to fetch product:", error);
-        setError(true);
-      }
-    };
+  const t = useTranslations("myProductsEdit");
 
-    fetchData();
-  }, [props.params.productId]);
-  if (error) {
-    return <div>No Product found with this id</div>;
-  }
-  console.log(product);
   return (
     <>
-      <MotionWrapperExit locale={locale}>
-        <ProductEditHeader />
-        <div>{JSON.stringify(product)}</div>
-        <div>
-          Product Id is
-          {props.params.productId}
-        </div>
-      </MotionWrapperExit>
+      <ProductEditRenderer
+        {...props}
+        locale={locale}
+        with={t("with")}
+        to={t("to")}
+        sku={t("sku")}
+        price={t("price")}
+        description={t("description")}
+        prodNameTitle={t("prodNameTitle")}
+        prodNameTitlePlaceholder={t("prodNameTitlePlaceholder")}
+        invalidProdName={t("invalidProdName")}
+        invalidSEODescription={t("invalidSEODescription")}
+        invalidSEOTitle={t("invalidSEOTitle")}
+        invalidDescription={t("invalidDescription")}
+        availableQuantity={t("availableQuantity")}
+        params={props.params}
+        currentPiece={t("currentPiece")}
+        piecePrice={t("piecePrice")}
+        originalPrice={t("originalPrice")}
+        shippingIncluded={t("shippingIncluded")}
+        withoutShipping={t("withoutShipping")}
+        profitType={t("profitType")}
+        editedPrice={t("editedPrice")}
+        tag={t("tag")}
+        category={t("category")}
+        SEOTitle={t("SEOTitle")}
+        SEODescription={t("SEODescription")}
+        color={t("color")}
+        size={t("size")}
+        shipping={t("shipping")}
+        number={t("number")}
+        profit={t("profit")}
+        percentage={t("percentage")}
+        value={t("value")}
+      >
+     
+          <ProductEditHeader
+            uploadProduct={t("uploadProduct")}
+            addToCart={t("addToCart")}
+          />
+      </ProductEditRenderer>
     </>
   );
 }
