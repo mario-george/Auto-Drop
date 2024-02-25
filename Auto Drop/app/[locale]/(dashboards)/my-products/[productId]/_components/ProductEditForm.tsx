@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/select";
 import ProductOptions from "./ui/ProductOptions";
 import ProductImageRenderer from "./ui/ProductImageRenderer";
+import ProductCategoriesTags from "./ui/ProductCategoriesTags";
 
 import { cn } from "@/lib/utils";
 interface ProductEditFormProps {
@@ -74,8 +75,8 @@ interface ProductEditFormProps {
 
 export default function ProductEditForm(props: ProductEditFormProps) {
   const [categoriesList, setCategoriesList] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState<string|null>(null);
-console.log(selectedCategory)
+  const [selectedCategories, setSelectedCategories] = useState<any>([]);
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -289,48 +290,14 @@ console.log(selectedCategory)
                 </div>
                 <Separator />
 
-                <div className="grid grid-cols-2 gap-4 my-4 min-w-full">
-                  <div className="border-l border-gray-400">
-                    <span>{category}</span>{" "}
-                    <Select>
-                      <SelectTrigger className="mt-3 max-w-[90%] bg-[#edf5f9] text-black text-right">
-                        <SelectValue placeholder={category} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>{category}</SelectLabel>
-
-                          {categoriesList.map(
-                            (category: { id: string; name: string }) => (
-                              <SelectItem key={category.id} value={category.name}           onClick={() => setSelectedCategory(category.name)}
-                              >
-                                {category.name}
-                              </SelectItem>
-                            )
-                          )}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>{" "}
-                  </div>
-                  <div>
-                    <span>{tag}</span>{" "}
-                    <Select>
-                      <SelectTrigger className="mt-3 bg-[#edf5f9] max-w-[90%]">
-                        <SelectValue placeholder={tag} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>{tag}</SelectLabel>
-                          {/*           <SelectItem value="apple">Apple</SelectItem>
-                          <SelectItem value="banana">Banana</SelectItem>
-                          <SelectItem value="blueberry">Blueberry</SelectItem>
-                          <SelectItem value="grapes">Grapes</SelectItem>
-                          <SelectItem value="pineapple">Pineapple</SelectItem> */}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>{" "}
-                  </div>
-                </div>
+                <ProductCategoriesTags
+                  category={category}
+                  tag={tag}
+                  setSelectedCategories={setSelectedCategories}
+                  categoriesList={categoriesList}
+                  selectedCategories={selectedCategories}
+                />
+      
 
                 <Separator />
                 <div
