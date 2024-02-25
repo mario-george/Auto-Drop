@@ -13,7 +13,7 @@ export default function ButtonsRenderer({ id, setMyProducts }: any) {
 
   let linkProductHandler = async () => {
     const res = await axiosInstance.post(
-      "aliexpress/product/linkProductSalla",
+      "aliexpress/product/linkProductSalla/v2",
       { productId: id }
     );
     console.log(res.data);
