@@ -14,6 +14,11 @@ import {
 import SallaToken from "../../../../models/SallaTokenModel";
 import MakeRequest from "../../features/Request";
 import AliExpressToken from "../../../../models/AliExpressTokenModel";
+import {
+  UpdateProductVariant,
+  getProductSkus,
+  getProductVariants,
+} from "./CRUD";
 
 export async function LinkProductSalla(
   req: Request & any,
@@ -23,8 +28,8 @@ export async function LinkProductSalla(
   try {
     const { role, _id } = req.user;
 
-let {productId} = req.body
-let product = await Product.findById(productId)
+    let { productId } = req.body;
+    let product = await Product.findById(productId);
     const sallaTokenDocument = await SallaToken.findOne({
       _id: req.user.sallaToken,
     });
@@ -301,5 +306,428 @@ let product = await Product.findById(productId)
     next(
       isAxiosError ? new AppError("UnprocessableEntity " + values, 400) : error
     );
+  }
+}
+export const updateVariantFinalOption = async (
+  product: ProductDocument,
+  token: string,
+  tokenData
+) => {
+  const jsonProduct = product.toJSON();
+  const data = await getProductVariants(product.salla_product_id, 1, token);
+  if (data.pagination.totalPages > 1) {
+    for (let i = 0; i < data.pagination.totalPages; i++) {
+      const vr = await getProductVariants(
+        product.salla_product_id,
+        i + 1,
+        token
+      );
+      const variants = vr.data.filter((e) => !e.sku);
+      if (!variants.length) return;
+      await Promise.all(
+        variants.map(async (variant: any) => {
+          if (!variant.sku) {
+            const salla_option_ids = variant.related_option_values;
+            const values = await Promise.all(
+              jsonProduct.options.map(async (option: OptionType) => {
+                const value = option.values.find((val) =>
+                  salla_option_ids.includes(val?.salla_value_id)
+                );
+                return value;
+              })
+            );
+            const getSkusId = async (values: any) => {
+              const skus = await getProductSkus(product.original_product_id);
+              const keyWords = values.map((val: any) => val.name);
+              await Promise.all(
+                skus.map(async (sku: any) => {
+                  const skusOptions =
+                    sku.ae_sku_property_dtos.ae_sku_property_d_t_o;
+                  const check =
+                    sku.ae_sku_property_dtos.ae_sku_property_d_t_o.filter(
+                      (property: any, idx: number) => {
+                        if (property.property_value_definition_name) {
+                          if (
+                            keyWords.includes(
+                              property.property_value_definition_name
+                            )
+                          )
+                            return property;
+                        } else {
+                          if (
+                            keyWords.includes(property.sku_property_value) ||
+                            property.sku_property_name === "Ships From"
+                          )
+                            return property;
+                        }
+                      }
+                    );
+                  if (check.length === skusOptions.length) {
+                    const optionValue = values.find(
+                      (val: any) =>
+                        val.name === sku.id.split(";")[0].split("#")[1] ||
+                        val.sku === sku.id.split(";")[0]
+                    );
+                    const { price, quantity } = optionValue;
+                    let mnp = getRandomInt(100000000000000, 999999999999999);
+                    let gitin = getRandomInt(10000000000000, 99999999999999);
+                    let barcode = [mnp, gitin].join("");
+                    let result = await UpdateProductVariant(
+                      variant.id,
+                      barcode,
+                      price,
+                      quantity,
+                      mnp,
+                      gitin,
+                      sku.sku_id,
+                      token
+                    );
+                    while (!result) {
+                      mnp = getRandomInt(100000000000000, 999999999999999);
+                      gitin = getRandomInt(10000000000000, 99999999999999);
+                      barcode = [mnp, gitin].join("");
+                      result = await UpdateProductVariant(
+                        variant.id,
+                        barcode,
+                        price,
+                        quantity,
+                        mnp,
+                        gitin,
+                        sku.sku_id,
+                        token
+                      );
+                    }
+                  }
+                })
+              );
+            };
+            await getSkusId(values);
+          }
+        })
+      );
+    }
+  } else {
+    const variants = data.data.filter((e: any) => !e.sku);
+    if (!variants.length) return;
+    await Promise.all(
+      variants.map(async (variant: any) => {
+        if (!variant.sku) {
+          // console.log(product.id,variant.id)
+          const salla_option_ids = variant.related_option_values;
+          const values = await Promise.all(
+            jsonProduct.options.map(async (option: OptionType) => {
+              // console.log(option.values)
+              const value = option.values.find((val) =>
+                salla_option_ids.includes(val.salla_value_id)
+              );
+              return value;
+            })
+          );
+          const getSkusId = async (values: any) => {
+            // console.log(values)
+            const skus = await getProductSkus(
+              product.original_product_id,
+              tokenData
+            );
+            const keyWords = values.map((val: any) => val.name);
+            await Promise.all(
+              skus.map(async (sku: any) => {
+                const skusOptions =
+                  sku.ae_sku_property_dtos.ae_sku_property_d_t_o;
+                const check =
+                  sku.ae_sku_property_dtos.ae_sku_property_d_t_o.filter(
+                    (property: any, idx: number) => {
+                      if (property.property_value_definition_name) {
+                        if (
+                          keyWords.includes(
+                            property.property_value_definition_name
+                          )
+                        )
+                          return property;
+                      } else {
+                        if (
+                          keyWords.includes(property.sku_property_value) ||
+                          property.sku_property_name === "Ships From"
+                        )
+                          return property;
+                      }
+                    }
+                  );
+                if (check.length === skusOptions.length) {
+                  const optionValue = values.find(
+                    (val: any) =>
+                      val.name === sku.id.split(";")[0].split("#")[1] ||
+                      val.sku === sku.id.split(";")[0]
+                  );
+                  const { price, quantity } = optionValue;
+                  let mnp = getRandomInt(100000000000000, 999999999999999);
+                  let gitin = getRandomInt(10000000000000, 99999999999999);
+                  let barcode = [mnp, gitin].join("");
+                  let result = await UpdateProductVariant(
+                    variant.id,
+                    barcode,
+                    price,
+                    quantity,
+                    mnp,
+                    gitin,
+                    sku.sku_id,
+                    token
+                  );
+                  while (!result) {
+                    mnp = getRandomInt(100000000000000, 999999999999999);
+                    gitin = getRandomInt(10000000000000, 99999999999999);
+                    barcode = [mnp, gitin].join("");
+                    result = await UpdateProductVariant(
+                      variant.id,
+                      barcode,
+                      price,
+                      quantity,
+                      mnp,
+                      gitin,
+                      sku.sku_id,
+                      token
+                    );
+                    console.log(result);
+                  }
+                }
+              })
+            );
+          };
+          await getSkusId(values);
+        }
+      })
+    );
+  }
+};
+function getRandomInt(min: any, max: any) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+}
+export async function LinkProductSalla2(
+  req: Request & any,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { role, _id } = req.user;
+
+    let { productId } = req.body;
+    let product: any = await Product.findById(productId);
+    const sallaTokenDocument = await SallaToken.findOne({
+      _id: req.user.sallaToken,
+    });
+    const aliexpressDoc = await AliExpressToken.findOne({
+      _id: req.user.aliExpressToken,
+    });
+    let { accessToken } = sallaTokenDocument!;
+    let token = accessToken;
+    let access_token = accessToken;
+    let tokenData = {
+      aliExpressAccessToken: aliexpressDoc?.accessToken,
+      aliExpressRefreshToken: aliexpressDoc?.refreshToken,
+    };
+    /*   let token: string | undefined, account: UserDocument | null;
+    let subscription: SubscriptionDocument | null; */
+
+    /*    const { access_token, user_id, userType } = pick(req.local, [
+      "user_id",
+      "access_token",
+      "userType",
+    ]); */
+
+    /*   let {
+      merchant,
+      vendor_commission,
+      main_price,
+      metadata_title,
+      metadata_description,
+      name,
+      price,
+      ...body
+    } = pick(req.body, [
+      "name",
+      "description",
+      "vendor_commission",
+      "main_price",
+      "price",
+      "quantity",
+      "sku",
+      "images",
+      "options",
+      "metadata_title",
+      "metadata_description",
+      "product_type",
+      "original_product_id",
+      "merchant",
+    ]) satisfies Partial<ProductSchema>;
+    if (price < main_price) {
+      [price, main_price] = [main_price, price];
+    } */
+    /*    subscription = await CheckSubscription(
+      userType === "vendor" ? user_id : merchant,
+      "products_limit"
+    );
+ */
+    /*   const product = new Product({
+      name: req.query.name || name,
+      ...body,
+      price,
+      vendor_commission,
+      main_price,
+      merchant: userType === "vendor" ? user_id : merchant,
+      sku_id: req.body.sku_id,
+      vat: req.body?.vat && true,
+    });
+
+    const vendor_price = parseFloat(
+      ((main_price * vendor_commission) / 100).toFixed(2)
+    );
+
+    product.vendor_price = vendor_price;
+    product.vendor_commission = vendor_commission;
+    product.metadata_title = metadata_title;
+    product.metadata_description = metadata_description;
+ */
+    /* const options = body?.options?.map((option: any) => {
+      const values = option.values;
+      return {
+        ...option,
+        values: values?.map((value) => {
+          const valuePrice = value.original_price;
+          const vendorOptionPrice = parseFloat(
+            (valuePrice + (valuePrice * vendor_commission) / 100).toFixed(2)
+          );
+
+          return {
+            ...value,
+            original_price: valuePrice,
+            price: vendorOptionPrice,
+          };
+        }),
+      };
+    }); */
+
+    /* product.options = options;
+    token = access_token; */
+    const jsonProduct = product?.toJSON();
+    /*  if (userType === "admin") {
+      account = await User.findOne({
+        _id: merchant,
+        userType: "vendor",
+      }).exec();
+    }  */
+    const options_1 = {
+      method: "POST",
+      url: "https://api.salla.dev/admin/v2/products",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        name: req.query.name || product.name,
+        price: product.price,
+        product_type: product.product_type,
+        quantity: product.quantity,
+        description: product.description,
+        cost_price: product.main_price,
+        require_shipping: product.require_shipping,
+        sku: product.sku,
+        images: product.images,
+        options: product.options,
+        metadata_title: product?.metadata_title,
+        metadata_description: product?.metadata_description,
+      },
+    };
+    const valuesStock = new Array().concat(
+      ...jsonProduct.options.map((option: OptionType) => option.values)
+    );
+    if (valuesStock.length > 100)
+      throw new AppError("Values count should be smaller than 100", 400);
+    console.log("here");
+    console.log(product);
+
+    const { data: createdeProduct } = await axios.request(options_1);
+    const opt = {
+      method: "GET",
+      url: `https://api.salla.dev/admin/v2/products/${createdeProduct.data.id}`,
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    console.log("here");
+
+    const { data: productResult } = await axios.request(opt);
+    console.log(createdeProduct.data.id);
+    // console.log(productResult.data.options);
+    // console.log(options[0].values);
+
+    console.log(productResult.data.options[0].values);
+    product.options = await Promise.all(
+      jsonProduct.options.map(async (option: OptionType, index: number) => {
+        let obj: OptionType = option;
+        const productOption = productResult.data.options[index];
+        const values = await Promise.all(
+          option.values.map(async (value: ValueType, idx: number) => {
+            const optionValue = productOption?.values?.[idx];
+            console.log(optionValue);
+            const mnp = getRandomInt(100000000000000, 999999999999999);
+            const gitin = getRandomInt(10000000000000, 99999999999999);
+            return {
+              ...value,
+              mpn: mnp,
+              gtin: gitin,
+              salla_value_id: optionValue?.id,
+            };
+          })
+        );
+
+        obj.salla_option_id = productOption?.id;
+        obj.values = values;
+        //this is new
+        return obj;
+      })
+    );
+
+    const finalOptions = await Promise.all(
+      jsonProduct.options.map(async (option: OptionType, idx: number) => {
+        const values = await Promise.all(
+          option.values.map(async (optionValue: any, i: number) => {
+            return optionValue;
+          })
+        );
+        return {
+          ...option,
+          values,
+        };
+      })
+    );
+
+    product.options = finalOptions;
+    product.salla_product_id = productResult.data?.id;
+
+    (async () =>
+      await updateVariantFinalOption(product, access_token, tokenData))().then(
+      async () => {
+        /*       if (subscription.products_limit)
+          subscription.products_limit = subscription.products_limit - 1; */
+        // await Promise.all([product.save(), subscription.save()]);
+        await Promise.all([product.save()]);
+        res.status(200).json({
+          message: "Product created successfully",
+          result: {
+            urls: productResult.data.urls || {},
+          },
+        });
+      }
+    );
+  } catch (error: AxiosError | any) {
+    const isAxiosError = error instanceof AxiosError;
+    const values = error?.response?.data;
+    console.log(error?.response?.data);
+    console.log(error?.response?.data?.error?.fields?.sku);
+    next(isAxiosError ? new AppError(values, 400) : error);
   }
 }
