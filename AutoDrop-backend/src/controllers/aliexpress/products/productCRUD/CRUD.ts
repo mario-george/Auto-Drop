@@ -685,7 +685,7 @@ const allVaraint = async (id: any, token: any) => {
   });
   return all;
 };
-const UpdateProductVariant = async (
+export const UpdateProductVariant = async (
   variantId,
   barcode,
   price,
