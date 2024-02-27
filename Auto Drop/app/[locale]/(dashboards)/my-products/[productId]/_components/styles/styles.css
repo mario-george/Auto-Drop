@@ -1,0 +1,3 @@
+.inputField{
+    @apply bg-[#edf5f9] text-[#253439] rounded-lg shadow shadow-sm text-sm md:text-base min-w-[60%]  
+}
