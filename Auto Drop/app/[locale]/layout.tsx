@@ -4,6 +4,7 @@ import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
 import ToastProvider from "@/components/toast-provider";
 import StoreProvider from "@/store/providers";
+import { Providers } from "../../components/chakra-ui/providers";
 
 export const metadata: Metadata = {
   generator: "Next.js",
@@ -58,7 +59,7 @@ export default function LocaleLayout({
       >
         <StoreProvider>
           <ToastProvider />
-          {children}
+          <Providers>{children}</Providers>
         </StoreProvider>
       </body>
     </html>
