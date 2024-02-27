@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axiosInstance from "../../../_components/shared/AxiosInstance";
 import ProductEditHeader from "./ProductEditHeader";
 import MotionWrapperExit from "../../../_components/shared/MotionWrapperExit";
@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
+import "./styles/styles.css";
 import { Separator } from "@/components/ui/separator";
 import {
   Select,
@@ -38,6 +38,7 @@ import ProductCategoriesTags from "./ui/ProductCategoriesTags";
 import { cn } from "@/lib/utils";
 import ProductInfoDetails from "./ui/ProductInfoDetails";
 import ProductPriceDetails from "./ui/ProductPriceDetails";
+import ProductSEOInfo from "./ui/ProductSEOInfo";
 interface ProductEditFormProps {
   prodNameTitle: string;
   prodNameTitlePlaceholder: string;
@@ -111,12 +112,61 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     offerPrice,
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
+  const [metadataTitle, setMetadataTitle] = useState("");
+  const [metadataDesc, setMetadataDesc] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<any>([]);
   const [profitChoosenType, setProfitChoosenType] = useState("percentage");
-  const [totalProfit, setTotalProfit] = useState(
-    product.vendor_commission * product.target_sale_price
-  );
+  let target_sale_price: any,
+    target_original_price: any,
+    vendor_commission: any,
+    metadata_title: any,
+    metadata_description: any;
 
+  if (product) {
+    ({
+      target_sale_price,
+      target_original_price,
+      vendor_commission,
+      metadata_title,
+      metadata_description,
+    } = product);
+  }
+  let commissionValInitial = vendor_commission || 0;
+
+  let totalProfitInitial = (vendor_commission || 0) * target_sale_price;
+  let finalPriceInitial =
+    (vendor_commission || 0) * target_sale_price + target_sale_price;
+  if (!product) {
+    commissionValInitial = 0;
+    totalProfitInitial = 0;
+    finalPriceInitial = 0;
+  }
+  useEffect(() => {
+    if (
+      product &&
+      (commissionVal == 0 || !commissionVal) &&
+      (totalProfit == 0 || !totalProfit) &&
+      (finalPrice == 0 || !finalPrice)
+    ) {
+      setCommissionVal(vendor_commission || 0);
+      setTotalProfit((vendor_commission || 0) * target_sale_price);
+      setFinalPrice(
+        (vendor_commission || 0) * target_sale_price + target_sale_price
+      );
+      setMetadataDesc(metadata_description);
+      setMetadataTitle(metadata_title);
+    }
+  }, [product]);
+  const [commissionVal, setCommissionVal] = useState(
+    product?.vendor_commission || 0
+  );
+  const [totalProfit, setTotalProfit] = useState(
+    (product?.vendor_commission || 0) * product?.target_sale_price
+  );
+  const [finalPrice, setFinalPrice] = useState(
+    (product?.vendor_commission || 0) * product?.target_sale_price +
+      product?.target_sale_price
+  );
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -137,7 +187,26 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   const [errorMsg, setErrorMsg] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
-
+  useEffect(() => {
+    if (profitChoosenType == "percentage" || profitChoosenType == percentage) {
+      setFinalPrice((finalPrice: any) => {
+        return (
+          (commissionVal / 100) * product?.target_sale_price +
+          product?.target_sale_price
+        );
+      });
+      setTotalProfit((prevTotalProfit: any) => {
+        return (commissionVal / 100) * product?.target_sale_price;
+      });
+    } else {
+      setFinalPrice((finalPrice: any) => {
+        return commissionVal + product?.target_sale_price;
+      });
+      setTotalProfit((prevTotalProfit: any) => {
+        return commissionVal;
+      });
+    }
+  }, [totalProfit, profitChoosenType, commissionVal]);
   let inputClasses = `bg-[#edf5f9] text-[#253439] rounded-lg shadow`;
   const locale = useLocale();
   const formSchema = z.object({
@@ -193,6 +262,16 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     offerPrice,
     addOfferPrice,
     target_original_price: product.target_original_price,
+  };
+
+  const ProductSEOInfoProps = {
+    SEOTitle,
+    SEODescription,
+    locale,
+    metadataDesc,
+    metadataTitle,
+    setMetadataDesc,
+    setMetadataTitle,
   };
   return (
     <>
@@ -258,15 +337,34 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                     </SelectContent>
                   </Select>
                   <div className=" flex items-center space-s-3">
-                    <Input
+                    <div className="relative mt-auto">
+                      <Input
+                        type="number"
+                        className="pr-6"
+                        value={commissionVal}
+                        onChange={(e: any) => {
+                          if (e.target.value) {
+                            setCommissionVal(parseInt(e.target.value));
+                          } else {
+                            setCommissionVal(0);
+                          }
+                        }}
+                      />
+                      <span className="absolute inset-y-0 right-0 pr-2 flex items-center text-gray-500">
+                        {profitChoosenType == "percentage" ? <>%</> : <></>}
+                      </span>
+                    </div>
+                    {/* <Input
                       className={`shadow-sm text-sm md:text-base   ${inputClasses} `}
                       value={
-                        product?.price +
+                        totalProfit +
                         (profitChoosenType == "percentage" ? "%" : "")
                       }
                       placeholder={percentage}
+                      onChange={(e:any) => {
+                        setTotalProfit(e.target.value.replace(/\D/g, ''));                      }}
                     />
-                    {profitChoosenType == "percentage" ? <>%</> : <></>}
+                    {profitChoosenType == "percentage" ? <>%</> : <></>} */}
                   </div>
                 </div>
                 <ProductPriceDetails {...ProductPriceDetailsProps} />
@@ -275,7 +373,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                   <span>{profit}</span>
                   <Input
                     className={`shadow-sm text-sm md:text-base min-w-[60%] ${inputClasses} `}
-                    value={totalProfit + product.target_sale_price}
+                    value={finalPrice}
                   />
                   <Input
                     className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
@@ -293,25 +391,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                 />
 
                 <Separator />
-                <div
-                  className={cn(
-                    "flex flex-col space-y-3 max-w-[95%]",
-                    locale === "ar" ? `text-right` : `text-left`
-                  )}
-                >
-                  <div>{SEOTitle}</div>
-                  <Input
-                    className={`shadow-sm text-sm md:text-base min-w-[60%]  ${inputClasses} `}
-                  />
-                  <div>{SEODescription}</div>
-                  <Input
-                    className={`shadow-sm text-sm md:text-base min-w-[60%]  ${inputClasses} `}
-                  />
-                  <div className="flex flex-col">
-                    <div></div>
-                  </div>
-                </div>
-                <Separator />
+                <ProductSEOInfo {...ProductSEOInfoProps} />
+
                 <ProductOptions options={product.options} />
               </div>
             </form>
