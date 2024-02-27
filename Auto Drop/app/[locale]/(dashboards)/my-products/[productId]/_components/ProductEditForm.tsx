@@ -36,6 +36,8 @@ import ProductImageRenderer from "./ui/ProductImageRenderer";
 import ProductCategoriesTags from "./ui/ProductCategoriesTags";
 
 import { cn } from "@/lib/utils";
+import ProductInfoDetails from "./ui/ProductInfoDetails";
+import ProductPriceDetails from "./ui/ProductPriceDetails";
 interface ProductEditFormProps {
   prodNameTitle: string;
   prodNameTitlePlaceholder: string;
@@ -71,33 +73,11 @@ interface ProductEditFormProps {
   SEOTitle: string;
   SEODescription: string;
   color: string;
+  addOfferPrice: string;
+  offerPrice: string;
 }
 
 export default function ProductEditForm(props: ProductEditFormProps) {
-  const [categoriesList, setCategoriesList] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState<any>([]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const resp = await axiosInstance.get("/salla/categories");
-        console.log(resp.data);
-        if (resp.status < 300 && resp.status >= 200) {
-          setCategoriesList(resp.data.data);
-        }
-      } catch (err: any) {
-        console.log(err?.response.data);
-        console.log(err?.response.status);
-        console.log(err?.response.headers);
-      }
-    };
-    fetchCategories();
-  }, []);
-  const [error, setError] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-
-  const [isLoading, setIsLoading] = useState(false);
-
   let {
     invalidProdName,
     invalidSEODescription,
@@ -127,7 +107,36 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     to,
     number,
     profit,
+    addOfferPrice,
+    offerPrice,
   } = props;
+  const [categoriesList, setCategoriesList] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState<any>([]);
+  const [profitChoosenType, setProfitChoosenType] = useState("percentage");
+  const [totalProfit, setTotalProfit] = useState(
+    product.vendor_commission * product.target_sale_price
+  );
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const resp = await axiosInstance.get("/salla/categories");
+        console.log(resp.data);
+        if (resp.status < 300 && resp.status >= 200) {
+          setCategoriesList(resp.data.data);
+        }
+      } catch (err: any) {
+        console.log(err?.response.data);
+        console.log(err?.response.status);
+        console.log(err?.response.headers);
+      }
+    };
+    fetchCategories();
+  }, []);
+  const [error, setError] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   let inputClasses = `bg-[#edf5f9] text-[#253439] rounded-lg shadow`;
   const locale = useLocale();
@@ -170,18 +179,24 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     return <div>Fetching Product...</div>;
   }
   console.log(product);
+  const productInfoProps = {
+    form,
+    productName: product?.name,
+    productSku: product?.sku,
+    prodNameTitlePlaceholder,
+    inputClasses,
+    prodNameTitle,
+    sku,
+    setErrorMsg,
+  };
+  const ProductPriceDetailsProps = {
+    offerPrice,
+    addOfferPrice,
+    target_original_price: product.target_original_price,
+  };
   return (
     <>
       <div className="bg-white rounded-lg shadow container p-6 lap:flex min-w-full justify-between  ">
-        {/* <div>
-          <Image
-            src={product?.images[0].original}
-            alt="Product Image"
-            width={518}
-            height={691}
-            className="rounded-md mx-auto"
-          />{" "}
-        </div> */}
         <ProductImageRenderer product={product} />
         <div className="flex flex-col min-w-[55%]">
           <Form {...form}>
@@ -190,40 +205,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
               className="flex flex-col bg-[#F7F5F2] rounded-lg shadow-lg p-8 space-y-4  "
               dir={locale === "ar" ? "rtl" : "ltr"}
             >
-              <div className="md:flex md:justify-between md:gap-5 items-center">
-                <FormField
-                  control={form.control}
-                  name="prodName"
-                  render={({ field }) => (
-                    <FormItem className="basis-1/2">
-                      <FormLabel className=" text-sm md:text-base">
-                        {prodNameTitle}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={prodNameTitlePlaceholder}
-                          {...field}
-                          id="firstName"
-                          className={`shadow-sm text-sm md:text-base ${inputClasses} `}
-                          onFocus={() => setErrorMsg(null)}
-                          value={product?.name}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="flex flex-col md:gap-2">
-                  <div>{sku}</div>
-                  <div>
-                    <Input
-                      className={`shadow-sm text-sm md:text-base ${inputClasses} `}
-                      value={product?.sku}
-                    />
-                  </div>
-                </div>
-              </div>
-              <Separator />
+              <ProductInfoDetails {...productInfoProps} />
+
               <div className="flex items-center space-s-2">
                 <span>{availableQuantity}</span>
                 <span className="text-[#8d9598]">
@@ -259,7 +242,11 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                 </div>
                 <div className="grid grid-cols-2 gap-4  my-4 min-w-full">
                   <span className="col-span-2">{profitType}</span>
-                  <Select>
+                  <Select
+                    onValueChange={(value: any) => {
+                      setProfitChoosenType(value);
+                    }}
+                  >
                     <SelectTrigger className="bg-[#edf5f9]">
                       <SelectValue placeholder={percentage} />
                     </SelectTrigger>
@@ -270,22 +257,29 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                       </SelectGroup>
                     </SelectContent>
                   </Select>
-                  <Input
-                    className={`shadow-sm text-sm md:text-base   ${inputClasses} `}
-                    value={product?.price}
-                    placeholder={percentage}
-                  />
+                  <div className=" flex items-center space-s-3">
+                    <Input
+                      className={`shadow-sm text-sm md:text-base   ${inputClasses} `}
+                      value={
+                        product?.price +
+                        (profitChoosenType == "percentage" ? "%" : "")
+                      }
+                      placeholder={percentage}
+                    />
+                    {profitChoosenType == "percentage" ? <>%</> : <></>}
+                  </div>
                 </div>
+                <ProductPriceDetails {...ProductPriceDetailsProps} />
                 <div className="grid grid-cols-2 gap-4 my-4 min-w-full">
                   <span>{editedPrice}</span>
                   <span>{profit}</span>
                   <Input
                     className={`shadow-sm text-sm md:text-base min-w-[60%] ${inputClasses} `}
-                    value={product?.price}
+                    value={totalProfit + product.target_sale_price}
                   />
                   <Input
                     className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
-                    value={product?.price}
+                    value={totalProfit}
                   />
                 </div>
                 <Separator />
@@ -297,7 +291,6 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                   categoriesList={categoriesList}
                   selectedCategories={selectedCategories}
                 />
-      
 
                 <Separator />
                 <div
