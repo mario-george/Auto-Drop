@@ -9,6 +9,7 @@ export default function ProductPriceDetails({
   const [checked, setChecked] = useState(false);
   return (
     <div>
+      
       <div className="flex space-s-3 items-center">
         <div>{addOfferPrice}</div>
         <Switch
