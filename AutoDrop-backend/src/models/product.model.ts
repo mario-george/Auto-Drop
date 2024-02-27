@@ -66,6 +66,10 @@ interface ProductSchema {
   vat: any;
   category_id?: number;
   category_name?: string;
+  first_level_category_name?: string;
+  second_level_category_name?: string;
+  target_sale_price?: string;
+  target_original_price?: string;
 }
 
 interface ProductDocument extends Document, ProductSchema {}
@@ -102,20 +106,38 @@ const options = {
     type: Boolean,
     default: true,
   },
-  shipping: {
-    name: {
-      type: String,
+  shipping: [
+    {
+      shipping_method: {
+        type: String,
+      },
+      service_name: {
+        type: String,
+      },
+      estimated_delivery_time: {
+        type: String,
+      },
+      tracking_available: {
+        type: Boolean,
+      },
+      freight: {
+        type: Object,
+        cent: { type: String },
+        currency: Object,
+        currency_code: { type: String, default: "SAR" },
+      },
     },
-    price: {
-      type: Number,
-    },
-  },
+  ],
   vat: {
     type: Boolean,
     default: false,
   },
   category_id: { type: Number, default: null },
   category_name: { type: String, default: null },
+  target_original_price: { type: Number, default: null },
+  target_sale_price: { type: Number, default: null },
+  first_level_category_name: { type: String, default: null },
+  second_level_category_name: { type: String, default: null },
 };
 
 const schema = new Schema<ProductSchema>(options, { timestamps: true });
