@@ -27,8 +27,26 @@ export default function SubmitProducts({
   let submitHandler = async () => {
     console.log(toBeSentProductsArr);
     const promises = toBeSentProductsArr.map((prod: any) => {
+      let {
+        first_level_category_name,
+        second_level_category_name,
+        target_sale_price,
+        target_original_price,
+        product_detail_url: url,
+      } = prod;
+      console.log(
+        first_level_category_name,
+        second_level_category_name,
+        target_sale_price,
+        target_original_price,
+        url
+      );
       return axiosInstance.post("/aliexpress/getProductDetails", {
         url: prod.product_detail_url,
+        first_level_category_name,
+        second_level_category_name,
+        target_sale_price,
+        target_original_price,
       });
     });
 
@@ -36,6 +54,8 @@ export default function SubmitProducts({
     console.log(productsDetails);
     const promises2 = productsDetails.map(
       (prodDetail: any, index: number): any => {
+        console.log(prodDetail.data);
+        console.log(prodDetail.data);
         console.log(prodDetail.data);
 
         let price;
@@ -45,6 +65,7 @@ export default function SubmitProducts({
               (option: any) => option.values
             )
           );
+          // you can make an array for prices for variants here aswell
           let total = (collectValues && collectValues[0]?.original_price) || 0;
           const commissionPrice =
             total *
