@@ -21,11 +21,14 @@ router.post("/products", GetRecommendedProductsPost);
 router.get("/productsByName", GetProductByName);
 router.post("/getProductDetails", GetProductDetails);
 router.post("/getShippingDetails", GetProductShippingDetailsByID);
+//delete later
 router.post(
   "/product/create",
   [Authentication(), ...CreateProduct, CheckValidationSchema],
   CreateProductController
 );
+//here
+
 
 router.post(
   "/product/createProduct",
