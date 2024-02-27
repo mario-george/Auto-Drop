@@ -19,9 +19,9 @@ export default function ProductSEOInfo({
         )}
       >
         <div>{SEOTitle}</div>
-        <Input className={`inputField `} value={metadata_title} onChange={(e:any)=>{setMetadataTitle(e.target.value)}} />
+        <Input className={`inputField `} value={metadata_title} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{setMetadataTitle(e.target.value)}} />
         <div>{SEODescription}</div>
-        <Input className={`inputField `} value={metadata_description} />
+        <Input className={`inputField `} value={metadata_description} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{setMetadataDesc(e.target.value)}}/>
         <div className="flex flex-col">
           <div></div>
         </div>
