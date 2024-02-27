@@ -320,9 +320,17 @@ async function GetProductImages(URLs: string) {
 export async function GetDetails({
   product_id,
   tokenInfo,
+  first_level_category_name,
+  second_level_category_name,
+  target_sale_price,
+  target_original_price,
 }: {
   product_id: string;
   tokenInfo: any;
+  first_level_category_name: string;
+  second_level_category_name: string;
+  target_sale_price: string;
+  target_original_price: string;
 }): Promise<any> {
   return new Promise((resolve, reject) => {
     MakeRequest(
@@ -394,20 +402,24 @@ export async function GetDetails({
             sku_id: SKUs[0].sku_id,
             vat: false,
             category_id: ae_item_base_info_dto.category_id,
+            first_level_category_name,
+            second_level_category_name,
+            target_sale_price,
+            target_original_price,
           };
-          console.log(data.category_id);
+          // console.log(data.category_id);
 
-          let category_name = await fetchCategoryName({
+          /*  let category_name = await fetchCategoryName({
             category_id: data.category_id,
             metadata_title: data.metadata_title,
             original_product_id: data.original_product_id,
             tokenInfo,
-          });
+          }); */
           //@ts-ignore
-          data.category_name = category_name;
+          /*   data.category_name = category_name;
           console.log("cat name", category_name);
           console.log(category_name);
-          console.log(category_name);
+          console.log(category_name); */
           const product = new Product(data).toJSON();
           resolve(product);
         }
@@ -432,7 +444,13 @@ export async function GetProductDetails(
   next: NextFunction
 ) {
   try {
-    const { url } = req.body;
+    const {
+      url,
+      first_level_category_name,
+      second_level_category_name,
+      target_sale_price,
+      target_original_price,
+    } = req.body;
     let user: any = await TokenUserExtractor(req);
     if (!user) return res.status(401).json({ message: "token is invalid" });
     let aliexpressToken = await AliExpressToken.findOne({ userId: user?._id });
@@ -444,7 +462,14 @@ export async function GetProductDetails(
     /*     if (userType === "vendor")
       await CheckSubscription(user_id, "products_limit"); */
 
-    const product = await GetDetails({ product_id, tokenInfo });
+    const product = await GetDetails({
+      product_id,
+      tokenInfo,
+      first_level_category_name,
+      second_level_category_name,
+      target_sale_price,
+      target_original_price,
+    });
     const result = await getProductShippingServices(
       {
         sku_id: product.sku_id,
