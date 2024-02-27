@@ -349,7 +349,7 @@
     "addToCart": "Add To Cart",
     "category": "Category",
     "description": "Description",
-    "editedPrice": "Edited Price",
+    "editedPrice": "Final Price",
     "size": "Size",
     "nameOfShippingComp": "Name of shipping company",
     "durationToDeliver": "Duration till product deliver",
@@ -367,8 +367,16 @@
     "invalidSEOTitle": "Product SEO Title is invalid at least enter 2 characters",
     "invalidDescription": "Product Description is invalid at least enter 2 characters",
 
-    "SEOTitle":"SEO Title",
-    "SEODescription":"SEO Description",
-    "color":"Color"
+    "SEOTitle": "SEO Title",
+    "SEODescription": "SEO Description",
+    "color": "Color",
+    "offerPrice": "Offer Price Before discount",
+    "addOfferPrice": "Add Discount Price"
+  },
+  "walletPage": {
+    "wallet": "Wallet",
+    "myCards": "My Cards",
+    "addCard": "Add Card",
+    "chargeWallet": "Charge Wallet"
   }
 }
