@@ -348,7 +348,7 @@
     "category": "الفئة",
     "addToCart": "أضف للسلة",
     "nameOfShippingComp": "اسم شركة الشحن:",
-    "editedPrice": "السعر المعدل",
+    "editedPrice": "السعر النهائي",
     "description": "الوصف",
     "size": "القياس",
     "durationToDeliver": "المدة المقدرة للتسليم خلال",
@@ -360,13 +360,20 @@
     "to": "الي",
     "currentPiece": "قطعة حالية",
     "shipping": "الشحن",
-    "invalidProdName": "Product Name is invalid at least enter 2 characters",
-    "invalidSEODescription": "Product SEO Description is invalid at least enter 2 characters",
-    "invalidSEOTitle": "Product SEO Title is invalid at least enter 2 characters",
-    "invalidDescription": "Product Description is invalid at least enter 2 characters",
-    "SEOTitle":"عنوان السيو",
-    "SEODescription":"وصف السيو",
-    "color":"اللون"
-
+    "invalidProdName": "اسم المنتج غير صالح، يجب إدخال 2 أحرف على الأقل",
+    "invalidSEODescription": "وصف SEO للمنتج غير صالح، يجب إدخال 2 أحرف على الأقل",
+    "invalidSEOTitle": "عنوان SEO للمنتج غير صالح، يجب إدخال 2 أحرف على الأقل",
+    "invalidDescription": "وصف المنتج غير صالح، يجب إدخال 2 أحرف على الأقل",
+    "SEOTitle": "عنوان السيو",
+    "SEODescription": "وصف السيو",
+    "color": "اللون",
+    "offerPrice": " سعر البيع قبل التخفيض",
+    "addOfferPrice": "أضف سعر التخفيض"
+  },
+  "walletPage": {
+    "wallet": "المحفظة",
+    "myCards": "بطاقاتي",
+    "addCard": "إضافة بطاقة",
+    "chargeWallet": " شحن المحفظة"
   }
 }
