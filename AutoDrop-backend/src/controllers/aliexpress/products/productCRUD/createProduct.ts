@@ -4,7 +4,38 @@ import { Product, ProductSchema } from "../../../../models/product.model";
 import { pick } from "lodash";
 import SallaToken from "../../../../models/SallaTokenModel";
 import { NextFunction, Request, Response } from "express";
-
+const attachShippingInfoToProuct = async (
+  docId: any,
+  productId: any,
+  req: any
+) => {
+  setTimeout(async () => {
+    try {
+      const product = await Product.findById(docId);
+      const token = req.headers["authorization"];
+      console.log(productId);
+      if (product) {
+        const getShippingInfo = {
+          url: process.env.Backend_Link + "/aliexpress/getShippingDetails",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          data: {
+            product_id: productId,
+          },
+        };
+        const resp = await axios.request(getShippingInfo);
+        console.log(resp.data.shipping);
+        product.shipping = resp.data.shipping;
+        await product.save();
+      }
+    } catch (error: any) {
+      console.log(error?.response?.data);
+    }
+  }, 2000);
+};
 export async function CreateAndSaveProduct(
   req: Request & any,
   res: Response,
@@ -12,6 +43,10 @@ export async function CreateAndSaveProduct(
 ) {
   try {
     const { role, _id } = req.user;
+const {  first_level_category_name,
+  second_level_category_name,
+  target_sale_price,
+  target_original_price,} = req.body 
 
     let {
       merchant,
@@ -50,7 +85,10 @@ export async function CreateAndSaveProduct(
       main_price,
       merchant: role === "client" ? _id : merchant,
       sku_id: req.body.sku_id,
-      vat: req.body?.vat && true,
+      vat: req.body?.vat && true, first_level_category_name,
+      second_level_category_name,
+      target_sale_price,
+      target_original_price,
     });
 
     const vendor_price = parseFloat(
@@ -94,6 +132,12 @@ export async function CreateAndSaveProduct(
       throw new AppError("Values count should be smaller than 100", 400);
     await product.save();
     res.status(201).json({ product, success: true });
+
+    attachShippingInfoToProuct(
+      product._id.toString(),
+      product.original_product_id,
+      req
+    );
   } catch (error: AxiosError | any) {
     const isAxiosError = error instanceof AxiosError;
     const values = error?.response?.data;
