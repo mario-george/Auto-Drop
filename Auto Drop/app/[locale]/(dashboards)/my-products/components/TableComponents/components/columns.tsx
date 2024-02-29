@@ -10,10 +10,20 @@ interface ColProps {
   sellPrice: string;
   category: string;
   platform: string;
-  inventory: string;setMyProducts:any
+  inventory: string;
+  setMyProducts: any;
+  setLoadProducts: any;
 }
 export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
-  const { productName, sellPrice, category, platform, inventory,setMyProducts } = props;
+  const {
+    productName,
+    sellPrice,
+    category,
+    platform,
+    inventory,
+    setMyProducts,
+    setLoadProducts,
+  } = props;
   return [
     {
       id: "select",
@@ -56,7 +66,7 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
             </span>
             <span>
               <Image
-        //@ts-ignore
+                //@ts-ignore
                 src={row.original.prodImage}
                 width={25}
                 height={25}
@@ -128,14 +138,18 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
       id: "actions",
       cell: ({ row }) => {
         //@ts-ignore
-        let {_id:id} = row.original;
+        let { _id: id, salla_product_id } = row.original;
         return (
-        <div>
-          <ButtonsRenderer setMyProducts={setMyProducts} id={id} />
-        </div>
-      )
-    }
-
+          <div>
+            <ButtonsRenderer
+              setMyProducts={setMyProducts}
+              id={id}
+              salla_product_id={salla_product_id}
+              setLoadProducts={setLoadProducts}
+            />
+          </div>
+        );
+      },
     },
   ];
 }
