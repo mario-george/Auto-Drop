@@ -1,9 +1,8 @@
 "use client"
 import { Button } from "@/components/ui/button";
 
-export default function ProductEditHeader({ uploadProduct, addToCart }: any) {
-  const uploadProductHandler = () => {};
-  const addToCartHandler = () => {};
+export default function ProductEditHeader({ uploadProduct, addToCart,addToCartHandler,uploadProductHandler }: any) {
+
   const toggleLang = (lang: string) => {};
 
   return (
