@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "../../../../../../../lib/utils";
 import {
   Select,
   SelectContent,
@@ -14,19 +15,21 @@ export default function ProductCategoriesTags({
   setSelectedCategories,
   categoriesList,
   selectedCategories,
+  locale,
 }: {
   category: string;
   tag: string;
   setSelectedCategories: (value: string[] | null) => void;
   categoriesList: any;
   selectedCategories: string[];
+  locale?: string;
 }) {
-  console.log(selectedCategories);
+  let isAr = locale=="ar"
   return (
     <div>
       {" "}
       <div className="grid grid-cols-2 gap-4 my-4 min-w-full">
-        <div className="border-l border-gray-400">
+        <div className={cn(isAr ? "border-l" : "border-r", "border-gray-400")}>
           <span>{category}</span>{" "}
           <Select
             onValueChange={(value: string) => {
