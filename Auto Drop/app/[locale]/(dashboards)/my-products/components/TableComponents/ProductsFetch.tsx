@@ -5,6 +5,7 @@ import ColsExtract from "./ColumnsExtractor";
 
 export default function ProductsFetch(props: any) {
   const [myProducts, setMyProducts] = useState([]);
+  const [loadProducts,setLoadProducts ] = useState(false);
 
   useEffect(() => {
     const getMyProductsData = async () => {
@@ -17,7 +18,8 @@ export default function ProductsFetch(props: any) {
             ...product,
             prodName: product.name,
             prodInfo: { name: product.name, image: product.images[0].original },
-            category: product.category_name||product.first_level_category_name,
+            category:
+              product.category_name || product.first_level_category_name,
             prodImage: product.images[0].original,
             sellPrice: product.price,
             inventory: product.quantity,
@@ -28,7 +30,7 @@ export default function ProductsFetch(props: any) {
     };
 
     getMyProductsData();
-  }, []);
+  }, [loadProducts]);
 
   if (!myProducts) {
     return <div>Loading...</div>; // Replace with your loading state
@@ -38,7 +40,12 @@ export default function ProductsFetch(props: any) {
     <>
       {" "}
       <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex bg-white">
-        <ColsExtract {...props} myProducts={myProducts} setMyProducts={setMyProducts}/>
+        <ColsExtract
+          {...props}
+          myProducts={myProducts}
+          setMyProducts={setMyProducts}
+          setLoadProducts={setLoadProducts}
+        />
       </div>
     </>
   );
