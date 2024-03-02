@@ -651,6 +651,11 @@ export const getProductVariants = async (
   pages: any,
   access_token: any
 ) => {
+  console.log("access_token", access_token);
+  console.log("access_token", access_token);
+  console.log("id", id);
+  console.log("pages", pages);
+
   const options = {
     method: "GET",
     url: `https://api.salla.dev/admin/v2/products/${id}/variants?page=${pages}`,
@@ -716,6 +721,50 @@ export const UpdateProductVariant = async (
       stock_quantity,
       mpn,
       gtin,
+    },
+  };
+  try {
+    const { data } = await axios.request(options);
+    return data;
+  } catch (error: any) {
+    if (error.response?.data?.error?.fields) {
+      console.log(error.response?.data?.error.fields);
+    } else {
+      console.log(error.response?.data);
+    }
+  }
+};
+export const UpdateProductVariantSale = async (
+  variantId,
+  barcode,
+  price,
+  stock_quantity,
+  mpn,
+  gtin,
+  sku,
+  token,sale_price
+) => {
+  const options = {
+    method: "PUT",
+    url: `https://api.salla.dev/admin/v2/products/variants/${variantId}`,
+    params: {
+      sku,
+      barcode,
+      price,
+      stock_quantity,sale_price
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: {
+      sku,
+      barcode,
+      price,
+      stock_quantity,
+      mpn,
+      gtin,sale_price
     },
   };
   try {
@@ -945,15 +994,17 @@ export const getProductSkus = async (
     const errorMessage =
       aeResponse?.error_response?.msg ||
       "There is something went wrong while getting product details or maybe this product is not available for shipping to SA, try another product or contact support.";
+    // console.log(result);
     if (!result) {
       console.log("notFound");
+      console.log("lollolo");
     } else {
       const {
         ae_item_sku_info_dtos,
         ae_item_base_info_dto,
         ae_multimedia_info_dto,
       } = result;
-      const chinaShippedProducts =
+      /* const chinaShippedProducts =
         ae_item_sku_info_dtos.ae_item_sku_info_d_t_o.filter((product: any) => {
           let skus = product.ae_sku_property_dtos.ae_sku_property_d_t_o.some(
             (prop: any) => {
@@ -967,8 +1018,29 @@ export const getProductSkus = async (
             skus = product.ae_sku_property_dtos.ae_sku_property_d_t_o;
           }
           return skus;
+        }); */
+
+      //me
+      const chinaShippedProducts =
+        ae_item_sku_info_dtos.ae_item_sku_info_d_t_o.filter((product: any) => {
+          return product.ae_sku_property_dtos.ae_sku_property_d_t_o.some(
+            (prop: any) => {
+              return (
+                prop.sku_property_name === "Ships From" &&
+                prop.sku_property_value === "CHINA"
+              );
+            }
+          );
         });
-      return uniqBy(chinaShippedProducts, "sku_id");
+      //
+   /*    console.log(chinaShippedProducts);
+      console.log(result.ae_item_sku_info_dtos.ae_item_sku_info_d_t_o); */
+      // console.log(result);
+      // return uniqBy(chinaShippedProducts, "sku_id");
+      return uniqBy(
+        result.ae_item_sku_info_dtos.ae_item_sku_info_d_t_o,
+        "sku_id"
+      );
     }
   } catch (error: any) {
     console.error("Error fetching product SKUs:", error?.message);
