@@ -1,3 +1,25 @@
-.inputField{
-    @apply bg-[#edf5f9] text-[#253439] rounded-lg shadow shadow-sm text-sm md:text-base min-w-[60%]  
+.inputField {
+  @apply bg-[#edf5f9] text-[#253439] rounded-lg shadow shadow-sm text-sm md:text-base min-w-[60%];
+}
+
+.sizeBox {
+  @apply bg-[#edf5f9] text-[#253439] rounded-lg shadow text-sm md:text-base;
+}
+
+.shippingCard {
+  @apply bg-[#edf5f9] text-[#253439] rounded-lg shadow text-sm md:text-base;
+}
+.shippingCardPrice {
+  @apply text-[#C1121F] rounded-lg text-sm md:text-base;
+}
+
+.shippingCardActive {
+  @apply bg-[#2b5563] text-white rounded-lg shadow text-sm md:text-base;
+}
+.shippingCardValue {
+    @apply  text-[#CCE0DB] text-sm md:text-base;
+  }
+
+.shippingCardPriceActive {
+  @apply text-[#F4B1AC] rounded-lg text-sm md:text-base;
 }
