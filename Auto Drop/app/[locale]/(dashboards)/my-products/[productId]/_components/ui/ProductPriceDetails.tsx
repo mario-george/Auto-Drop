@@ -3,29 +3,38 @@ import { Switch } from "@chakra-ui/react";
 import { Input } from "@/components/ui/input";
 
 export default function ProductPriceDetails({
-  offerPrice,
-  addOfferPrice,target_original_price
+  
+  addOfferPrice
+  , editedPrice,
+  profit,finalPrice,totalProfit,inputClasses,showDiscountPrice,setShowDiscountPrice
 }: any) {
   const [checked, setChecked] = useState(false);
   return (
     <div>
-      
-      <div className="flex space-s-3 items-center">
-        <div>{addOfferPrice}</div>
-        <Switch
-          id="email-alerts"
-          isChecked={checked}
-          onChange={() => {
-            setChecked(!checked);
-          }}
-        />
+      <div className="grid grid-cols-2 space-s-3 items-center">
+        <div className="flex space-s-3">
+          <div>{addOfferPrice}</div>
+          <Switch
+            id="email-alerts"
+            isChecked={showDiscountPrice}
+            onChange={() => {
+              setShowDiscountPrice(!showDiscountPrice);
+            }}
+          /> </div>
+         
       </div>
-      {checked && (
-        <>
-          <div>{offerPrice}</div>
-          <Input type="number" value={target_original_price} className="" />
-        </>
-      )}
+      <div className="grid grid-cols-2 gap-4 my-4 min-w-full">
+                  <span>{editedPrice}</span>
+                  <span>{profit}</span>
+                  <Input
+                    className={`shadow-sm text-sm md:text-base min-w-[60%] ${inputClasses} `}
+                    value={finalPrice}
+                  />
+                  <Input
+                    className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
+                    value={totalProfit}
+                  />
+                </div>
     </div>
   );
 }
