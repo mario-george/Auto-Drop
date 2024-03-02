@@ -58,7 +58,7 @@ interface ProductSchema {
   metadata_description: string;
   product_type: string;
   original_product_id: number | string;
-  salla_product_id: number | string;
+  salla_product_id: number | string | undefined;
   merchant: SchemaDefinitionProperty<Types.ObjectId>;
   require_shipping: boolean;
   shipping: ShippingAttributes;
@@ -70,6 +70,9 @@ interface ProductSchema {
   second_level_category_name?: string;
   target_sale_price?: string;
   target_original_price?: string;
+  variantsArr?: any;
+  commissionPercentage?:boolean,
+  showDiscountPrice?: boolean,
 }
 
 interface ProductDocument extends Document, ProductSchema {}
@@ -138,6 +141,9 @@ const options = {
   target_sale_price: { type: Number, default: null },
   first_level_category_name: { type: String, default: null },
   second_level_category_name: { type: String, default: null },
+  variantsArr: { type: Array, default: [] },
+  commissionPercentage: { type: Boolean, default: true },
+  showDiscountPrice: { type: Boolean, default: false },
 };
 
 const schema = new Schema<ProductSchema>(options, { timestamps: true });
