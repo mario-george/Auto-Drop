@@ -3,20 +3,32 @@ import { Button } from "@/components/ui/button";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-export default function ButtonsRenderer({ id, setMyProducts }: any) {
+import DialogUnLinkProduct from './DialogUnLinkProduct'
+export default function ButtonsRenderer({
+  id,
+  setMyProducts,
+  salla_product_id,
+  setLoadProducts,
+}: any) {
   const router = useRouter();
   const locale = useLocale();
   let buttonClassD = "rounded-full bg-[#c1121f] px-2 py-2";
-  let buttonClassL = "rounded-full bg-[#008767] px-2 py-2";
+  let buttonClassL = `rounded-full ${
+    salla_product_id ? `bg-red-500` : `bg-[#008767]`
+  } px-2 py-2`;
   let buttonClassE = "rounded-full bg-[#253439] px-2 py-2";
   let buttonClassS = "rounded-full bg-[#f79042] px-2 py-2";
 
   let linkProductHandler = async () => {
+    if (salla_product_id) {
+      return;
+    }
     const res = await axiosInstance.post(
       "aliexpress/product/linkProductSalla/v2",
       { productId: id }
     );
     console.log(res.data);
+    setLoadProducts((prev: boolean) => !prev);
   };
   let deleteProductHandler = async () => {
     const res = await axiosInstance.delete(
@@ -48,14 +60,16 @@ export default function ButtonsRenderer({ id, setMyProducts }: any) {
           height={24}
         />
       </Button>
-      <Button className={buttonClassL} onClick={linkProductHandler}>
+
+      {salla_product_id ? <DialogUnLinkProduct sallaProductId={salla_product_id} setLoadProducts={setLoadProducts}/>:  <Button className={buttonClassL} onClick={linkProductHandler}>
         <Image
           src={`/client/my-products/link.svg`}
           alt={`link`}
           width={24}
           height={24}
         />
-      </Button>
+      </Button> }
+    
       <Button className={buttonClassE} onClick={EditProductHandler}>
         <Image
           src={`/client/my-products/edit.svg`}
