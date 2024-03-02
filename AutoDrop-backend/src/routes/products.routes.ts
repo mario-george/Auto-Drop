@@ -15,6 +15,7 @@ import { getUserProducts } from "../controllers/aliexpress/products/productCRUD/
 import { LinkProductSalla ,LinkProductSalla2} from "../controllers/aliexpress/products/productCRUD/LinkProduct";
 import { DeleteProductById } from "../controllers/aliexpress/products/productCRUD/DeleteProduct";
 import GetProductInfo from "../controllers/aliexpress/products/productCRUD/GetProductInfo";
+import PatchProduct from "../controllers/aliexpress/products/productCRUD/PatchProduct";
 const router = Router();
 router.get("/products", GetRecommendedProducts);
 router.post("/products", GetRecommendedProductsPost);
@@ -42,6 +43,11 @@ router.delete(
   "/product/deleteProduct/:productId",
   [Authentication()],
   DeleteProductById
+);
+router.patch(
+  "/product/updateProduct/:productId",
+  [Authentication()],
+  PatchProduct
 );
 router.get(
   "/product/getProductInfo/:productId",
