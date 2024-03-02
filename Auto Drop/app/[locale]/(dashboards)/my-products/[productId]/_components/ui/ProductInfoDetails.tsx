@@ -17,7 +17,7 @@ export default function ProductInfoDetails({
   inputClasses,
   prodNameTitle,
   sku,
-  setErrorMsg,
+  setErrorMsg,formValues,setFormValues
 }: any) {
   return (
     <div>
@@ -37,7 +37,13 @@ export default function ProductInfoDetails({
                   id="firstName"
                   className={`shadow-sm text-sm md:text-base ${inputClasses} `}
                   onFocus={() => setErrorMsg(null)}
-                  value={productName}
+                  value={formValues.ProductName}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    console.log(e.target.value);
+                    setFormValues((prevVals: any) => {
+                      return { ...prevVals, ProductName: e.target.value };
+                    });
+                  }}
                 />
               </FormControl>
               <FormMessage />
