@@ -43,6 +43,10 @@ export default function ProductEditRenderer(props: {
   SEODescription: string;
   color: string;
   availableQuantity: string;
+  offerPrice: string;
+  addOfferPrice: string;
+  uploadProduct: string;
+  addToCart: string;
 }) {
   let { locale, children } = props;
   const [product, setProduct] = useState<any>(null);
@@ -71,8 +75,6 @@ export default function ProductEditRenderer(props: {
     <div>
       <MotionWrapperExit locale={locale} mdClasses="px-3 my-3">
         <div className="">
-          {children}
-
           <ProductEditForm {...props} product={product} />
         </div>
       </MotionWrapperExit>
