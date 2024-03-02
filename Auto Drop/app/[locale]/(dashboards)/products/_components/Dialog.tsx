@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { FaPlus } from "react-icons/fa6";
 import axiosInstance from "../../_components/shared/AxiosInstance";
 import { useRouter } from "next/navigation";
-
+import { ScrollArea } from "@/components/ui/scroll-area";
 export default function SubmitProducts({
   lang,
   pagesProducts,
@@ -155,23 +155,25 @@ function Dialog({
             </AlertDialogTitle>
             <AlertDialogDescription>
               You can save these products to your list
-              {toBeSentProductsArr.map((product: any, i: number) => {
-                return (
-                  <>
-                    <div
-                      key={i}
-                      className="flex justify-between items-center text-[#253439] min-w-full my-4 border-2 rounded-lg p-2"
-                    >
-                      <span className="max-w-[80%]">
-                        {product.product_title}
-                      </span>
-                      <span>
-                        {CurrencyFormatter(product.target_sale_price)}
-                      </span>
-                    </div>
-                  </>
-                );
-              })}
+              <ScrollArea className="h-[20rem]">
+                {toBeSentProductsArr.map((product: any, i: number) => {
+                  return (
+                    <>
+                      <div
+                        key={i}
+                        className="flex justify-between items-center text-[#253439] min-w-full my-4 border-2 rounded-lg p-2"
+                      >
+                        <span className="max-w-[80%]">
+                          {product.product_title}
+                        </span>
+                        <span>
+                          {CurrencyFormatter(product.target_sale_price)}
+                        </span>
+                      </div>
+                    </>
+                  );
+                })}
+              </ScrollArea>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
