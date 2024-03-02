@@ -3,7 +3,6 @@ import catchAsync from "../../../../utils/catchAsync";
 import { Product } from "../../../../models/product.model";
 export const DeleteProductById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log('yes')
     if (!req.params) {
       return res
         .status(400)
