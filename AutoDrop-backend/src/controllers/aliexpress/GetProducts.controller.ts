@@ -267,9 +267,16 @@ async function GetProductOptions(SKUs: object[]) {
           const valuePrice = parseFloat(sku_price);
           const offerPrice = parseFloat(offer_sale_price);
           const valPrice = valuePrice === offerPrice ? valuePrice : offerPrice;
-          const displayValue = slugify(property_value_definition_name, {
+          /*    const displayValue = slugify(property_value_definition_name, {
             lower: true,
-          });
+          }); */
+          let displayValue;
+
+          if (property_value_definition_name) {
+            displayValue = slugify(property_value_definition_name, {
+              lower: true,
+            });
+          }
           sku_image_1 = sku_image;
 
           if (isFirst) {
@@ -364,7 +371,26 @@ export async function GetDetails({
 
           const { ae_item_sku_info_d_t_o: SKUs }: any =
             ae_item_sku_info_dtos || {};
-
+            const variantsArr = SKUs.map((variant:any)=>{
+              let obj:any={}
+              let {offer_sale_price,sku_available_stock,id,sku_code,sku_id,sku_price,offer_bulk_sale_price,sku_stock}=variant
+              obj.offer_sale_price=offer_sale_price
+              obj.sku_available_stock=sku_available_stock
+              obj.id=id
+              obj.sku_code=sku_code
+              obj.sku_id=sku_id
+              obj.sku_price=sku_price
+              obj.offer_bulk_sale_price=offer_bulk_sale_price
+              obj.sku_stock=sku_stock
+              
+              let {ae_sku_property_dtos} = variant
+              
+              let relativeOptions:any =  ae_sku_property_dtos?.ae_sku_property_d_t_o?.map((e: any) => {
+                return e
+              })
+              obj.relativeOptions=relativeOptions
+              return obj
+            })
           const [{ price, quantities, options }, images] = await Promise.all([
             GetProductOptions(SKUs || []),
             GetProductImages(ae_multimedia_info_dto?.image_urls),
@@ -406,6 +432,7 @@ export async function GetDetails({
             second_level_category_name,
             target_sale_price,
             target_original_price,
+            variantsArr
           };
           // console.log(data.category_id);
 
