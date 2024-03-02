@@ -15,6 +15,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { Spinner } from "@chakra-ui/react";
 
 import {
   Table,
@@ -36,8 +37,10 @@ interface DataTableProps<TData, TValue> {
   unUpProd: string;
   price: string;
   category: string;
-  locale: string;setMyProducts:any;
-  apply:string
+  locale: string;
+  setMyProducts: any;
+  apply: string;
+  setLoadProducts:any
 }
 
 export function DataTable<TData, TValue>({
@@ -48,7 +51,9 @@ export function DataTable<TData, TValue>({
   unUpProd,
   columns,
   data,
-  locale,setMyProducts,apply
+  locale,
+  setMyProducts,
+  apply,setLoadProducts
 }: DataTableProps<TData, TValue>) {
   console.log(columns);
   const [rowSelection, setRowSelection] = React.useState({});
@@ -136,7 +141,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  <Spinner />
                 </TableCell>
               </TableRow>
             )}
