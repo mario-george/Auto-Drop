@@ -9,6 +9,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
 import {
   Form,
   FormControl,
@@ -39,6 +40,7 @@ import { cn } from "@/lib/utils";
 import ProductInfoDetails from "./ui/ProductInfoDetails";
 import ProductPriceDetails from "./ui/ProductPriceDetails";
 import ProductSEOInfo from "./ui/ProductSEOInfo";
+import Editor from "./ui/Editor";
 interface ProductEditFormProps {
   prodNameTitle: string;
   prodNameTitlePlaceholder: string;
@@ -76,6 +78,8 @@ interface ProductEditFormProps {
   color: string;
   addOfferPrice: string;
   offerPrice: string;
+  addToCart: string;
+  uploadProduct: string;
 }
 
 export default function ProductEditForm(props: ProductEditFormProps) {
@@ -110,12 +114,23 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     profit,
     addOfferPrice,
     offerPrice,
+    uploadProduct,
+    addToCart,
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
+  const [formValues, setFormValues] = useState<any>({ ProductName: "" });
   const [metadataTitle, setMetadataTitle] = useState("");
   const [metadataDesc, setMetadataDesc] = useState("");
+  const [choosenColors, setChoosenColors] = useState<any>([]);
+  const [choosenMaterials, setChoosenMaterials] = useState<any>([]);
+  const [choosenSizes, setChoosenSizes] = useState<any>([]);
   const [selectedCategories, setSelectedCategories] = useState<any>([]);
   const [profitChoosenType, setProfitChoosenType] = useState("percentage");
+  const [descriptionField, setDescriptionField] = useState(
+    product?.description
+  );
+  const [showDiscountPrice, setShowDiscountPrice] = useState<boolean>(false);
+
   let target_sale_price: any,
     target_original_price: any,
     vendor_commission: any,
@@ -155,6 +170,39 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       );
       setMetadataDesc(metadata_description);
       setMetadataTitle(metadata_title);
+      setFormValues((prevV: any) => {
+        return { ...prevV, ProductName: product?.name };
+      });
+      let colorsOption = product?.options?.find(
+        (option: any) =>
+          option.name.includes("Color") || option.name.includes("color")
+      );
+
+      let materialsOption = product?.options?.find(
+        (option: any) =>
+          option.name.includes("Material") || option.name.includes("material")
+      );
+      let sizeOptions = product?.options?.find(
+        (option: any) =>
+          option.name.includes("Size") || option.name.includes("size")
+      );
+      setDescriptionField(product?.description);
+      setChoosenColors(
+        Array.from({ length: colorsOption?.values?.length }, (_, i) => {
+          return colorsOption?.values[i]?.selected || true;
+        })
+      );
+      setChoosenMaterials(
+        Array.from({ length: materialsOption?.values?.length }, (_, i) => {
+          return materialsOption?.values[i]?.selected || true;
+        })
+      );
+      setChoosenSizes(
+        Array.from({ length: sizeOptions?.values?.length }, (_, i) => {
+          return sizeOptions?.values[i]?.selected || true;
+        })
+      );
+      setShowDiscountPrice(product?.showDiscountPrice || false);
     }
   }, [product]);
   const [commissionVal, setCommissionVal] = useState(
@@ -188,6 +236,10 @@ export default function ProductEditForm(props: ProductEditFormProps) {
 
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    console.log(commissionVal);
+    console.log(
+      profitChoosenType == "percentage" || profitChoosenType == percentage
+    );
     if (profitChoosenType == "percentage" || profitChoosenType == percentage) {
       setFinalPrice((finalPrice: any) => {
         return (
@@ -211,8 +263,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   const locale = useLocale();
   const formSchema = z.object({
     prodName: z.string().min(2, invalidProdName).max(100),
-    SEOTitle: z.string().min(2, invalidSEOTitle).max(100),
-    SEOescription: z.string().min(2, invalidSEODescription).max(100),
+    SEOTitle: z.string().min(2, invalidSEOTitle).max(70),
+    SEODescription: z.string().min(2, invalidSEODescription).max(100),
     description: z.string().min(2, invalidDescription).max(100),
   });
 
@@ -221,23 +273,19 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     defaultValues: {
       prodName: "",
       SEOTitle: "",
-      SEOescription: "",
+      SEODescription: "",
       description: "",
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmitHandler = async (data: z.infer<typeof formSchema>) => {
+    console.log(data.SEOTitle);
+    console.log(data);
+    console.log(data);
+    console.log(data);
     setIsLoading(true);
-
     try {
-      const response = await axiosInstance.patch(
-        "/aliexpress/product/editProduct/" + props.params.productId
-      );
-
-      if (response.status < 300 && response.status >= 200) {
-        console.log("Product updated");
-      } else {
-      }
+      uploadProductHandler();
     } catch (err: any) {
       setError(err.response.data.message);
     } finally {
@@ -257,11 +305,19 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     prodNameTitle,
     sku,
     setErrorMsg,
+    formValues,
+    setFormValues,
   };
   const ProductPriceDetailsProps = {
     offerPrice,
     addOfferPrice,
-    target_original_price: product.target_original_price,
+    editedPrice,
+    profit,
+    finalPrice,
+    totalProfit,
+    inputClasses,
+    showDiscountPrice,
+    setShowDiscountPrice,
   };
 
   const ProductSEOInfoProps = {
@@ -272,15 +328,73 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     metadataTitle,
     setMetadataDesc,
     setMetadataTitle,
+    form,
+  };
+  const ProductOptionsProps = {
+    options: product.options,
+    choosenSizes,
+    choosenColors,
+    setChoosenColors,
+    setChoosenSizes,
+    setChoosenMaterials,
+    choosenMaterials,
+  };
+  const ProductCategoriesTagsProps = {
+    category,
+    tag,
+    setSelectedCategories,
+    categoriesList,
+    selectedCategories,
+    locale,
+  };
+  let addToCartHandler = () => {};
+  let uploadProductHandler = async () => {
+    try {
+      let profitChoosenTypeName = "number";
+      let commissionPercentage = false;
+      if (profitChoosenType == percentage) {
+        profitChoosenTypeName = "percentage";
+        commissionPercentage = true;
+      }
+
+      let data = {
+        name: formValues.ProductName,
+        vendor_commission: commissionVal,
+        metadata_description: metadataDesc,
+        metadata_title: metadataTitle,
+        description: descriptionField,
+        profitChoosenTypeName,
+        commissionPercentage,
+        showDiscountPrice,
+      };
+      const res = await axiosInstance.patch(
+        `aliexpress/product/updateProduct/${product._id}`,
+        data
+      );
+      if (res.status >= 200 && res.status < 300) {
+        console.log("Product updated");
+      } else {
+        console.log("error");
+      }
+    } catch (e: any) {
+      console.error(e);
+    }
+  };
+  const ProductEditHeaderProps = {
+    uploadProduct,
+    addToCart,
+    addToCartHandler,
+    uploadProductHandler: onSubmitHandler,
   };
   return (
     <>
+      <ProductEditHeader {...ProductEditHeaderProps} />
       <div className="bg-white rounded-lg shadow container p-6 lap:flex min-w-full justify-between  ">
         <ProductImageRenderer product={product} />
         <div className="flex flex-col min-w-[55%]">
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={form.handleSubmit(onSubmitHandler)}
               className="flex flex-col bg-[#F7F5F2] rounded-lg shadow-lg p-8 space-y-4  "
               dir={locale === "ar" ? "rtl" : "ltr"}
             >
@@ -299,7 +413,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                   <span className="col-span-2">{originalPrice}</span>
                   <Input
                     className={`shadow-sm text-sm md:text-base bg-[#edf5f9] ${inputClasses} `}
-                    value={product?.price}
+                    value={product?.target_original_price}
                   />{" "}
                   <RadioGroup
                     defaultValue="shippingIncluded"
@@ -340,7 +454,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                     <div className="relative mt-auto">
                       <Input
                         type="number"
-                        className="pr-6"
+                        className="inputField px-6"
                         value={commissionVal}
                         onChange={(e: any) => {
                           if (e.target.value) {
@@ -354,46 +468,29 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                         {profitChoosenType == "percentage" ? <>%</> : <></>}
                       </span>
                     </div>
-                    {/* <Input
-                      className={`shadow-sm text-sm md:text-base   ${inputClasses} `}
-                      value={
-                        totalProfit +
-                        (profitChoosenType == "percentage" ? "%" : "")
-                      }
-                      placeholder={percentage}
-                      onChange={(e:any) => {
-                        setTotalProfit(e.target.value.replace(/\D/g, ''));                      }}
-                    />
-                    {profitChoosenType == "percentage" ? <>%</> : <></>} */}
                   </div>
                 </div>
                 <ProductPriceDetails {...ProductPriceDetailsProps} />
-                <div className="grid grid-cols-2 gap-4 my-4 min-w-full">
-                  <span>{editedPrice}</span>
-                  <span>{profit}</span>
-                  <Input
-                    className={`shadow-sm text-sm md:text-base min-w-[60%] ${inputClasses} `}
-                    value={finalPrice}
-                  />
-                  <Input
-                    className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
-                    value={totalProfit}
-                  />
-                </div>
+
                 <Separator />
 
-                <ProductCategoriesTags
-                  category={category}
-                  tag={tag}
-                  setSelectedCategories={setSelectedCategories}
-                  categoriesList={categoriesList}
-                  selectedCategories={selectedCategories}
-                />
+                <ProductCategoriesTags {...ProductCategoriesTagsProps} />
 
                 <Separator />
                 <ProductSEOInfo {...ProductSEOInfoProps} />
 
-                <ProductOptions options={product.options} />
+                <ProductOptions {...ProductOptionsProps} />
+                <div className="form-group">
+                  <label className="form-label">Description</label>
+                  <Editor
+                    value={descriptionField}
+                    onChange={(value) => setDescriptionField(value)}
+                  />
+
+                  {/*   {errors?.description ? (
+                  <span className="form-error">{errors?.description}</span>
+                ) : null} */}
+                </div>
               </div>
             </form>
           </Form>
