@@ -53,11 +53,10 @@ export default function ProductEdit(props: { params: { productId: string } }) {
         durationToDeliver={t("durationToDeliver")}
         offerPrice={t("offerPrice")}
         addOfferPrice={t("addOfferPrice")}
+        uploadProduct={t("uploadProduct")}
+        addToCart={t("addToCart")}
       >
-        <ProductEditHeader
-          uploadProduct={t("uploadProduct")}
-          addToCart={t("addToCart")}
-        />
+      
       </ProductEditRenderer>
     </>
   );
