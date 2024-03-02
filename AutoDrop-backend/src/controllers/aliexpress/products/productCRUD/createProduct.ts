@@ -46,8 +46,8 @@ export async function CreateAndSaveProduct(
 const {  first_level_category_name,
   second_level_category_name,
   target_sale_price,
-  target_original_price,} = req.body 
-
+  target_original_price,variantsArr} = req.body 
+console.log(req.body.variantsArr)
     let {
       merchant,
       vendor_commission,
@@ -88,7 +88,7 @@ const {  first_level_category_name,
       vat: req.body?.vat && true, first_level_category_name,
       second_level_category_name,
       target_sale_price,
-      target_original_price,
+      target_original_price,variantsArr
     });
 
     const vendor_price = parseFloat(
