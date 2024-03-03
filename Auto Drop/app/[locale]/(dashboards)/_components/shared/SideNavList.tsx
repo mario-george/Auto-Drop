@@ -22,65 +22,74 @@ export default function NavComponent({
 
   return (
     <>
-
-    <div className="h-full">
-
-
-      <ul className="flex flex-col mx-2 space-y-2 ">
-        {iconData.map((link: any, index: any) => {
-          let isActive = link.route == path;
-          return (
-            <motion.li
-              className={`group icon-path flex items-center py-2 px-4 hover:bg-[#F0F3F400] text-opacity-50  ${
-                isActive
-                  ? "bg-[#F0F3F4] !icon-path-active shadow-md !text-opacity-100 icon "
-                  : ""
-              } text-[#253439] hover:text-opacity-100 hover:bg-[#f0f3f4] rounded-lg hover:shadow-md`}
-              key={index}
-            >
-              <Link href={link.route} className="flex items-center">
-                <link.icon />
+      <div className="h-full">
+        <ul className="flex flex-col mx-2 space-y-2 overflow-hidden">
+          {iconData.map((link: any, index: any) => {
+            let isActive = link.route == path;
+            return (
+              <motion.li
+                className={`group icon-path flex items-center py-2 px-1 hover:bg-[#F0F3F400] text-opacity-50  ${
+                  isActive
+                    ? "bg-[#F0F3F4]  !icon-path-active shadow-md !text-opacity-100 icon "
+                    : ""
+                } text-[#253439] hover:text-opacity-100 hover:bg-[#f0f3f4] rounded-lg hover:shadow-md ${isNavOpen &&`!pr-12  ${locale=="ar" ? `mr-24`:`ml-3`} `}`}
+                key={index}
+              >
+                <Link
+                  href={link.route}
+                  className={`flex items-center transition-all duration-100   `}
+                >
+                  <link.icon />
+                  {!isNavOpen &&                  <motion.span
+                    className={`${marginDirection} whitespace-nowrap`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                  >
+                    {iconInfo[index]}
+                  </motion.span>}
+                </Link>
+              </motion.li>
+            );
+          })}
+        </ul>
+        <div
+          className={`flex flex-col mx-2 space-y-6  border-t  mt-16 transition-all duration-100 overflow-hidden `}
+        >
+            <LogoutHandler
+            isNavOpen={isNavOpen}
+            logoutMsg={logoutMsg}
+            marginDirection={marginDirection2}
+          />
+          <motion.li
+            className={`flex transition-all duration-100 items-center py-2 px-1 ${
+              locale == "en" ? "ml-1" : "mr-1"
+            } ${isNavOpen &&`!pr-12 mr-24 `} text-[#253439] hover:text-black  rounded-lg hover:shadow-md border border-[#00A859] w--fit ${
+              isNavOpen && false && ``
+            } 
+              
+            `}
+          >
+            <Link href={"/"} className="flex items-center">
+              <Image
+                width={42}
+                height={30}
+                src={"/client/whatsapp.svg"}
+                alt="whatsapp"
+                className={`transform ${whatsappTranslate} `}
+              />
+              {!isNavOpen && (
                 <motion.span
-                  className={`${marginDirection} whitespace-nowrap`}
+                  className={`${marginDirection3} whitespace-nowrap`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
-                  {iconInfo[index]}
+                  {whatsappMsg}
                 </motion.span>
-              </Link>
-            </motion.li>
-          );
-        })}
-      </ul>
-      <div className="flex flex-col mx-2 space-y-6  border-t  mt-16">
-        <LogoutHandler
-          logoutMsg={logoutMsg}
-          marginDirection={marginDirection2}
-        />
-        <motion.li
-          className={`flex items-center py-2 px-1 ${
-            locale == "en" ? "ml-1" : "mr-1"
-          } text-[#253439] hover:text-black  rounded-lg hover:shadow-md border border-[#00A859]`}
-        >
-          <Link href={"/"} className="flex items-center">
-            <Image
-              width={42}
-              height={30}
-              src={"/client/whatsapp.svg"}
-              alt="whatsapp"
-              className={`transform ${whatsappTranslate}`}
-            />
-            <motion.span
-              className={`${marginDirection3} whitespace-nowrap`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              {whatsappMsg}
-            </motion.span>
-          </Link>
-        </motion.li>
+              )}
+            </Link>
+          </motion.li>
+        </div>
       </div>
-    </div>
     </>
   );
 }
