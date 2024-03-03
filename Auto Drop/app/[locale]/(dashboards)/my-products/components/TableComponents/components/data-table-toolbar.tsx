@@ -64,8 +64,8 @@ export function DataTableToolbar<TData>({
 
   let isAr = locale === "ar";
   return (
-    <div className="flex items-center justify-between bg-[#f0f3f4] px-3 py-4 rounded-md">
-      <div className="flex flex-1 items-center space-x-2">
+    <div className="flex flex-col space-y-3 tab:space-y-0 tab:flex-row items-center justify-between bg-[#f0f3f4] px-3 py-4 rounded-md">
+      <div className="flex flex-col tab:flex-1 items-center space-x-2">
         <div className="relative">
           <Input
             placeholder={searchByProd}
@@ -92,8 +92,8 @@ export function DataTableToolbar<TData>({
           </div>
         </div>
       </div>
-      <div className="flex space-s-1 items-center mx-4">
-        <div>{unAvProd}</div>
+      <div className="flex  space-s-1 items-center mx-4">
+        <div className="text-sm tab:text-lg">{unAvProd}</div>
         <Checkbox
           checked={checked}
           onCheckedChange={() => setChecked(!checked)}
@@ -101,7 +101,7 @@ export function DataTableToolbar<TData>({
         />
       </div>
       <Button
-        className="bg-[#b29e84] hover:bg-[#b29e84]/90 "
+        className="bg-[#b29e84] hover:bg-[#b29e84]/90 h-[2rem] tab:h-fit"
         onClick={filterHandler}
       >
         {apply}
