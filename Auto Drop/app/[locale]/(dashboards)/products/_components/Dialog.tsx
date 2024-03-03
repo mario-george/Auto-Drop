@@ -15,6 +15,7 @@ import { FaPlus } from "react-icons/fa6";
 import axiosInstance from "../../_components/shared/AxiosInstance";
 import { useRouter } from "next/navigation";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import useLoader from "@/components/loader/useLoader";
 export default function SubmitProducts({
   lang,
   pagesProducts,
@@ -24,7 +25,10 @@ export default function SubmitProducts({
   locale,
 }: any) {
   const router = useRouter();
+  const { LoaderComponent, setLoading } = useLoader();
+
   let submitHandler = async () => {
+    setLoading(true);
     console.log(toBeSentProductsArr);
     const promises = toBeSentProductsArr.map((prod: any) => {
       let {
@@ -90,6 +94,7 @@ export default function SubmitProducts({
     if (valid) {
       router.push(`/${locale || "en"}/my-products`);
     }
+    setLoading(false);
   };
   let toBeSentPages = pagesProducts.filter((element: any) => {
     return element.lang === lang && element.page !== currPage;
@@ -123,6 +128,7 @@ export default function SubmitProducts({
         toBeSentProductsArr={toBeSentProductsArr}
         submitHandler={submitHandler}
       >
+        {LoaderComponent}
         <Button
           className="fixed bottom-12 !bg-blue-300 rounded-full min-w-[3rem] min-h-[3rem] shadow"
           onClick={submitProductsHandler}
