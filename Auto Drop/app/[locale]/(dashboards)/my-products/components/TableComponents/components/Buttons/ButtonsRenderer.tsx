@@ -3,32 +3,42 @@ import { Button } from "@/components/ui/button";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import DialogUnLinkProduct from './DialogUnLinkProduct'
+import DialogUnLinkProduct from "./DialogUnLinkProduct";
+import useLoader from "@/components/loader/useLoader";
 export default function ButtonsRenderer({
   id,
   setMyProducts,
   salla_product_id,
   setLoadProducts,
 }: any) {
+  const { LoaderComponent, setLoading } = useLoader();
   const router = useRouter();
   const locale = useLocale();
-  let buttonClassD = "rounded-full bg-[#c1121f] px-2 py-2";
-  let buttonClassL = `rounded-full ${
-    salla_product_id ? `bg-red-500` : `bg-[#008767]`
-  } px-2 py-2`;
-  let buttonClassE = "rounded-full bg-[#253439] px-2 py-2";
-  let buttonClassS = "rounded-full bg-[#f79042] px-2 py-2";
+  let buttonClassD =
+    "rounded-full bg-[#c1121f] w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem]  px-2 py-2 tab:px-0 tab:py-0 hover:cursor-pointer  hover:bg-[#c1121f]/90 ";
+  let buttonClassL = `rounded-full w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem]  px-2 py-2 tab:px-0 tab:py-0 hover:cursor-pointer  ${
+    salla_product_id
+      ? `bg-red-500 hover:bg-red-500/90`
+      : `bg-[#008767] hover:bg-[#008767]/90`
+  } `;
+  let buttonClassE =
+    "rounded-full bg-[#253439] w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem] hover:cursor-pointer  px-2 py-2 tab:px-0 tab:py-0 hover:bg-[#253439]/90";
+  let buttonClassS =
+    "rounded-full bg-[#f79042] w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem] hover:cursor-pointer  px-2 py-2 tab:px-0 tab:py-0 hover:bg-[#f79042]/90 ";
 
   let linkProductHandler = async () => {
     if (salla_product_id) {
       return;
     }
+    setLoading(true)
     const res = await axiosInstance.post(
       "aliexpress/product/linkProductSalla/v2",
       { productId: id }
     );
     console.log(res.data);
     setLoadProducts((prev: boolean) => !prev);
+    setLoading(false)
+
   };
   let deleteProductHandler = async () => {
     const res = await axiosInstance.delete(
@@ -51,42 +61,54 @@ export default function ButtonsRenderer({
   };
 
   return (
-    <div className="flex flex-row-reverse gap-3">
-      <Button className={buttonClassD} onClick={deleteProductHandler}>
+    <div className="flex flex-row-reverse gap-3 transition-all duration-100">
+        {LoaderComponent}
+      <div className={buttonClassD} onClick={deleteProductHandler}>
         <Image
           src={`/client/my-products/delete.svg`}
           alt={`delete`}
           width={24}
           height={24}
+          className="mx-auto my-auto mt-[15%] tab:mt-[22.5%]"
         />
-      </Button>
+      </div>
 
-      {salla_product_id ? <DialogUnLinkProduct sallaProductId={salla_product_id} setLoadProducts={setLoadProducts}/>:  <Button className={buttonClassL} onClick={linkProductHandler}>
-        <Image
-          src={`/client/my-products/link.svg`}
-          alt={`link`}
-          width={24}
-          height={24}
+      {salla_product_id ? (
+        <DialogUnLinkProduct
+          sallaProductId={salla_product_id}
+          setLoadProducts={setLoadProducts}
         />
-      </Button> }
-    
-      <Button className={buttonClassE} onClick={EditProductHandler}>
+      ) : (
+        <div className={buttonClassL} onClick={linkProductHandler}>
+          <Image
+            src={`/client/my-products/link.svg`}
+            alt={`link`}
+            width={24}
+            height={24}
+            className="mx-auto my-auto  mt-[15%] tab:mt-[22.5%]"
+          />
+        </div>
+      )}
+
+      <div className={buttonClassE} onClick={EditProductHandler}>
         <Image
           src={`/client/my-products/edit.svg`}
           alt={`edit`}
           width={24}
           height={24}
+          className="mx-auto my-auto  mt-[15%] tab:mt-[22.5%]"
         />
-      </Button>
+      </div>
 
-      <Button className={buttonClassS}>
+      <div className={buttonClassS}>
         <Image
           src={`/client/my-products/store.svg`}
           alt={`store`}
           width={24}
           height={24}
+          className="mx-auto my-auto  mt-[15%] tab:mt-[22.5%]"
         />
-      </Button>
+      </div>
     </div>
   );
 }
