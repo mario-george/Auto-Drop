@@ -29,7 +29,7 @@ export function DataTablePagination<TData>({
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex space-s-3">
           <Pagination>
-            <PaginationContent className="space-s-4 mx-auto">
+            <PaginationContent className="space-s-4 flex flex-wrap">
               {Array.from({ length: table.getPageCount() }, (_, i) => {
                 return i + 1;
               }).map((page) => {
