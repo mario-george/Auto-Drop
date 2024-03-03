@@ -20,6 +20,7 @@ import {
   getProductSkus,
   getProductVariants,
 } from "./CRUD";
+import { RefreshTokenHandler } from "../../../salla/RefreshAccessToken";
 
 export async function LinkProductSalla(
   req: Request & any,
@@ -63,12 +64,12 @@ export async function LinkProductSalla(
     };
 
     const jsonProduct = product.toJSON();
-    const valuesStock = new Array().concat(
+    /*     const valuesStock = new Array().concat(
       //@ts-ignore
       ...jsonProduct.options?.map((option: any) => option.values)
     );
     if (valuesStock.length > 100)
-      throw new AppError("Values count should be smaller than 100", 400);
+      throw new AppError("Values count should be smaller than 100", 400); */
 
     const { data: productResult } = await axios.request(options_1);
     product.salla_product_id = productResult.data?.id;
@@ -154,150 +155,6 @@ export async function LinkProductSalla(
     console.log(respData);
     console.log(respData2);
     return;
-
-    //
-    /*     for (let option of product.options) {
-      for (let value of option.values) {
-      }
-      let options2 = {
-        method: "POST",
-        url: `https://api.salla.dev/admin/v2/products/${productResult.data?.id}/options`,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        data: {
-          display_type: option.display_type,
-          name: option.name,
-          values: [option.values[0]],
-        },
-      };
-
-      let response = await axios.request(options2);
-      SentOptionsResolved.push(response);
-    } */
-
-    // let resolvedOptions = await Promise.all(SentOptionsResolved);
-    /*     let optionsIds = resolvedOptions.map((option: any) => {
-      return option.data.data.id;
-    }); */
-
-    try {
-      // let res2 = await Promise.all(valuseSent.flat());
-
-      // console.log(res2);
-      console.log("success");
-    } catch (e) {
-      //console.log(e);
-      //console.log(e.data.error.fields.values);
-      // console.log(e.response.data.error.fields);
-      console.log(e.response);
-    }
-
-    return;
-    product.options = await Promise.all(
-      // @ts-ignore
-      jsonProduct.options?.map(async (option: OptionType, index: number) => {
-        let obj: OptionType = option;
-        const productOption = productResult.data.options[index];
-
-        const values = await Promise.all(
-          option.values.map(async (value: ValueType, idx: number) => {
-            const optionValue = productOption?.values[idx];
-            const mnp = getRandomInt(100000000000000, 999999999999999);
-            const gitin = getRandomInt(10000000000000, 99999999999999);
-
-            console.log(optionValue.id);
-            // console.log(optionValue.id);
-
-            return {
-              ...value,
-              mpn: mnp,
-              gtin: gitin,
-              // salla_value_id: value?.id,
-              //salla_value_id: optionValue?.id,
-            };
-          })
-        );
-
-        obj.salla_option_id = productOption?.id;
-        obj.values = values;
-      })
-    );
-    console.log(productResult.data.id);
-    const finalOptions = await Promise.all(
-      //@ts-ignore
-      jsonProduct.options.map(async (option: OptionType, idx: number) => {
-        const values = await Promise.all(
-          option.values.map(async (optionValue: any, i: number) => {
-            const variants =
-              (await allVaraint(productResult.data.id, token)) || [];
-            const variant = variants.find((item: any) =>
-              item.related_option_values?.includes(optionValue.salla_value_id)
-            );
-            const mnp = getRandomInt(100000000000000, 999999999999999);
-            const gitin = getRandomInt(10000000000000, 99999999999999);
-            const { price, quantity, mpn, gtin, sku, id, sku_id } = optionValue;
-            const barcode = [mnp, gitin].join("");
-            if (!variant) return optionValue;
-            let result = await UpdateProductVariant(
-              variant.id,
-              barcode,
-              price,
-              quantity,
-              mnp,
-              gitin,
-              sku_id,
-              access_token
-            );
-            if (!result) {
-              result = await UpdateProductVariant(
-                variant.id,
-                barcode,
-                price,
-                quantity,
-                mnp,
-                gitin,
-                sku_id,
-                access_token
-              );
-            }
-            return {
-              ...optionValue,
-              salla_variant_id: result?.data?.id,
-            };
-          })
-        );
-        return {
-          ...option,
-          values,
-        };
-      })
-    );
-    let aliexpressDoc = await AliExpressToken.findById(
-      req.user.aliExpressToken
-    );
-    let tokenData = {
-      aliExpressAccessToken: aliexpressDoc?.accessToken,
-      aliExpressRefreshToken: aliexpressDoc?.refreshToken,
-    };
-    product.options = finalOptions;
-    (async () =>
-      await updateVariantFinalOption(product, access_token, tokenData))().then(
-      async () => {
-        /*         if (subscription.products_limit)
-          subscription.products_limit = subscription.products_limit - 1; */
-        // await Promise.all([product.save(), subscription.save()]);
-        await product.save();
-        res.status(200).json({
-          message: "Product created successfully",
-          result: {
-            urls: productResult.data.urls || {},
-          },
-        });
-      }
-    );
   } catch (error: AxiosError | any) {
     const isAxiosError = error instanceof AxiosError;
     const values = error?.response?.data;
@@ -316,8 +173,8 @@ export const updateVariantFinalOption2 = async (
 ) => {
   const jsonProduct = product.toJSON();
   const data = await getProductVariants(product.salla_product_id, 1, token);
-  console.log(data.pagination.totalPages);
-  if (data.pagination.totalPages > 1) {
+  console.log(data?.pagination?.totalPages);
+  if (false) {
     for (let i = 0; i < data.pagination.totalPages; i++) {
       const vr = await getProductVariants(
         product.salla_product_id,
@@ -411,11 +268,13 @@ export const updateVariantFinalOption2 = async (
   } else {
     const variants = data.data.filter((e: any) => !e.sku);
 
-    console.log("variants", variants);
+    // console.log("variants", variants);
     let variantsIds = variants.map((el: any) => {
       return el.id;
     });
-    console.log("productsVariantsArr", product?.variantsArr);
+    console.log(variantsIds);
+    console.log(variantsIds.length);
+    // console.log("productsVariantsArr", product?.variantsArr);
 
     let { variantsArr, showDiscountPrice } = product;
     let promises = variantsArr.map((el, index) => {
@@ -459,131 +318,9 @@ export const updateVariantFinalOption2 = async (
     let results = await Promise.all(promises);
 
     results.forEach((result) => {
-      console.log(result.data);
+      console.log(result?.data);
     });
     return;
-    let newOptions = jsonProduct.options.map((option: OptionType) => {
-      const values = option.values.map((value: ValueType, index: number) => {
-        // console.log(value);
-
-        return {
-          ...value,
-          variantId: variants[index].id,
-        };
-      });
-      return { ...option, values };
-    });
-    /*  console.log("newOptions", newOptions);
-    console.log("variants", variants);
-    console.log("variants.length", variants.length); */
-    return;
-    console.log(variants);
-    console.log(variants.length);
-    if (!variants.length) return;
-    await Promise.all(
-      variants.map(async (variant: any) => {
-        if (!variant.sku) {
-          // console.log(product.id,variant.id)
-          const salla_option_ids = variant.related_option_values;
-          const values = await Promise.all(
-            jsonProduct.options.map(async (option: OptionType) => {
-              // console.log(option.values)
-              const value = option.values.find((val) =>
-                salla_option_ids.includes(val.salla_value_id)
-              );
-              return value;
-            })
-          );
-          console.log("values", values);
-          const getSkusId = async (values: any) => {
-            // console.log(values)
-            const skus = await getProductSkus(
-              product.original_product_id,
-              tokenData
-            );
-            // console.log("skus", skus);
-            const keyWords = values.map((val: any) => val.name);
-            // console.log("keyWords", keyWords);
-
-            await Promise.all(
-              skus.map(async (sku: any) => {
-                const skusOptions =
-                  sku.ae_sku_property_dtos.ae_sku_property_d_t_o;
-                const check =
-                  sku.ae_sku_property_dtos.ae_sku_property_d_t_o.filter(
-                    (property: any, idx: number) => {
-                      if (property.property_value_definition_name) {
-                        if (
-                          keyWords.includes(
-                            property.property_value_definition_name
-                          )
-                        )
-                          return property;
-                      } else {
-                        if (
-                          keyWords.includes(property.sku_property_value) ||
-                          property.sku_property_name === "Ships From"
-                        )
-                          return property;
-                      }
-                    }
-                  );
-                if (check.length === skusOptions.length) {
-                  const optionValue = values.find(
-                    (val: any) =>
-                      val.name === sku.id.split(";")[0].split("#")[1] ||
-                      val.sku === sku.id.split(";")[0]
-                  );
-                  const { price, quantity } = optionValue;
-                  /* console.log("hereerererereere");
-                  console.log("hereerererereere");
-                  console.log("hereerererereere");
-                  console.log("hereerererereere");
-                  console.log(price, quantity);
-                  console.log(price, quantity);
-                  console.log(price, quantity);
-                  console.log(price, quantity);
-                  console.log(optionValue);
-                  console.log(values);
-                  console.log("values", values); */
-
-                  let mnp = getRandomInt(100000000000000, 999999999999999);
-                  let gitin = getRandomInt(10000000000000, 99999999999999);
-                  let barcode = [mnp, gitin].join("");
-                  let result = await UpdateProductVariant(
-                    variant.id,
-                    barcode,
-                    price,
-                    quantity,
-                    mnp,
-                    gitin,
-                    sku.sku_id,
-                    token
-                  );
-                  while (!result) {
-                    mnp = getRandomInt(100000000000000, 999999999999999);
-                    gitin = getRandomInt(10000000000000, 99999999999999);
-                    barcode = [mnp, gitin].join("");
-                    result = await UpdateProductVariant(
-                      variant.id,
-                      barcode,
-                      price,
-                      quantity,
-                      mnp,
-                      gitin,
-                      sku.sku_id,
-                      token
-                    );
-                    console.log(result);
-                  }
-                }
-              })
-            );
-          };
-          await getSkusId(values);
-        }
-      })
-    );
   }
 };
 export const updateVariantFinalOption = async (
@@ -593,7 +330,7 @@ export const updateVariantFinalOption = async (
 ) => {
   const jsonProduct = product.toJSON();
   const data = await getProductVariants(product.salla_product_id, 1, token);
-  console.log(data.pagination.totalPages);
+  console.log(data?.pagination?.totalPages);
   if (data.pagination.totalPages > 1) {
     for (let i = 0; i < data.pagination.totalPages; i++) {
       const vr = await getProductVariants(
@@ -834,6 +571,62 @@ export async function LinkProductSalla2(
       }).exec();
     }  */
     console.log("reached this 2 ");
+    let noOptionsInProduct = false;
+    let bodyDataSalla = {
+      name: req.query.name || product.name,
+      price: product.price,
+      product_type: product.product_type,
+      quantity: product.quantity,
+      description: product.description,
+      cost_price: product.main_price,
+      require_shipping: product.require_shipping,
+      sku: product.sku,
+      images: product.images,
+      options: product.options,
+      metadata_title: product?.metadata_title,
+      metadata_description: product?.metadata_description,
+    };
+    if (!product.options[0].name) {
+      noOptionsInProduct = true;
+      let prodPrice = product.variantsArr[0].offer_sale_price;
+      console.log("no options hereeeeee");
+      let totalPrice = product?.vendor_commission * prodPrice + prodPrice;
+      if (!product.commissionPercentage) {
+        totalPrice = product?.vendor_commission + prodPrice;
+      }
+      bodyDataSalla = {
+        name: req.query.name || product.name,
+        price: totalPrice,
+        product_type: product.product_type,
+        quantity: product.variantsArr[0].sku_available_stock,
+        description: product.description,
+        cost_price: product.main_price,
+        require_shipping: product.require_shipping,
+        sku: product.sku,
+        images: product.images,
+
+        metadata_title: product?.metadata_title,
+        metadata_description: product?.metadata_description,
+      };
+      if (showDiscountPrice) {
+        let originalPrice = product.variantsArr[0].sku_price;
+        bodyDataSalla = {
+          name: req.query.name || product.name,
+          price: originalPrice,
+          sale_price: totalPrice,
+          product_type: product.product_type,
+          quantity: product.variantsArr[0].sku_available_stock,
+          description: product.description,
+          cost_price: product.main_price,
+          require_shipping: product.require_shipping,
+          sku: product.sku,
+          images: product.images,
+
+          metadata_title: product?.metadata_title,
+          metadata_description: product?.metadata_description,
+        };
+      }
+    }
     const options_1 = {
       method: "POST",
       url: "https://api.salla.dev/admin/v2/products",
@@ -842,30 +635,47 @@ export async function LinkProductSalla2(
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
-      data: {
-        name: req.query.name || product.name,
-        price: product.price,
-        product_type: product.product_type,
-        quantity: product.quantity,
-        description: product.description,
-        cost_price: product.main_price,
-        require_shipping: product.require_shipping,
-        sku: product.sku,
-        images: product.images,
-        options: product.options,
-        metadata_title: product?.metadata_title,
-        metadata_description: product?.metadata_description,
-      },
+      data: bodyDataSalla,
     };
-    const valuesStock = new Array().concat(
+    /*     const valuesStock = new Array().concat(
       ...jsonProduct.options.map((option: OptionType) => option.values)
     );
     if (valuesStock.length > 100)
-      throw new AppError("Values count should be smaller than 100", 400);
+      throw new AppError("Values count should be smaller than 100", 400); */
     console.log("here");
     console.log(product);
+    try {
+    } catch (err: any) {
+      console.log(err?.response?.status);
+      if (err?.response?.status === 401) {
+        // get new access token
+        RefreshTokenHandler(token);
+      }
+    }
+    let createdeProduct;
 
-    const { data: createdeProduct } = await axios.request(options_1);
+    try {
+      let { data } = await axios.request(options_1);
+      createdeProduct = data;
+    } catch (error: any) {
+      if (
+        error?.response?.data?.status === 401 &&
+        error?.response?.data?.error?.code === "Unauthorized"
+      ) {
+        // get new access tokens
+        console.log("heree");
+        console.log(req.headers["authorization"]);
+        let data = await RefreshTokenHandler(token, req.user.sallaToken);
+        console.log(data);
+      }
+    }
+    /* 
+    error?.response?.data
+{
+  status: 401,
+  success: false,
+  error: { code: 'Unauthorized', message: 'The access token is invalid' }
+}    */
     const opt = {
       method: "GET",
       url: `https://api.salla.dev/admin/v2/products/${createdeProduct.data.id}`,
@@ -879,7 +689,7 @@ export async function LinkProductSalla2(
     const { data: productResult } = await axios.request(opt);
     console.log(createdeProduct.data.id);
 
-    console.log(productResult.data.options[0].values);
+    // console.log(productResult.data.options[0].values);
     product.options = await Promise.all(
       jsonProduct.options.map(async (option: OptionType, index: number) => {
         let obj: OptionType = option;
@@ -922,7 +732,15 @@ export async function LinkProductSalla2(
 
     product.options = finalOptions;
     product.salla_product_id = productResult.data?.id;
-
+    if (noOptionsInProduct) {
+      await Promise.all([product.save()]);
+      return res.status(200).json({
+        message: "Product created successfully",
+        result: {
+          urls: productResult.data.urls || {},
+        },
+      });
+    }
     (async () =>
       await updateVariantFinalOption2(product, access_token, tokenData))().then(
       async () => {
@@ -940,6 +758,28 @@ export async function LinkProductSalla2(
     );
   } catch (error: AxiosError | any) {
     const isAxiosError = error instanceof AxiosError;
+
+    /* console.log(error);
+    console.log(error?.request?._header);
+    const headerString = error?.request?._header;
+    const match = headerString.match(/Authorization: Bearer (.*)\r\n/);
+    const token = match ? match[1] : null;
+    console.log(token);
+    console.log(error?.response?.status);
+    console.log(error?.response?.error);
+    console.log(error?.response);
+
+    console.log(
+      error?.response?.data?.status === 401 &&
+        error?.response?.data?.error?.code === "Unauthorized"
+    );
+    if (
+      error?.response?.data?.status === 401 &&
+      error?.response?.data?.error?.code === "Unauthorized"
+    ) {
+      // get new access tokens
+      RefreshTokenHandler(token);
+    } */
     const values = error?.response?.data;
     console.log(error?.response?.data);
     console.log(error?.response?.data?.error?.fields?.sku);
