@@ -118,6 +118,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     addToCart,
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+
   const [formValues, setFormValues] = useState<any>({ ProductName: "" });
   const [metadataTitle, setMetadataTitle] = useState("");
   const [metadataDesc, setMetadataDesc] = useState("");
@@ -170,21 +172,33 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       );
       setMetadataDesc(metadata_description);
       setMetadataTitle(metadata_title);
+      const newValues: any = {
+        prodName: product?.name,
+        SEOTitleText: metadata_title,
+        SEODescription: metadata_description,
+      };
+
+      // Use the setValue method to update the form fields
+      Object.keys(newValues).forEach((key: any) => {
+        form.setValue(key, newValues[key]);
+      });
+
       setFormValues((prevV: any) => {
         return { ...prevV, ProductName: product?.name };
       });
       let colorsOption = product?.options?.find(
         (option: any) =>
-          option.name.includes("Color") || option.name.includes("color")
+          option?.name?.includes("Color") || option?.name?.includes("color")
       );
 
       let materialsOption = product?.options?.find(
         (option: any) =>
-          option.name.includes("Material") || option.name.includes("material")
+          option?.name?.includes("Material") ||
+          option?.name?.includes("material")
       );
       let sizeOptions = product?.options?.find(
         (option: any) =>
-          option.name.includes("Size") || option.name.includes("size")
+          option?.name?.includes("Size") || option?.name?.includes("size")
       );
       setDescriptionField(product?.description);
       setChoosenColors(
@@ -262,24 +276,23 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   let inputClasses = `bg-[#edf5f9] text-[#253439] rounded-lg shadow`;
   const locale = useLocale();
   const formSchema = z.object({
-    prodName: z.string().min(2, invalidProdName).max(100),
-    SEOTitle: z.string().min(2, invalidSEOTitle).max(70),
-    SEODescription: z.string().min(2, invalidSEODescription).max(100),
-    description: z.string().min(2, invalidDescription).max(100),
+    prodName: z.string().min(2, invalidProdName).max(300),
+    SEOTitleText: z.string().min(2, invalidSEOTitle).max(70),
+    SEODescription: z.string().min(2, invalidSEODescription).max(70),
+    // description: z.string().min(2, invalidDescription).max(100),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      prodName: "",
-      SEOTitle: "",
-      SEODescription: "",
-      description: "",
+      prodName: formValues?.ProductName,
+      SEOTitleText: metadataTitle,
+      SEODescription: metadataDesc,
     },
   });
 
   const onSubmitHandler = async (data: z.infer<typeof formSchema>) => {
-    console.log(data.SEOTitle);
+    console.log(data.SEOTitleText);
     console.log(data);
     console.log(data);
     console.log(data);
@@ -380,24 +393,30 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       console.error(e);
     }
   };
+  const formSubmmitedHandler = () => {
+    buttonRef?.current?.click();
+  };
   const ProductEditHeaderProps = {
     uploadProduct,
     addToCart,
     addToCartHandler,
-    uploadProductHandler: onSubmitHandler,
+    uploadProductHandler: formSubmmitedHandler,
   };
   return (
     <>
       <ProductEditHeader {...ProductEditHeaderProps} />
-      <div className="bg-white rounded-lg shadow container p-6 lap:flex min-w-full justify-between  ">
+      <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  ">
         <ProductImageRenderer product={product} />
         <div className="flex flex-col min-w-[55%]">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmitHandler)}
-              className="flex flex-col bg-[#F7F5F2] rounded-lg shadow-lg p-8 space-y-4  "
+              className="flex flex-col bg-[#F7F5F2] rounded-lg shadow-lg tab:p-8 space-y-4  "
               dir={locale === "ar" ? "rtl" : "ltr"}
             >
+              <button type="submit" ref={buttonRef} className="hidden">
+                Submit
+              </button>
               <ProductInfoDetails {...productInfoProps} />
 
               <div className="flex items-center space-s-2">
@@ -409,25 +428,31 @@ export default function ProductEditForm(props: ProductEditFormProps) {
               <Separator />
               <div className="flex flex-col min-w-full">
                 <span>{piecePrice}</span>
-                <div className="grid grid-cols-2 gap-4   my-4 min-w-full">
-                  <span className="col-span-2">{originalPrice}</span>
+                <div className="grid grid-rows-3 grid-cols-1 tab:grid-cols-2  tab:gap-4   my-4 min-w-full">
+                  <span className="tab:col-span-2">{originalPrice}</span>
                   <Input
                     className={`shadow-sm text-sm md:text-base bg-[#edf5f9] ${inputClasses} `}
                     value={product?.target_original_price}
                   />{" "}
                   <RadioGroup
                     defaultValue="shippingIncluded"
-                    className="!flex space-s-3 w-full"
+                    className="!flex flex-col tab:flex-row  tab:space-s-3 w-full"
                   >
-                    <div className="flex items-center space-x-2 bg-[#edf5f9] p-2 rounded-md">
+                    <div className="flex items-center space-x-2  bg-[#edf5f9] p-2 rounded-md">
                       <RadioGroupItem value="withoutShipping" id="r1" />
-                      <Label className="whitespace-nowrap " htmlFor="r1">
+                      <Label
+                        className="whitespace-nowrap  text-xs mm:text-sm ml:text-md tab:text-lg"
+                        htmlFor="r1"
+                      >
                         {withoutShipping}
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2 bg-[#edf5f9] p-2 rounded-md">
                       <RadioGroupItem value="shippingIncluded" id="r2" />
-                      <Label className="whitespace-nowrap" htmlFor="r2">
+                      <Label
+                        className="whitespace-nowrap text-xs mm:text-sm ml:text-md tab:text-lg"
+                        htmlFor="r2"
+                      >
                         {shippingIncluded}
                       </Label>
                     </div>
