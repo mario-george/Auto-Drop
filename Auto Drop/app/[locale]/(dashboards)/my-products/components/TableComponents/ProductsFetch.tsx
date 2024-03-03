@@ -5,7 +5,7 @@ import ColsExtract from "./ColumnsExtractor";
 
 export default function ProductsFetch(props: any) {
   const [myProducts, setMyProducts] = useState([]);
-  const [loadProducts,setLoadProducts ] = useState(false);
+  const [loadProducts, setLoadProducts] = useState(false);
 
   useEffect(() => {
     const getMyProductsData = async () => {
@@ -39,7 +39,7 @@ export default function ProductsFetch(props: any) {
   return (
     <>
       {" "}
-      <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex bg-white">
+      <div className=" tableContainer">
         <ColsExtract
           {...props}
           myProducts={myProducts}
