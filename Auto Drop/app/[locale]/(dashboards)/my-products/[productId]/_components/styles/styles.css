@@ -23,3 +23,10 @@
 .shippingCardPriceActive {
   @apply text-[#F4B1AC] rounded-lg text-sm md:text-base;
 }
+.productEditContainer{
+  @apply text-xs tab:text-lg max-w-[240px] rounded-lg mm:max-w-[290px]  ml:max-w-[335px]   tab:max-w-[680px]    md:space-y-8 md:p-8 max-h-[100%] overflow-y-auto lap:max-w-none
+}
+
+.HeaderContainer {
+  @apply flex flex-col tab:flex-row space-y-3 tab:space-y-0 tab:space-s-3 py-3
+}
