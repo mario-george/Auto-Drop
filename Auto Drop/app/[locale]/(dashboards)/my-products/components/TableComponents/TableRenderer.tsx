@@ -5,7 +5,7 @@ import Cols from "./components/columns";
 import { DataTable } from "./components/data-table";
 import ColsExtract from "./ColumnsExtractor";
 import axiosInstance from "../../../_components/shared/AxiosInstance";
-import ProductsFetch from './ProductsFetch'
+import ProductsFetch from "./ProductsFetch";
 // Simulate a database read for tasks.
 async function getMyProducts() {
   /* const data = await fs.readFile(
@@ -27,7 +27,8 @@ interface myProductProps {
   unAvProd: string;
   unUpProd: string;
   price: string;
-  locale: string;apply:string
+  locale: string;
+  apply: string;
 }
 export default async function TaskPage(props: myProductProps) {
   const getMyProductsData = async () => {
@@ -37,12 +38,11 @@ export default async function TaskPage(props: myProductProps) {
   const myProducts: any = [];
   return (
     <>
-    <ProductsFetch {...props}>
-      <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex bg-white">
+      <ProductsFetch {...props}>
+        {/*       <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex bg-white">
         <ColsExtract {...props} myProducts={myProducts} />
-      </div>
-    </ProductsFetch>
-
+      </div> */}
+      </ProductsFetch>
     </>
   );
 }
