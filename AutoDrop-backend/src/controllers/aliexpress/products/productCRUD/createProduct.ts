@@ -43,11 +43,14 @@ export async function CreateAndSaveProduct(
 ) {
   try {
     const { role, _id } = req.user;
-const {  first_level_category_name,
-  second_level_category_name,
-  target_sale_price,
-  target_original_price,variantsArr} = req.body 
-console.log(req.body.variantsArr)
+    const {
+      first_level_category_name,
+      second_level_category_name,
+      target_sale_price,
+      target_original_price,
+      variantsArr,
+    } = req.body;
+    console.log(req.body.variantsArr);
     let {
       merchant,
       vendor_commission,
@@ -85,10 +88,12 @@ console.log(req.body.variantsArr)
       main_price,
       merchant: role === "client" ? _id : merchant,
       sku_id: req.body.sku_id,
-      vat: req.body?.vat && true, first_level_category_name,
+      vat: req.body?.vat && true,
+      first_level_category_name,
       second_level_category_name,
       target_sale_price,
-      target_original_price,variantsArr
+      target_original_price,
+      variantsArr,
     });
 
     const vendor_price = parseFloat(
@@ -124,12 +129,12 @@ console.log(req.body.variantsArr)
     product.category_name = category_name;
     product.category_id = category_id;
     const jsonProduct = product.toJSON();
-    const valuesStock = new Array().concat(
+    /*     const valuesStock = new Array().concat(
       //@ts-ignore
       ...jsonProduct.options?.map((option: any) => option.values)
-    );
-    if (valuesStock.length > 100)
-      throw new AppError("Values count should be smaller than 100", 400);
+    ); */
+    /*     if (valuesStock.length > 100)
+      throw new AppError("Values count should be smaller than 100", 400); */
     await product.save();
     res.status(201).json({ product, success: true });
 
