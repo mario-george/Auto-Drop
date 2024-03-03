@@ -17,16 +17,18 @@ export default function ProductInfoDetails({
   inputClasses,
   prodNameTitle,
   sku,
-  setErrorMsg,formValues,setFormValues
+  setErrorMsg,
+  formValues,
+  setFormValues,
 }: any) {
   return (
     <div>
-      <div className="md:flex md:justify-between md:gap-5 items-center mb-3">
+      <div className="flex flex-col space-y-5 tab:flex-row tab:justify-between md:gap-5 items-center mb-3">
         <FormField
           control={form.control}
           name="prodName"
           render={({ field }) => (
-            <FormItem className="basis-1/2">
+            <FormItem className="">
               <FormLabel className=" text-sm md:text-base">
                 {prodNameTitle}
               </FormLabel>
@@ -34,23 +36,16 @@ export default function ProductInfoDetails({
                 <Input
                   placeholder={prodNameTitlePlaceholder}
                   {...field}
-                  id="firstName"
+                  id="prodName"
                   className={`shadow-sm text-sm md:text-base ${inputClasses} `}
                   onFocus={() => setErrorMsg(null)}
-                  value={formValues.ProductName}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    console.log(e.target.value);
-                    setFormValues((prevVals: any) => {
-                      return { ...prevVals, ProductName: e.target.value };
-                    });
-                  }}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div className="flex flex-col md:gap-2">
+        <div className="flex flex-col gap-2 md:gap-2">
           <div>{sku}</div>
           <div>
             <Input
