@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import ToastProvider from "@/components/toast-provider";
 import StoreProvider from "@/store/providers";
 import { Providers } from "../../components/chakra-ui/providers";
-
+import NextTopLoader from 'nextjs-toploader'
 export const metadata: Metadata = {
   generator: "Next.js",
   applicationName: "Auto Drop",
@@ -57,6 +57,7 @@ export default function LocaleLayout({
           locale === "en" ? inter.className : cairo.className
         )}
       >
+        <NextTopLoader/>
         <StoreProvider>
           <ToastProvider />
           <Providers>{children}</Providers>
