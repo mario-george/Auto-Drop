@@ -17,16 +17,15 @@ export default function ProductOptions({
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-4 p-3">
+      <div className="grid grid-cols-1 ml:grid-cols-2 tab:grid-cols-3 gap-2 tab:gap-4 p-1 tab:p-3">
         {options &&
           options.map((option: any) => {
-            console.log(option.name);
-            console.log(option.name.includes("Color"));
+    
             return (
               <>
-                {option.name.includes("Color") ? (
+                {option?.name?.includes("Color") ? (
                   <>
-                    <span className="text-xl font-semibold col-span-3">
+                    <span className="text-xl font-semibold ml:col-span-2 tab:col-span-3">
                       {option.name}
                     </span>
                     {option.values.map((el: any, i: number) => {
@@ -62,13 +61,13 @@ export default function ProductOptions({
                 ) : (
                   <></>
                 )}
-                {option.name.includes("Size") ? (
+                {option?.name?.includes("Size") ? (
                   <>
-                    <span className="text-xl font-semibold col-span-3"> {option.name}</span>
+                    <span className="text-xl font-semibold ml:col-span-2 tab:col-span-3"> {option.name}</span>
                     {option.values.map((el: any,i:number) => {
                       return (
                         <div key={el.id}>
-                          <div className="sizeBox max-w-[50%]">
+                          <div className="sizeBox w-fit">
                             <Checkbox
                                       isChecked={choosenSizes[i]}
                                 onChange={() => {
@@ -91,7 +90,7 @@ export default function ProductOptions({
                 ) : (
                   <></>
                 )}
-                {option.name.includes("Material") ? (
+                {option?.name?.includes("Material") ? (
                   <>
                     <span className="text-xl font-semibold col-span-3"> {option.name}</span>
                     {option.values.map((el: any,i:number) => {
