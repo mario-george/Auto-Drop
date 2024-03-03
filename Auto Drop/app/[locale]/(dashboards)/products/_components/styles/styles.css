@@ -1,0 +1,15 @@
+.productsContainer {
+  @apply text-xs tab:text-lg max-w-[240px] rounded-lg mm:max-w-[290px]  ml:max-w-[335px]   tab:max-w-[680px]    md:space-y-8 md:p-8 max-h-[100%] overflow-y-auto lap:max-w-none;
+}
+.HeaderContainer {
+  @apply flex flex-col tab:flex-row space-y-3 tab:space-y-0 tab:space-s-3 py-3;
+}
+.InnerHeader{
+    @apply bg-white rounded-lg shadow justify-between px-2 py-2 flex flex-col tab:flex-row items-center
+}
+.InnerHeaderContainer{
+    @apply tab:px-2 tab:py-2 flex flex-col tab:flex-row items-center tab:space-s-3 space-y-3 tab:space-y-0
+}
+.InnerHeaderContainerStores{
+    @apply tab:px-2 tab:py-2 flex  items-center space-s-3
+}
