@@ -31,38 +31,63 @@ export default function ProductSEOInfo({
       >
         <FormField
           control={form.control}
-          name="SEOTitle"
+          name="SEOTitleText"
           render={({ field }) => (
             <FormItem className="basis-1/2">
               <FormLabel className="shadow-sm text-sm md:text-base">
                 {SEOTitle}
               </FormLabel>
               <FormControl>
-                <Textarea className={`inputField `} {...field} id="SEOTitle" />
+                <Textarea
+                  className={`inputField `}
+                  {...field}
+                  id="SEOTitleText"
+                  // value={metadataTitle}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div>{SEOTitle}</div>
+        <FormField
+          control={form.control}
+          name="SEODescription"
+          render={({ field }) => (
+            <FormItem className="basis-1/2">
+              <FormLabel className="shadow-sm text-sm md:text-base">
+                {SEODescription}
+              </FormLabel>
+              <FormControl>
+                <Textarea
+                  className={`inputField `}
+                  {...field}
+                  id="SEODescription"
+                  // value={metadataDesc}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/*   <div>{SEOTitle}</div>
         <Textarea
           className={`inputField `}
           value={metadataTitle}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
             setMetadataTitle(e.target.value);
           }}
-        />
-        <div>{SEODescription}</div>
+        /> */}
+    {/*     <div>{SEODescription}</div>
         <Textarea
           className={`inputField `}
           value={metadataDesc}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
             setMetadataDesc(e.target.value);
           }}
-        />
-        <div className="flex flex-col">
+        /> */}
+       {/*  <div className="flex flex-col">
           <div></div>
-        </div>
+        </div> */}
       </div>
       <Separator />
     </div>
