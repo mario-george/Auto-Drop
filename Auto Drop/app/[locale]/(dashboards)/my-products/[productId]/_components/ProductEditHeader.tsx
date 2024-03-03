@@ -7,7 +7,7 @@ export default function ProductEditHeader({ uploadProduct, addToCart,addToCartHa
 
   return (
     <>
-    <div className="flex space-s-3 py-3">
+    <div className="HeaderContainer">
 
       <Button
         className="bg-[#40a58d] text-white"
