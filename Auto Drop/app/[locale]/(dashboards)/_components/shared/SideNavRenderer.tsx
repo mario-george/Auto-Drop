@@ -150,7 +150,7 @@ export default function SideNavRenderer({
         <nav className="flex flex-col justify-between ">
           {isSmallScreen ? (
             <>
-              <ScrollArea className="h-[150vw]">
+              <ScrollArea className="h-[170vw]">
                 <div className="z-[9999999]" dir={isAr ? "rtl" : "ltr"}>
                   <NavComponent
                     iconData={iconData}
