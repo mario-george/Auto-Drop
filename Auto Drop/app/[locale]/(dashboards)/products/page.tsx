@@ -3,13 +3,15 @@ import React from "react";
 
 import ProductsRenderer from "./_components/ProductsRenderer";
 import MotionWrapper from "../_components/shared/MotionWrapper";
+
+import './_components/styles/styles.css'
 export default function Page() {
   const t = useTranslations("productsPage");
   const locale = useLocale();
   return (
     <>
       <MotionWrapper locale={locale}>
-        <div className="px-3">
+        <div className="px-3 productsContainer">
           <ProductsRenderer
             locale={locale}
             categories={t("categories")}
