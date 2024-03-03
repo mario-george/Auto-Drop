@@ -50,7 +50,7 @@ export default function ProductCategoriesTags({
               });
             }}
           >
-            <SelectTrigger className="mt-3 max-w-[90%] bg-[#edf5f9] text-black text-right">
+            <SelectTrigger className="mt-3 max-w-[90%] bg-[#edf5f9] text-black text-right text-xs mm:text-sm ml:text-md tab:text-lg">
               <SelectValue placeholder={category} />
             </SelectTrigger>
             <SelectContent>
@@ -62,7 +62,7 @@ export default function ProductCategoriesTags({
                     <SelectItem
                       key={category.id}
                       value={category.name}
-                      className="z-[50] relative"
+                      className="z-[50] relative text-xs mm:text-sm ml:text-md tab:text-lg"
                     >
                       {category.name}
                     </SelectItem>
