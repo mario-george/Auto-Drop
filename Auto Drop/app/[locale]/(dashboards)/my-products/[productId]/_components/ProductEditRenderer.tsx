@@ -73,8 +73,8 @@ export default function ProductEditRenderer(props: {
 
   return (
     <div>
-      <MotionWrapperExit locale={locale} mdClasses="px-3 my-3">
-        <div className="">
+      <MotionWrapperExit locale={locale} mdClasses=" my-3">
+        <div className="productEditContainer">
           <ProductEditForm {...props} product={product} />
         </div>
       </MotionWrapperExit>
