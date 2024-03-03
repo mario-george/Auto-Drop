@@ -129,12 +129,12 @@ export async function CreateProductController(
     };
 
     const jsonProduct = product.toJSON();
-    const valuesStock = new Array().concat(
+    /*     const valuesStock = new Array().concat(
       //@ts-ignore
       ...jsonProduct.options?.map((option: any) => option.values)
     );
     if (valuesStock.length > 100)
-      throw new AppError("Values count should be smaller than 100", 400);
+      throw new AppError("Values count should be smaller than 100", 400); */
 
     const { data: productResult } = await axios.request(options_1);
     product.salla_product_id = productResult.data?.id;
@@ -516,12 +516,12 @@ export async function CreateProductControllerOld(
 
     const jsonProduct = product.toJSON();
     console.log(token);
-    const valuesStock = new Array().concat(
+    /*     const valuesStock = new Array().concat(
       //@ts-ignore
       ...jsonProduct.options?.map((option: any) => option.values)
     );
     if (valuesStock.length > 100)
-      throw new AppError("Values count should be smaller than 100", 400);
+      throw new AppError("Values count should be smaller than 100", 400); */
 
     const { data: productResult } = await axios.request(options_1);
     // console.log(productResult);
@@ -654,11 +654,11 @@ export const getProductVariants = async (
   console.log("access_token", access_token);
   console.log("access_token", access_token);
   console.log("id", id);
-  console.log("pages", pages);
+  // console.log("pages", pages);
 
   const options = {
     method: "GET",
-    url: `https://api.salla.dev/admin/v2/products/${id}/variants?page=${pages}`,
+    url: `https://api.salla.dev/admin/v2/products/${id}/variants`,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -742,7 +742,8 @@ export const UpdateProductVariantSale = async (
   mpn,
   gtin,
   sku,
-  token,sale_price
+  token,
+  sale_price
 ) => {
   const options = {
     method: "PUT",
@@ -751,7 +752,8 @@ export const UpdateProductVariantSale = async (
       sku,
       barcode,
       price,
-      stock_quantity,sale_price
+      stock_quantity,
+      sale_price,
     },
     headers: {
       "Content-Type": "application/json",
@@ -764,7 +766,8 @@ export const UpdateProductVariantSale = async (
       price,
       stock_quantity,
       mpn,
-      gtin,sale_price
+      gtin,
+      sale_price,
     },
   };
   try {
@@ -1033,7 +1036,7 @@ export const getProductSkus = async (
           );
         });
       //
-   /*    console.log(chinaShippedProducts);
+      /*    console.log(chinaShippedProducts);
       console.log(result.ae_item_sku_info_dtos.ae_item_sku_info_d_t_o); */
       // console.log(result);
       // return uniqBy(chinaShippedProducts, "sku_id");
