@@ -290,7 +290,8 @@ export const updateVariantFinalOption2 = async (
       if (product?.vendor_commission && !product?.commissionPercentage) {
         price = parseFloat(price) + product?.vendor_commission;
       } else if (product?.vendor_commission && product?.commissionPercentage) {
-        price = product?.vendor_commission * parseFloat(price) + parseFloat(price);
+        price =
+          product?.vendor_commission * parseFloat(price) + parseFloat(price);
       }
       let mnp = getRandomInt(100000000000000, 999999999999999);
       let gitin = getRandomInt(10000000000000, 99999999999999);
@@ -595,7 +596,7 @@ export async function LinkProductSalla2(
 
     if (!product?.options[0]?.name) {
       noOptionsInProduct = true;
-      let prodPrice = product.variantsArr[0].offer_sale_price;
+      let prodPrice = parseFloat(product.variantsArr[0].offer_sale_price);
       console.log("no options hereeeeee");
       let totalPrice = product?.vendor_commission * prodPrice + prodPrice;
       if (!product.commissionPercentage) {
@@ -647,7 +648,7 @@ export async function LinkProductSalla2(
     };
 
     console.log("here");
-    console.log(product);
+    // console.log(product);
     /* try {
     } catch (err: any) {
       console.log(err?.response?.status);

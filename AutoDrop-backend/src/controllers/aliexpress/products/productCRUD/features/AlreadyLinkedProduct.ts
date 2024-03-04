@@ -61,6 +61,8 @@ export const ProductSallaChecker = async (
     let status = err?.response?.data?.status;
     let success = err?.response?.data?.success;
     let errorFieldSku = err?.response?.data?.error?.fields?.sku;
+    let priceErr = err?.response?.data?.error?.fields?.price;
+    console.log(priceErr);
     console.log(status);
     console.log(success);
     console.log(errorFieldSku);
