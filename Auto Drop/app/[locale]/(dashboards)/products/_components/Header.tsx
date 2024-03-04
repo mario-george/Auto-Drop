@@ -14,7 +14,7 @@ export default function Header({
     <div className="text-2xl my-3">{shops}</div>
     <div className="HeaderContainer">
 
-      <div className="InnerHeader">
+      <div className="InnerHeader tab:min-w-full ">
         <div className="InnerHeaderContainerStores ">
           <div className={isActive === "amazon" ? isActiveClasses : ""}>
             <Image
