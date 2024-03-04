@@ -608,7 +608,7 @@ export async function LinkProductSalla2(
         metadata_title: product?.metadata_title,
         metadata_description: product?.metadata_description,
       };
-      if (showDiscountPrice) {
+      if (product?.showDiscountPrice) {
         let originalPrice = product.variantsArr[0].sku_price;
         bodyDataSalla = {
           name: req.query.name || product.name,
