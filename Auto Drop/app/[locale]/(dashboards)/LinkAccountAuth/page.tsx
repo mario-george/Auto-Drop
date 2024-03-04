@@ -44,9 +44,9 @@ const TokenExtractor: React.FC = () => {
           }
         ); */
 
-        if (resp.status >= 200 && resp.status < 300)  {
+      /*   if (resp.status >= 200 && resp.status < 300)  {
           throw new Error("Network response was not ok");
-        }
+        } */
 
         const data = resp
         console.log("tokenType", tokenType);
