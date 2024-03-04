@@ -41,6 +41,8 @@ import ProductInfoDetails from "./ui/ProductInfoDetails";
 import ProductPriceDetails from "./ui/ProductPriceDetails";
 import ProductSEOInfo from "./ui/ProductSEOInfo";
 import Editor from "./ui/Editor";
+import ProductShipping from "./ui/ProductShipping";
+import useLoader from "@/components/loader/useLoader";
 interface ProductEditFormProps {
   prodNameTitle: string;
   prodNameTitlePlaceholder: string;
@@ -116,10 +118,12 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     offerPrice,
     uploadProduct,
     addToCart,
+    nameOfShippingComp,
+    durationToDeliver,
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-
+  const { setLoading, LoaderComponent } = useLoader();
   const [formValues, setFormValues] = useState<any>({ ProductName: "" });
   const [metadataTitle, setMetadataTitle] = useState("");
   const [metadataDesc, setMetadataDesc] = useState("");
@@ -293,6 +297,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   });
 
   const onSubmitHandler = async (data: z.infer<typeof formSchema>) => {
+    setLoading(true);
     console.log(data.SEOTitleText);
     console.log(data);
     console.log(data);
@@ -353,6 +358,12 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     setChoosenMaterials,
     choosenMaterials,
   };
+  let ProductShippingProps = {
+    shipping: product?.shipping,
+    shippingText: shipping,
+    nameOfShippingComp,
+    durationToDeliver,
+  };
   const ProductCategoriesTagsProps = {
     category,
     tag,
@@ -392,6 +403,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       }
     } catch (e: any) {
       console.error(e);
+    } finally {
+      setLoading(false);
     }
   };
   const formSubmmitedHandler = () => {
@@ -405,6 +418,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   };
   return (
     <>
+      {LoaderComponent}
       <ProductEditHeader {...ProductEditHeaderProps} />
       <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  ">
         <ProductImageRenderer product={product} />
@@ -506,6 +520,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                 <ProductSEOInfo {...ProductSEOInfoProps} />
 
                 <ProductOptions {...ProductOptionsProps} />
+                <ProductShipping {...ProductShippingProps} />
                 <div className="form-group">
                   <label className="form-label">Description</label>
                   <Editor
