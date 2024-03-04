@@ -661,12 +661,15 @@ export async function LinkProductSalla2(
 
     // let { data: createdeProduct } = await axios.request(options_1);
 
-    let createdeProduct = ProductSallaChecker(
+    let createdeProduct = await ProductSallaChecker(
       options_1,
       product?.sku,
       token,
+      req,
+      res,
       next
     );
+    console.log(createdeProduct);
     /*    try {
       createdeProduct = data;
     } catch (error: any) {
@@ -761,7 +764,7 @@ export async function LinkProductSalla2(
           subscription.products_limit = subscription.products_limit - 1; */
         // await Promise.all([product.save(), subscription.save()]);
         await Promise.all([product.save()]);
-        res.status(200).json({
+        return res.status(200).json({
           message: "Product created successfully",
           result: {
             urls: productResult.data.urls || {},

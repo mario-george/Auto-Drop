@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
-import { NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import AppError from "../../../../../utils/appError";
+import { LinkProductSalla2 } from "../LinkProduct";
 
 export default async function AlreadyLinkedProduct(
   sku?: string,
@@ -27,7 +28,8 @@ export default async function AlreadyLinkedProduct(
     console.log(skuResp?.status);
     // console.log(skuResp?.code)
     console.log(skuResp?.data?.code);
-    if (status === 202 && success && dataCode === 200) {
+    console.log(success);
+    if (success) {
       return true;
     } else {
       return false;
@@ -44,6 +46,8 @@ export const ProductSallaChecker = async (
   optionsObj: any,
   sku?: string,
   token?: string,
+  req?: Request & any,
+  res?: Response,
   next?: NextFunction
 ) => {
   console.log(optionsObj);
@@ -70,8 +74,19 @@ export const ProductSallaChecker = async (
     ) {
       console.log("SKU is already linked to a product on Salla");
       let successFullUnLink = await AlreadyLinkedProduct(sku, token, next);
-      if (successFullUnLink) return;
-
+      console.log("1111");
+      console.log(successFullUnLink);
+      if (successFullUnLink) {
+        // Call LinkProductSalla2 again
+        console.log("2222");
+        if (res && next) {
+          await LinkProductSalla2(req, res, next);
+        } else {
+          // Handle the case where res is undefined
+          console.error("res/next is undefined");
+        }
+        return;
+      }
       return;
     }
     throw new AppError("sku already linked to a product on Salla", 400);
