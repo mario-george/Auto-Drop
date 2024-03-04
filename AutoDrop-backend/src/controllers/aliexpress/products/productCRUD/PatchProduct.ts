@@ -61,6 +61,7 @@ const PatchProduct = catchAsync(
     product.commissionPercentage = commissionPercentage;
     product.showDiscountPrice = showDiscountPrice;
     product.vendor_commission = vendor_commission;
+    product.commissionPercentage = commissionPercentage;
 
     // console.log(product);
     await product.save();

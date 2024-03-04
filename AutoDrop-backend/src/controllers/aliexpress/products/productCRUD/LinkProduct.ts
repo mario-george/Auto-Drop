@@ -286,12 +286,15 @@ export const updateVariantFinalOption2 = async (
         sku_id,
         sku_price: oldPrice,
       } = el;
-
+      console.log(
+        "product?.commissionPercentage",
+        product?.commissionPercentage
+      );
       if (product?.vendor_commission && !product?.commissionPercentage) {
         price = parseFloat(price) + product?.vendor_commission;
       } else if (product?.vendor_commission && product?.commissionPercentage) {
         price =
-          product?.vendor_commission * parseFloat(price) + parseFloat(price);
+          (product?.vendor_commission /100)* parseFloat(price) + parseFloat(price);
       }
       let mnp = getRandomInt(100000000000000, 999999999999999);
       let gitin = getRandomInt(10000000000000, 99999999999999);
@@ -553,7 +556,6 @@ export async function LinkProductSalla2(
     console.log("reached this 1 ");
 
     const { role, _id } = req.user;
-
     let { productId } = req.body;
     let product: any = await Product.findById(productId);
     const sallaTokenDocument = await SallaToken.findOne({
@@ -598,7 +600,7 @@ export async function LinkProductSalla2(
       noOptionsInProduct = true;
       let prodPrice = parseFloat(product.variantsArr[0].offer_sale_price);
       console.log("no options hereeeeee");
-      let totalPrice = product?.vendor_commission * prodPrice + prodPrice;
+      let totalPrice = (product?.vendor_commission/100) * prodPrice + prodPrice;
       if (!product.commissionPercentage) {
         totalPrice = product?.vendor_commission + prodPrice;
       }

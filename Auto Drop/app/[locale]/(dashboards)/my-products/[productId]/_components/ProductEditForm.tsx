@@ -304,7 +304,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     console.log(data);
     setIsLoading(true);
     try {
-      uploadProductHandler();
+      uploadProductHandler(data);
     } catch (err: any) {
       setError(err.response.data.message);
     } finally {
@@ -373,20 +373,26 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     locale,
   };
   let addToCartHandler = () => {};
-  let uploadProductHandler = async () => {
+  let uploadProductHandler = async (dataForm: any) => {
     try {
       let profitChoosenTypeName = "number";
+      console.log("percentage",percentage)
+      console.log("profitChoosenType==percentage",profitChoosenType==percentage)
+      console.log('profitChoosenType',profitChoosenType)
       let commissionPercentage = false;
-      if (profitChoosenType == percentage) {
+      if (profitChoosenType == percentage|| profitChoosenType == 'percentage') {
         profitChoosenTypeName = "percentage";
         commissionPercentage = true;
       }
-
+      console.log("dataForm?.SEOTitleText", dataForm?.SEOTitleText);
+      console.log("dataForm?.prodName", dataForm?.prodName);
+      console.log("dataForm?.SEODescription", dataForm?.SEODescription);
+      console.log("commissionPercentage", commissionPercentage);
       let data = {
-        name: formValues.ProductName,
+        name: dataForm.prodName,
         vendor_commission: commissionVal,
-        metadata_description: metadataDesc,
-        metadata_title: metadataTitle,
+        metadata_description: dataForm?.SEODescription,
+        metadata_title: dataForm?.SEOTitleText,
         description: descriptionField,
         profitChoosenTypeName,
         commissionPercentage,
