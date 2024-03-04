@@ -50,21 +50,24 @@ const TokenExtractor: React.FC = () => {
 
         const data = resp;
         console.log("tokenType", tokenType);
-        console.log("data.sallaToken", resp?.data?.user?.sallaToken);
-        console.log("data.aliExpressToken", resp?.data?.user?.aliExpressToken);
+        console.log("data.sallaToken", resp?.data?.data?.user?.sallaToken);
+        console.log(
+          "data.aliExpressToken",
+          resp?.data?.data?.user?.aliExpressToken
+        );
         console.log("data", data);
         if (tokenType === "Salla") {
           dispatch(
             userActions.updateToken({
               tokenType: "Salla",
-              token: data.data.user.sallaToken,
+              token: resp?.data?.data?.user?.sallaToken,
             })
           );
         } else if (tokenType === "AliExpress") {
           dispatch(
             userActions.updateToken({
               tokenType: "AliExpress",
-              token: data.data.user.aliExpressToken,
+              token: resp?.data?.data?.user?.aliExpressToken,
             })
           );
         }
