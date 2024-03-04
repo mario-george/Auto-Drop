@@ -592,7 +592,8 @@ export async function LinkProductSalla2(
       metadata_title: product?.metadata_title,
       metadata_description: product?.metadata_description,
     };
-    if (!product.options[0].name) {
+    
+    if (!product?.options[0]?.name) {
       noOptionsInProduct = true;
       let prodPrice = product.variantsArr[0].offer_sale_price;
       console.log("no options hereeeeee");
@@ -615,6 +616,7 @@ export async function LinkProductSalla2(
         metadata_description: product?.metadata_description,
       };
       if (product?.showDiscountPrice) {
+        console.log("product?.showDiscountPrice",product?.showDiscountPrice)
         let originalPrice = product.variantsArr[0].sku_price;
         bodyDataSalla = {
           name: req.query.name || product.name,
