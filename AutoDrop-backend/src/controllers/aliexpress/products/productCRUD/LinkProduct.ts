@@ -288,11 +288,10 @@ export const updateVariantFinalOption2 = async (
       } = el;
 
       if (product?.vendor_commission && !product?.commissionPercentage) {
-        price += product?.vendor_commission;
+        price = parseFloat(price) + product?.vendor_commission;
       } else if (product?.vendor_commission && product?.commissionPercentage) {
-        price = product?.vendor_commission * price + price;
+        price = product?.vendor_commission * parseFloat(price) + parseFloat(price);
       }
-
       let mnp = getRandomInt(100000000000000, 999999999999999);
       let gitin = getRandomInt(10000000000000, 99999999999999);
       let barcode = [mnp, gitin].join("");
@@ -799,6 +798,7 @@ export async function LinkProductSalla2(
     const values = error?.response?.data;
     console.log(error?.response?.data);
     console.log(error?.response?.data?.error?.fields?.sku);
+    console.log(error?.response?.data?.error?.fields?.price);
     console.log(
       error?.response?.data?.error?.fields?.visibility_condition_type
     );
