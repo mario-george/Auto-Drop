@@ -286,6 +286,12 @@ export const updateVariantFinalOption2 = async (
         sku_price: oldPrice,
       } = el;
 
+      if (product?.vendor_commission && !product?.commissionPercentage) {
+        price += product?.vendor_commission;
+      } else if (product?.vendor_commission && product?.commissionPercentage) {
+        price = product?.vendor_commission * price + price;
+      }
+
       let mnp = getRandomInt(100000000000000, 999999999999999);
       let gitin = getRandomInt(10000000000000, 99999999999999);
       let barcode = [mnp, gitin].join("");
