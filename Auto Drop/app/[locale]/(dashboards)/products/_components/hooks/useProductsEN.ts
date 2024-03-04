@@ -180,6 +180,7 @@ export default function useProducts({
         });
       });
     }
+   
     setProductsShippingInfo((productsShipping) => {
       return productsShipping.map((shipping, shippingIndex) => {
         if (shippingIndex === index) {

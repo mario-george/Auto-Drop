@@ -30,6 +30,10 @@ export default function SubmitProducts({
   let submitHandler = async () => {
     setLoading(true);
     console.log(toBeSentProductsArr);
+    console.log(toBeSentProductsArr);
+    console.log(toBeSentProductsArr);
+    console.log(toBeSentProductsArr);
+    console.log(toBeSentProductsArr);
     const promises = toBeSentProductsArr.map((prod: any) => {
       let {
         first_level_category_name,
@@ -76,9 +80,15 @@ export default function SubmitProducts({
             ((Number(toBeSentProductsArr[index].vendor_commission) || 0) / 100);
           price = parseFloat((total + commissionPrice).toFixed(2));
         }
+
+        console.log('vendor_commission',prodDetail?.data?.product?.vendor_commission)
+        console.log('vendor_commission',prodDetail?.data?.product?.vendor_commission)
+        console.log('product',prodDetail?.data?.product)
+        console.log('product',prodDetail?.data?.product)
+        console.log('product',prodDetail?.data?.product)
         return axiosInstance.post("/aliexpress/product/createProduct", {
           ...prodDetail.data.product,
-          vendor_commission: prodDetail.data.product.vendor_commission,
+          vendor_commission: (Number(toBeSentProductsArr[index].vendor_commission) || 0),
           price,
         });
       }

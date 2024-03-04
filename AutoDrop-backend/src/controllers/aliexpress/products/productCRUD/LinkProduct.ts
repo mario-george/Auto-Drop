@@ -21,6 +21,7 @@ import {
   getProductVariants,
 } from "./CRUD";
 import { RefreshTokenHandler } from "../../../salla/RefreshAccessToken";
+import { ProductSallaChecker } from "./features/AlreadyLinkedProduct";
 
 export async function LinkProductSalla(
   req: Request & any,
@@ -592,7 +593,7 @@ export async function LinkProductSalla2(
       metadata_title: product?.metadata_title,
       metadata_description: product?.metadata_description,
     };
-    
+
     if (!product?.options[0]?.name) {
       noOptionsInProduct = true;
       let prodPrice = product.variantsArr[0].offer_sale_price;
@@ -616,7 +617,7 @@ export async function LinkProductSalla2(
         metadata_description: product?.metadata_description,
       };
       if (product?.showDiscountPrice) {
-        console.log("product?.showDiscountPrice",product?.showDiscountPrice)
+        console.log("product?.showDiscountPrice", product?.showDiscountPrice);
         let originalPrice = product.variantsArr[0].sku_price;
         bodyDataSalla = {
           name: req.query.name || product.name,
@@ -645,38 +646,42 @@ export async function LinkProductSalla2(
       },
       data: bodyDataSalla,
     };
-    /*     const valuesStock = new Array().concat(
-      ...jsonProduct.options.map((option: OptionType) => option.values)
-    );
-    if (valuesStock.length > 100)
-      throw new AppError("Values count should be smaller than 100", 400); */
+
     console.log("here");
     console.log(product);
-    try {
+    /* try {
     } catch (err: any) {
       console.log(err?.response?.status);
       if (err?.response?.status === 401) {
         // get new access token
         RefreshTokenHandler(token);
       }
-    }
-    let createdeProduct;
+    } */
+    // let createdeProduct;
 
-    try {
-      let { data } = await axios.request(options_1);
+    // let { data: createdeProduct } = await axios.request(options_1);
+
+    let createdeProduct = ProductSallaChecker(
+      options_1,
+      product?.sku,
+      token,
+      next
+    );
+    /*    try {
       createdeProduct = data;
     } catch (error: any) {
+      console.error(error?.response?.body)
       if (
         error?.response?.data?.status === 401 &&
         error?.response?.data?.error?.code === "Unauthorized"
       ) {
         // get new access tokens
-        console.log("heree");
+        console.log("get new access tokens");
         console.log(req.headers["authorization"]);
         let data = await RefreshTokenHandler(token, req.user.sallaToken);
         console.log(data);
       }
-    }
+    } */
     /* 
     error?.response?.data
 {

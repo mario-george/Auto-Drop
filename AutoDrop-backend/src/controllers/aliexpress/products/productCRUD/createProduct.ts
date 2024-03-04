@@ -43,6 +43,7 @@ export async function CreateAndSaveProduct(
 ) {
   try {
     const { role, _id } = req.user;
+
     const {
       first_level_category_name,
       second_level_category_name,
@@ -76,6 +77,14 @@ export async function CreateAndSaveProduct(
       "original_product_id",
       "merchant",
     ]) satisfies Partial<ProductSchema>;
+    console.log('vendor_commission',vendor_commission)
+    console.log('vendor_commission',vendor_commission)
+    console.log('vendor_commission',vendor_commission)
+    console.log('vendor_commission',vendor_commission)
+    console.log('vendor_commission',vendor_commission)
+    console.log('vendor_commission',vendor_commission)
+    console.log('vendor_commission',vendor_commission)
+    console.log('vendor_commission',vendor_commission)
     if (price < main_price) {
       [price, main_price] = [main_price, price];
     }
