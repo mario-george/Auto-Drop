@@ -172,6 +172,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       );
       setMetadataDesc(metadata_description);
       setMetadataTitle(metadata_title);
+      setCommissionVal(product?.vendor_commission);
       const newValues: any = {
         prodName: product?.name,
         SEOTitleText: metadata_title,
