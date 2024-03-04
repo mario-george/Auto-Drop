@@ -40,7 +40,7 @@ interface DataTableProps<TData, TValue> {
   locale: string;
   setMyProducts: any;
   apply: string;
-  setLoadProducts:any
+  setLoadProducts: any;
 }
 
 export function DataTable<TData, TValue>({
@@ -53,7 +53,8 @@ export function DataTable<TData, TValue>({
   data,
   locale,
   setMyProducts,
-  apply,setLoadProducts
+  apply,
+  setLoadProducts,
 }: DataTableProps<TData, TValue>) {
   console.log(columns);
   const [rowSelection, setRowSelection] = React.useState({});
@@ -86,7 +87,7 @@ export function DataTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 min-w-full">
       <DataTableToolbar
         table={table}
         searchByProd={searchByProd}
