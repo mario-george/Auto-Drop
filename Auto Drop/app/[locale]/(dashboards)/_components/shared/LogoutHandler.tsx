@@ -5,13 +5,13 @@ import { userActions } from "@/store/user-slice";
 import { motion } from "framer-motion";
 import LogoutSVG from "@/components/icons/ClientSVGs/LogoutSVG";
 
-export default function LogoutHandler({logoutMsg,marginDirection,isNavOpen}:{logoutMsg:string,marginDirection:string,isNavOpen?:boolean}) {
+export default function LogoutHandler({logoutMsg,marginDirection,isNavOpen,locale}:{logoutMsg:string,marginDirection:string,isNavOpen?:boolean,locale?:boolean}) {
   // dir={locale === "ar" ? "rtl" : "ltr"}
   return (
     <>
       <div className="">
       
-        <motion.li className={`cursor-pointer group icon-path flex items-center py-2  px-4 hover:bg-[#F0F3F400] text-[#253439] hover:text-black hover:bg-[#f0f3f4] rounded-lg hover:shadow-md ${isNavOpen &&`!pr-12 mr-24 `}`}
+        <motion.li className={`cursor-pointer group icon-path flex items-center py-2  px-4 hover:bg-[#F0F3F400] text-[#253439] hover:text-black hover:bg-[#f0f3f4] rounded-lg hover:shadow-md ${isNavOpen &&`  `} ${isNavOpen && `${locale=='ar' && `!mr-0`}`}`}
           onClick={() => store.dispatch(userActions.logout())}
           >
             <div className="flex items-center">
