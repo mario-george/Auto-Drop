@@ -44,6 +44,9 @@ export default function HomePageRenderer(props: any) {
   console.log(availableCredits);
   return (
     <>
+    <div className="HomePageContainer">
+
+
       <div className="grid tab:grid-cols-8 max-w-[97%] gap-4">
         <div className="col-span-1 tab:col-span-2">
           <WelcomeComponent goodMorning={goodMorning} />
@@ -125,7 +128,7 @@ export default function HomePageRenderer(props: any) {
             latestRequests={latestRequests}
           />
         </div>
-      </div>
+      </div>    </div>
     </>
   );
 }
