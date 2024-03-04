@@ -86,11 +86,11 @@ export default function SubmitProducts({
     const res = await Promise.all(promises2);
     console.log(res);
     let valid = true;
-    res.forEach((oneRes) => {
+ /*    res.forEach((oneRes) => {
       if (oneRes.data.success === false) {
         valid = false;
       }
-    });
+    }); */
     if (valid) {
       router.push(`/${locale || "en"}/my-products`);
     }
