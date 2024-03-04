@@ -28,7 +28,7 @@ const TokenExtractor: React.FC = () => {
           userId,
         });
         console.log("resp", resp);
-      /*   const response = await fetch(
+        /*   const response = await fetch(
           process.env.NEXT_PUBLIC_BACK_URL + "auth/saveToken",
           {
             method: "POST",
@@ -44,14 +44,14 @@ const TokenExtractor: React.FC = () => {
           }
         ); */
 
-      /*   if (resp.status >= 200 && resp.status < 300)  {
+        /*   if (resp.status >= 200 && resp.status < 300)  {
           throw new Error("Network response was not ok");
         } */
 
-        const data = resp
+        const data = resp;
         console.log("tokenType", tokenType);
-        console.log("data.sallaToken", data.data.user.sallaToken);
-        console.log("data.aliExpressToken", data.data.user.aliExpressToken);
+        console.log("data.sallaToken", resp?.data?.user?.sallaToken);
+        console.log("data.aliExpressToken", resp?.data?.user?.aliExpressToken);
         console.log("data", data);
         if (tokenType === "Salla") {
           dispatch(
