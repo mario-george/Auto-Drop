@@ -34,9 +34,7 @@ export default function SubmitProducts({
     }
     setLoading(false);
   };
-  let buttonClassL = `rounded-full
-    bg-red-500
-    px-2 py-2 w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem] hover:cursor-pointer  hover:bg-red-500/90 `;
+  let buttonClassL = `rounded-full bg-[#008767] hover:bg-[#008767]/90 px-2 py-2 w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem] hover:cursor-pointer `;
   return (
     <>
       <Dialog submitHandler={submitHandler}>
@@ -47,7 +45,7 @@ export default function SubmitProducts({
             alt={`link`}
             width={24}
             height={24}
-            className="mx-auto my-auto  mt-[15%] tab:mt-[22.5%]"
+            className="mx-auto my-auto  mt-[15%]"
           />
         </div>
       </Dialog>
