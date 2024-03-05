@@ -15,7 +15,7 @@ export default function DashboardLayout({
   return (
     <DashboardProtectWrapper>
       <div
-        className="bg-[#F0F3F4] py-4 transition-all duration-300"
+        className="bg-[#F0F3F4] dark:!bg-[#253439] py-4 transition-all duration-300"
         dir={locale === "ar" ? "rtl" : "ltr"}
       >
         <div className="flex space-s-1 " dir={locale === "ar" ? "rtl" : "ltr"}>
