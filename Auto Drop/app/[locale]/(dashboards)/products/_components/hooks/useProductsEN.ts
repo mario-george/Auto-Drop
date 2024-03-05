@@ -16,12 +16,14 @@ export default function useProducts({
   const [commissionV, setCommissionV] = useState(
     Array(products.length).fill(0)
   );
-
   let lengthOfProducts = products.length;
   if (lang == "ar") {
     lengthOfProducts = productsAR.length;
   }
 
+  const [showShippingForProduct, setShowShippingForProduct] = useState([
+    Array(lengthOfProducts).fill(false),
+  ]);
   const [productsShippingInfo, setProductsShippingInfo] = useState([
     Array(lengthOfProducts).fill([
       {
@@ -60,11 +62,14 @@ export default function useProducts({
             profitAfterDiscount: "",
             duration: "",
             activated: false,
-            loading: false,
+            // loading: false,
+            loading: "pending",
+            // made pending after remove of commission calculation
           },
         ])
       );
     }
+
     if (productsAR.length !== productsShippingInfo.length && lang == "ar") {
       setProductsShippingInfo(
         Array(productsAR.length).fill([
@@ -78,6 +83,12 @@ export default function useProducts({
           },
         ])
       );
+    }
+    if (products.length !== showShippingForProduct.length && lang == "en") {
+      setShowShippingForProduct(Array(products.length).fill(false));
+    }
+    if (productsAR.length !== showShippingForProduct.length && lang == "ar") {
+      setShowShippingForProduct(Array(productsAR.length).fill(false));
     }
   }, [lang, productsAR.length, products.length]);
   const fetchAndSet2 = useCallback(async () => {
@@ -161,7 +172,7 @@ export default function useProducts({
     }
     console.log(lang);
     console.log(product);
-    if (lang == "en") {
+    /*   if (lang == "en") {
       setProducts((products) =>
         products.map((product, i) => {
           if (i === index) {
@@ -180,7 +191,7 @@ export default function useProducts({
         });
       });
     }
-   
+    */
     setProductsShippingInfo((productsShipping) => {
       return productsShipping.map((shipping, shippingIndex) => {
         if (shippingIndex === index) {
@@ -257,18 +268,69 @@ export default function useProducts({
 
     console.log(shippingArr);
     console.log(productsShippingInfo);
-
-    console.log((product.target_sale_price * value) / 100);
   };
+  useEffect(() => {
+    let updateAllProductShipping = async function () {
+      if (lang == "en") {
+        if (productsShippingInfo.length == 0) {
+          let prodSh = products.map((prod: any, ind: number) => {
+            return shoppingCartHandler(prod.product_id);
+          });
+          let prodShPromises = await Promise.allSettled(prodSh);
+          console.log(prodShPromises);
+          setProductsShippingInfo(
+            prodShPromises.map((result: any, index: number) => {
+              if (result.status === "rejected") {
+                return [];
+              }
+
+              let shipping = result.value;
+
+              if (shipping.length == 0) {
+                return [{ activated: true, loading: false, noShipping: true }];
+              }
+              return shipping.map((e: any) => {
+                let shippingType = e.shipping_method;
+                let duration = e.estimated_delivery_time;
+                let price = e?.freight?.cent / 100;
+                return {
+                  ...e,
+                  price,
+                  duration,
+                  shippingType,
+                  activated: true,
+                  loading: false,
+                };
+              });
+            })
+          );
+        }
+      } else {
+      }
+    };
+    updateAllProductShipping();
+  }, [products, productsAR, lang]);
   const shoppingCartHandler = async (product_id: string) => {
-    const resp = await axiosInstance.post("/aliexpress/getShippingDetails", {
-      product_id,
-    });
+    try {
+      const resp = await axiosInstance.post("/aliexpress/getShippingDetails", {
+        product_id,
+      });
 
-    console.log(resp.data.shipping);
-    console.log(resp.data);
-    return resp.data.shipping;
+      return resp.data.shipping;
+    } catch (e: any) {
+      console.log(e);
+      return [];
+    }
   };
+
+  const showShippingHandler = (i: number) => {
+    setShowShippingForProduct((prevProducts: any) => {
+      let tempArr = [...prevProducts];
+      tempArr[i] = !tempArr[i];
+      return tempArr;
+    });
+  };
+
   return {
     commissionV,
     products,
@@ -280,5 +342,7 @@ export default function useProducts({
     setProducts,
     fetchAndSet2,
     setProductsShippingInfo,
+    showShippingForProduct,
+    showShippingHandler,
   };
 }
