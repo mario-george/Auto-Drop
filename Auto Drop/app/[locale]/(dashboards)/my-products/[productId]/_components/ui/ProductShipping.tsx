@@ -20,7 +20,7 @@ export default function ProductShipping({
               <Stack direction="row">
                 {shipping?.map((option: any, index: number) => {
                   return (
-                    <Radio value={index.toString()}>
+                    <Radio value={index.toString()} key={index}>
                       <div
                         style={{ border: "2px solid #d1c2c2" }}
                         className={` flex  flex-col border-gray-500  rounded-lg tab:px-3 tab:py-5 ${
