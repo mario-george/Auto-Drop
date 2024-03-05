@@ -16,11 +16,7 @@ export default function ButtonsRenderer({
   const locale = useLocale();
   let buttonClassD =
     "rounded-full bg-[#c1121f] w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem]  px-2 py-2 tab:px-0 tab:py-0 hover:cursor-pointer  hover:bg-[#c1121f]/90 ";
-  let buttonClassL = `rounded-full w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem]  px-2 py-2 tab:px-0 tab:py-0 hover:cursor-pointer  ${
-    salla_product_id
-      ? `bg-red-500 hover:bg-red-500/90`
-      : `bg-[#008767] hover:bg-[#008767]/90`
-  } `;
+  let buttonClassL = `rounded-full w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem]  px-2 py-2 tab:px-0 tab:py-0 hover:cursor-pointer bg-[#ff0000] hover:bg-[#ff0000]/90 `;
   let buttonClassE =
     "rounded-full bg-[#253439] w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem] hover:cursor-pointer  px-2 py-2 tab:px-0 tab:py-0 hover:bg-[#253439]/90";
   let buttonClassS =
