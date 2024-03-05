@@ -31,7 +31,7 @@ export default function ProductsListAR({
     <>
       {" "}
       <MotionWrapper locale="ar">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-3 overflow-hidden">
+        <div className="productsContainerGrid">
           {productsAR?.map((product: any, i: number) => {
             let shippingInfoActive =
               productsShippingInfo &&
