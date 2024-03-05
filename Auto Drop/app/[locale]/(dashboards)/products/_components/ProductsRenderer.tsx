@@ -64,6 +64,8 @@ export default function ProductsRenderer({
     setProducts,
     fetchAndSet2,
     setProductsShippingInfo,
+    showShippingForProduct,
+    showShippingHandler,
   } = useProductsEN({
     currPage,
     fetchAndSetAR,
@@ -112,7 +114,19 @@ export default function ProductsRenderer({
     }
     return;
   };
-
+  let ProductsListENProps = {
+    showShippingForProduct,
+    showShippingHandler,
+    products,
+    productsShippingInfo,
+    toggleShoppingCartActivated,
+    handleCheckChange,
+    locale,
+    shippingInfoPending,
+    commissionV,
+    setCommissionV,
+    addCommissionHandler,
+  };
   return (
     <div>
       <Header toogleLang={toogleLang} shops={shops} />
@@ -122,17 +136,7 @@ export default function ProductsRenderer({
       {lang == "en" ? (
         <>
           {" "}
-          <ProductsListEN
-            products={products}
-            productsShippingInfo={productsShippingInfo}
-            toggleShoppingCartActivated={toggleShoppingCartActivated}
-            handleCheckChange={handleCheckChange}
-            locale={locale}
-            shippingInfoPending={shippingInfoPending}
-            commissionV={commissionV}
-            setCommissionV={setCommissionV}
-            addCommissionHandler={addCommissionHandler}
-          />
+          <ProductsListEN {...ProductsListENProps} />
         </>
       ) : (
         <>
