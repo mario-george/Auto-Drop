@@ -17,6 +17,13 @@ module.exports = {
       },
     },
     extend: {
+      strokeOpacity: {
+        60: ".6",
+        70: ".7",
+        90: ".9",
+        100: "1",
+      },
+
       screens: {
         ms: "320px",
         mm: "375px",
