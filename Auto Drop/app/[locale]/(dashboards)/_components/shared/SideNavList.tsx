@@ -28,12 +28,17 @@ export default function NavComponent({
             let isActive = link.route == path;
             return (
               <motion.li
-                className={`group icon-path flex items-center py-2 px-1 hover:bg-[#F0F3F400] text-opacity-50  ${
+                className={`group icon-path flex items-center py-2 px-1 hover:bg-[#F0F3F400] text-opacity-50 dark:text-white dark:hover:text-[#253439]   ${
                   isActive
-                    ? "bg-[#F0F3F4]  !icon-path-active shadow-md !text-opacity-100 icon "
+                    ? "bg-[#F0F3F4]   !icon-path-active dark:icon-path-active-dark shadow-md !text-opacity-100 icon "
                     : ""
-                } text-[#253439] hover:text-opacity-100 hover:bg-[#f0f3f4] rounded-lg ${!isNavOpen && `${locale=='ar' && `!mr-0`}`}  hover:shadow-md ${
-                  !isNavOpen && `!pr- ${locale == "ar" ? `mr-24` : `ml-3`} `
+                } text-[#253439] hover:text-opacity-100 hover:bg-[#f0f3f4] rounded-lg ${
+                  !isNavOpen && `${locale == "ar" && `!mr-0`}`
+                }  hover:shadow-md ${
+                  !isNavOpen &&
+                  `!pr- ${locale == "ar" ? `mr-24` : `ml-3`} ${
+                    isActive ? `dark:!text-[#2e464f] ` : ``
+                  }`
                 }`}
                 key={index}
               >
@@ -66,9 +71,9 @@ export default function NavComponent({
             locale={locale}
           />
           <motion.li
-            className={`flex transition-all duration-100 items-center py-2 px-1 ${!isNavOpen && `${locale=='ar' && `!mr-0`}`} ${
-              locale == "en" ? "ml-1" : "mr-1"
-            } ${
+            className={`flex transition-all dark:text-[#253439] duration-100 items-center py-2 px-1  dark:bg-white ${
+              !isNavOpen && `${locale == "ar" && `!mr-0`}`
+            } ${locale == "en" ? "ml-1" : "mr-1"} ${
               isNavOpen && ` mr-`
             } text-[#253439] hover:text-black  rounded-lg hover:shadow-md border border-[#00A859] w--fit ${
               isNavOpen && false && ``
