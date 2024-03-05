@@ -94,18 +94,24 @@ body,
 .package {
   @apply mx-auto w-[80%] pt-2 md:pt-3 md:w-[90%] h-[38px] md:h-[52px] bg-[#b29e84] rounded-xl shadow text-center text-white text-sm md:text-base font-bold ms:mt-11 mm:mt-0 tab:mt-11 lap:mt-20;
 }
-.packageTitle{
-  @apply text-center text-gray-800 pt-1 md:pt-0 text-base md:text-lg font-bold mb-5 px-[.62rem] md:px-8
+.packageTitle {
+  @apply text-center text-gray-800 pt-1 md:pt-0 text-base md:text-lg font-bold mb-5 px-[.62rem] md:px-8;
 }
-.monthly{
-  @apply text-center text-gray-800 text-sm md:text-base mt-5 font-bold px-8
+.monthly {
+  @apply text-center text-gray-800 text-sm md:text-base mt-5 font-bold px-8;
 }
-.productsInfoWrapper{
-  @apply flex flex-col text-center text-gray-950 text-sm md:text-base w-full font-medium px-8 pt-[1rem] md:pt-[2rem]
+.productsInfoWrapper {
+  @apply flex flex-col text-center text-gray-950 text-sm md:text-base w-full font-medium px-8 pt-[1rem] md:pt-[2rem];
 }
-.ordersInfoWrapper{
-  @apply flex flex-col text-center text-gray-950 text-sm md:text-base mt-3 md:mt-5 font-medium px-6 mx-auto
+.ordersInfoWrapper {
+  @apply flex flex-col text-center text-gray-950 text-sm md:text-base mt-3 md:mt-5 font-medium px-6 mx-auto;
 }
-.subscriptionButton{
-  @apply mb-5 lg:mb-0 cursor-pointer w-[100%] mt-2 md:mt-2
+.subscriptionButton {
+  @apply mb-5 lg:mb-0 cursor-pointer w-[100%] mt-2 md:mt-2;
+}
+.theme-svg {
+  fill: white;
+}
+.productsContainerGrid {
+  @apply grid grid-cols-1 ml:grid-cols-2 tab:grid-cols-4 gap-y-10 gap-x-3 overflow-hidden;
 }
