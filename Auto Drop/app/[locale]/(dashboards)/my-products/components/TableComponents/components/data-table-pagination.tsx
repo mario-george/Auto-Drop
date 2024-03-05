@@ -39,7 +39,7 @@ export function DataTablePagination<TData>({
                       isActive={
                         table.getState().pagination.pageIndex + 1 === page
                       }
-                      className={`shadow-md ${
+                      className={` hover:bg-[#253439] hover:cursor-pointer hover:text-white shadow-md ${
                         table.getState().pagination.pageIndex + 1 === page
                           ? `bg-[#253439] text-white hover:bg-[#253439] hover:text-white`
                           : ``
@@ -54,7 +54,7 @@ export function DataTablePagination<TData>({
               <PaginationItem>
                 <Button
                   onClick={() => table.nextPage()}
-                  className="bg-white text-[#253439] hover:bg-white/90 shadow-md"
+                  className="bg-white text-[#253439] hover:bg-white/90 shadow-md hover:bg-[#253439] hover:text-white"
                   disabled={!table.getCanNextPage()}
                 >
                   Next
