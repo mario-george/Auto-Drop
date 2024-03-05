@@ -9,6 +9,7 @@ function Icon() {
       height="50"
       fill="none"
       viewBox="0 0 50 50"
+      className="text-white dark:text-white"
     >
       <path fill="url(#pattern0)" d="M0 0H50V50H0z"></path>
       <defs>
