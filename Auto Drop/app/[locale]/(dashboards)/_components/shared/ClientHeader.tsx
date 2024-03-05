@@ -81,7 +81,7 @@ export default function ClientHeader({
     >
       <nav
         className="bg-[#F8F6F4] rounded-md shadow flex flex-row 
-      justify-between items-center lg:px-14 px-1 py-2 min-h-[50px]"
+      justify-between items-center lg:px-14 px-1 py-2 min-h-[50px] dark:bg-[#2e464f] dark:text-white"
       >
         <div className="flex flex-row space-s-3 items-center">
           <Avatar className="w-12 h-12">
@@ -140,38 +140,44 @@ export default function ClientHeader({
 
         {locale == "ar" ? (
           <>
-            <div className="relative hidden tab:flex space-s-1 border-4 rounded-md border-[#B29E84]">
-              <div
-                className=" lap:w-[7rem] tab:w-[6rem] h-6 bg-[#B29E84]"
-                style={{ clipPath: "polygon(0 0, 57% 0, 100% 100%, 0% 100%)" }}
-              ></div>
-              <div
-                className="lap:w-[6rem]  tab:w-[5rem] h-6 bg-white"
-                style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)" }}
-              />
-              <div className="absolute text-black right-3 top-[3px] lap:top-[1px]   text-xs tab:text-sm lap:text-md">
-                {planTitle}
-              </div>
-              <div className="absolute text-white top-[3px] text-xs lap:top-[1px]  lap:left-[6px]  tab:text-sm lap:text-md">
-                {planValue}
+            <div className="">
+              <div className="relative hidden tab:flex space-s-1 border-4 dark:bg-[#2e464f] dark:border-white rounded-md border-[#B29E84]">
+                <div
+                  className=" lap:w-[7rem] tab:w-[6rem] h-6 bg-[#B29E84] dark:bg-white"
+                  style={{
+                    clipPath: "polygon(0 0, 57% 0, 100% 100%, 0% 100%)",
+                  }}
+                ></div>
+                <div
+                  className="lap:w-[6rem]  tab:w-[5rem] h-6 bg-white dark:bg-[#2e464f]"
+                  style={{
+                    clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)",
+                  }}
+                />
+                <div className="absolute text-black dark:text-white right-3 top-[3px] lap:top-[1px]   text-xs tab:text-sm lap:text-md">
+                  {planTitle}
+                </div>
+                <div className="absolute text-white dark:text-[#253439] top-[3px] text-xs lap:top-[1px]  lap:left-[6px]  tab:text-sm lap:text-md">
+                  {planValue}
+                </div>
               </div>
             </div>
           </>
         ) : (
           <>
-            <div className="relative hidden tab:flex space-s-1 border-4 rounded-md border-[#B29E84]">
+            <div className="relative hidden tab:flex space-s-1 border-4 rounded-md border-[#B29E84]dark:bg-[#2e464f] dark:border-white ">
               <div
-                className="lap:w-[6rem]  tab:w-[5rem] h-6 bg-white"
+                className="lap:w-[6rem]  tab:w-[5rem] h-6 bg-white dark:bg-[#2e464f]"
                 style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)" }}
               />
               <div
-                className=" lap:w-[7rem] tab:w-[6rem] h-6 bg-[#B29E84]"
+                className=" lap:w-[7rem] tab:w-[6rem] h-6 bg-[#B29E84]  dark:bg-white"
                 style={{ clipPath: "polygon(0 0, 57% 0, 100% 100%, 0% 100%)" }}
               ></div>
-              <div className="absolute text-black right-3 top-[3px] tab:top-[5px]   text-xs  lap:text-md">
+              <div className="absolute text-black right-3 top-[3px] tab:top-[5px]   text-xs  lap:text-md dark:text-white">
                 {planTitle}
               </div>
-              <div className="absolute text-white top-[3px] text-xs  tab:top-[5px] tab:left-[6px] lap:text-md">
+              <div className="absolute text-white top-[3px] text-xs  tab:top-[5px] tab:left-[6px] lap:text-md  dark:text-[#253439]">
                 {planValue}
               </div>
             </div>
