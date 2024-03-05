@@ -2,6 +2,8 @@
 import { iconData } from "@/app/[locale]/(dashboards)/_components/constants/itemData";
 import { motion } from "framer-motion";
 import NavBarSVG from "@/components/icons/ClientSVGs/NavBarSVG";
+import DarkModeLogo from "@/components/icons/ClientSVGs/DarkModeLogo";
+
 import { Link, usePathname } from "@/navigation";
 import "@/components/icons/ClientSVGs/strokeOpacityActive.css";
 import Image from "next/image";
@@ -10,6 +12,9 @@ import { useMediaQuery } from "react-responsive";
 import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import NavComponent from "./SideNavList";
+import { ModeToggle } from "@/components/theme-providers-button";
+import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 
 export default function SideNavRenderer({
   iconInfo,
@@ -22,6 +27,11 @@ export default function SideNavRenderer({
   whatsappMsg: string;
   locale: string;
 }) {
+  const { theme } = useTheme();
+  useEffect(() => {
+    console.log(theme); // 'light' or 'dark'
+  }, [theme]);
+
   const isMediumScreen = useMediaQuery({
     query: "(min-width: 769px) and (max-width: 1024px)",
   });
@@ -103,7 +113,7 @@ export default function SideNavRenderer({
         // whileHover={{ width: 250 }}
         onHoverEnd={() => {}}
         transition={{ duration: 0.2, ease: "easeInOut" }}
-        className={`group transition-all duration-200 flex flex-col min-h-full text-[#25343980] text-black bg-white border overflow-hidden rounded-md ${navClass} `}
+        className={`group transition-all duration-200 flex flex-col min-h-full text-[#25343980] text-black bg-white border dark:text-white dark:bg-[#2e464f] overflow-hidden rounded-md ${navClass} `}
       >
         <button className={`${isAr ? `mr-[1.5rem]` : `ml-[1.5rem]`} mt-5`}>
           {" "}
@@ -134,17 +144,27 @@ export default function SideNavRenderer({
             ></motion.rect>
           </motion.svg>
         </button>
-        <div className="flex items-center justify-center h-16">
-          <h1
-            className={`flex space-x-2 ${isAr ? `mr-[.7rem]` : `ml-[.7rem]`}`}
+        <div
+          className={cn(
+            "flex items-center justify-between h-16 tab:pl-6 tab:pr-1",
+            isAr ? `tab:pl-6 tab:pr-1` : `tab:pl-1 tab:pr-6`
+          )}
+        >
+          <div
+            className={`flex justify-between space-s-2 tab:space-s-8${
+              isAr ? `mr-[.7rem]` : `ml-[.7rem]`
+            }`}
           >
-            <div className="">
+            <div className="flex">
               <div className="relative">
-                <div className="absolute z-30  left-0 right-12 top-0 bottom-0 group-hover:bg-transparent transition-all duration-300" />
-                <NavBarSVG />
+                <div className="absolute z-30 flex justify-between  left-0 right-12 top-0 bottom-0 group-hover:bg-transparent transition-all duration-300" />
+                {theme === "dark" ? <DarkModeLogo /> : <NavBarSVG />}
               </div>
             </div>
-          </h1>
+          </div>
+          <div className={`${isNavOpen ? `hidden` : ``}`}>
+            <ModeToggle />
+          </div>
         </div>
 
         <nav className="flex flex-col justify-between ">
