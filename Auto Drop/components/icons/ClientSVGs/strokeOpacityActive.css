@@ -1,24 +1,66 @@
 .icon-path {
-
-  @apply transition-all duration-200
+  @apply transition-all duration-100;
 }
 
 .icon:hover .icon-path {
   stroke-opacity: 1;
-   fill-opacity: 1;
-
+  fill-opacity: 1;
+  @apply dark:stroke-[#253439];
+}
+.icon:hover .icon-path-mid {
+  /* stroke-opacity: 0.5; */
+  /* fill-opacity: 1; */
+  @apply !stroke-[#253439] stroke-black duration-100 transition-all dark:!stroke-[#253439];
 }
 .icon .icon-path {
   stroke-opacity: 1;
-   fill-opacity: 1;
-
+  fill-opacity: 1;
+  @apply stroke-[#253439] duration-100 transition-all;
 }
 .icon .icon-path-active .icon-path {
   stroke-opacity: 1;
-   fill-opacity: 1;
+  fill-opacity: 1;
+  @apply stroke-[#253439] duration-100 transition-all dark:!stroke-[#253439];
 }
 .icon-path:hover .icon-path {
   stroke-opacity: 1;
   fill-opacity: 1;
+  @apply stroke-[#253439] duration-100 transition-all;
+}
+.icon-path-mid:hover .icon-path-mid {
+  stroke-opacity: 1;
+  fill-opacity: 1;
+  @apply stroke-[#253439] duration-100 transition-all;
+}
 
+.strokeDark {
+  @apply stroke-[#929a9c] dark:stroke-white;
+}
+.icon .icon-path-active-dark .icon-path {
+  stroke-opacity: 1;
+  fill-opacity: 1;
+  stroke-color:"#253439";
+  @apply stroke-[#253439] !stroke-[#253439] duration-100 transition-all;
+}
+.icon-path-active .icon-path {
+  stroke-opacity: 1;
+  fill-opacity: 1;
+  @apply stroke-[#253439] duration-100 transition-all;
+}
+.icon .icon-path-mid {
+  stroke-opacity: 0.7;
+  fill-opacity: 1;
+  @apply  stroke-black duration-100 transition-all;
+}
+ .icon-path-active .icon-path-mid {
+  stroke-opacity: 0.5;
+  fill-opacity: 1;
+  @apply stroke-[#253439] duration-100 transition-all dark:!stroke-[#253439];
+}
+
+
+.icon-path-active-dark .icon-path {
+  stroke-opacity: 1;
+  fill-opacity: 1;
+  @apply dark:!stroke-[#253439] duration-100 transition-all;
 }
