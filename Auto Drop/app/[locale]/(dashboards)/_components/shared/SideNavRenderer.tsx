@@ -124,6 +124,7 @@ export default function SideNavRenderer({
             viewBox="0 0 100 80"
             width="25"
             height="25"
+            className={theme === "dark" ? "text-white fill-white" : ""}
           >
             <motion.rect
               width="100"
