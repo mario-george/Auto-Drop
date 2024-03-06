@@ -165,7 +165,7 @@ export default function ClientHeader({
           </>
         ) : (
           <>
-            <div className="relative hidden tab:flex space-s-1 border-4 rounded-md border-[#B29E84]dark:bg-[#2e464f] dark:border-white ">
+            <div className="relative hidden tab:flex space-s-1 border-4 rounded-md border-[#B29E84] dark:bg-[#2e464f] dark:border-white ">
               <div
                 className="lap:w-[6rem]  tab:w-[5rem] h-6 bg-white dark:bg-[#2e464f]"
                 style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)" }}
