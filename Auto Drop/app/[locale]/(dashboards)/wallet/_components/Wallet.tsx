@@ -74,7 +74,7 @@ export default function Settings(props: WalletProps) {
 
         <WalletUserCard {...WalletUserCardProps} />
         <div className={` tab:px-6 py-2 my-12 tab:mx-3`}>
-          <div className="flex space-s-6 tab:space-s-0 flex-wrap tab:max-w-[60%] lap:max-w-[50%] tab:mb-4">
+          {/*   <div className="flex space-s-6 tab:space-s-0 flex-wrap tab:max-w-[60%] lap:max-w-[50%] tab:mb-4">
             <Button
               className="w-full ms:max-w-[60%] ms:mx-auto tab:mx-auto tab:max-w-[150px] bg-[#f0f3f4] rounded-lg text-[#253439] my-2 sm:my-0 hover:bg-[#f0f3f4]"
               onClick={() => {
@@ -91,7 +91,7 @@ export default function Settings(props: WalletProps) {
             >
               {"changeAccountDetails"}
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
       <HeaderText isAr={isAr} title={myCards} />
