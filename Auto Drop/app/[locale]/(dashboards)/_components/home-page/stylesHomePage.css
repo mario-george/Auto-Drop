@@ -1,3 +1,3 @@
 .HomePageContainer {
-  @apply text-xs tab:text-lg max-w-[240px] rounded-lg mm:max-w-[290px]  ml:max-w-[335px]   tab:max-w-[680px]    md:space-y-8 md:p-8 max-h-[100%] overflow-y-auto lap:max-w-none;
+  @apply text-xs tab:text-lg max-w-[240px] rounded-lg mm:max-w-[290px]  ml:max-w-[335px]   tab:max-w-none tab:min-w-full    md:space-y-8 tab:p-2 max-h-[100%] overflow-y-auto lap:max-w-none;
 }
