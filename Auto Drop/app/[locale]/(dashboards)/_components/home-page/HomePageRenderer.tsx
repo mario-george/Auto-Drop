@@ -9,9 +9,9 @@ import HomePageCard, {
 import Progress from "./Progress";
 import Image from "next/image";
 import TableRenderer from "./TableComponents/TableRenderer";
-
+import { CircularProgress, CircularProgressLabel } from "@chakra-ui/react";
 export default function HomePageRenderer(props: any) {
-  const { t } = props;
+  const { locale,t } = props;
   let prodNotLinked = t("prodNotLinked");
   let numOfSales = t("numOfSales");
 
@@ -44,91 +44,94 @@ export default function HomePageRenderer(props: any) {
   console.log(availableCredits);
   return (
     <>
-    <div className="HomePageContainer">
-
-
-      <div className="grid tab:grid-cols-8 max-w-[97%] gap-4">
-        <div className="col-span-1 tab:col-span-2">
-          <WelcomeComponent goodMorning={goodMorning} />
+      <div className="HomePageContainer">
+        <div className="grid tab:grid-cols-8 max-w-[97%]  ">
+          <div className="col-span-1 tab:col-span-2 ">
+            <WelcomeComponent goodMorning={goodMorning} />
+          </div>
         </div>
+        <div className="grid grid-cols-1 grid-rows-12 sm:grid-cols-2 md:grid-cols-3 tab:grid-cols-6 lap:grid-cols-8 gap-4 max-w-[97%] lg:grid-rows-7">
+          <div className="tab:col-span-2">
+            <TotalProfits firstEl={totalProfits} />
+          </div>
+          <div className="tab:col-span-2">
+            <HomePageCard
+              firstEl={numOfProd}
+              secondEl={"68"}
+              ThirdEl={<Progress value={68} />}
+              smallText={true}
+            locale={locale}
+            />
+          </div>
+
+          <div className="tab:col-span-2">
+            <HomePageCard
+              firstEl={prodLinked}
+              secondEl={"13"}
+              ThirdEl={<Progress gradientType="orange" value={13} />}
+            locale={locale}
+            />
+          </div>
+          <div className="tab:col-span-2">
+            <HomePageCard
+              firstEl={prodNotLinked}
+              secondEl={"10"}
+              ThirdEl={<Progress gradientType="red" value={10} />}
+            locale={locale}
+            />
+          </div>
+          <div className="tab:col-span-4 lap:col-span-2 row-span-2">
+            <ProfitsCard
+              firstEl={profits}
+              totalProfits={totalProfits2}
+              suspendedProfits={suspendedProfits}
+              availableCredits={availableCredits}
+            />
+          </div>
+          <div className="tab:col-span-2">
+            <SallaCard
+              firstEl={platform}
+              ThirdEl={
+                <Image
+                  src={"/client/home/salla.svg"}
+                  width={61}
+                  height={61}
+                  alt="salla"
+                />
+              }
+            />
+          </div>
+          <div className="tab:col-span-2">
+            <HomePageCard
+              firstEl={numOfOrders}
+              secondEl={"34"}
+              ThirdEl={<Progress gradientType="green" value={34} />}
+            locale={locale}
+            />
+          </div>
+          <div className="tab:col-span-2">
+            <HomePageCard
+              firstEl={numOfSales}
+              secondEl={"22"}
+              ThirdEl={<Progress gradientType="blue" value={22} />}
+            locale={locale}
+            />
+          </div>
+          <div className="tab:col-span-2 tab:row-start-4">
+            <WalletComponent wallet={wallet} value={"0.0"} />
+          </div>
+          <div className="col-span-1 tab:col-span-6 row-span-3">
+            <TableRenderer
+              date={date}
+              CustomerName={CustomerName}
+              details={details}
+              amount={amount}
+              orderStatus={orderStatus}
+              latestRequests={latestRequests}
+            />
+          </div>
+        </div>{" "}
       </div>
-
-      <div className="grid grid-cols-1 grid-rows-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-4 max-w-[97%] lg:grid-rows-7">
-        <div className="tab:col-span-2">
-          <TotalProfits firstEl={totalProfits} />
-        </div>
-        <div className="tab:col-span-2">
-          <HomePageCard
-            firstEl={numOfProd}
-            secondEl={"68"}
-            ThirdEl={<Progress value={68} />}
-            smallText={true}
-          />
-        </div>
-
-        <div className="tab:col-span-2">
-          <HomePageCard
-            firstEl={prodLinked}
-            secondEl={"13"}
-            ThirdEl={<Progress gradientType="orange" value={13} />}
-          />
-        </div>
-        <div className="tab:col-span-2">
-          <HomePageCard
-            firstEl={prodNotLinked}
-            secondEl={"10"}
-            ThirdEl={<Progress gradientType="red" value={10} />}
-          />
-        </div>
-        <div className="tab:col-span-2 row-span-2">
-          <ProfitsCard
-            firstEl={profits}
-            totalProfits={totalProfits2}
-            suspendedProfits={suspendedProfits}
-            availableCredits={availableCredits}
-          />
-        </div>
-        <div className="tab:col-span-2">
-          <SallaCard
-            firstEl={platform}
-            ThirdEl={
-              <Image
-                src={"/client/home/salla.svg"}
-                width={61}
-                height={61}
-                alt="salla"
-              />
-            }
-          />
-        </div>
-        <div className="tab:col-span-2">
-          <HomePageCard
-            firstEl={numOfOrders}
-            secondEl={"34"}
-            ThirdEl={<Progress gradientType="green" value={34} />}
-          />
-        </div>
-        <div className="tab:col-span-2">
-          <HomePageCard
-            firstEl={numOfSales}
-            secondEl={"22"}
-            ThirdEl={<Progress gradientType="blue" value={22} />}
-          />
-        </div>
-        <div className="tab:col-span-2 tab:row-start-4">
-          <WalletComponent wallet={wallet} value={"0.0"} />
-        </div>
-        <div className="col-span-1 tab:col-span-6 row-span-3">
-          <TableRenderer
-            date={date}
-            CustomerName={CustomerName}
-            details={details}
-            amount={amount}
-            orderStatus={orderStatus}
-            latestRequests={latestRequests}
-          />
-        </div>
-      </div>    </div>
     </>
   );
 }

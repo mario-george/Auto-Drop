@@ -10,6 +10,8 @@ interface HomePageCardProps {
   secondEl?: any;
   ThirdEl?: React.ReactNode;
   smallText?: boolean;
+  largeHeader?: boolean;
+  locale?: string;
 }
 
 export default function Page({
@@ -17,17 +19,30 @@ export default function Page({
   secondEl,
   ThirdEl,
   smallText,
+  largeHeader,
+  locale,
 }: HomePageCardProps) {
+  let isAr = locale == "ar";
   return (
     <>
-      <div className="flex justify-between items-center bg-white rounded-md min-w-[200px] max-w-[350px] shadow max-h-full px-2 py-5">
+      <div className="relative flex justify-between items-center bg-white dark:bg-[#2e464f] dark:text-white rounded-md min-w-[200px] max-w-[350px] shadow max-h-full px-2 py-5">
         <div
           className={`flex flex-col space-y-1 ${smallText ? `mx-3` : ``} px-3`}
         >
-          <div className="whitespace-nowrap">{firstEl}</div>
+          <div
+            className={` tab:text-[15px] ${
+              largeHeader
+                ? ` whitespace-nowrap tab:text-[10px]`
+                : `whitespace-nowrap`
+            }`}
+          >
+            {firstEl}
+          </div>
           <div className="font-bold text-3xl">{secondEl}</div>
         </div>
-        {ThirdEl}
+        <div className={` ${isAr ? `right-[7rem]` : `left-[7rem]`} absolute `}>
+          {ThirdEl}
+        </div>
       </div>
     </>
   );
@@ -40,7 +55,7 @@ export function TotalProfits({
 }: any) {
   return (
     <>
-      <div className="flex justify-between bg-white rounded-md min-w-[200px] max-w-[350px] shadow min-h-full ">
+      <div className="flex justify-between bg-white dark:bg-[#2e464f] dark:text-white rounded-md min-w-[200px] max-w-[350px] shadow min-h-full px-3 py-2">
         <div className="flex flex-col space-y-2">
           <div className="whitespace-nowrap">{firstEl}</div>
           <div className="whitespace-nowrap opacity-50">{last60Days}</div>
@@ -69,7 +84,7 @@ export function WelcomeComponent({ goodMorning }: any) {
   const name = useSelector((state: any) => state.user.name);
   return (
     <>
-      <div className="flex justify-between bg-white rounded-md max-w-[380px] min-w-[300px] shadow h-fit items-center my-2">
+      <div className="flex justify-between bg-white dark:bg-[#2e464f] dark:text-white rounded-md max-w-[380px] min-w-[300px] shadow h-fit items-center my-2 tab:px-2">
         <div className="flex space-s-1">
           <span>{goodMorning}</span>
           <span>{name}</span>
@@ -88,7 +103,7 @@ export function WelcomeComponent({ goodMorning }: any) {
 export function SallaCard({ firstEl, ThirdEl, smallText }: HomePageCardProps) {
   return (
     <>
-      <div className="flex justify-between items-center bg-white rounded-md min-w-[200px] max-w-[350px] shadow max-h-full px-2 py-5">
+      <div className="flex justify-between items-center bg-white dark:bg-[#2e464f] dark:text-white rounded-md min-w-[200px] max-w-[350px] shadow max-h-full px-2 py-5">
         <div
           className={`flex flex-col space-y-1 ${smallText ? `mx-3` : ``} px-3`}
         >
@@ -112,24 +127,24 @@ export function ProfitsCard({
 }: any) {
   return (
     <>
-      <div className="flex flex-col bg-white rounded-md min-w-[200px] max-w-[350px] shadow max-h-full px-4 py-5 space-y-3">
+      <div className="flex flex-col bg-white dark:bg-[#2e464f] dark:text-white rounded-md min-w-[200px] max-w-[350px] shadow max-h-full px-4 py-5 space-y-3">
         <div className="flex">{firstEl}</div>
         <Separator />
-        <div className="flex justify-between   text-[23.98px] space-s-3 items-center">
-          <div className="font-bold">{firstVal}%</div>
+        <div className="flex justify-between    space-s-3 items-center">
+          <div className="font-semibold">{firstVal}%</div>
           <Progress color="bg-[#f99c55]" value={firstVal} className="-py-2" />
         </div>
-        <div className="flex justify-between text-[23.98px] space-s-3 items-center">
-          <div className="font-bold">{secondVal}%</div>
+        <div className="flex justify-between  space-s-3 items-center">
+          <div className="font-semibold">{secondVal}%</div>
           <Progress color="bg-[#26b34e]" value={secondVal} />
         </div>
-        <div className="flex justify-between text-[23.98px] space-s-3 items-center">
-          <div className="font-bold">{thirdVal}%</div>
+        <div className="flex justify-between  space-s-3 items-center">
+          <div className="font-semibold">{thirdVal}%</div>
           <Progress value={thirdVal} color="bg-[#70A6E8]" />
         </div>
-        <div className="flex space-s-6 whitespace-nowrap text-[12px]">
-          <div className="flex space-s-1">
-            <span>{totalProfits}</span>
+        <div className="flex space-s-6 whitespace-nowrap text-xs">
+          <div className="flex flex-col space-y-1 tab:space-y-0 tab:space-s-1 text-xs tab:flex-row">
+            <span className="text-xs">{totalProfits}</span>
             <Image
               src={`/client/home/blue-circle.svg`}
               alt={`blue-circle`}
@@ -164,7 +179,7 @@ export function ProfitsCard({
 export function WalletComponent({ wallet, value }: any) {
   return (
     <>
-      <div className="flex justify-between items-center bg-white rounded-md min-w-[200px] max-w-[350px] shadow max-h-full px-2 py-5 ">
+      <div className="flex justify-between items-center bg-white dark:bg-[#2e464f] dark:text-white rounded-md min-w-[200px] max-w-[350px] shadow max-h-full px-2 py-5 ">
         <div className={`flex flex-col space-y-1 px-3`}>
           <div className="whitespace-nowrap">{wallet}</div>
           <div className="flex space-s-1">
