@@ -127,6 +127,20 @@ export default function ProductsRenderer({
     setCommissionV,
     addCommissionHandler,
   };
+  let ProductsListARProps = {
+    productsAR,
+    productsShippingInfo,
+    toggleShoppingCartActivated,
+    handleCheckChangeAR,
+    locale,
+    shippingInfoPending,
+    commissionV,
+    setCommissionV,
+    addCommissionHandler,
+    lang,
+    showShippingForProduct,
+    showShippingHandler,
+  };
   return (
     <div>
       <Header toogleLang={toogleLang} shops={shops} />
@@ -140,18 +154,7 @@ export default function ProductsRenderer({
         </>
       ) : (
         <>
-          <ProductsListAR
-            productsAR={productsAR}
-            productsShippingInfo={productsShippingInfo}
-            toggleShoppingCartActivated={toggleShoppingCartActivated}
-            handleCheckChangeAR={handleCheckChangeAR}
-            locale={locale}
-            shippingInfoPending={shippingInfoPending}
-            commissionV={commissionV}
-            setCommissionV={setCommissionV}
-            addCommissionHandler={addCommissionHandler}
-            lang={lang}
-          />
+          <ProductsListAR {...ProductsListARProps} />
         </>
       )}
       <>

@@ -25,8 +25,9 @@ export default function ProductsListAR({
   commissionV,
   setCommissionV,
   addCommissionHandler,
-  lang,
+  lang,showShippingForProduct,showShippingHandler
 }: any) {
+  console.log("productsShippingInfoAR",productsShippingInfo)
   return (
     <>
       {" "}
@@ -39,21 +40,25 @@ export default function ProductsListAR({
               productsShippingInfo[i] &&
               productsShippingInfo[i][0] &&
               productsShippingInfo[i][0].activated;
-            console.log(shippingInfoActive);
-            console.log(shippingInfoPending);
+              let newShippingInfoActive =
+              productsShippingInfo &&
+              productsShippingInfo[i] &&
+              productsShippingInfo[i][0].activated &&
+              showShippingForProduct?.[i];
+              let newShippingInfoPending = productsShippingInfo &&
+              productsShippingInfo[i] &&
+              productsShippingInfo[i][0].loading === "pending" &&
+              showShippingForProduct?.[i]
+              
             return (
               <Card
                 className="relative flex flex-col !p-0 my-3 shadow-md rounded-lg justify-between overflow-hidden"
                 key={i}
               >
-                {productsShippingInfo &&
-                  productsShippingInfo[i] &&
-                  productsShippingInfo[i][0].loading === "pending" && (
+                {newShippingInfoPending&&(
                     <FetchSpinner />
                   )}
-                {productsShippingInfo &&
-                  productsShippingInfo[i] &&
-                  productsShippingInfo[i][0].activated && (
+                {newShippingInfoActive? (
                     <>
                       <MotionWrapperExit locale="en">
                         <div className="text-[#253439]" dir="rtl">
@@ -61,7 +66,7 @@ export default function ProductsListAR({
                             معلومات و طرق الشحن للمنتج{" "}
                           </div>
                           <ScrollArea className="h-[18rem]  p-6">
-                            {productsShippingInfo[i].map(
+                            {productsShippingInfo[i].map( 
                               (shipping: any, ind: number) => {
                                 if (shipping.noShipping) {
                                   return (
@@ -99,7 +104,7 @@ export default function ProductsListAR({
                                           {shipping.duration}
                                         </span>
                                       </div>
-                                      <div className="flex space-s-3">
+                                      {/* <div className="flex space-s-3">
                                         {" "}
                                         <span>الربح بعد خصم الشحن: </span>{" "}
                                         <span className="text-[#008767]">
@@ -107,7 +112,7 @@ export default function ProductsListAR({
                                             shipping.profitAfterDiscount
                                           )}
                                         </span>{" "}
-                                      </div>
+                                      </div> */}
                                       <div className="flex space-s-3 text-[#C1121F]">
                                         {" "}
                                         <span>السعر:</span>{" "}
@@ -128,7 +133,85 @@ export default function ProductsListAR({
                         </div>
                       </MotionWrapperExit>
                     </>
-                  )}
+                  ): <>
+                   <div className="">
+                    <Image
+                      src={
+                        product.product_small_image_urls.productSmallImageUrl[0]
+                      }
+                      className="p-0 w-full min-h-[67.5%] mb-auto "
+                      height={300}
+                      width={300}
+                      alt="aliexpressProduct"
+                    />
+                  </div>
+                        <div className="p-3 flex flex-col  gap-y-3">
+                    <div
+                      className={`flex justify-between gap-x-2 items-center`}
+                    >
+                      <div
+                        className={`flex justify-between w-full items-center`}
+                      >
+                        <span
+                          className={`w-fit text-[#253439] text-xs ${
+                            lang === "ar" && "text-right "
+                          }`}
+                        >
+                          {lang === "en"
+                            ? product.product_title.substring(0, 25)
+                            : product.product_title.substring(0, 35)}
+                          ...
+                        </span>
+                        <div>
+                          <Image
+                            src={"/client/products/cart.svg"}
+                            alt={`cart`}
+                            width={24}
+                            height={24}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className={`flex justify-between items-center w-full`}>
+                      <div className={`flex space-x-2 items-center `}>
+                        <span className="text-sm">
+                          {CurrencyFormatter(product.target_sale_price)}
+                        </span>
+                        {product.target_original_price !==
+                        product.target_sale_price ? (
+                          <span className="text-xs text-[#c2464f] line-through text-[12px]">
+                            {CurrencyFormatter(product.target_original_price)}
+                          </span>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
+                    <div
+                      className={`flex justify-between items-center`}
+                    >
+                      <div className="flex flex-1 z-30">
+                        {product.evaluate_rate
+                          ? renderRatingStars(
+                              product.evaluate_rate.split("%")[0]
+                            )
+                          : renderRatingStars(90)}
+                      </div>
+                      <a
+                        href={product.product_detail_url}
+                        target="_blank"
+                        className=" "
+                      >
+                        <Image
+                          src={`/client/products/aliexpressCard.svg`}
+                          width={66}
+                          height={21}
+                          alt="aliexpressCard"
+                        />
+                      </a>
+                    </div>
+                  </div>
+                  </> }
                 <div
                   className={cn(
                     "absolute top-[1rem] ",
@@ -138,12 +221,13 @@ export default function ProductsListAR({
                   <div
                     className="overflow-hidden"
                     onClick={() => {
-                      if (
+                    /*   if (
                         product.checked &&
                         (product.vendor_commission || product.vendor_commission === 0)
                       ) {
                         toggleShoppingCartActivated(i);
-                      }
+                      } */
+                      showShippingHandler(i);
                     }}
                   >
                     <Image
@@ -155,7 +239,7 @@ export default function ProductsListAR({
                     />
                   </div>
                 </div>
-                {!shippingInfoActive && (
+                {!showShippingForProduct?.[i] && (
                   <div
                     className={
                       (cn("absolute top-[10rem] left-[6rem]"),
@@ -173,7 +257,7 @@ export default function ProductsListAR({
                     />
                   </div>
                 )}
-                {!shippingInfoActive && (
+          {/*       {!shippingInfoActive && (
                   <div className="">
                     <Image
                       src={
@@ -185,9 +269,9 @@ export default function ProductsListAR({
                       alt="aliexpressProduct"
                     />
                   </div>
-                )}
+                )} */}
 
-                {product.checked && !shippingInfoActive ? (
+            {/*     {product.checked && !shippingInfoActive ? (
                   <>
                     <div className="space-y-3 flex flex-col pt-7">
                       <span className="mx-auto">من فضلك أدخل عمولتك. </span>
@@ -290,7 +374,7 @@ export default function ProductsListAR({
                       </a>
                     </div>
                   </div>
-                )}
+                )} */}
               </Card>
             );
           })}

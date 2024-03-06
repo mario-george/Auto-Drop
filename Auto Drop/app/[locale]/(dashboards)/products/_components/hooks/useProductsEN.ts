@@ -79,7 +79,8 @@ export default function useProducts({
             profitAfterDiscount: "",
             duration: "",
             activated: false,
-            loading: false,
+            // loading: false,
+            loading: "pending",
           },
         ])
       );
@@ -271,11 +272,17 @@ export default function useProducts({
   };
   useEffect(() => {
     let updateAllProductShipping = async function () {
+          let prodSh
       if (lang == "en") {
-        if (productsShippingInfo.length == 0) {
-          let prodSh = products.map((prod: any, ind: number) => {
+        prodSh = products.map((prod: any, ind: number) => {
+          return shoppingCartHandler(prod.product_id);
+        });
+      }else{ prodSh = productsAR.map((prod: any, ind: number) => {
             return shoppingCartHandler(prod.product_id);
           });
+
+      }
+      
           let prodShPromises = await Promise.allSettled(prodSh);
           console.log(prodShPromises);
           setProductsShippingInfo(
@@ -304,9 +311,8 @@ export default function useProducts({
               });
             })
           );
-        }
-      } else {
-      }
+        
+   
     };
     updateAllProductShipping();
   }, [products, productsAR, lang]);
