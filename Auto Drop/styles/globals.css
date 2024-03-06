@@ -115,3 +115,7 @@ body,
 .productsContainerGrid {
   @apply grid grid-cols-1 ml:grid-cols-2 tab:grid-cols-4 gap-y-10 gap-x-3 overflow-hidden;
 }
+/* 
+wallet page sttyles
+*/
+
