@@ -29,7 +29,7 @@ export default async function TableRenderer(props: latestOrdersProps) {
 
   return (
     <>
-      <div className="flex flex-col  bg-white md:py-4 md:px-6">
+      <div className="flex flex-col  bg-white md:py-4 md:px-6 dark:bg-[#2e464f] dark:text-white">
         <ColsExtract {...props} latestOrders={latestOrders} />
       </div>
     </>

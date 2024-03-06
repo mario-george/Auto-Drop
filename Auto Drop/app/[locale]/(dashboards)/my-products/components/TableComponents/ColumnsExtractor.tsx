@@ -16,15 +16,21 @@ export default function ColsExtract(props: any) {
     <DataTable
     setMyProducts={setMyProducts}
     setLoadProducts={setLoadProducts}
+    colData = {   {productName,
+      sellPrice,
+      category,
+      platform,
+      inventory,
+      setMyProducts,setLoadProducts}}
       data={myProducts}
-      columns={Cols({
+   /*    columns={Cols({
         productName,
         sellPrice,
         category,
         platform,
         inventory,
         setMyProducts,setLoadProducts
-      })}
+      })} */
       {...props}
     />
   );

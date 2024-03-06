@@ -28,6 +28,7 @@ import {
 
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
+import Cols from "./columns";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -41,6 +42,7 @@ interface DataTableProps<TData, TValue> {
   setMyProducts: any;
   apply: string;
   setLoadProducts: any;
+  colData?: any;
 }
 
 export function DataTable<TData, TValue>({
@@ -49,24 +51,37 @@ export function DataTable<TData, TValue>({
   price,
   category,
   unUpProd,
-  columns,
+  // columns,
   data,
   locale,
   setMyProducts,
   apply,
-  setLoadProducts,
+  setLoadProducts,colData
 }: DataTableProps<TData, TValue>) {
-  console.log(columns);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [sorting, setSorting] = React.useState<SortingState>([]);
 
+  let {productName,
+    sellPrice,
+    platform,
+    inventory,
+    } = colData
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+let columns =Cols({
+  productName,
+  sellPrice,
+  category,
+  platform,
+  inventory,
+  setMyProducts,setLoadProducts,rowSelection
+})
   const table = useReactTable({
     data,
+    //@ts-ignore
     columns,
     state: {
       sorting,

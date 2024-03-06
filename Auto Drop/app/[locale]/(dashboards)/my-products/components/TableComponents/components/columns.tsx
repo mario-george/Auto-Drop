@@ -13,6 +13,7 @@ interface ColProps {
   inventory: string;
   setMyProducts: any;
   setLoadProducts: any;
+  rowSelection?: any;
 }
 export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
   const {
@@ -22,7 +23,7 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
     platform,
     inventory,
     setMyProducts,
-    setLoadProducts,
+    setLoadProducts,rowSelection
   } = props;
   return [
     {
@@ -150,6 +151,7 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
     {
       id: "actions",
       cell: ({ row }) => {
+        console.log(rowSelection)
         //@ts-ignore
         let { _id: id, salla_product_id } = row.original;
         return (

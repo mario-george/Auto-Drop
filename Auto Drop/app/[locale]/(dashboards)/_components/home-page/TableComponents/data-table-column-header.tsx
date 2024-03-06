@@ -28,12 +28,12 @@ export function DataTableColumnHeader<TData, TValue>({
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
-    return <div className={cn("text-center", className)}>{title}</div>;
+    return <div className={cn("text-center dark:text-white", className)}>{title}</div>;
   }
 
   return (
     <div
-      className={cn("flex items-center justify-center space-x-0", className)}
+      className={cn("flex items-center justify-center space-x-0 dark:text-white", className)}
     >
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
