@@ -11,7 +11,7 @@ export default function Home() {
     <>
       <MotionWrapper locale={locale}>
         <div className="tab:p-4">
-          <HomePageRenderer t={t} />
+          <HomePageRenderer t={t} locale={locale} />
         </div>
       </MotionWrapper>
     </>
