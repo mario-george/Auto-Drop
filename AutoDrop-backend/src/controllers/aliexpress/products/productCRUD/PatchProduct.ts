@@ -32,6 +32,7 @@ const PatchProduct = catchAsync(
       productQuantity,
       metadata_description,
       metadata_title,
+      categoriesSalla,
       ...body
     } = req.body;
 
@@ -59,10 +60,16 @@ const PatchProduct = catchAsync(
     product.metadata_title = metadata_title;
     product.name = name;
     product.commissionPercentage = commissionPercentage;
-    product.showDiscountPrice = showDiscountPrice;
+    if(showDiscountPrice){
+
+      product.showDiscountPrice = showDiscountPrice;
+    }
     product.vendor_commission = vendor_commission;
     product.commissionPercentage = commissionPercentage;
+if(categoriesSalla){
+  product.categoriesSalla = categoriesSalla;
 
+}
     // console.log(product);
     await product.save();
     const opt2 = {
