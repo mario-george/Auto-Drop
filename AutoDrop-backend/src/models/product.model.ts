@@ -71,8 +71,9 @@ interface ProductSchema {
   target_sale_price?: string;
   target_original_price?: string;
   variantsArr?: any;
-  commissionPercentage?:boolean,
-  showDiscountPrice?: boolean,
+  commissionPercentage?: boolean;
+  showDiscountPrice?: boolean;
+  categoriesSalla?: number[];
 }
 
 interface ProductDocument extends Document, ProductSchema {}
@@ -144,6 +145,7 @@ const options = {
   variantsArr: { type: Array, default: [] },
   commissionPercentage: { type: Boolean, default: true },
   showDiscountPrice: { type: Boolean, default: false },
+  categoriesSalla: { type: Array, default: [] },
 };
 
 const schema = new Schema<ProductSchema>(options, { timestamps: true });
