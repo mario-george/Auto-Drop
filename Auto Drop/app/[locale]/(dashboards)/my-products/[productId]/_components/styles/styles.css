@@ -19,7 +19,12 @@
 .shippingCardValue {
     @apply  text-[#CCE0DB] text-sm md:text-base;
   }
-
+  .shippingCardText {
+    @apply  text-[#CCE0DB] text-sm md:text-base;
+  }
+  .shippingCardTextActive {
+    @apply  text-[#CCE0DB] text-sm md:text-base;
+  }
 .shippingCardPriceActive {
   @apply text-[#F4B1AC] rounded-lg text-sm md:text-base;
 }
