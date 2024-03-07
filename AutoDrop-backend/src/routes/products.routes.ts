@@ -12,7 +12,7 @@ import { CheckValidationSchema } from "../validate/CheckValidation";
 import { CreateProduct } from "../validate/products";
 import { CreateAndSaveProduct } from "../controllers/aliexpress/products/productCRUD/createProduct";
 import { getUserProducts } from "../controllers/aliexpress/products/productCRUD/getUserProducts";
-import { LinkProductSalla ,LinkProductSalla2} from "../controllers/aliexpress/products/productCRUD/LinkProduct";
+import { LinkProductSalla2 } from "../controllers/aliexpress/products/productCRUD/LinkProduct";
 import { DeleteProductById } from "../controllers/aliexpress/products/productCRUD/DeleteProduct";
 import GetProductInfo from "../controllers/aliexpress/products/productCRUD/GetProductInfo";
 import PatchProduct from "../controllers/aliexpress/products/productCRUD/PatchProduct";
@@ -30,14 +30,17 @@ router.post(
 );
 //here
 
-
 router.post(
   "/product/createProduct",
   [Authentication(), ...CreateProduct, CheckValidationSchema],
   CreateAndSaveProduct
 );
-router.post("/product/linkProductSalla", [Authentication()], LinkProductSalla);
-router.post("/product/linkProductSalla/v2", [Authentication()], LinkProductSalla2);
+// router.post("/product/linkProductSalla", [Authentication()], LinkProductSalla);
+router.post(
+  "/product/linkProductSalla/v2",
+  [Authentication()],
+  LinkProductSalla2
+);
 router.get("/product/getProducts", [Authentication()], getUserProducts);
 router.delete(
   "/product/deleteProduct/:productId",

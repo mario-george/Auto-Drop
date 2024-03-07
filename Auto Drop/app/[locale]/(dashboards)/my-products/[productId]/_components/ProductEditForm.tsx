@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import axiosInstance from "../../../_components/shared/AxiosInstance";
-import ProductEditHeader from "./ProductEditHeader";
+import useProductEditHeader from "./useProductEditHeader";
 import MotionWrapperExit from "../../../_components/shared/MotionWrapperExit";
 import { useLocale } from "next-intl";
 import Image from "next/image";
@@ -84,9 +84,8 @@ interface ProductEditFormProps {
   uploadProduct: string;
 }
 interface CategorySalla {
-    id:number;
-    name:string
-
+  id: number;
+  name: string;
 }
 export default function ProductEditForm(props: ProductEditFormProps) {
   let {
@@ -126,8 +125,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     durationToDeliver,
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
-  const [shippingWithoutOrInclude, setShippingWithoutOrInclude] = useState("shippingIncluded");
-
+  const [shippingWithoutOrInclude, setShippingWithoutOrInclude] =
+    useState("shippingIncluded");
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const { setLoading, LoaderComponent } = useLoader();
   const [formValues, setFormValues] = useState<any>({ ProductName: "" });
@@ -142,7 +141,19 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     product?.description
   );
   const [showDiscountPrice, setShowDiscountPrice] = useState<boolean>(false);
-
+  const formSubmmitedHandler = () => {
+    buttonRef?.current?.click();
+  };
+  let addToCartHandler = () => {};
+  const ProductEditHeaderProps = {
+    uploadProduct,
+    addToCart,
+    addToCartHandler,
+    uploadProductHandler: formSubmmitedHandler,
+  };
+  const { ProductHeaderComponent, choosenQuantity } = useProductEditHeader({
+    ...ProductEditHeaderProps,
+  });
   let target_sale_price: any,
     target_original_price: any,
     vendor_commission: any,
@@ -378,37 +389,40 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     selectedCategories,
     locale,
   };
-  let addToCartHandler = () => {};
+
   let uploadProductHandler = async (dataForm: any) => {
     try {
       let profitChoosenTypeName = "number";
-      console.log("percentage",percentage)
-      console.log("profitChoosenType==percentage",profitChoosenType==percentage)
-      console.log('profitChoosenType',profitChoosenType)
+      console.log("percentage", percentage);
+      console.log(
+        "profitChoosenType==percentage",
+        profitChoosenType == percentage
+      );
+      console.log("profitChoosenType", profitChoosenType);
       let commissionPercentage = false;
-      if (profitChoosenType == percentage|| profitChoosenType == 'percentage') {
+      if (
+        profitChoosenType == percentage ||
+        profitChoosenType == "percentage"
+      ) {
         profitChoosenTypeName = "percentage";
         commissionPercentage = true;
       }
 
-      let require_shipping 
-      if(shippingWithoutOrInclude=="shippingIncluded"){
-        let require_shipping = false
-
-      }else{
-        require_shipping = true
-
+      let require_shipping;
+      if (shippingWithoutOrInclude == "shippingIncluded") {
+        let require_shipping = false;
+      } else {
+        require_shipping = true;
       }
-      console.log("dataForm?.SEOTitleText", dataForm?.SEOTitleText);
-      console.log("dataForm?.prodName", dataForm?.prodName);
-      console.log("dataForm?.SEODescription", dataForm?.SEODescription);
-      console.log("commissionPercentage", commissionPercentage);
-      let categoriesSalla = categoriesList.filter((category:CategorySalla)=>selectedCategories.includes(category.name)).map((category:CategorySalla)=>category.id) 
-      console.log("categoriesSalla",categoriesSalla)
-      console.log("categoriesList",categoriesList)
-      console.log("require_shipping",require_shipping)
-      console.log("shippingWithoutOrInclude",shippingWithoutOrInclude)
-return
+
+      let categoriesSalla = categoriesList
+        .filter((category: CategorySalla) =>
+          selectedCategories.includes(category.name)
+        )
+        .map((category: CategorySalla) => category.id);
+
+      console.log("choosenQuantity", choosenQuantity);
+      return;
       let data = {
         name: dataForm.prodName,
         vendor_commission: commissionVal,
@@ -417,7 +431,10 @@ return
         description: descriptionField,
         profitChoosenTypeName,
         commissionPercentage,
-        showDiscountPrice,require_shipping,categoriesSalla
+        showDiscountPrice,
+        require_shipping,
+        categoriesSalla,
+        quantity: choosenQuantity,
       };
       const res = await axiosInstance.patch(
         `aliexpress/product/updateProduct/${product._id}`,
@@ -434,19 +451,12 @@ return
       setLoading(false);
     }
   };
-  const formSubmmitedHandler = () => {
-    buttonRef?.current?.click();
-  };
-  const ProductEditHeaderProps = {
-    uploadProduct,
-    addToCart,
-    addToCartHandler,
-    uploadProductHandler: formSubmmitedHandler,
-  };
+
   return (
     <>
       {LoaderComponent}
-      <ProductEditHeader {...ProductEditHeaderProps} />
+      {/* <ProductEditHeader {...ProductEditHeaderProps} /> */}
+      {ProductHeaderComponent}
       <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  ">
         <ProductImageRenderer product={product} />
         <div className="flex flex-col min-w-[55%]">
@@ -470,17 +480,18 @@ return
               <Separator />
               <div className="flex flex-col min-w-full">
                 <span>{piecePrice}</span>
-                <div className="grid grid-rows-3 grid-cols-1 tab:grid-cols-2  tab:gap-4   my-4 min-w-full">
+                <div className="grid grid-cols-1 tab:grid-cols-2  tab:gap-4   my-4 min-w-full">
                   <span className="tab:col-span-2">{originalPrice}</span>
                   <Input
                     className={`shadow-sm text-sm md:text-base bg-[#edf5f9] ${inputClasses} `}
                     value={product?.target_original_price}
                   />{" "}
-                  
                   <RadioGroup
                     defaultValue="shippingIncluded"
                     className="!flex flex-col tab:flex-row  tab:space-s-3 w-full"
-                    onValueChange={(value:string)=>{setShippingWithoutOrInclude(value)}}
+                    onValueChange={(value: string) => {
+                      setShippingWithoutOrInclude(value);
+                    }}
                   >
                     <div className="flex items-center space-x-2  bg-[#edf5f9] p-2 rounded-md">
                       <RadioGroupItem value="withoutShipping" id="r1" />

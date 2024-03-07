@@ -23,7 +23,7 @@ export default function ProductInfoDetails({
 }: any) {
   return (
     <div>
-      <div className="flex flex-col space-y-5 tab:flex-row tab:justify-between md:gap-5 items-center mb-3">
+      <div className="grid grid-cols-1 tab:grid-cols-2 space-y-5 tab:space-y-0  md:gap-5 items-center mb-3">
         <FormField
           control={form.control}
           name="prodName"
@@ -37,7 +37,7 @@ export default function ProductInfoDetails({
                   placeholder={prodNameTitlePlaceholder}
                   {...field}
                   id="prodName"
-                  className={`shadow-sm text-sm md:text-base ${inputClasses} `}
+                  className={`shadow-sm text-sm md:text-base ${inputClasses}`}
                   onFocus={() => setErrorMsg(null)}
                 />
               </FormControl>

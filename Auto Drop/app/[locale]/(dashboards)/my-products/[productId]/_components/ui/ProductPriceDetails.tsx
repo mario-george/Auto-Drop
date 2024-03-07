@@ -36,7 +36,7 @@ export default function ProductPriceDetails({
           value={CurrencyFormatter(finalPrice)}
         />
         <Input
-          className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
+          className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#636867] ${inputClasses} `}
           value={CurrencyFormatter(totalProfit)}
         />
       </div>

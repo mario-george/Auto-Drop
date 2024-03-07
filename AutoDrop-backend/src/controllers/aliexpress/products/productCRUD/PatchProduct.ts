@@ -32,7 +32,7 @@ const PatchProduct = catchAsync(
       productQuantity,
       metadata_description,
       metadata_title,
-      categoriesSalla,
+      categoriesSalla,require_shipping,
       ...body
     } = req.body;
 
@@ -69,6 +69,9 @@ const PatchProduct = catchAsync(
 if(categoriesSalla){
   product.categoriesSalla = categoriesSalla;
 
+}
+if(require_shipping){
+  product.require_shipping = require_shipping;
 }
     // console.log(product);
     await product.save();
