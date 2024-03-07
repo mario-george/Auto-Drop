@@ -98,11 +98,16 @@ element
                       });
                     }}
                   >
-                    <div className="bg-[#000000] rounded-full px-[6px] py-[0px] text-white">
-                      x
+                    <div className=" ">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="11.6133" cy="12.3652" r="10" fill="#2E464F" stroke="white"/>
+<line x1="7.4863" y1="8.85141" x2="15.4336" y2="15.481" stroke="white"/>
+<line x1="14.3659" y1="8.1459" x2="8.95408" y2="16.4352" stroke="white"/>
+</svg>
+
                     </div>
                   </div>
-                  <span>{category}</span>
+                  <span className="dark:text-[#111111]">{category}</span>
                 </div>
               </>
             );
