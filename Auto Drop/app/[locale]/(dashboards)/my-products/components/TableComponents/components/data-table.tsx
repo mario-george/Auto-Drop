@@ -29,6 +29,8 @@ import {
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 import Cols from "./columns";
+import { useDispatch } from "react-redux";
+import { setKeyValue } from "@/store/productsSlice";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -43,6 +45,8 @@ interface DataTableProps<TData, TValue> {
   apply: string;
   setLoadProducts: any;
   colData?: any;
+
+  
 }
 
 export function DataTable<TData, TValue>({
@@ -56,7 +60,8 @@ export function DataTable<TData, TValue>({
   locale,
   setMyProducts,
   apply,
-  setLoadProducts,colData
+  setLoadProducts,
+  colData
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -65,20 +70,24 @@ export function DataTable<TData, TValue>({
     []
   );
 
-  let {productName,
+  let { productName, sellPrice, platform, inventory } = colData;
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(
+      setKeyValue({ key: "currentSelectedProducts", value: rowSelection })
+    );
+  }, [rowSelection]);
+  let columns = Cols({
+    productName,
     sellPrice,
+    category,
     platform,
     inventory,
-    } = colData
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-let columns =Cols({
-  productName,
-  sellPrice,
-  category,
-  platform,
-  inventory,
-  setMyProducts,setLoadProducts,rowSelection
-})
+    setMyProducts,
+    setLoadProducts,
+    rowSelection,
+  });
   const table = useReactTable({
     data,
     //@ts-ignore
@@ -164,7 +173,7 @@ let columns =Cols({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <DataTablePagination table={table} products={data} />
     </div>
   );
 }
