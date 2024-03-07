@@ -37,8 +37,8 @@ export default function SubmitProducts({
   let buttonClassL = `rounded-full bg-[#008767] hover:bg-[#008767]/90 px-2 py-2 w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem] hover:cursor-pointer `;
   return (
     <>
-      <Dialog submitHandler={submitHandler}>
         {LoaderComponent}
+      <Dialog submitHandler={submitHandler}>
         <div className={buttonClassL}>
           <Image
             src={`/client/my-products/link.svg`}
