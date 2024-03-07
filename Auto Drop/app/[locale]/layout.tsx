@@ -6,7 +6,6 @@ import ToastProvider from "@/components/toast-provider";
 import StoreProvider from "@/store/providers";
 import { Providers } from "../../components/chakra-ui/providers";
 import NextTopLoader from 'nextjs-toploader'
-import { ThemeProvider } from "@/components/ui/theme-provider";
 export const metadata: Metadata = {
   generator: "Next.js",
   applicationName: "Auto Drop",
@@ -62,14 +61,8 @@ export default function LocaleLayout({
         <StoreProvider>
           <ToastProvider />
           <Providers>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+       
             {children}
-          </ThemeProvider>
             </Providers>
         </StoreProvider>
       </body>
