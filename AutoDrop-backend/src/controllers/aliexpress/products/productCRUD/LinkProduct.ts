@@ -294,7 +294,8 @@ export const updateVariantFinalOption2 = async (
         price = parseFloat(price) + product?.vendor_commission;
       } else if (product?.vendor_commission && product?.commissionPercentage) {
         price =
-          (product?.vendor_commission /100)* parseFloat(price) + parseFloat(price);
+          (product?.vendor_commission / 100) * parseFloat(price) +
+          parseFloat(price);
       }
       let mnp = getRandomInt(100000000000000, 999999999999999);
       let gitin = getRandomInt(10000000000000, 99999999999999);
@@ -600,7 +601,8 @@ export async function LinkProductSalla2(
       noOptionsInProduct = true;
       let prodPrice = parseFloat(product.variantsArr[0].offer_sale_price);
       console.log("no options hereeeeee");
-      let totalPrice = (product?.vendor_commission/100) * prodPrice + prodPrice;
+      let totalPrice =
+        (product?.vendor_commission / 100) * prodPrice + prodPrice;
       if (!product.commissionPercentage) {
         totalPrice = product?.vendor_commission + prodPrice;
       }
@@ -671,6 +673,11 @@ export async function LinkProductSalla2(
       res,
       next
     );
+    if (createdeProduct?.message == "Cancel") {
+      return;
+    } else if (createdeProduct?.message == "Error") {
+      throw new AppError("sku already linked to a product on Salla", 400);
+    }
     console.log(createdeProduct);
     /*    try {
       createdeProduct = data;
