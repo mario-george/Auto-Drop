@@ -5,6 +5,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import DialogUnLinkProduct from "./DialogUnLinkProduct";
 import useLoader from "@/components/loader/useLoader";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { setKeyValue } from "@/store/productsSlice";
 export default function ButtonsRenderer({
   id,
   setMyProducts,
@@ -14,6 +17,8 @@ export default function ButtonsRenderer({
   const { LoaderComponent, setLoading } = useLoader();
   const router = useRouter();
   const locale = useLocale();
+  const dispatch = useDispatch();
+  const reloadPage = useSelector((state: any) => state.products.reloadPage);
   let buttonClassD =
     "rounded-full bg-[#c1121f] w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem]  px-2 py-2 tab:px-0 tab:py-0 hover:cursor-pointer  hover:bg-[#c1121f]/90 ";
   let buttonClassL = `rounded-full w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem]  px-2 py-2 tab:px-0 tab:py-0 hover:cursor-pointer bg-[#ff0000] hover:bg-[#ff0000]/90 `;
@@ -26,15 +31,15 @@ export default function ButtonsRenderer({
     if (salla_product_id) {
       return;
     }
-    setLoading(true)
+    setLoading(true);
     const res = await axiosInstance.post(
       "aliexpress/product/linkProductSalla/v2",
       { productId: id }
     );
     console.log(res.data);
     setLoadProducts((prev: boolean) => !prev);
-    setLoading(false)
-
+    dispatch(setKeyValue({ key: "reloadPage", value: !reloadPage }));
+    setLoading(false);
   };
   let deleteProductHandler = async () => {
     const res = await axiosInstance.delete(
@@ -58,7 +63,7 @@ export default function ButtonsRenderer({
 
   return (
     <div className="flex flex-row-reverse gap-3 transition-all duration-100">
-        {LoaderComponent}
+      {LoaderComponent}
       <div className={buttonClassD} onClick={deleteProductHandler}>
         <Image
           src={`/client/my-products/delete.svg`}
