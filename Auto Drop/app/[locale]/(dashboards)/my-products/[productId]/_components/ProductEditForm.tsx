@@ -83,7 +83,11 @@ interface ProductEditFormProps {
   addToCart: string;
   uploadProduct: string;
 }
+interface CategorySalla {
+    id:number;
+    name:string
 
+}
 export default function ProductEditForm(props: ProductEditFormProps) {
   let {
     invalidProdName,
@@ -122,6 +126,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     durationToDeliver,
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
+  const [shippingWithoutOrInclude, setShippingWithoutOrInclude] = useState("shippingIncluded");
+
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const { setLoading, LoaderComponent } = useLoader();
   const [formValues, setFormValues] = useState<any>({ ProductName: "" });
@@ -384,10 +390,25 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         profitChoosenTypeName = "percentage";
         commissionPercentage = true;
       }
+
+      let require_shipping 
+      if(shippingWithoutOrInclude=="shippingIncluded"){
+        let require_shipping = false
+
+      }else{
+        require_shipping = true
+
+      }
       console.log("dataForm?.SEOTitleText", dataForm?.SEOTitleText);
       console.log("dataForm?.prodName", dataForm?.prodName);
       console.log("dataForm?.SEODescription", dataForm?.SEODescription);
       console.log("commissionPercentage", commissionPercentage);
+      let categoriesSalla = categoriesList.filter((category:CategorySalla)=>selectedCategories.includes(category.name)).map((category:CategorySalla)=>category.id) 
+      console.log("categoriesSalla",categoriesSalla)
+      console.log("categoriesList",categoriesList)
+      console.log("require_shipping",require_shipping)
+      console.log("shippingWithoutOrInclude",shippingWithoutOrInclude)
+return
       let data = {
         name: dataForm.prodName,
         vendor_commission: commissionVal,
@@ -396,7 +417,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         description: descriptionField,
         profitChoosenTypeName,
         commissionPercentage,
-        showDiscountPrice,
+        showDiscountPrice,require_shipping,categoriesSalla
       };
       const res = await axiosInstance.patch(
         `aliexpress/product/updateProduct/${product._id}`,
@@ -455,9 +476,11 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                     className={`shadow-sm text-sm md:text-base bg-[#edf5f9] ${inputClasses} `}
                     value={product?.target_original_price}
                   />{" "}
+                  
                   <RadioGroup
                     defaultValue="shippingIncluded"
                     className="!flex flex-col tab:flex-row  tab:space-s-3 w-full"
+                    onValueChange={(value:string)=>{setShippingWithoutOrInclude(value)}}
                   >
                     <div className="flex items-center space-x-2  bg-[#edf5f9] p-2 rounded-md">
                       <RadioGroupItem value="withoutShipping" id="r1" />
