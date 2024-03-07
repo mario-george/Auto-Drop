@@ -2,11 +2,13 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../../_components/shared/AxiosInstance";
 import ColsExtract from "./ColumnsExtractor";
+import { setKeyValue } from "@/store/productsSlice";
+import { useDispatch } from "react-redux";
 
 export default function ProductsFetch(props: any) {
   const [myProducts, setMyProducts] = useState([]);
   const [loadProducts, setLoadProducts] = useState(false);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const getMyProductsData = async () => {
       const data2 = await axiosInstance.get("/aliexpress/product/getProducts");
@@ -25,6 +27,12 @@ export default function ProductsFetch(props: any) {
             inventory: product.quantity,
             platform: props.locale == "ar" ? "علي اكسبرس" : "Aliexpress",
           };
+        })
+      );
+      dispatch(
+        setKeyValue({
+          key: "currentProductsList",
+          value: data2.data.userProducts,
         })
       );
     };
