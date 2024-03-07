@@ -44,7 +44,7 @@ export default function NavComponent({
               >
                 <Link
                   href={link.route}
-                  className={`flex items-center transition-all duration-100 `}
+                  className={`flex items-center transition-all duration-100 ${locale=="ar" && `mr-4 tab:mr-0`} `}
                 >
                   <link.icon />
                   {!isNavOpen && (
