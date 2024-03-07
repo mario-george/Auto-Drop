@@ -42,7 +42,7 @@ export default async function AlreadyLinkedProduct(
     return;
   }
 }
-export const ProductSallaChecker = async (
+export const ProductSallaChecker :any = async (
   optionsObj: any,
   sku?: string,
   token?: string,
@@ -85,14 +85,17 @@ export const ProductSallaChecker = async (
         console.log("2222");
         if (res && next) {
           await LinkProductSalla2(req, res, next);
+          return {"message":"Cancel"}
         } else {
           // Handle the case where res is undefined
           console.error("res/next is undefined");
         }
-        return;
+        return {"message":"Error"}
+
       }
-      return;
+      return {"message":"Error"}
+
     }
-    throw new AppError("sku already linked to a product on Salla", 400);
+    // throw new AppError("sku already linked to a product on Salla", 400);
   }
 };
