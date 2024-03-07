@@ -272,47 +272,45 @@ export default function useProducts({
   };
   useEffect(() => {
     let updateAllProductShipping = async function () {
-          let prodSh
+      let prodSh;
       if (lang == "en") {
         prodSh = products.map((prod: any, ind: number) => {
           return shoppingCartHandler(prod.product_id);
         });
-      }else{ prodSh = productsAR.map((prod: any, ind: number) => {
-            return shoppingCartHandler(prod.product_id);
-          });
-
+      } else {
+        prodSh = productsAR.map((prod: any, ind: number) => {
+          return shoppingCartHandler(prod.product_id);
+        });
       }
-      
-          let prodShPromises = await Promise.allSettled(prodSh);
-          console.log(prodShPromises);
-          setProductsShippingInfo(
-            prodShPromises.map((result: any, index: number) => {
-              if (result.status === "rejected") {
-                return [];
-              }
 
-              let shipping = result.value;
+      let prodShPromises = await Promise.allSettled(prodSh);
+      console.log(prodShPromises);
+      setProductsShippingInfo(
+        prodShPromises.map((result: any, index: number) => {
+          if (result.status === "rejected") {
+            return [{ activated: true, loading: false, noShipping: true }];
+          }
 
-              if (shipping.length == 0) {
-                return [{ activated: true, loading: false, noShipping: true }];
-              }
-              return shipping.map((e: any) => {
-                let shippingType = e.shipping_method;
-                let duration = e.estimated_delivery_time;
-                let price = e?.freight?.cent / 100;
-                return {
-                  ...e,
-                  price,
-                  duration,
-                  shippingType,
-                  activated: true,
-                  loading: false,
-                };
-              });
-            })
-          );
-        
-   
+          let shipping = result.value;
+
+          if (shipping.length == 0) {
+            return [{ activated: true, loading: false, noShipping: true }];
+          }
+          return shipping.map((e: any) => {
+            let shippingType = e.shipping_method;
+            let duration = e.estimated_delivery_time;
+            let price = e?.freight?.cent / 100;
+            return {
+              ...e,
+              price,
+              duration,
+              shippingType,
+              activated: true,
+              loading: false,
+            };
+          });
+        })
+      );
     };
     updateAllProductShipping();
   }, [products, productsAR, lang]);
