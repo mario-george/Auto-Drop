@@ -1,12 +1,30 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction } from "@reduxjs/toolkit";
+type PageType = {
+  page: string;
+  products: any[];
+  lang: string;
+};
 
+type InitialStateType = {
+  pages: PageType[];
+  currentSelectedProducts: any;
+  currentProductsList: any;
+  reloadPage:boolean
+};
+interface SetKeyValueActionPayload {
+  key: "pages" | "currentSelectedProducts"|"currentProductsList"|"reloadPage";
+  value: any;
+}
 // Define a slice for the products
 const productsSlice = createSlice({
   name: "pagesProducts",
   // { pages: [ { products: [] } ,page as number]
   initialState: {
-    pages: [] as { page: string; products: any[]; lang: string }[],
-  },
+    pages: [],
+    currentSelectedProducts: {},
+    currentProductsList: [],reloadPage:false
+  } as InitialStateType,
   reducers: {
     setPageProducts: (state, action) => {
       const { products, page, lang } = action.payload;
@@ -27,8 +45,13 @@ const productsSlice = createSlice({
     resetPagesProducts: (state) => {
       state.pages = [];
     },
+    setKeyValue: (state, action: PayloadAction<SetKeyValueActionPayload>) => {
+      const { key, value } = action.payload;
+      state[key] = value;
+    },
   },
 });
 
-export const { setPageProducts, resetPagesProducts } = productsSlice.actions;
+export const { setPageProducts, resetPagesProducts, setKeyValue } =
+  productsSlice.actions;
 export const productsSliceReducer = productsSlice.reducer;
