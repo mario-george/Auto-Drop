@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { Switch } from "@chakra-ui/react";
 import { Input } from "@/components/ui/input";
+import CurrencyFormatter from "../../../../products/_components/CurrencyFormatter";
 
 export default function ProductPriceDetails({
-  
-  addOfferPrice
-  , editedPrice,
-  profit,finalPrice,totalProfit,inputClasses,showDiscountPrice,setShowDiscountPrice
+  addOfferPrice,
+  editedPrice,
+  profit,
+  finalPrice,
+  totalProfit,
+  inputClasses,
+  showDiscountPrice,
+  setShowDiscountPrice,
 }: any) {
   const [checked, setChecked] = useState(false);
   return (
@@ -20,21 +25,21 @@ export default function ProductPriceDetails({
             onChange={() => {
               setShowDiscountPrice(!showDiscountPrice);
             }}
-          /> </div>
-         
+          />{" "}
+        </div>
       </div>
       <div className="grid grid-cols-2 gap-4 my-4 min-w-full">
-                  <span>{editedPrice}</span>
-                  <span>{profit}</span>
-                  <Input
-                    className={`shadow-sm text-sm md:text-base min-w-[60%] ${inputClasses} `}
-                    value={finalPrice}
-                  />
-                  <Input
-                    className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
-                    value={totalProfit}
-                  />
-                </div>
+        <span>{editedPrice}</span>
+        <span>{profit}</span>
+        <Input
+          className={`shadow-sm text-sm md:text-base min-w-[60%] ${inputClasses} `}
+          value={CurrencyFormatter(finalPrice)}
+        />
+        <Input
+          className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
+          value={CurrencyFormatter(totalProfit)}
+        />
+      </div>
     </div>
   );
 }
