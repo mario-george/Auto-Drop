@@ -116,8 +116,10 @@ element
         <div>
           <span>{tag}</span>{" "}
           <Select>
-            <SelectTrigger className="mt-3 bg-[#edf5f9] max-w-[90%]">
-              <SelectValue placeholder={tag} />
+            <SelectTrigger className="mt-3 bg-[#edf5f9] max-w-[90%] dark:text-black">
+              <SelectValue 
+              
+              placeholder={tag} />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
