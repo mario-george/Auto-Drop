@@ -17,7 +17,7 @@ export default function Header({
   title: string;
   className?: string;
 }) {
-  const { ProfitComponent,LoaderComponent } = useProfitTypeHandler({
+  const { ProfitComponent, LoaderComponent } = useProfitTypeHandler({
     upProducts,
     val,
     percentage,
@@ -26,8 +26,8 @@ export default function Header({
   });
   return (
     <>
-    {LoaderComponent}
-      <div className="flex justify-between max-w-[90%] px-3 my-3 items-center">
+      {LoaderComponent}
+      <div className="flex flex-col tab:flex-row justify-between tab:max-w-[90%] px-3 my-3 items-center">
         <div className={`flex tab:text-[30px] text-[#253439] ${className}`}>
           {title}
         </div>{" "}
