@@ -32,6 +32,12 @@ export default function useProfitTypeHandler(props: any) {
     let selectedProds: any = currentProductsList.filter(
       (_: any, index: number) => currentSelectedProducts[index]
     );
+    if (selectedProds.length == 0) {
+      toast({
+        variant: "destructive",
+        title: "No product was selected please try again.",
+      });
+    }
     let promisesArr = selectedProds?.map((product: any) => {
       let { salla_product_id, _id: id } = product;
       /*       if (salla_product_id) {
@@ -70,7 +76,7 @@ export default function useProfitTypeHandler(props: any) {
     });
     try {
       let promisesSettled = await Promise.allSettled(promisesArr);
-      console.log(promisesSettled);
+      console.log("promisesSettled", promisesSettled);
       promisesSettled.forEach((promise: any) => {
         let { status, value } = promise;
         if (status === "rejected") {
@@ -89,15 +95,20 @@ export default function useProfitTypeHandler(props: any) {
   };
   let ProfitComponent = (
     <>
-      <div className="grid grid-cols-3 gap-4 tab:max-w-[30rem] items-center   my-4">
-        <div className="flex space-s-6 items-center">
-          <span className="whitespace-nowrap text-sm mx-2">{profitType}</span>
+      <div className="grid grid-cols-2 justify-center tab:grid-cols-3 gap-4 tab:max-w-[30rem] items-center my-2 tab:my-4  dark:text-white">
+        <span className="whitespace-nowrap text-sm mx-2  tab:hidden">
+          {profitType}
+        </span>
+        <div className="flex space-y-3 tab:space-y-0 flex-col tab:flex-row tab:space-s-6 items-center">
+          <span className="whitespace-nowrap text-sm mx-2 hidden tab:block">
+            {profitType}
+          </span>
           <Select
             onValueChange={(value: any) => {
               setProfitChoosenType(value);
             }}
           >
-            <SelectTrigger className="bg-[#edf5f9]">
+            <SelectTrigger className="bg-[#edf5f9]  dark:text-black">
               <SelectValue placeholder={percentage} />
             </SelectTrigger>
             <SelectContent>
@@ -108,7 +119,7 @@ export default function useProfitTypeHandler(props: any) {
             </SelectContent>
           </Select>
         </div>
-        <div className=" flex items-center space-s-3">
+        <div className=" flex items-center tab:space-s-3">
           <div className="relative mt-auto">
             <Input
               type="number"
