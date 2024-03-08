@@ -47,7 +47,7 @@ export default function ProductsFetch(props: any) {
   return (
     <>
       {" "}
-      <div className=" tableContainer">
+      <div className=" tableContainer dark:bg-[#2e464f] dark:text-white">
         <ColsExtract
           {...props}
           myProducts={myProducts}
