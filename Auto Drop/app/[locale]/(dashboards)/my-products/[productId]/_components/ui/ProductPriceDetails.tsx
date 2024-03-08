@@ -17,7 +17,7 @@ export default function ProductPriceDetails({
   return (
     <div>
       <div className="grid grid-cols-2 space-s-3 items-center">
-        <div className="flex whitespace-nowrap space-s-3">
+        <div className="flex whitespace-nowrap items-center space-s-3">
           <div>{addOfferPrice}</div>
           <Switch
             id="email-alerts"
