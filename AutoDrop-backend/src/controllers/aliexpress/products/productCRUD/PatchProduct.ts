@@ -32,7 +32,9 @@ const PatchProduct = catchAsync(
       productQuantity,
       metadata_description,
       metadata_title,
-      categoriesSalla,require_shipping,
+      categoriesSalla,
+      require_shipping,
+      choosenQuantity,
       ...body
     } = req.body;
 
@@ -60,19 +62,20 @@ const PatchProduct = catchAsync(
     product.metadata_title = metadata_title;
     product.name = name;
     product.commissionPercentage = commissionPercentage;
-    if(showDiscountPrice){
-
+    if (showDiscountPrice) {
       product.showDiscountPrice = showDiscountPrice;
     }
     product.vendor_commission = vendor_commission;
     product.commissionPercentage = commissionPercentage;
-if(categoriesSalla){
-  product.categoriesSalla = categoriesSalla;
-
-}
-if(require_shipping){
-  product.require_shipping = require_shipping;
-}
+    if (categoriesSalla) {
+      product.categoriesSalla = categoriesSalla;
+    }
+    if (choosenQuantity) {
+      product.choosenQuantity = choosenQuantity;
+    }
+    if (require_shipping) {
+      product.require_shipping = require_shipping;
+    }
     // console.log(product);
     await product.save();
     const opt2 = {
