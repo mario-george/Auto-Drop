@@ -43,6 +43,7 @@ import ProductSEOInfo from "./ui/ProductSEOInfo";
 import Editor from "./ui/Editor";
 import ProductShipping from "./ui/ProductShipping";
 import useLoader from "@/components/loader/useLoader";
+import CurrencyFormatter from "../../../products/_components/CurrencyFormatter";
 interface ProductEditFormProps {
   prodNameTitle: string;
   prodNameTitlePlaceholder: string;
@@ -434,7 +435,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         showDiscountPrice,
         require_shipping,
         categoriesSalla,
-        quantity: choosenQuantity,
+        choosenQuantity: choosenQuantity,
       };
       const res = await axiosInstance.patch(
         `aliexpress/product/updateProduct/${product._id}`,
@@ -457,13 +458,13 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       {LoaderComponent}
       {/* <ProductEditHeader {...ProductEditHeaderProps} /> */}
       {ProductHeaderComponent}
-      <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  ">
+      <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  dark:bg-[#2e464f] dark:text-white">
         <ProductImageRenderer product={product} />
         <div className="flex flex-col min-w-[55%]">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmitHandler)}
-              className="flex flex-col bg-[#F7F5F2] rounded-lg shadow-lg tab:p-8 space-y-4  "
+              className="flex flex-col rounded-lg tab:p-8 space-y-4  "
               dir={locale === "ar" ? "rtl" : "ltr"}
             >
               <button type="submit" ref={buttonRef} className="hidden">
@@ -484,11 +485,11 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                   <span className="tab:col-span-2">{originalPrice}</span>
                   <Input
                     className={`shadow-sm text-sm md:text-base bg-[#edf5f9] ${inputClasses} `}
-                    value={product?.target_original_price}
+                    value={CurrencyFormatter(product?.target_sale_price)}
                   />{" "}
                   <RadioGroup
                     defaultValue="shippingIncluded"
-                    className="!flex flex-col tab:flex-row  tab:space-s-3 w-full"
+                    className="grid grid-cols-1 ml:grid-cols-2 gap-2 tab:my-0 my-2 ml:my-3 w-full"
                     onValueChange={(value: string) => {
                       setShippingWithoutOrInclude(value);
                     }}
@@ -496,7 +497,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                     <div className="flex items-center space-x-2  bg-[#edf5f9] p-2 rounded-md">
                       <RadioGroupItem value="withoutShipping" id="r1" />
                       <Label
-                        className="whitespace-nowrap  text-xs mm:text-sm ml:text-md tab:text-lg"
+                        className="whitespace-nowrap  text-xs mm:text-sm ml:text-md dark:text-black"
                         htmlFor="r1"
                       >
                         {withoutShipping}
@@ -505,7 +506,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                     <div className="flex items-center space-x-2 bg-[#edf5f9] p-2 rounded-md">
                       <RadioGroupItem value="shippingIncluded" id="r2" />
                       <Label
-                        className="whitespace-nowrap text-xs mm:text-sm ml:text-md tab:text-lg"
+                        className="whitespace-nowrap text-xs mm:text-sm ml:text-md dark:text-black"
                         htmlFor="r2"
                       >
                         {shippingIncluded}
@@ -521,7 +522,10 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                     }}
                   >
                     <SelectTrigger className="bg-[#edf5f9]">
-                      <SelectValue placeholder={percentage} />
+                      <SelectValue
+                        className=" dark:text-[#253439]"
+                        placeholder={percentage}
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
@@ -530,8 +534,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                       </SelectGroup>
                     </SelectContent>
                   </Select>
-                  <div className=" flex items-center space-s-3">
-                    <div className="relative mt-auto">
+                  <div className=" flex items-center space-s-3 ">
+                    <div className="relative mt-auto min-w-full">
                       <Input
                         type="number"
                         className="inputField px-6"
