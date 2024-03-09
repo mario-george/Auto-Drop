@@ -11,7 +11,7 @@ export default function ProductOptions({
   setChoosenColors,
   setChoosenSizes,
   setChoosenMaterials,
-  choosenMaterials, optionsSelected, setOptionsSelected, optionCheckHandler
+  choosenMaterials, optionsSelected, setOptionsSelected, optionCheckHandler,selectedCheckboxes,checkboxHandler,checkboxesSelected
 
 }: any) {
   if (!options) {
@@ -25,34 +25,47 @@ console.log("optionsSelected",optionsSelected)
       {optionsSelected?.map((opt:any,optIndex:number)=>{
 let {name,checkboxes} = opt
 let optImage :boolean = opt.name.includes('color') || opt.name.includes('Color')
-console.log("optImage",optImage)
-return <div key={opt.id}>
+console.log("checkboxesSelected",checkboxesSelected)
+return <>
    <span className="text-xl font-semibold ml:col-span-2 tab:col-span-3">
                       {opt.name}
                     </span>
                     {opt.values.map((el: any, i: number) => {
+                      console.log('checkboxesSelected?.[optIndex]?.[i]',checkboxesSelected?.[optIndex]?.[i])
                       return (
-                        <div key={el.id}>
+                        <div key={el.id} className={`${!optImage && `sizeBox w-fit`}`} >
                           <Checkbox
-                            isChecked={checkboxes[i]}
-                            onChange={() => {
-                              optionCheckHandler(optIndex,i)
+                         
+                            isChecked={checkboxesSelected?.[optIndex]?.[i]}
+                            onChange={() => { 
+                              // optionCheckHandler(optIndex,i)
+                          /*     setOptionsSelected((prev: any) => {
+                                const updatedOptions = [...prev];
+                                updatedOptions[optIndex].checkboxes[i] =
+                                  !updatedOptions[optIndex].checkboxes[i];
+                                console.log("updatedOptions", updatedOptions);
+                                return updatedOptions;
+                              }); */
+
+                              checkboxHandler(optIndex,i,checkboxesSelected?.[optIndex]?.[i])
+
+                              
                             }}
-                            className=""
+                            className={`${ !optImage && `w-full flex  justify-between px-3`}`}
                           >
-                            <ImageChakra
+           {         optImage &&        <ImageChakra
                               src={el.sku_image}
                               fallbackSrc="https://clarionhealthcare.com/wp-content/uploads/2020/12/default-fallback-image.png"
                               className="rounded-lg"
                               htmlWidth="250"
                               htmlHeight="500"
-                            />
+                            />}
                             <p className="text-center mt-auto">{el.name}</p>
                           </Checkbox>
                         </div>
                       );
                     })}
-                    </div>
+                    </>
                          
       })}
         {options &&
@@ -66,7 +79,7 @@ return <div key={opt.id}>
                     </span>
                     {option.values.map((el: any, i: number) => {
                       return (
-                        <div key={el.id}>
+                        <div key={el.id} >
                           <Checkbox
                             isChecked={choosenColors[i]}
                             onChange={() => {
