@@ -126,6 +126,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     durationToDeliver,
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
+  const [tagsList, setTagsList] = useState([]);
   const [shippingWithoutOrInclude, setShippingWithoutOrInclude] =
     useState("shippingIncluded");
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -137,6 +138,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   const [choosenMaterials, setChoosenMaterials] = useState<any>([]);
   const [choosenSizes, setChoosenSizes] = useState<any>([]);
   const [selectedCategories, setSelectedCategories] = useState<any>([]);
+  const [selectedTags, setSelectedTags] = useState<any>([]);
   const [profitChoosenType, setProfitChoosenType] = useState("percentage");
   const [descriptionField, setDescriptionField] = useState(
     product?.description
@@ -152,7 +154,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     addToCartHandler,
     uploadProductHandler: formSubmmitedHandler,
   };
-  const { ProductHeaderComponent, choosenQuantity } = useProductEditHeader({
+  const { ProductHeaderComponent, choosenQuantity,setQuantity } = useProductEditHeader({
     ...ProductEditHeaderProps,
   });
   let target_sale_price: any,
@@ -240,6 +242,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         })
       );
       setShowDiscountPrice(product?.showDiscountPrice || false);
+      setQuantity(product?.choosenQuantity)
+      setSelectedTags(product?.sallaTags.map((tag:{name:string,id:number})=>tag.name))
     }
   }, [product]);
   const [commissionVal, setCommissionVal] = useState(
@@ -266,8 +270,46 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         console.log(err?.response.headers);
       }
     };
+    const fetchTags = async () => {
+      try {
+        const resp = await axiosInstance.get("/salla/tags");
+        console.log(resp.data);
+        if (resp.status < 300 && resp.status >= 200) {
+          setTagsList(resp.data.data);
+        }
+      } catch (err: any) {
+        console.log(err?.response.data);
+        console.log(err?.response.status);
+        console.log(err?.response.headers);
+      }
+    };
     fetchCategories();
+    // fetchTags();
   }, []);
+  useEffect(() => {
+    console.log("product", product);
+    console.log(
+      "product?.categoriesSalla && product?.categoriesSalla.length!==0",
+      product?.categoriesSalla && product?.categoriesSalla.length !== 0
+    );
+    console.log("categoriesList", categoriesList);
+    if (product?.categoriesSalla && product?.categoriesSalla.length !== 0) {
+      let fetchedCat = categoriesList
+        .filter((category: any) =>
+          product?.categoriesSalla.includes(category.id)
+        )
+        .map((category: any) => category.name);
+      setSelectedCategories(fetchedCat);
+    }
+  /*   if (product?.tagsSalla && product?.tagsSalla.length !== 0) {
+      let fetchedTags = tagsList
+        .filter((tag: any) => product?.tagsSalla.includes(tag.id))
+        .map((tag: any) => tag.name);
+      setSelectedTags(fetchedTags);
+    } */
+    // console.log("tagsList", tagsList);
+    // setSelectedTags(tagsList.map((t: any) => t.name));
+  }, [categoriesList]);
   const [error, setError] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
@@ -389,6 +431,9 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     categoriesList,
     selectedCategories,
     locale,
+    tagsList,
+    setSelectedTags,
+    selectedTags,
   };
 
   let uploadProductHandler = async (dataForm: any) => {
@@ -423,7 +468,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         .map((category: CategorySalla) => category.id);
 
       console.log("choosenQuantity", choosenQuantity);
-      return;
+      console.log("selectedTags", selectedTags);
       let data = {
         name: dataForm.prodName,
         vendor_commission: commissionVal,
@@ -436,6 +481,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         require_shipping,
         categoriesSalla,
         choosenQuantity: choosenQuantity,
+        selectedTags,
       };
       const res = await axiosInstance.patch(
         `aliexpress/product/updateProduct/${product._id}`,
@@ -521,7 +567,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                       setProfitChoosenType(value);
                     }}
                   >
-                    <SelectTrigger className="bg-[#edf5f9]">
+                    <SelectTrigger className="bg-[#edf5f9] dark:text-black">
                       <SelectValue
                         className=" dark:text-[#253439]"
                         placeholder={percentage}
@@ -564,14 +610,15 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                 <ProductSEOInfo {...ProductSEOInfoProps} />
 
                 <ProductOptions {...ProductOptionsProps} />
-                <ProductShipping {...ProductShippingProps} />
+                {shippingWithoutOrInclude == "shippingIncluded" && (
+                  <ProductShipping {...ProductShippingProps} />
+                )}
                 <div className="form-group">
                   <label className="form-label">Description</label>
                   <Editor
                     value={descriptionField}
                     onChange={(value) => setDescriptionField(value)}
                   />
-
                   {/*   {errors?.description ? (
                   <span className="form-error">{errors?.description}</span>
                 ) : null} */}
