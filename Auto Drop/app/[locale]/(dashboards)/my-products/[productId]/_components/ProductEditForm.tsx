@@ -41,10 +41,10 @@ import ProductInfoDetails from "./ui/ProductInfoDetails";
 import ProductPriceDetails from "./ui/ProductPriceDetails";
 import ProductSEOInfo from "./ui/ProductSEOInfo";
 import Editor from "./ui/Editor";
-import ProductShipping from "./ui/ProductShipping";
 import useLoader from "@/components/loader/useLoader";
 import CurrencyFormatter from "../../../products/_components/CurrencyFormatter";
 import useOptionHook from "./hooks/useOptionHook";
+import useProductShipping from "./ui/useProductShipping";
 interface ProductEditFormProps {
   prodNameTitle: string;
   prodNameTitlePlaceholder: string;
@@ -149,9 +149,21 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     buttonRef?.current?.click();
   };
 
-  const { optionsSelected, setOptionsSelected, optionCheckHandler } =
-    useOptionHook({ product: product });
-
+  const {
+    optionsSelected,
+    setOptionsSelected,
+    optionCheckHandler,
+    checkboxesSelected,
+    checkboxHandler,
+  } = useOptionHook({ product: product });
+  let ProductShippingProps = {
+    shipping: product?.shipping,
+    shippingText: shipping,
+    nameOfShippingComp,
+    durationToDeliver,
+  };
+  const { ProductShippingComponent, value: choosenShippingIndex } =
+    useProductShipping({ ...ProductShippingProps });
   let addToCartHandler = () => {};
   const ProductEditHeaderProps = {
     uploadProduct,
@@ -178,16 +190,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       metadata_description,
     } = product);
   }
-  let commissionValInitial = vendor_commission || 0;
 
-  let totalProfitInitial = (vendor_commission || 0) * target_sale_price;
-  let finalPriceInitial =
-    (vendor_commission || 0) * target_sale_price + target_sale_price;
-  if (!product) {
-    commissionValInitial = 0;
-    totalProfitInitial = 0;
-    finalPriceInitial = 0;
-  }
   useEffect(() => {
     if (
       product &&
@@ -428,13 +431,10 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     optionsSelected,
     setOptionsSelected,
     optionCheckHandler,
+    checkboxesSelected,
+    checkboxHandler,
   };
-  let ProductShippingProps = {
-    shipping: product?.shipping,
-    shippingText: shipping,
-    nameOfShippingComp,
-    durationToDeliver,
-  };
+
   const ProductCategoriesTagsProps = {
     category,
     tag,
@@ -480,6 +480,11 @@ export default function ProductEditForm(props: ProductEditFormProps) {
 
       console.log("choosenQuantity", choosenQuantity);
       console.log("selectedTags", selectedTags);
+      console.log("checkboxesSelected", checkboxesSelected);
+      console.log("choosenShippingIndex", choosenShippingIndex);
+
+
+      
       let data = {
         name: dataForm.prodName,
         vendor_commission: commissionVal,
@@ -621,9 +626,9 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                 <ProductSEOInfo {...ProductSEOInfoProps} />
 
                 <ProductOptions {...ProductOptionsProps} />
-                {shippingWithoutOrInclude == "shippingIncluded" && (
-                  <ProductShipping {...ProductShippingProps} />
-                )}
+                {shippingWithoutOrInclude == "shippingIncluded" &&
+                  ProductShippingComponent}
+
                 <div className="form-group">
                   <label className="form-label">Description</label>
                   <Editor
