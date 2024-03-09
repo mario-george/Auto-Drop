@@ -3,6 +3,13 @@ import catchAsync from "../../../../utils/catchAsync";
 import { Product } from "../../../../models/product.model";
 import axios from "axios";
 import SallaToken from "../../../../models/SallaTokenModel";
+
+const variantsCheckHandler = (variants: any,checkboxes:boolean[]|boolean[][]) => {
+  
+}
+
+
+
 const tagsSallaHandler = async (
   sallaAccessToken: string,
   selectedTags: string[]
@@ -71,13 +78,27 @@ const PatchProduct = catchAsync(
       categoriesSalla,
       require_shipping,
       choosenQuantity,
-      selectedTags,
+      selectedTags,   checkboxesSelected,
+      choosenShippingIndex,
+      shippingIncludedChoice,
+      shippingIncludedChoiceIndex,
       ...body
     } = req.body;
     let sallaTags;
     if (selectedTags && selectedTags.length > 0) {
       sallaTags = await tagsSallaHandler(sallaAccessToken, selectedTags);
     }
+    let containsFalse = false;
+for (let i = 0; i < checkboxesSelected.length; i++) {
+  if (checkboxesSelected[i].includes(false)) {
+    containsFalse = true;
+    break;
+  }
+}
+if (containsFalse){
+
+
+}
     if (sallaTags && sallaTags.length > 0) {
       product.sallaTags = sallaTags;
     }
