@@ -11,7 +11,7 @@ import Image from "next/image";
 import TableRenderer from "./TableComponents/TableRenderer";
 import { CircularProgress, CircularProgressLabel } from "@chakra-ui/react";
 export default function HomePageRenderer(props: any) {
-  const { locale,t } = props;
+  const { locale, t } = props;
   let prodNotLinked = t("prodNotLinked");
   let numOfSales = t("numOfSales");
 
@@ -60,7 +60,7 @@ export default function HomePageRenderer(props: any) {
               secondEl={"68"}
               ThirdEl={<Progress value={68} />}
               smallText={true}
-            locale={locale}
+              locale={locale}
             />
           </div>
 
@@ -69,7 +69,7 @@ export default function HomePageRenderer(props: any) {
               firstEl={prodLinked}
               secondEl={"13"}
               ThirdEl={<Progress gradientType="orange" value={13} />}
-            locale={locale}
+              locale={locale}
             />
           </div>
           <div className="tab:col-span-2">
@@ -77,7 +77,7 @@ export default function HomePageRenderer(props: any) {
               firstEl={prodNotLinked}
               secondEl={"10"}
               ThirdEl={<Progress gradientType="red" value={10} />}
-            locale={locale}
+              locale={locale}
             />
           </div>
           <div className="tab:col-span-4 lap:col-span-2 row-span-2">
@@ -86,6 +86,7 @@ export default function HomePageRenderer(props: any) {
               totalProfits={totalProfits2}
               suspendedProfits={suspendedProfits}
               availableCredits={availableCredits}
+              locale={locale}
             />
           </div>
           <div className="tab:col-span-2">
@@ -106,7 +107,7 @@ export default function HomePageRenderer(props: any) {
               firstEl={numOfOrders}
               secondEl={"34"}
               ThirdEl={<Progress gradientType="green" value={34} />}
-            locale={locale}
+              locale={locale}
             />
           </div>
           <div className="tab:col-span-2">
@@ -114,7 +115,7 @@ export default function HomePageRenderer(props: any) {
               firstEl={numOfSales}
               secondEl={"22"}
               ThirdEl={<Progress gradientType="blue" value={22} />}
-            locale={locale}
+              locale={locale}
             />
           </div>
           <div className="tab:col-span-2 tab:row-start-4">
