@@ -15,11 +15,13 @@ export default function Editor({
   ) => void;
 }) {
   return (
-    <ReactQuill
-      theme="snow"
-      value={value}
-      onChange={onChange}
-      className="bg-[#edf5f9] border-red-500 !rounded-xl shadow"
-    />
+    <div className="rounded-xl overflow-hidden border-[#d2d2d2] border-2">
+      <ReactQuill
+        theme="snow"
+        value={value}
+        onChange={onChange}
+        className="bg-[#edf5f9] dark:!text-black !border-none"
+      />
+    </div>
   );
 }
