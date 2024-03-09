@@ -45,14 +45,14 @@ export default function AccountDetails(props: AccountDetails) {
     <>
       <MotionWrapper locale={locale}>
         <div className="ms:text-sm flex flex-col space-y-3 tab:space-y-6 mt-3">
-          <div className="flex justify-center tab:justify-end  max-w-[90%] tab:max-w-[60%]">
-            <div className="relative">
+          <div className="flex justify-center tab:justify-end  max-w-[90%] tab:max-w-[60%] ">
+            <div className="relative ">
               <Image
                 src={userImage}
                 width={168}
                 height={168}
                 alt="user"
-                className="mx-auto tab:ml-[4rem]"
+                className="mx-auto tab:ml-[4rem] "
               />
               <div className="absolute bottom-6 right-6 bg-black rounded-full px-[3px] py-[5px] border-4 border-white">
                 <Image
