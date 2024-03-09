@@ -21,14 +21,18 @@ export default function useOptionHook({ product }: any) {
     });
   };
   useEffect(() => {
-    let newOpt = product?.options?.map((option: any) => {
-      let { name, values } = option;
-      let checkboxes = Array(values.length).fill(true);
-      return { name, checkboxes ,values};
-    });
-    setOptionsSelected((prev: any) => {
-      return newOpt;
-    });
+    if(product?.options === undefined) return;  
+    if(product?.options.length !== optionsSelected.length){
+
+      let newOpt = product?.options?.map((option: any) => {
+        let { name, values } = option;
+        let checkboxes = Array(values.length).fill(true);
+        return { name, checkboxes ,values};
+      });
+      setOptionsSelected((prev: any) => {
+        return newOpt;
+      });
+    }
   }, [product]);
   return { optionsSelected, setOptionsSelected, optionCheckHandler };
 }
