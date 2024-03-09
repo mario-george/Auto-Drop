@@ -41,7 +41,7 @@ export default function Progress(props: ProgressProps) {
 
       var options = {
         chart: {
-          height: 160,
+          height: 110,
           type: "radialBar",
         },
         series: [value],
@@ -50,6 +50,7 @@ export default function Progress(props: ProgressProps) {
         plotOptions: {
           radialBar: {
             hollow: {
+              // size of the radial progress here
               size: "15%",
             },
             track: {
