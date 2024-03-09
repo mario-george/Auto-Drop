@@ -41,6 +41,11 @@ interface OptionType {
 interface ShippingAttributes {
   name: string;
   price: number;
+  shipping_method?: string;
+  service_name?: string;
+  estimated_delivery_time?: string;
+  tracking_available?: boolean;
+  freight?: { cent?: string; currency?: any; currency_code?: any };
 }
 
 interface ProductSchema {
@@ -79,7 +84,7 @@ interface ProductSchema {
   sallaTags?: { name: string; id: number }[];
 
   shippingIncludedChoice?: boolean;
-  shippingIncludedChoiceIndex?: any;
+  shippingIncludedChoiceIndex?: number;
   checkboxesSelected?: any;
 }
 
