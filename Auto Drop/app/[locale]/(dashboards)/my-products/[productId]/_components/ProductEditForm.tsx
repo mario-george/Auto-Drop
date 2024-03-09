@@ -160,9 +160,9 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     shipping: product?.shipping,
     shippingText: shipping,
     nameOfShippingComp,
-    durationToDeliver,
+    durationToDeliver,shippingWithoutOrInclude
   };
-  const { ProductShippingComponent, value: choosenShippingIndex } =
+  const { ProductShippingComponent, value: choosenShippingIndex,shippingTotalCost } =
     useProductShipping({ ...ProductShippingProps });
   let addToCartHandler = () => {};
   const ProductEditHeaderProps = {
@@ -407,7 +407,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     totalProfit,
     inputClasses,
     showDiscountPrice,
-    setShowDiscountPrice,
+    setShowDiscountPrice,shippingTotalCost
   };
 
   const ProductSEOInfoProps = {
@@ -421,6 +421,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     form,
   };
   const ProductOptionsProps = {
+  
     options: product.options,
     choosenSizes,
     choosenColors,
@@ -486,7 +487,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       console.log("checkboxesSelected", checkboxesSelected);
       console.log("choosenShippingIndex", choosenShippingIndex);
 
-      let data = {
+      let data: any = {
         name: dataForm.prodName,
         vendor_commission: commissionVal,
         metadata_description: dataForm?.SEODescription,
@@ -502,8 +503,13 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         checkboxesSelected,
         choosenShippingIndex,
         shippingIncludedChoice,
-        shippingIncludedChoiceIndex: choosenShippingIndex,
+        // shippingIncludedChoiceIndex: choosenShippingIndex,
       };
+      if (shippingWithoutOrInclude == "shippingIncluded") {
+        data.shippingIncludedChoiceIndex = choosenShippingIndex;
+      } else {
+        data.shippingIncludedChoiceIndex = -1;
+      }
       const res = await axiosInstance.patch(
         `aliexpress/product/updateProduct/${product._id}`,
         data
