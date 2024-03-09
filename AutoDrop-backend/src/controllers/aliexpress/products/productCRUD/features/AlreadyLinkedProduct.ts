@@ -42,13 +42,14 @@ export default async function AlreadyLinkedProduct(
     return;
   }
 }
-export const ProductSallaChecker :any = async (
+export const ProductSallaChecker: any = async (
   optionsObj: any,
   sku?: string,
   token?: string,
   req?: Request & any,
   res?: Response,
-  next?: NextFunction
+  next?: NextFunction,
+  product?: any
 ) => {
   console.log(optionsObj);
   try {
@@ -63,18 +64,70 @@ export const ProductSallaChecker :any = async (
     let errorFieldSku = err?.response?.data?.error?.fields?.sku;
     let priceErr = err?.response?.data?.error?.fields?.price;
     let nameErr = err?.response?.data?.error?.fields?.name;
-    console.log("nameErr", nameErr);
-    console.log("priceErr", priceErr);
-    console.log("status", status);
-    console.log(success);
-    console.log(errorFieldSku);
+    let visibility_condition_type =
+      err?.response?.data?.error?.fields?.visibility_condition_type;
+    let visibility_condition_option =
+      err?.response?.data?.error?.fields?.visibility_condition_option;
+    let visibility_condition_value =
+      err?.response?.data?.error?.fields?.visibility_condition_value;
+    if (visibility_condition_type) {
+      console.log("visibility_condition_type", visibility_condition_type);
+    }
+    if (visibility_condition_option) {
+      console.log("visibility_condition_option", visibility_condition_option);
+    }
+    if (visibility_condition_value) {
+      console.log("visibility_condition_value", visibility_condition_value);
+    }
+    if (nameErr) {
+      console.log("nameErr", nameErr);
+    }
+    if (priceErr) {
+      console.log("priceErr", priceErr);
+    }
+
+    if (status) {
+      console.log("status", status);
+    }
+    if (success) {
+      console.log("success", success);
+    }
+    if (errorFieldSku) {
+      console.log("errorFieldSku", errorFieldSku);
+    }
+
     console.log(
-      status == 422 && success == false && errorFieldSku[0]?.includes("SKU")
+      status == 422 && success == false && errorFieldSku?.[0]?.includes("SKU")
     );
+    if (
+      visibility_condition_type &&
+      visibility_condition_option &&
+      visibility_condition_value &&
+      res &&
+      next
+    ) {
+      if (product)
+        product.options = product?.options.map((option: any, index: number) => {
+          let newV = option.values.map((value: any, index: number) => {
+            return { ...value, name: index + " " + value.name };
+          });
+          return {
+            ...option,
+            /*      visibility: "always",
+            visibility_condition_type: "=",
+            visibility_condition_option: option.name + index,
+            visibility_condition_value: option.name + index, */
+            values: newV,
+          };
+        });
+      await product.save();
+      await LinkProductSalla2(req, res, next);
+      return { message: "Cancel" };
+    }
     if (
       status == 422 &&
       success == false &&
-      errorFieldSku[0]?.includes("SKU")
+      errorFieldSku?.[0]?.includes("SKU")
     ) {
       console.log("SKU is already linked to a product on Salla");
       let successFullUnLink = await AlreadyLinkedProduct(sku, token, next);
@@ -85,16 +138,14 @@ export const ProductSallaChecker :any = async (
         console.log("2222");
         if (res && next) {
           await LinkProductSalla2(req, res, next);
-          return {"message":"Cancel"}
+          return { message: "Cancel" };
         } else {
           // Handle the case where res is undefined
           console.error("res/next is undefined");
         }
-        return {"message":"Error"}
-
+        return { message: "Error" };
       }
-      return {"message":"Error"}
-
+      return { message: "Error" };
     }
     // throw new AppError("sku already linked to a product on Salla", 400);
   }
