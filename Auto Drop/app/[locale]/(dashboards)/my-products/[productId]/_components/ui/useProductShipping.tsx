@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import CurrencyFormatter from "../../../../products/_components/CurrencyFormatter";
 import { Radio, RadioGroup, Stack } from "@chakra-ui/react";
 
@@ -7,15 +7,32 @@ export default function useProductShipping({
   nameOfShippingComp,
   shippingText,
   durationToDeliver,
+  shippingWithoutOrInclude,
 }: any) {
-  const [value, setValue] = useState("1");
+  const [value, setValue] = useState("0");
+  const [shippingTotalCost, setShippingTotalCost] = useState(0);
+  useEffect(() => {
+    if (shippingWithoutOrInclude == "shippingIncluded") {
+      let price = shipping?.[+value]?.freight?.cent / 100;
+      if (price == 0||price ) {
+        setShippingTotalCost(price);
+      }
+    } else {
+      setShippingTotalCost(0);
+    }
+  }, [shippingWithoutOrInclude, value, shipping]);
   let ProductShippingComponent = (
     <>
       {shipping?.length ? (
         <div className="space-y-4 min-w-full  ">
-          <p className="text-lg font-semibold text-content">{shippingText}</p>
-          <div className="min-w-full  grid grid-cols-1 items-center justify-around gap-y-5 py-4">
-            <RadioGroup defaultValue="1" onChange={setValue} value={value}>
+          <div>
+            <p className="text-lg font-semibold text-content">{shippingText}</p>
+            <RadioGroup
+              defaultValue="0"
+              onChange={setValue}
+              value={value}
+              className="min-w-full  grid grid-cols-1 items-center justify-around gap-5 gap-y-5 py-4"
+            >
               {shipping?.map((option: any, index: number) => {
                 return (
                   <Radio value={index.toString()} key={index}>
@@ -92,5 +109,5 @@ export default function useProductShipping({
       )}
     </>
   );
-  return { ProductShippingComponent, value };
+  return { ProductShippingComponent, value, shippingTotalCost };
 }
