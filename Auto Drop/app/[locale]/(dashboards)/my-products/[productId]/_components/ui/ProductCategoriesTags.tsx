@@ -27,22 +27,20 @@ export default function ProductCategoriesTags({
   categoriesList: any;
   selectedCategories: string[];
   selectedTags: string[];
-  setSelectedTags: (value:string[]|null)=>void;
+  setSelectedTags: (value: string[] | null) => void;
   locale?: string;
 }) {
   let isAr = locale == "ar";
   const addTagHandler = () => {
-    let val = inputRef.current?.value
+    let val: string = inputRef.current?.value ?? "";
     console.log("val", val);
-    console.log( val);
-    setSelectedTags((prevTags:string[]|null)=>
-   { 
-   return [...prevTags,val]
-
-    }
-    )
+    console.log(val);
+    //@ts-ignore
+    setSelectedTags((prevTags: any) => {
+      return prevTags ? [...prevTags, val] : [val];
+    });
   };
-  const inputRef = React.useRef()
+  const inputRef = React.useRef<HTMLInputElement>(null);
   return (
     <div>
       {" "}
@@ -160,6 +158,7 @@ export default function ProductCategoriesTags({
                 <button
                   type="button"
                   className="duration-200 transition-all hover:fill-black hover:text-green-300"
+                  onClick={addTagHandler}
                 >
                   <span>
                     <IoMdSend />
@@ -168,16 +167,17 @@ export default function ProductCategoriesTags({
               </>
             )}
 
-            <Input ref={inputRef} className="max-w-[90%] bg-[#edf5f9] text-black text-right text-xs mm:text-sm ml:text-md tab:text-lg" />
+            <Input
+              ref={inputRef}
+              className="max-w-[90%] bg-[#edf5f9] text-black text-right text-xs mm:text-sm ml:text-md tab:text-lg"
+            />
             {isAr && (
               <>
                 {" "}
                 <button
                   type="button"
                   className="duration-200 transition-all hover:fill-black hover:text-green-300"
-                  onClick={
-    addTagHandler
-                  }
+                  onClick={addTagHandler}
                 >
                   <span>
                     <IoMdSend />
@@ -198,10 +198,7 @@ export default function ProductCategoriesTags({
                     onClick={() => {
                       //@ts-ignore
                       setSelectedTags((prevTags: any) => {
-                       
-                        return prevTags.filter(
-                          (item: any) => item !== tag
-                        );
+                        return prevTags.filter((item: any) => item !== tag);
                       });
                     }}
                   >
