@@ -12,6 +12,7 @@ export default function ProductPriceDetails({
   inputClasses,
   showDiscountPrice,
   setShowDiscountPrice,
+  shippingTotalCost,
 }: any) {
   const [checked, setChecked] = useState(false);
   return (
@@ -33,11 +34,11 @@ export default function ProductPriceDetails({
         <span>{profit}</span>
         <Input
           className={`shadow-sm text-sm md:text-base min-w-[60%] ${inputClasses} `}
-          value={CurrencyFormatter(finalPrice)}
+          value={CurrencyFormatter(finalPrice + shippingTotalCost)}
         />
         <Input
           className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#636867] ${inputClasses} `}
-          value={CurrencyFormatter(totalProfit)}
+          value={CurrencyFormatter(totalProfit - shippingTotalCost)}
         />
       </div>
     </div>
