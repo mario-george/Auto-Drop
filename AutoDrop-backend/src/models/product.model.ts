@@ -77,6 +77,10 @@ interface ProductSchema {
   choosenQuantity?: number;
 
   sallaTags?: { name: string; id: number }[];
+
+  shippingIncludedChoice?:any
+  checkboxesSelected?:any ,
+
 }
 
 interface ProductDocument extends Document, ProductSchema {}
@@ -151,6 +155,8 @@ const options = {
   categoriesSalla: { type: Array, default: [] },
   choosenQuantity: { type: Number, default: 1 },
   sallaTags: { type: Array, default: [] },
+  shippingIncludedChoice: { type: Object, default: null },
+  checkboxesSelected: { type: Array, default: [] },
 };
 
 const schema = new Schema<ProductSchema>(options, { timestamps: true });
