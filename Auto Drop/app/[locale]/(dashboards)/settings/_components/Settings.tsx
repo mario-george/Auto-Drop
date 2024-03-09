@@ -52,7 +52,7 @@ export default function Settings(props: SettingsProps) {
   return (
     <MotionWrapper locale={locale}>
       <div
-        className={`relative bg-white  text-[#253439]   rounded-lg  !px-0 mt-4 overflow-hidden ${
+        className={`relative bg-white  text-[#253439]   rounded-lg  !px-0 mt-4 overflow-hidden dark:bg-[#2e464f] dark:text-white ${
           isAr ? `ml-3 tab:ml-3 tab:mr-3` : `mr-3 tab:mr-3 tab:ml-3`
         }  `}
         dir={locale === "en" ? "ltr" : "rtl"}
@@ -86,7 +86,7 @@ export default function Settings(props: SettingsProps) {
         <div className={` tab:px-6 py-2 my-12 tab:mx-3`}>
           <div className="flex space-s-6 tab:space-s-0 flex-wrap tab:max-w-[60%] lap:max-w-[50%] tab:mb-4">
             <Button
-              className="w-full ms:max-w-[60%] ms:mx-auto tab:mx-auto tab:max-w-[150px] bg-[#f0f3f4] rounded-lg text-[#253439] my-2 sm:my-0 hover:bg-[#f0f3f4]"
+              className="w-full ms:max-w-[60%] ms:mx-auto tab:mx-auto tab:max-w-[150px] bg-[#f0f3f4] rounded-lg text-[#253439] my-2 sm:my-0 hover:bg-[#f0f3f4] dark:bg-white dark:text-[#2E464F]"
               onClick={() => {
                 setCurrWindow("ChangePassword");
               }}
@@ -94,7 +94,7 @@ export default function Settings(props: SettingsProps) {
               {changePassword}
             </Button>
             <Button
-              className="w-full ms:max-w-[60%] ms:!mx-auto tab:!mx-auto tab:max-w-[150px] bg-[#253439] rounded-lg my-2 sm:my-0 hover:bg-[#253439]"
+              className="w-full ms:max-w-[60%] ms:!mx-auto tab:!mx-auto tab:max-w-[150px] bg-[#253439] rounded-lg my-2 sm:my-0 hover:bg-[#253439] dark:text-white dark:bg-[#253439]"
               onClick={() => {
                 setCurrWindow("AccountInfo");
               }}
