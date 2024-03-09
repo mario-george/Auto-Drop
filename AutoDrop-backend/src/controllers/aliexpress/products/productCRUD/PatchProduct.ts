@@ -2,9 +2,39 @@ import { NextFunction, Request, Response } from "express";
 import catchAsync from "../../../../utils/catchAsync";
 import { Product } from "../../../../models/product.model";
 import axios from "axios";
-
+import SallaToken from "../../../../models/SallaTokenModel";
+const tagsSallaHandler = async (
+  sallaAccessToken: string,
+  selectedTags: string[]
+) => {
+  console.log("selectedTags", selectedTags);
+  const promises = selectedTags.map((tag: string) => {
+    const sallaOpt = {
+      url: `https://api.salla.dev/admin/v2/products/tags?tag_name=${tag}`,
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ` + sallaAccessToken,
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.request(sallaOpt);
+  });
+  let promisesSettled = await Promise.allSettled(promises);
+  let tagsSalla = promisesSettled.map((promise: any) => {
+    if (promise.status === "rejected") {
+      console.log(promise.reason);
+      console.log(promise);
+      return null;
+    }
+    console.log(promise);
+    // [{id,name}]
+    return promise.value.data.data;
+  });
+  console.log("tagsSalla", tagsSalla);
+  return tagsSalla;
+};
 const PatchProduct = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request & any, res: Response, next: NextFunction) => {
     if (!req.params) {
       return res
         .status(400)
@@ -13,11 +43,17 @@ const PatchProduct = catchAsync(
     //@ts-ignore
     let { productId }: { productId: string } = req.params;
 
+    let sallaToken = await SallaToken.findById(req.user?.sallaToken);
+    if (!sallaToken) {
+      return res.status(404).json({ message: "SallaToken Not Found." });
+    }
+    let { accessToken: sallaAccessToken } = sallaToken;
     let product = await Product.findOne({
       //@ts-ignore
       merchant: req.user._id as any,
       _id: productId,
     });
+
     if (!product) {
       console.log("No product found");
       return res.status(404).json({ message: "Product Not Found." });
@@ -35,9 +71,16 @@ const PatchProduct = catchAsync(
       categoriesSalla,
       require_shipping,
       choosenQuantity,
+      selectedTags,
       ...body
     } = req.body;
-
+    let sallaTags;
+    if (selectedTags && selectedTags.length > 0) {
+      sallaTags = await tagsSallaHandler(sallaAccessToken, selectedTags);
+    }
+    if (sallaTags && sallaTags.length > 0) {
+      product.sallaTags = sallaTags;
+    }
     if (product?.salla_product_id) {
       let axiosOptions = {
         method: "DELETE",
