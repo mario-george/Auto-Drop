@@ -24,7 +24,7 @@ export default function HeaderContainer({
   return (
     <MotionWrapper locale={locale} mdClasses={mdClasses}>
       <div
-        className={`bg-white  text-[#253439]  px-6 py-2 my-12 rounded-lg shadow ${isAr?`ml-3 tab:ml-3 tab:mr-3`:`mr-3 tab:mr-3 tab:ml-3`}   ${
+        className={`bg-white  text-[#253439] dark:bg-[#2e464f] dark:text-white  px-6 py-2 my-12 rounded-lg shadow ${isAr?`ml-3 tab:ml-3 tab:mr-3`:`mr-3 tab:mr-3 tab:ml-3`}   ${
           className ? className : null
         } ${headerClasses ? headerClasses : ``}`}
       >
