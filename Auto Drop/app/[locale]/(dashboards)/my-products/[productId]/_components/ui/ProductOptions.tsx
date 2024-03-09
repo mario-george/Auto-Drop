@@ -28,15 +28,18 @@ export default function ProductOptions({
       <div className="grid grid-cols-1 ml:grid-cols-2 tab:grid-cols-3 gap-2 tab:gap-4 p-1 tab:p-3">
         {optionsSelected?.map((opt: any, optIndex: number) => {
           let { name, checkboxes } = opt;
+          if(!name){
+            return<></>
+          }
           let optImage: boolean =
-            opt.name.includes("color") || opt.name.includes("Color");
+            opt?.name?.includes("color") || opt?.name?.includes("Color");
           console.log("checkboxesSelected", checkboxesSelected);
           return (
             <>
               <span className="text-xl font-semibold ml:col-span-2 tab:col-span-3">
-                {opt.name}
+                {opt?.name}
               </span>
-              {opt.values.map((el: any, i: number) => {
+              {opt?.values?.map((el: any, i: number) => {
                 console.log(
                   "checkboxesSelected?.[optIndex]?.[i]",
                   checkboxesSelected?.[optIndex]?.[i]
@@ -68,7 +71,7 @@ export default function ProductOptions({
                           htmlHeight="500"
                         />
                       )}
-                      <p className="text-center mt-auto">{el.name}</p>
+                      <p className="text-center mt-auto">{el?.name}</p>
                     </Checkbox>
                   </div>
                 );
@@ -76,7 +79,7 @@ export default function ProductOptions({
             </>
           );
         })}
-  {/*       {options &&
+        {/*       {options &&
           options.map((option: any) => {
             return (
               <>
