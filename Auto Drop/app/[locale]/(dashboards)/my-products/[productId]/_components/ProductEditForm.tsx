@@ -466,10 +466,13 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       }
 
       let require_shipping;
+      let shippingIncludedChoice;
       if (shippingWithoutOrInclude == "shippingIncluded") {
-        let require_shipping = false;
+        require_shipping = false;
+        shippingIncludedChoice = true;
       } else {
         require_shipping = true;
+        shippingIncludedChoice = false;
       }
 
       let categoriesSalla = categoriesList
@@ -483,8 +486,6 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       console.log("checkboxesSelected", checkboxesSelected);
       console.log("choosenShippingIndex", choosenShippingIndex);
 
-
-      
       let data = {
         name: dataForm.prodName,
         vendor_commission: commissionVal,
@@ -498,6 +499,10 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         categoriesSalla,
         choosenQuantity: choosenQuantity,
         selectedTags,
+        checkboxesSelected,
+        choosenShippingIndex,
+        shippingIncludedChoice,
+        shippingIncludedChoiceIndex: choosenShippingIndex,
       };
       const res = await axiosInstance.patch(
         `aliexpress/product/updateProduct/${product._id}`,
