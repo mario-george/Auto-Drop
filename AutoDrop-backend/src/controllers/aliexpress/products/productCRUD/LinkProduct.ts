@@ -1,4 +1,3 @@
-//@ts-nocheck
 import axios, { AxiosError } from "axios";
 import { NextFunction, Request, Response } from "express";
 import { pick, uniqBy } from "lodash";
@@ -23,11 +22,10 @@ import {
 import { RefreshTokenHandler } from "../../../salla/RefreshAccessToken";
 import { ProductSallaChecker } from "./features/AlreadyLinkedProduct";
 
-
 export const updateVariantFinalOption2 = async (
   product: ProductDocument,
   token: string,
-  tokenData
+  tokenData: any
 ) => {
   const jsonProduct = product.toJSON();
   const data = await getProductVariants(product.salla_product_id, 1, token);
@@ -39,7 +37,7 @@ export const updateVariantFinalOption2 = async (
         i + 1,
         token
       );
-      const variants = vr.data.filter((e) => !e.sku);
+      const variants = vr.data.filter((e: any) => !e.sku);
       if (!variants.length) return;
       await Promise.all(
         variants.map(async (variant: any) => {
@@ -135,7 +133,7 @@ export const updateVariantFinalOption2 = async (
     // console.log("productsVariantsArr", product?.variantsArr);
 
     let { variantsArr, showDiscountPrice } = product;
-    let promises = variantsArr.map((el, index) => {
+    let promises = variantsArr.map((el: any, index: number) => {
       let variantId = variantsIds[index];
       let {
         offer_sale_price: price,
@@ -207,7 +205,13 @@ export async function LinkProductSalla2(
 
     const { role, _id } = req.user;
     let { productId } = req.body;
-    let product: any = await Product.findById(productId);
+    let product: ProductDocument | undefined | null = await Product.findById(
+      productId
+    );
+    if (!product)
+      return res
+        .status(404)
+        .json({ message: "Cannot find product with the given id" });
     const sallaTokenDocument = await SallaToken.findOne({
       _id: req.user.sallaToken,
     });
@@ -232,34 +236,61 @@ export async function LinkProductSalla2(
     console.log("reached this 2 ");
     let noOptionsInProduct = false;
     let prodPrice = parseFloat(product.variantsArr[0].offer_sale_price);
-    let totalPrice =
-      (product?.vendor_commission / 100) * prodPrice + prodPrice;
+    let totalPrice = (product?.vendor_commission / 100) * prodPrice + prodPrice;
     if (!product.commissionPercentage) {
       totalPrice = product?.vendor_commission + prodPrice;
     }
-    let bodyDataSalla = {
+    let bodyDataSalla: any = {
       name: req.query.name || product.name,
       price: totalPrice,
       product_type: product.product_type,
-      quantity: product.quantity,
+      quantity: product?.choosenQuantity,
       description: product.description,
       cost_price: product.main_price,
       require_shipping: product.require_shipping,
       sku: product.sku,
       images: product.images,
-      options: product.options,
+      // options: product.options,
       metadata_title: product?.metadata_title,
       metadata_description: product?.metadata_description,
     };
-if(product?.categoriesSalla){
-  bodyDataSalla.categories=product?.categoriesSalla
-}
-if (product?.showDiscountPrice) {
-  let originalPrice = parseFloat(product.variantsArr[0].sku_price);
-  bodyDataSalla.price = originalPrice
-  bodyDataSalla.sale_price = totalPrice
-}
-    if (!product?.options[0]?.name) {
+    if (product.sallaTags) {
+      bodyDataSalla.tags = product.sallaTags.map(
+        (tag: { id: number; name: string }) => tag.id
+      );
+    }
+
+    let updatedQuantityVars = product?.variantsArr?.map((variant: any) => {
+      let tempQ = variant.sku_available_stock;
+
+      return {
+        ...variant,
+        sku_available_stock: product?.choosenQuantity,
+        sku_available_stock_original: tempQ,
+      };
+    });
+    if (updatedQuantityVars) {
+      product.variantsArr = updatedQuantityVars;
+    }
+    //@ts-ignore
+    if (product?.options?.[0]?.name) {
+      bodyDataSalla.options = product.options;
+    }
+    if (product?.categoriesSalla) {
+      bodyDataSalla.categories = product?.categoriesSalla;
+    }
+
+    if (product?.showDiscountPrice) {
+      let originalPrice = parseFloat(product.variantsArr[0].sku_price);
+      bodyDataSalla.price = originalPrice;
+      bodyDataSalla.sale_price = totalPrice;
+    }
+    //@ts-ignore
+
+    if (!product?.options?.[0]?.name) {
+      noOptionsInProduct = true;
+    }
+    /* if (!product?.options[0]?.name) {
       noOptionsInProduct = true;
       let prodPrice = parseFloat(product.variantsArr[0].offer_sale_price);
       console.log("no options hereeeeee");
@@ -301,11 +332,12 @@ if (product?.showDiscountPrice) {
           metadata_title: product?.metadata_title,
           metadata_description: product?.metadata_description,
         }; */
-      }
+    /*  }
       if(product?.categoriesSalla){
         bodyDataSalla.categories=product?.categoriesSalla
       }
-    }
+    } */
+
     const options_1 = {
       method: "POST",
       url: "https://api.salla.dev/admin/v2/products",
@@ -438,7 +470,7 @@ if (product?.showDiscountPrice) {
         /*       if (subscription.products_limit)
           subscription.products_limit = subscription.products_limit - 1; */
         // await Promise.all([product.save(), subscription.save()]);
-        await Promise.all([product.save()]);
+        await Promise.all([product?.save()]);
         return res.status(200).json({
           message: "Product created successfully",
           result: {
@@ -450,7 +482,6 @@ if (product?.showDiscountPrice) {
   } catch (error: AxiosError | any) {
     const isAxiosError = error instanceof AxiosError;
 
-    
     const values = error?.response?.data;
     console.log(error?.response?.data);
     console.log(error?.response?.data?.error?.fields?.sku);
