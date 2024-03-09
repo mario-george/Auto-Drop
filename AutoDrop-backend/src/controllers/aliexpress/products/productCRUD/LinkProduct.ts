@@ -128,8 +128,11 @@ export const updateVariantFinalOption2 = async (
     let variantsIds = variants.map((el: any) => {
       return el.id;
     });
-    console.log(variantsIds);
-    console.log(variantsIds.length);
+    console.log("variantsIds", variantsIds);
+    console.log("variantsIds.length", variantsIds.length);
+    console.log("variantsIds.length", variantsIds.length);
+    console.log("variantsIds.length", variantsIds.length);
+    console.log("variantsIds.length", variantsIds.length);
     // console.log("productsVariantsArr", product?.variantsArr);
 
     let { variantsArr, showDiscountPrice } = product;
@@ -141,10 +144,12 @@ export const updateVariantFinalOption2 = async (
         sku_id,
         sku_price: oldPrice,
       } = el;
-      console.log(
-        "product?.commissionPercentage",
-        product?.commissionPercentage
-      );
+if(product?.choosenQuantity && quantity > product?.choosenQuantity){
+  quantity = product?.choosenQuantity
+
+}
+
+
       if (product?.vendor_commission && !product?.commissionPercentage) {
         price = parseFloat(price) + product?.vendor_commission;
       } else if (product?.vendor_commission && product?.commissionPercentage) {
@@ -152,6 +157,15 @@ export const updateVariantFinalOption2 = async (
           (product?.vendor_commission / 100) * parseFloat(price) +
           parseFloat(price);
       }
+      if(product?.shippingIncludedChoice &&  product?.shippingIncludedChoiceIndex){
+        console.log("product?.shippingIncludedChoice &&  product?.shippingIncludedChoiceIndex",product?.shippingIncludedChoice &&  product?.shippingIncludedChoiceIndex)
+        //@ts-ignore
+        let extraShippingCost = product?.shipping?.[shippingIncludedChoiceIndex]?.freight?.cent /100
+        console.log("extraShippingCost",extraShippingCost)
+        price+=extraShippingCost
+        console.log("price",price)
+
+        }
       let mnp = getRandomInt(100000000000000, 999999999999999);
       let gitin = getRandomInt(10000000000000, 99999999999999);
       let barcode = [mnp, gitin].join("");
@@ -236,9 +250,22 @@ export async function LinkProductSalla2(
     console.log("reached this 2 ");
     let noOptionsInProduct = false;
     let prodPrice = parseFloat(product.variantsArr[0].offer_sale_price);
-    let totalPrice = (product?.vendor_commission / 100) * prodPrice + prodPrice;
+    let totalPrice: number =
+      (product?.vendor_commission / 100) * prodPrice + prodPrice;
     if (!product.commissionPercentage) {
       totalPrice = product?.vendor_commission + prodPrice;
+    }
+    if (
+      product.shippingIncludedChoice &&
+      product.shippingIncludedChoiceIndex !== -1
+      ) {
+      console.log("product.shippingIncludedChoice",product.shippingIncludedChoice)
+      console.log("product.shippingIncludedChoiceIndex",product.shippingIncludedChoiceIndex)
+      //@ts-ignore
+      totalPrice +=
+        //@ts-ignore
+        product?.shipping?.[product.shippingIncludedChoiceIndex].freight
+          .cent / 100;
     }
     let bodyDataSalla: any = {
       name: req.query.name || product.name,
@@ -255,9 +282,11 @@ export async function LinkProductSalla2(
       metadata_description: product?.metadata_description,
     };
     if (product.sallaTags) {
-      bodyDataSalla.tags = product.sallaTags.map(
+      let prodTags = product.sallaTags.filter((t:any)=>t).map(
         (tag: { id: number; name: string }) => tag.id
       );
+      bodyDataSalla.tags = prodTags
+      console.log("prodTags",prodTags)
     }
 
     let updatedQuantityVars = product?.variantsArr?.map((variant: any) => {
@@ -369,14 +398,14 @@ export async function LinkProductSalla2(
       token,
       req,
       res,
-      next
+      next,product
     );
     if (createdeProduct?.message == "Cancel") {
       return;
     } else if (createdeProduct?.message == "Error") {
       throw new AppError("sku already linked to a product on Salla", 400);
     }
-    console.log(createdeProduct);
+    // console.log(createdeProduct);
     /*    try {
       createdeProduct = data;
     } catch (error: any) {
@@ -484,6 +513,7 @@ export async function LinkProductSalla2(
 
     const values = error?.response?.data;
     console.log(error?.response?.data);
+    console.log(error);
     console.log(error?.response?.data?.error?.fields?.sku);
     console.log(error?.response?.data?.error?.fields?.price);
     console.log(
