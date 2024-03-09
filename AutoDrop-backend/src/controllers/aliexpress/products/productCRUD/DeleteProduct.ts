@@ -1,6 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import catchAsync from "../../../../utils/catchAsync";
-import { Product } from "../../../../models/product.model";
+import {
+  Product,
+  ProductDocument,
+  ProductSchema,
+} from "../../../../models/product.model";
+import axios from "axios";
 export const DeleteProductById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     if (!req.params) {
@@ -11,7 +16,7 @@ export const DeleteProductById = catchAsync(
     //@ts-ignore
     let { productId }: { productId: string } = req.params;
 
-    let product = await Product.findOne({
+    let product: ProductDocument | null = await Product.findOne({
       //@ts-ignore
       merchant: req.user._id as any,
       _id: productId,
@@ -19,6 +24,24 @@ export const DeleteProductById = catchAsync(
     if (!product) {
       console.log("No product found");
       return res.status(404).json({ message: "Product Not Found." });
+    }
+    if (product?.salla_product_id) {
+      let axiosOptions = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: req.headers["authorization"],
+        },
+        url: `  ${process.env.Backend_Link}/salla/deleteProduct/${product.salla_product_id}`,
+      };
+      let { data: deleteResp } = await axios.request(axiosOptions);
+
+      if (deleteResp.status !== "success") {
+        return res.status(400).json({
+          status: "failed",
+        });
+      }
+      product.salla_product_id = undefined;
     }
     await Product.deleteOne({ _id: product._id });
     return res.json({ message: "Product deleted" });
