@@ -78,9 +78,9 @@ interface ProductSchema {
 
   sallaTags?: { name: string; id: number }[];
 
-  shippingIncludedChoice?:any
-  checkboxesSelected?:any ,
-
+  shippingIncludedChoice?: boolean;
+  shippingIncludedChoiceIndex?: any;
+  checkboxesSelected?: any;
 }
 
 interface ProductDocument extends Document, ProductSchema {}
@@ -155,8 +155,9 @@ const options = {
   categoriesSalla: { type: Array, default: [] },
   choosenQuantity: { type: Number, default: 1 },
   sallaTags: { type: Array, default: [] },
-  shippingIncludedChoice: { type: Object, default: null },
+  shippingIncludedChoice: { type: Boolean, default: false },
   checkboxesSelected: { type: Array, default: [] },
+  shippingIncludedChoiceIndex: { type: Number, default: -1 },
 };
 
 const schema = new Schema<ProductSchema>(options, { timestamps: true });
