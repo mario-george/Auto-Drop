@@ -44,6 +44,7 @@ import Editor from "./ui/Editor";
 import ProductShipping from "./ui/ProductShipping";
 import useLoader from "@/components/loader/useLoader";
 import CurrencyFormatter from "../../../products/_components/CurrencyFormatter";
+import useOptionHook from "./hooks/useOptionHook";
 interface ProductEditFormProps {
   prodNameTitle: string;
   prodNameTitlePlaceholder: string;
@@ -147,6 +148,10 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   const formSubmmitedHandler = () => {
     buttonRef?.current?.click();
   };
+
+  const { optionsSelected, setOptionsSelected, optionCheckHandler } =
+    useOptionHook({ product: product });
+
   let addToCartHandler = () => {};
   const ProductEditHeaderProps = {
     uploadProduct,
@@ -154,9 +159,10 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     addToCartHandler,
     uploadProductHandler: formSubmmitedHandler,
   };
-  const { ProductHeaderComponent, choosenQuantity,setQuantity } = useProductEditHeader({
-    ...ProductEditHeaderProps,
-  });
+  const { ProductHeaderComponent, choosenQuantity, setQuantity } =
+    useProductEditHeader({
+      ...ProductEditHeaderProps,
+    });
   let target_sale_price: any,
     target_original_price: any,
     vendor_commission: any,
@@ -242,8 +248,10 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         })
       );
       setShowDiscountPrice(product?.showDiscountPrice || false);
-      setQuantity(product?.choosenQuantity)
-      setSelectedTags(product?.sallaTags.map((tag:{name:string,id:number})=>tag.name))
+      setQuantity(product?.choosenQuantity);
+      setSelectedTags(
+        product?.sallaTags.map((tag: { name: string; id: number }) => tag.name)
+      );
     }
   }, [product]);
   const [commissionVal, setCommissionVal] = useState(
@@ -301,7 +309,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         .map((category: any) => category.name);
       setSelectedCategories(fetchedCat);
     }
-  /*   if (product?.tagsSalla && product?.tagsSalla.length !== 0) {
+    /*   if (product?.tagsSalla && product?.tagsSalla.length !== 0) {
       let fetchedTags = tagsList
         .filter((tag: any) => product?.tagsSalla.includes(tag.id))
         .map((tag: any) => tag.name);
@@ -417,6 +425,9 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     setChoosenSizes,
     setChoosenMaterials,
     choosenMaterials,
+    optionsSelected,
+    setOptionsSelected,
+    optionCheckHandler,
   };
   let ProductShippingProps = {
     shipping: product?.shipping,
