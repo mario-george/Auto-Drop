@@ -75,6 +75,8 @@ interface ProductSchema {
   showDiscountPrice?: boolean;
   categoriesSalla?: number[];
   choosenQuantity?: number;
+
+  sallaTags?: { name: string; id: number }[];
 }
 
 interface ProductDocument extends Document, ProductSchema {}
@@ -148,6 +150,7 @@ const options = {
   showDiscountPrice: { type: Boolean, default: false },
   categoriesSalla: { type: Array, default: [] },
   choosenQuantity: { type: Number, default: 1 },
+  sallaTags: { type: Array, default: [] },
 };
 
 const schema = new Schema<ProductSchema>(options, { timestamps: true });
