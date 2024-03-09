@@ -150,7 +150,7 @@ export default function SettingsPassword(props: SettingsPassword) {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="bg-[#F7F5F2] rounded-lg p-2 lap:p-8 space-y-4 lg:w-3/4 w-full"
+            className="bg-[#F7F5F2] rounded-lg p-2 lap:p-8 space-y-4 lg:w-3/4 w-full dark:bg-[#2e464f]"
             dir={locale === "ar" ? "rtl" : "ltr"}
           >
             <div className="ms:text-sm flex flex-col space-y-3 tab:space-y-6 mt-3">
@@ -330,7 +330,7 @@ export default function SettingsPassword(props: SettingsPassword) {
                   </FormItem>
                 )}
               />
-              <Button className="ms:max-w-[50%] ms:my-4  tab:max-w-[12rem] bg-[#253439] rounded-lg  hover:bg-[#253439] tab:mx-auto ">
+              <Button className="ms:max-w-[50%] ms:my-4  tab:max-w-[12rem] bg-[#253439] rounded-lg  hover:bg-[#253439] tab:mx-auto dark:bg-white dark:text-[#2E464F] ">
                 {saveChanges}
               </Button>
             </div>{" "}
