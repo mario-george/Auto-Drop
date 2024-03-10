@@ -144,11 +144,9 @@ export const updateVariantFinalOption2 = async (
         sku_id,
         sku_price: oldPrice,
       } = el;
-if(product?.choosenQuantity && quantity > product?.choosenQuantity){
-  quantity = product?.choosenQuantity
-
-}
-
+      if (product?.choosenQuantity && quantity > product?.choosenQuantity) {
+        quantity = product?.choosenQuantity;
+      }
 
       if (product?.vendor_commission && !product?.commissionPercentage) {
         price = parseFloat(price) + product?.vendor_commission;
@@ -157,15 +155,23 @@ if(product?.choosenQuantity && quantity > product?.choosenQuantity){
           (product?.vendor_commission / 100) * parseFloat(price) +
           parseFloat(price);
       }
-      if(product?.shippingIncludedChoice &&  product?.shippingIncludedChoiceIndex){
-        console.log("product?.shippingIncludedChoice &&  product?.shippingIncludedChoiceIndex",product?.shippingIncludedChoice &&  product?.shippingIncludedChoiceIndex)
+      if (
+        product?.shippingIncludedChoice &&
+        product?.shippingIncludedChoiceIndex
+      ) {
+        console.log(
+          "product?.shippingIncludedChoice &&  product?.shippingIncludedChoiceIndex",
+          product?.shippingIncludedChoice &&
+            product?.shippingIncludedChoiceIndex
+        );
         //@ts-ignore
-        let extraShippingCost = product?.shipping?.[shippingIncludedChoiceIndex]?.freight?.cent /100
-        console.log("extraShippingCost",extraShippingCost)
-        price+=extraShippingCost
-        console.log("price",price)
-
-        }
+        let extraShippingCost =
+          //@ts-ignore
+          product?.shipping?.[shippingIncludedChoiceIndex]?.freight?.cent / 100;
+        console.log("extraShippingCost", extraShippingCost);
+        price += extraShippingCost;
+        console.log("price", price);
+      }
       let mnp = getRandomInt(100000000000000, 999999999999999);
       let gitin = getRandomInt(10000000000000, 99999999999999);
       let barcode = [mnp, gitin].join("");
@@ -258,14 +264,20 @@ export async function LinkProductSalla2(
     if (
       product.shippingIncludedChoice &&
       product.shippingIncludedChoiceIndex !== -1
-      ) {
-      console.log("product.shippingIncludedChoice",product.shippingIncludedChoice)
-      console.log("product.shippingIncludedChoiceIndex",product.shippingIncludedChoiceIndex)
+    ) {
+      console.log(
+        "product.shippingIncludedChoice",
+        product.shippingIncludedChoice
+      );
+      console.log(
+        "product.shippingIncludedChoiceIndex",
+        product.shippingIncludedChoiceIndex
+      );
       //@ts-ignore
       totalPrice +=
         //@ts-ignore
-        product?.shipping?.[product.shippingIncludedChoiceIndex].freight
-          .cent / 100;
+        product?.shipping?.[product.shippingIncludedChoiceIndex].freight.cent /
+        100;
     }
     let bodyDataSalla: any = {
       name: req.query.name || product.name,
@@ -282,11 +294,11 @@ export async function LinkProductSalla2(
       metadata_description: product?.metadata_description,
     };
     if (product.sallaTags) {
-      let prodTags = product.sallaTags.filter((t:any)=>t).map(
-        (tag: { id: number; name: string }) => tag.id
-      );
-      bodyDataSalla.tags = prodTags
-      console.log("prodTags",prodTags)
+      let prodTags = product.sallaTags
+        .filter((t: any) => t)
+        .map((tag: { id: number; name: string }) => tag.id);
+      bodyDataSalla.tags = prodTags;
+      console.log("prodTags", prodTags);
     }
 
     let updatedQuantityVars = product?.variantsArr?.map((variant: any) => {
@@ -398,7 +410,8 @@ export async function LinkProductSalla2(
       token,
       req,
       res,
-      next,product
+      next,
+      product
     );
     if (createdeProduct?.message == "Cancel") {
       return;
@@ -442,47 +455,55 @@ export async function LinkProductSalla2(
     console.log(createdeProduct.data.id);
 
     // console.log(productResult.data.options[0].values);
-    product.options = await Promise.all(
-      jsonProduct.options.map(async (option: OptionType, index: number) => {
-        let obj: OptionType = option;
-        const productOption = productResult.data.options[index];
-        const values = await Promise.all(
-          option.values.map(async (value: ValueType, idx: number) => {
-            const optionValue = productOption?.values?.[idx];
-            console.log(optionValue);
-            const mnp = getRandomInt(100000000000000, 999999999999999);
-            const gitin = getRandomInt(10000000000000, 99999999999999);
-            return {
-              ...value,
-              mpn: mnp,
-              gtin: gitin,
-              salla_value_id: optionValue?.id,
-            };
-          })
-        );
+    if (
+      Array.isArray(product?.options) &&
+      //@ts-ignore
+      product?.options?.[0]?.values?.[0] &&
+      //@ts-ignore
+      product?.options?.[0]?.values?.[0]?.length > 0
+    ) {
+      product.options = await Promise.all(
+        jsonProduct?.options?.map(async (option: OptionType, index: number) => {
+          let obj: OptionType = option;
+          const productOption = productResult?.data?.options?.[index];
+          const values = await Promise.all(
+            option?.values?.map(async (value: ValueType, idx: number) => {
+              const optionValue = productOption?.values?.[idx];
+              console.log(optionValue);
+              const mnp = getRandomInt(100000000000000, 999999999999999);
+              const gitin = getRandomInt(10000000000000, 99999999999999);
+              return {
+                ...value,
+                mpn: mnp,
+                gtin: gitin,
+                salla_value_id: optionValue?.id,
+              };
+            })
+          );
 
-        obj.salla_option_id = productOption?.id;
-        obj.values = values;
-        //this is new
-        return obj;
-      })
-    );
+          obj.salla_option_id = productOption?.id;
+          obj.values = values;
+          //this is new
+          return obj;
+        })
+      );
 
-    const finalOptions = await Promise.all(
-      jsonProduct.options.map(async (option: OptionType, idx: number) => {
-        const values = await Promise.all(
-          option.values.map(async (optionValue: any, i: number) => {
-            return optionValue;
-          })
-        );
-        return {
-          ...option,
-          values,
-        };
-      })
-    );
+      const finalOptions = await Promise.all(
+        jsonProduct?.options?.map(async (option: OptionType, idx: number) => {
+          const values = await Promise.all(
+            option?.values?.map(async (optionValue: any, i: number) => {
+              return optionValue;
+            })
+          );
+          return {
+            ...option,
+            values,
+          };
+        })
+      );
 
-    product.options = finalOptions;
+      product.options = finalOptions;
+    }
     product.salla_product_id = productResult.data?.id;
     if (noOptionsInProduct) {
       await Promise.all([product.save()]);
