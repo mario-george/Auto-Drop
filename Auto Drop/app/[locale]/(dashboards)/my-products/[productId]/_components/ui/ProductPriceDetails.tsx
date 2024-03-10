@@ -38,7 +38,7 @@ export default function ProductPriceDetails({
         />
         <Input
           className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#636867] ${inputClasses} `}
-          value={CurrencyFormatter(totalProfit - shippingTotalCost)}
+          value={CurrencyFormatter(totalProfit)}
         />
       </div>
     </div>

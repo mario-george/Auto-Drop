@@ -127,6 +127,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     durationToDeliver,
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
+  const [defaultProfitType, setDefaultProfitType] = useState("percentage");
+
   const [tagsList, setTagsList] = useState([]);
   const [shippingWithoutOrInclude, setShippingWithoutOrInclude] =
     useState("shippingIncluded");
@@ -259,6 +261,11 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       setSelectedTags(
         product?.sallaTags.map((tag: { name: string; id: number }) => tag.name)
       );
+
+      if (!product?.commissionPercentage) {
+        setProfitChoosenType("number");
+        setDefaultProfitType("number");
+      }
     }
   }, [product]);
   const [commissionVal, setCommissionVal] = useState(
@@ -597,6 +604,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                     onValueChange={(value: any) => {
                       setProfitChoosenType(value);
                     }}
+                    defaultValue={defaultProfitType}
                   >
                     <SelectTrigger className="bg-[#edf5f9] dark:text-black">
                       <SelectValue
@@ -606,8 +614,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="percentage">{percentage}</SelectItem>
                         <SelectItem value="number">{number}</SelectItem>
+                        <SelectItem value="percentage">{percentage}</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
