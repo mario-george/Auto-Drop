@@ -333,53 +333,6 @@ export async function LinkProductSalla2(
     if (!product?.options?.[0]?.name) {
       noOptionsInProduct = true;
     }
-    /* if (!product?.options[0]?.name) {
-      noOptionsInProduct = true;
-      let prodPrice = parseFloat(product.variantsArr[0].offer_sale_price);
-      console.log("no options hereeeeee");
-      let totalPrice =
-        (product?.vendor_commission / 100) * prodPrice + prodPrice;
-      if (!product.commissionPercentage) {
-        totalPrice = product?.vendor_commission + prodPrice;
-      }
-      bodyDataSalla = {
-        name: req.query.name || product.name,
-        price: totalPrice,
-        product_type: product.product_type,
-        quantity: product.variantsArr[0].sku_available_stock,
-        description: product.description,
-        cost_price: product.main_price,
-        require_shipping: product.require_shipping,
-        sku: product.sku,
-        images: product.images,
-
-        metadata_title: product?.metadata_title,
-        metadata_description: product?.metadata_description,
-      };
-      if (product?.showDiscountPrice) {
-        let originalPrice = parseFloat(product.variantsArr[0].sku_price);
-        bodyDataSalla.price = originalPrice
-        bodyDataSalla.sale_price = totalPrice
-       /*  bodyDataSalla = {
-          name: req.query.name || product.name,
-          price: originalPrice,
-          sale_price: totalPrice,
-          product_type: product.product_type,
-          quantity: product.variantsArr[0].sku_available_stock,
-          description: product.description,
-          cost_price: product.main_price,
-          require_shipping: product.require_shipping,
-          sku: product.sku,
-          images: product.images,
-
-          metadata_title: product?.metadata_title,
-          metadata_description: product?.metadata_description,
-        }; */
-    /*  }
-      if(product?.categoriesSalla){
-        bodyDataSalla.categories=product?.categoriesSalla
-      }
-    } */
 
     const options_1 = {
       method: "POST",
@@ -393,19 +346,7 @@ export async function LinkProductSalla2(
     };
 
     console.log("here");
-    // console.log(product);
-    /* try {
-    } catch (err: any) {
-      console.log(err?.response?.status);
-      if (err?.response?.status === 401) {
-        // get new access token
-        RefreshTokenHandler(token);
-      }
-    } */
-    // let createdeProduct;
-
-    // let { data: createdeProduct } = await axios.request(options_1);
-
+ 
     let createdeProduct = await ProductSallaChecker(
       options_1,
       product?.sku,
@@ -426,32 +367,10 @@ export async function LinkProductSalla2(
         createdeProduct = await axios.request(options_1);
       } catch (error) {
         console.error(error);
-        // handle error
       }
     }
 
-    /*    try {
-      createdeProduct = data;
-    } catch (error: any) {
-      console.error(error?.response?.body)
-      if (
-        error?.response?.data?.status === 401 &&
-        error?.response?.data?.error?.code === "Unauthorized"
-      ) {
-        // get new access tokens
-        console.log("get new access tokens");
-        console.log(req.headers["authorization"]);
-        let data = await RefreshTokenHandler(token, req.user.sallaToken);
-        console.log(data);
-      }
-    } */
-    /* 
-    error?.response?.data
-{
-  status: 401,
-  success: false,
-  error: { code: 'Unauthorized', message: 'The access token is invalid' }
-}    */
+    
     const opt = {
       method: "GET",
       url: `https://api.salla.dev/admin/v2/products/${createdeProduct.data.id}`,
@@ -465,7 +384,6 @@ export async function LinkProductSalla2(
     const { data: productResult } = await axios.request(opt);
     console.log(createdeProduct.data.id);
 
-    // console.log(productResult.data.options[0].values);
     if (
       Array.isArray(product?.options) &&
       //@ts-ignore
