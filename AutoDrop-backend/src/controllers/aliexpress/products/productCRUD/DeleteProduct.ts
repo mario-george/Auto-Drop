@@ -36,7 +36,7 @@ export const DeleteProductById = catchAsync(
       };
       let { data: deleteResp } = await axios.request(axiosOptions);
 
-      if (deleteResp.status !== "success") {
+      if (!res.headersSent && deleteResp.status !== "success") {
         return res.status(400).json({
           status: "failed",
         });
@@ -44,6 +44,8 @@ export const DeleteProductById = catchAsync(
       product.salla_product_id = undefined;
     }
     await Product.deleteOne({ _id: product._id });
-    return res.json({ message: "Product deleted" });
+    if (!res.headersSent) {
+      return res.json({ message: "Product deleted" });
+    }
   }
 );
