@@ -302,13 +302,19 @@ export async function LinkProductSalla2(
       bodyDataSalla.tags = prodTags;
       console.log("prodTags", prodTags);
     }
-
     let updatedQuantityVars = product?.variantsArr?.map((variant: any) => {
       let tempQ = variant.sku_available_stock;
+      let choosenQuantity = product?.choosenQuantity;
+      if (variant?.sku_available_stock_original) {
+        tempQ = variant?.sku_available_stock_original;
+      }
+      if ((product?.choosenQuantity || 1) > tempQ) {
+        choosenQuantity = tempQ;
+      }
 
       return {
         ...variant,
-        sku_available_stock: product?.choosenQuantity,
+        sku_available_stock: choosenQuantity,
         sku_available_stock_original: tempQ,
       };
     });
@@ -346,7 +352,7 @@ export async function LinkProductSalla2(
     };
 
     console.log("here");
- 
+
     let createdeProduct = await ProductSallaChecker(
       options_1,
       product?.sku,
@@ -370,7 +376,6 @@ export async function LinkProductSalla2(
       }
     }
 
-    
     const opt = {
       method: "GET",
       url: `https://api.salla.dev/admin/v2/products/${createdeProduct.data.id}`,
@@ -434,6 +439,7 @@ export async function LinkProductSalla2(
       product.options = finalOptions;
     }
     product.salla_product_id = productResult.data?.id;
+    await product.save();
     if (noOptionsInProduct) {
       await Promise.all([product.save()]);
       return res.status(200).json({
