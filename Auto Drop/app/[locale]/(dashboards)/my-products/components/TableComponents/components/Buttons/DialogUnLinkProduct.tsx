@@ -15,16 +15,30 @@ import { useRouter } from "next/navigation";
 import axiosInstance from "@/app/[locale]/(dashboards)/_components/shared/AxiosInstance";
 import Image from "next/image";
 import useLoader from "@/components/loader/useLoader";
-
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setKeyValue } from "@/store/productsSlice";
 export default function SubmitProducts({
   sallaProductId,
   setLoadProducts,
 }: any) {
   const router = useRouter();
   const { setLoading, LoaderComponent } = useLoader();
-
+  const productsState = useSelector((state: any) => state.products);
+  const dispatch = useDispatch();
+  let { allowButtonAction,loadingProductTable } = productsState;
+  console.log("loadingProductTable",loadingProductTable)
   let submitHandler = async () => {
-    setLoading(true);
+   /*  if (!allowButtonAction) {
+      return;
+    } */
+    dispatch(
+      setKeyValue({
+        key: "loadingProductTable",
+        value: true,
+      })
+    );
+    // setLoading(true);
     const resp = await axiosInstance.delete(
       `/salla/deleteProduct/${sallaProductId}`
     );
@@ -32,12 +46,12 @@ export default function SubmitProducts({
     if (resp.data.status) {
       setLoadProducts((prev: boolean) => !prev);
     }
-    setLoading(false);
+    // setLoading(false);
   };
   let buttonClassL = `rounded-full bg-[#008767] hover:bg-[#008767]/90 px-2 py-2 w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem] hover:cursor-pointer `;
   return (
     <>
-        {LoaderComponent}
+      {LoaderComponent}
       <Dialog submitHandler={submitHandler}>
         <div className={buttonClassL}>
           <Image

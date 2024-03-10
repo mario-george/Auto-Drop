@@ -672,6 +672,8 @@ export const getProductVariants = async (
     } else return;
   } catch (error) {
     console.log(error);
+    console.log(error?.response?.data?.error);
+    console.log(error?.response?.data?.error);
   }
 };
 const allVaraint = async (id: any, token: any) => {

@@ -258,6 +258,8 @@ export async function LinkProductSalla2(
     let prodPrice = parseFloat(product.variantsArr[0].offer_sale_price);
     let totalPrice: number =
       (product?.vendor_commission / 100) * prodPrice + prodPrice;
+    /*    console.log("product.commissionPercentage", product.commissionPercentage);
+    console.log("product?.vendor_commission", product?.vendor_commission); */
     if (!product.commissionPercentage) {
       totalPrice = product?.vendor_commission + prodPrice;
     }

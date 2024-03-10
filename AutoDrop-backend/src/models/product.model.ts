@@ -73,8 +73,8 @@ interface ProductSchema {
   category_name?: string;
   first_level_category_name?: string;
   second_level_category_name?: string;
-  target_sale_price?: string;
-  target_original_price?: string;
+  target_sale_price?: string | number;
+  target_original_price?: string | number;
   variantsArr?: any;
   commissionPercentage?: boolean;
   showDiscountPrice?: boolean;

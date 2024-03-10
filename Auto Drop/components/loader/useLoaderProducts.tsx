@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { BounceLoader } from "react-spinners";
 export const toggleLoadingState = () => {};
-export default function useLoader() {
-  const [loading, setLoading] = useState(false);
-  /*  const loading = useSelector(
+export default function useLoaderProducts() {
+  // const [loading, setLoading] = useState(false);
+  const loading = useSelector(
     (state: any) => state.products.loadingProductTable
   );
- */
+
   const setLoadingState = () => {};
 
   const overlayStyles = {

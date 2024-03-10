@@ -4,38 +4,44 @@ import { Product } from "../../../../models/product.model";
 import axios from "axios";
 import SallaToken from "../../../../models/SallaTokenModel";
 
-const variantsCheckHandler = (variants: any, checkboxes: boolean[][],options:any) => {
-let propertyIds = variants[0].relativeOptions.map((variant:any)=>variant.property_value_id)
-if(checkboxes.length!==options.length){
-   throw new Error("options is not equal to checkboxes")
-}
-let newC = checkboxes.map((checkboxOption:any,optionIndex:number)=>{
+const variantsCheckHandler = (
+  variants: any,
+  checkboxes: boolean[][],
+  options: any
+) => {
+  let propertyIds = variants[0].relativeOptions.map(
+    (variant: any) => variant.property_value_id
+  );
+  if (checkboxes.length !== options.length) {
+    throw new Error("options is not equal to checkboxes");
+  }
+  let newC = checkboxes.map((checkboxOption: any, optionIndex: number) => {
+    let namesToBeDeleted = Array(options.length).fill([]);
+    // get names to be deleted
+    // namesToBeDeleted = [ {}  ]
+    checkboxOption.forEach((checkbox: boolean, checkboxIndex: number) => {
+      if (checkbox === false) {
+        namesToBeDeleted[optionIndex].push(
+          options[optionIndex].values[checkboxIndex].name
+        );
+        return;
+      } else {
+        return;
+      }
+    });
 
-let namesToBeDeleted = Array(options.length).fill([])
-// get names to be deleted
-// namesToBeDeleted = [ {}  ]
-  checkboxOption.forEach((checkbox:boolean,checkboxIndex:number)=>{
-    if(checkbox===false){
-      namesToBeDeleted[optionIndex].push(options[optionIndex].values[checkboxIndex].name)
-      return 
-    }else{
-      return
-    }
-  })
-
-  let newO = options[optionIndex].values.map()
-  
-} )
-let newOptionsArr = options.filter((option:any,optionIndex:number)=>{
-  let newValues = option.values.filter((value:any,valueIndex:number)=>{
-    return checkboxes[optionIndex][valueIndex]
-  })
-  option.values = newValues
-  return newValues.length>0
-})
-let newVariantsArr2 = variants.map((variant:any,variantIndex:number)=>{ 
-  
-}) 
+    let newO = options[optionIndex].values.map();
+  });
+  let newOptionsArr = options.filter((option: any, optionIndex: number) => {
+    let newValues = option.values.filter((value: any, valueIndex: number) => {
+      return checkboxes[optionIndex][valueIndex];
+    });
+    option.values = newValues;
+    return newValues.length > 0;
+  });
+  let newVariantsArr2 = variants.map(
+    (variant: any, variantIndex: number) => {}
+  );
 
   let newVariantsArr = variants.map((variant: any, index: number) => {
     let newVariant = { ...variant };
@@ -85,7 +91,7 @@ const PatchProduct = catchAsync(
         .status(400)
         .json({ message: "Missing productId in query parameters." });
     }
-    console.log('reached Patch 1 ')
+    console.log("reached Patch 1 ");
     //@ts-ignore
     let { productId }: { productId: string } = req.params;
 
@@ -129,8 +135,7 @@ const PatchProduct = catchAsync(
       sallaTags = await tagsSallaHandler(sallaAccessToken, selectedTags);
     }
     let containsFalse = false;
-    if(checkboxesSelected){
-
+    if (checkboxesSelected) {
       for (let i = 0; i < checkboxesSelected.length; i++) {
         if (checkboxesSelected[i].includes(false)) {
           containsFalse = true;
@@ -139,19 +144,19 @@ const PatchProduct = catchAsync(
       }
     }
 
-    if(shippingIncludedChoice && shippingIncludedChoiceIndex){
-      product.shippingIncludedChoice = shippingIncludedChoice
-      product.shippingIncludedChoiceIndex = shippingIncludedChoiceIndex
+    if (shippingIncludedChoice && shippingIncludedChoiceIndex) {
+      product.shippingIncludedChoice = shippingIncludedChoice;
+      product.shippingIncludedChoiceIndex = shippingIncludedChoiceIndex;
     }
     if (containsFalse) {
       //remove unchecked variants
-   /*    let { variantsArr } = product;
+      /*    let { variantsArr } = product;
       let newVariantsArr = variantsCheckHandler(
         variantsArr,
         checkboxesSelected
       ); */
     }
-    console.log('reached Patch 2 ')
+    console.log("reached Patch 2 ");
 
     if (sallaTags && sallaTags.length > 0) {
       product.sallaTags = sallaTags;
@@ -194,8 +199,9 @@ const PatchProduct = catchAsync(
     if (require_shipping) {
       product.require_shipping = require_shipping;
     }
-    // console.log(product);
     await product.save();
+    /* console.log("product?.vendor_commission", product?.vendor_commission);
+    console.log("product?.commissionPercentage", product?.commissionPercentage); */
     const opt2 = {
       method: "POST",
       headers: {

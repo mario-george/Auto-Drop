@@ -125,16 +125,16 @@ export const ProductSallaChecker: any = async (
     ) {
       if (product)
         product.options = product?.options.map((option: any, index: number) => {
-          let newV = option.values.map((value: any, index: number) => {
+       /*    let newV = option.values.map((value: any, index: number) => {
             return { ...value, name: index + " " + value.name };
-          });
+          }); */
           return {
             ...option,
             /*      visibility: "always",
             visibility_condition_type: "=",
             visibility_condition_option: option.name + index,
             visibility_condition_value: option.name + index, */
-            values: newV,
+            // values: newV,
           };
         });
       await product.save();

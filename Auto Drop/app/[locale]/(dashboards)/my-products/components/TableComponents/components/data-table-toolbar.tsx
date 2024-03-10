@@ -99,7 +99,7 @@ export function DataTableToolbar<TData>({
           <Checkbox
             checked={checked}
             onCheckedChange={() => setChecked(!checked)}
-            classNameIndicator={`bg-black rounded-lg`}
+            classNameIndicator={`bg-black rounded-lg dark:fill-white dark:bg-white`}
           />
         </div>
         <Button

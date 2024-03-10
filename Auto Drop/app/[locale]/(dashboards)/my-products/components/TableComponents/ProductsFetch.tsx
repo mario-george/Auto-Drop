@@ -4,12 +4,17 @@ import axiosInstance from "../../../_components/shared/AxiosInstance";
 import ColsExtract from "./ColumnsExtractor";
 import { setKeyValue } from "@/store/productsSlice";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function ProductsFetch(props: any) {
   const [myProducts, setMyProducts] = useState([]);
   const [loadProducts, setLoadProducts] = useState(false);
+  const reloadProducts = useSelector(
+    (state: any) => state.products.reloadProducts
+  );
   const dispatch = useDispatch();
   useEffect(() => {
+  
     const getMyProductsData = async () => {
       const data2 = await axiosInstance.get("/aliexpress/product/getProducts");
       console.log(data2.data.userProducts);
@@ -35,10 +40,17 @@ export default function ProductsFetch(props: any) {
           value: data2.data.userProducts,
         })
       );
+      dispatch(
+        setKeyValue({
+          key: "loadingProductTable",
+          value: false,
+        })
+      );
+      
     };
 
     getMyProductsData();
-  }, [loadProducts]);
+  }, [loadProducts, reloadProducts]);
 
   if (!myProducts) {
     return <div>Loading...</div>; // Replace with your loading state
@@ -47,7 +59,11 @@ export default function ProductsFetch(props: any) {
   return (
     <>
       {" "}
-      <div className=" tableContainer dark:bg-[#2e464f] dark:text-white">
+      <div
+        className={` tableContainer dark:bg-[#2e464f] dark:text-white flex flex-1 justify-center ${
+          myProducts.length > 0 && `!mx-auto`
+        }`}
+      >
         <ColsExtract
           {...props}
           myProducts={myProducts}

@@ -23,7 +23,7 @@ export const DeleteSallaProduct = catchAsync(
     };
     const { data: deleteResp } = await axios.request(deleteSallaProductOpt);
     if (!deleteResp.success) {
-      res.status(400).json({
+      return res.status(400).json({
         status: "failed",
       });
     }
@@ -33,7 +33,7 @@ export const DeleteSallaProduct = catchAsync(
     });
     console.log(product);
     if (!product) {
-      res.status(404).json({
+      return res.status(404).json({
         status: "failed",
         message: "Cannot find product",
       });
@@ -43,7 +43,7 @@ export const DeleteSallaProduct = catchAsync(
       await product.save();
     }
     console.log(deleteResp.success);
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
     });
   }

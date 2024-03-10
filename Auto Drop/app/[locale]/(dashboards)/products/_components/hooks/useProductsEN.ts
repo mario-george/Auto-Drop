@@ -313,7 +313,7 @@ export default function useProducts({
       );
     };
     updateAllProductShipping();
-  }, [products, productsAR, lang]);
+  }, [products.length, productsAR.length, lang]);
   const shoppingCartHandler = async (product_id: string) => {
     try {
       const resp = await axiosInstance.post("/aliexpress/getShippingDetails", {

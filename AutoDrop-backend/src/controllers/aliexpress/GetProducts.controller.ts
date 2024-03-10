@@ -400,7 +400,11 @@ export async function GetDetails({
             ...options?.map((e: any) => e.values)
           );
           const hasValues = values.length;
+          let targetSalePrice = Number(variantsArr[0].offer_sale_price) ||target_sale_price
+          let targetOriginalPrice = Number(variantsArr[0].sku_price) ||target_original_price
 
+
+          
           const data: ProductSchema = {
             name: subject,
             description: detail,
@@ -430,8 +434,8 @@ export async function GetDetails({
             category_id: ae_item_base_info_dto.category_id,
             first_level_category_name,
             second_level_category_name,
-            target_sale_price,
-            target_original_price,
+            target_sale_price:targetSalePrice,
+            target_original_price:targetOriginalPrice,
             variantsArr
           };
           // console.log(data.category_id);

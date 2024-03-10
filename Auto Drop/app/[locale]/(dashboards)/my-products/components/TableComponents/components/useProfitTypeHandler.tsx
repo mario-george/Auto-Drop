@@ -16,10 +16,18 @@ import { useSelector } from "react-redux";
 import axiosInstance from "@/app/[locale]/(dashboards)/_components/shared/AxiosInstance";
 import { useToast } from "@/components/ui/use-toast";
 import useLoader from "@/components/loader/useLoader";
+import { useDispatch } from "react-redux";
+import { setKeyValue } from "@/store/productsSlice";
 export default function useProfitTypeHandler(props: any) {
   const { toast } = useToast();
+  const dispatch = useDispatch();
+  /*   const reloadProducts = useSelector(
+    (state: any) => state.products.reloadProducts
+  ); */
   let { profitType, percentage, number, upProducts, val } = props;
   const productsState = useSelector((state: any) => state.products);
+  let {allowButtonAction}= productsState
+  console.log("allowButtonAction",allowButtonAction)
   let { currentProductsList, currentSelectedProducts } = productsState;
   const [profitChoosenType, setProfitChoosenType] = useState("percentage");
   const [commissionVal, setCommissionVal] = useState(0);
@@ -28,7 +36,16 @@ export default function useProfitTypeHandler(props: any) {
   const { LoaderComponent, setLoading } = useLoader();
 
   const linkProductsToSallaHandler = async () => {
-    setLoading(true);
+  /*   if(!allowButtonAction){
+return
+    } */
+    // setLoading(true);
+    dispatch(
+      setKeyValue({
+        key: "loadingProductTable",
+        value: true,
+      })
+    );
     let selectedProds: any = currentProductsList.filter(
       (_: any, index: number) => currentSelectedProducts[index]
     );
@@ -56,6 +73,8 @@ export default function useProfitTypeHandler(props: any) {
         profitChoosenTypeName = "percentage";
         commissionPercentage = true;
       }
+      console.log("commissionVal", commissionVal);
+      console.log("commissionPercentage", commissionPercentage);
       let data = {
         name: product.name,
         vendor_commission: commissionVal,
@@ -88,10 +107,22 @@ export default function useProfitTypeHandler(props: any) {
           console.log(promise.reason);
         }
       });
+      dispatch(
+        setKeyValue({
+          key: "reloadProducts",
+          value: !productsState.reloadProducts,
+        })
+      );
+      dispatch(
+        setKeyValue({
+          key: "allowButtonAction",
+          value: false,
+        })
+      );
     } catch (err: any) {
       console.log(err);
     }
-    setLoading(false);
+    // setLoading(false);
   };
   let ProfitComponent = (
     <>
@@ -143,6 +174,7 @@ export default function useProfitTypeHandler(props: any) {
           className="!bg-[#40a58d] !text-white !min-h-[2rem]"
           size="xs"
           onClick={linkProductsToSallaHandler}
+          disabled={!allowButtonAction}
         >
           {upProducts}
         </Button>
