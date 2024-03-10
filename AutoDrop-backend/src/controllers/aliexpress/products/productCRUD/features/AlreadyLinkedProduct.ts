@@ -51,7 +51,7 @@ export const ProductSallaChecker: any = async (
   next?: NextFunction,
   product?: any
 ) => {
-  console.log(optionsObj);
+  // console.log(optionsObj);
   try {
     let { data } = await axios.request(optionsObj);
     return data;
@@ -64,12 +64,29 @@ export const ProductSallaChecker: any = async (
     let errorFieldSku = err?.response?.data?.error?.fields?.sku;
     let priceErr = err?.response?.data?.error?.fields?.price;
     let nameErr = err?.response?.data?.error?.fields?.name;
+    let options0valeus10name =
+      err?.response?.data?.error?.fields?.["options.0.values.10.name"];
+    let options1valeus0name =
+      err?.response?.data?.error?.fields?.["options.1.values.0.name"];
+    let options1valeus1name =
+      err?.response?.data?.error?.fields?.["options.1.values.1.name"];
     let visibility_condition_type =
       err?.response?.data?.error?.fields?.visibility_condition_type;
     let visibility_condition_option =
       err?.response?.data?.error?.fields?.visibility_condition_option;
     let visibility_condition_value =
       err?.response?.data?.error?.fields?.visibility_condition_value;
+
+    if (options1valeus0name) {
+      console.log("options1valeus0name", options1valeus0name);
+    }
+    if (options1valeus1name) {
+      console.log("options1valeus1name", options1valeus1name);
+    }
+    if (options0valeus10name) {
+      console.log("options0valeus10name", options0valeus10name);
+    }
+
     if (visibility_condition_type) {
       console.log("visibility_condition_type", visibility_condition_type);
     }
