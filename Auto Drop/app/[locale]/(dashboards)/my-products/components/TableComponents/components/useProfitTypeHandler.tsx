@@ -95,7 +95,7 @@ export default function useProfitTypeHandler(props: any) {
   };
   let ProfitComponent = (
     <>
-      <div className="grid grid-cols-2 justify-center tab:grid-cols-3 gap-4 tab:max-w-[30rem] items-center my-2 tab:my-4  dark:text-white">
+      <div className="grid grid-cols-2 justify-center tab:grid-cols-3 gap-4    items-center my-2 tab:my-4  dark:text-white">
         <span className="whitespace-nowrap text-sm mx-2  tab:hidden">
           {profitType}
         </span>
@@ -108,7 +108,7 @@ export default function useProfitTypeHandler(props: any) {
               setProfitChoosenType(value);
             }}
           >
-            <SelectTrigger className="bg-[#edf5f9]  dark:text-black">
+            <SelectTrigger className="bg-[#edf5f9]  dark:text-black text-xs tab:text-sm">
               <SelectValue placeholder={percentage} />
             </SelectTrigger>
             <SelectContent>
