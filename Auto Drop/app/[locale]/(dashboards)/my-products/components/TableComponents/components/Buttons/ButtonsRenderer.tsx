@@ -33,10 +33,7 @@ export default function ButtonsRenderer({
       if (salla_product_id) {
         return;
       }
-      /* if(!allowButtonAction){
-return
-      } */
-      // setLoading(true);
+
       dispatch(
         setKeyValue({
           key: "loadingProductTable",
@@ -50,23 +47,13 @@ return
       console.log(res.data);
       setLoadProducts((prev: boolean) => !prev);
       dispatch(setKeyValue({ key: "reloadPage", value: !reloadPage }));
-      // setLoading(false);
-      /*   dispatch(
-        setKeyValue({
-          key: "allowButtonAction",
-          value: false,
-        })
-      ); */
+     
     } catch (err: any) {
       console.error(err);
     }
   };
   let deleteProductHandler = async () => {
     try {
-      /*   if(!allowButtonAction){
-        return
-              } */
-      // setLoading(true);
 
       dispatch(
         setKeyValue({
@@ -79,20 +66,16 @@ return
       );
       if (res.status >= 200 && res.status < 300) {
         console.log("Product deleted");
-        setMyProducts((prevProducts: any) => {
-          return prevProducts.filter((prod: any) => {
-            return prod._id !== id;
-          });
-        });
-
-        // setLoading(false);
-
-        /*  dispatch(
+        dispatch(
           setKeyValue({
-            key: "allowButtonAction",
+            key: "loadingProductTable",
             value: false,
           })
-        ); */
+        );
+     
+        dispatch(setKeyValue({ key: "reloadPage", value: !reloadPage }));
+
+      
       } else {
         console.log("error");
       }
@@ -107,7 +90,6 @@ return
 
   return (
     <div className="flex flex-row-reverse gap-3 transition-all duration-100">
-      {/* {LoaderComponent} */}
       <div className={buttonClassD} onClick={deleteProductHandler}>
         <Image
           src={`/client/my-products/delete.svg`}

@@ -26,27 +26,32 @@ export default function SubmitProducts({
   const { setLoading, LoaderComponent } = useLoader();
   const productsState = useSelector((state: any) => state.products);
   const dispatch = useDispatch();
-  let { allowButtonAction,loadingProductTable } = productsState;
+  let { reloadPage,loadingProductTable } = productsState;
   console.log("loadingProductTable",loadingProductTable)
   let submitHandler = async () => {
-   /*  if (!allowButtonAction) {
-      return;
-    } */
+try{
+
+  dispatch(
+    setKeyValue({
+      key: "loadingProductTable",
+      value: true,
+    })
+  );
+  const resp = await axiosInstance.delete(
+    `/salla/deleteProduct/${sallaProductId}`
+  );
+  console.log(resp.data);
+  dispatch(setKeyValue({ key: "reloadPage", value: !reloadPage }));
+  if (res.status >= 200 && res.status < 300) {
     dispatch(
       setKeyValue({
         key: "loadingProductTable",
-        value: true,
+        value: false,
       })
     );
-    // setLoading(true);
-    const resp = await axiosInstance.delete(
-      `/salla/deleteProduct/${sallaProductId}`
-    );
-    console.log(resp.data);
-    if (resp.data.status) {
-      setLoadProducts((prev: boolean) => !prev);
-    }
-    // setLoading(false);
+  }
+}catch(err){console.error(err)}
+
   };
   let buttonClassL = `rounded-full bg-[#008767] hover:bg-[#008767]/90 px-2 py-2 w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem] hover:cursor-pointer `;
   return (
