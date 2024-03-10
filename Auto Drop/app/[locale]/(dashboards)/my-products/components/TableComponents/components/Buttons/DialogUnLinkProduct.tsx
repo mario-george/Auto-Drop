@@ -42,7 +42,7 @@ try{
   );
   console.log(resp.data);
   dispatch(setKeyValue({ key: "reloadPage", value: !reloadPage }));
-  if (res.status >= 200 && res.status < 300) {
+  if (resp.status >= 200 && resp.status < 300) {
     dispatch(
       setKeyValue({
         key: "loadingProductTable",
