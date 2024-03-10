@@ -18,6 +18,7 @@ import { useToast } from "@/components/ui/use-toast";
 import useLoader from "@/components/loader/useLoader";
 import { useDispatch } from "react-redux";
 import { setKeyValue } from "@/store/productsSlice";
+import { useLocale } from "next-intl";
 export default function useProfitTypeHandler(props: any) {
   const { toast } = useToast();
   const dispatch = useDispatch();
@@ -26,17 +27,17 @@ export default function useProfitTypeHandler(props: any) {
   ); */
   let { profitType, percentage, number, upProducts, val } = props;
   const productsState = useSelector((state: any) => state.products);
-  let {allowButtonAction}= productsState
-  console.log("allowButtonAction",allowButtonAction)
+  let { allowButtonAction } = productsState;
+  console.log("allowButtonAction", allowButtonAction);
   let { currentProductsList, currentSelectedProducts } = productsState;
   const [profitChoosenType, setProfitChoosenType] = useState("percentage");
   const [commissionVal, setCommissionVal] = useState(0);
   console.log("currentProductsList", currentProductsList);
   console.log("currentSelectedProducts", currentSelectedProducts);
   const { LoaderComponent, setLoading } = useLoader();
-
+  const locale = useLocale();
   const linkProductsToSallaHandler = async () => {
-  /*   if(!allowButtonAction){
+    /*   if(!allowButtonAction){
 return
     } */
     // setLoading(true);
@@ -126,12 +127,32 @@ return
   };
   let ProfitComponent = (
     <>
-      <div className="grid grid-cols-2 justify-center tab:grid-cols-3 gap-4    items-center my-2 tab:my-4  dark:text-white">
-        <span className="whitespace-nowrap text-sm mx-2  tab:hidden">
+      <div
+        className={`grid grid-cols-2 justify- ${
+          locale == "en"
+            ? `lap:grid-cols-3 lap:my-4 `
+            : `tab:grid-cols-3 tab:my-4`
+        } gap-4    items-center my-2   dark:text-white`}
+      >
+        <span
+          className={`whitespace-nowrap text-sm mx-2  ${
+            locale == "en" ? `lap:hidden` : `tab:hidden`
+          }`}
+        >
           {profitType}
         </span>
-        <div className="flex space-y-3 tab:space-y-0 flex-col tab:flex-row tab:space-s-6 items-center">
-          <span className="whitespace-nowrap text-sm mx-2 hidden tab:block">
+        <div
+          className={`flex ${
+            locale == "en"
+              ? `lap:flex-row lap:space-s-6 lap:space-y-0 `
+              : `tab:flex-row tab:space-s-6 tab:space-y-0`
+          } space-y-3  flex-col items-center`}
+        >
+          <span
+            className={`whitespace-nowrap text-sm mx-2 hidden ${
+              locale == "en" ? `lap:block` : "tab:block"
+            }`}
+          >
             {profitType}
           </span>
           <Select
@@ -139,7 +160,11 @@ return
               setProfitChoosenType(value);
             }}
           >
-            <SelectTrigger className="bg-[#edf5f9]  dark:text-black text-xs tab:text-sm">
+            <SelectTrigger
+              className={`bg-[#edf5f9]  dark:text-black text-xs ${
+                locale == "en" ? `lap:text-sm` : `tab:text-sm`
+              }`}
+            >
               <SelectValue placeholder={percentage} />
             </SelectTrigger>
             <SelectContent>
@@ -150,7 +175,11 @@ return
             </SelectContent>
           </Select>
         </div>
-        <div className=" flex items-center tab:space-s-3">
+        <div
+          className={`flex items-center ${
+            locale == "en" ? ` lap:space-s-3` : `tab:space-s-3`
+          }`}
+        >
           <div className="relative mt-auto">
             <Input
               type="number"

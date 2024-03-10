@@ -5,8 +5,10 @@ import ColsExtract from "./ColumnsExtractor";
 import { setKeyValue } from "@/store/productsSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import useLoaderProducts from "@/components/loader/useLoaderProducts";
 
 export default function ProductsFetch(props: any) {
+  const { LoaderComponent } = useLoaderProducts();
   const [myProducts, setMyProducts] = useState([]);
   const [loadProducts, setLoadProducts] = useState(false);
   const reloadProducts = useSelector(
@@ -14,7 +16,6 @@ export default function ProductsFetch(props: any) {
   );
   const dispatch = useDispatch();
   useEffect(() => {
-  
     const getMyProductsData = async () => {
       const data2 = await axiosInstance.get("/aliexpress/product/getProducts");
       console.log(data2.data.userProducts);
@@ -46,7 +47,6 @@ export default function ProductsFetch(props: any) {
           value: false,
         })
       );
-      
     };
 
     getMyProductsData();
@@ -58,7 +58,7 @@ export default function ProductsFetch(props: any) {
 
   return (
     <>
-      {" "}
+      {LoaderComponent}{" "}
       <div
         className={` tableContainer dark:bg-[#2e464f] dark:text-white flex flex-1 justify-center ${
           myProducts.length > 0 && `!mx-auto`
