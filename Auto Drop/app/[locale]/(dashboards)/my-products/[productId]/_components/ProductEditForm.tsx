@@ -148,7 +148,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   const formSubmmitedHandler = () => {
     buttonRef?.current?.click();
   };
-
+  console.log("LoaderComponent", LoaderComponent);
   const {
     optionsSelected,
     setOptionsSelected,
@@ -160,10 +160,14 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     shipping: product?.shipping,
     shippingText: shipping,
     nameOfShippingComp,
-    durationToDeliver,shippingWithoutOrInclude
+    durationToDeliver,
+    shippingWithoutOrInclude,
   };
-  const { ProductShippingComponent, value: choosenShippingIndex,shippingTotalCost } =
-    useProductShipping({ ...ProductShippingProps });
+  const {
+    ProductShippingComponent,
+    value: choosenShippingIndex,
+    shippingTotalCost,
+  } = useProductShipping({ ...ProductShippingProps });
   let addToCartHandler = () => {};
   const ProductEditHeaderProps = {
     uploadProduct,
@@ -407,7 +411,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     totalProfit,
     inputClasses,
     showDiscountPrice,
-    setShowDiscountPrice,shippingTotalCost
+    setShowDiscountPrice,
+    shippingTotalCost,
   };
 
   const ProductSEOInfoProps = {
@@ -421,7 +426,6 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     form,
   };
   const ProductOptionsProps = {
-  
     options: product.options,
     choosenSizes,
     choosenColors,

@@ -420,7 +420,16 @@ export async function LinkProductSalla2(
     } else if (createdeProduct?.message == "Error") {
       throw new AppError("sku already linked to a product on Salla", 400);
     }
-    // console.log(createdeProduct);
+    console.log("createdeProduct?.status", createdeProduct?.status);
+    if (!createdeProduct || !createdeProduct?.data) {
+      try {
+        createdeProduct = await axios.request(options_1);
+      } catch (error) {
+        console.error(error);
+        // handle error
+      }
+    }
+
     /*    try {
       createdeProduct = data;
     } catch (error: any) {

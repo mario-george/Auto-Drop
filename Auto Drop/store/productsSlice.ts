@@ -12,7 +12,7 @@ type InitialStateType = {
   currentProductsList: any;
   reloadPage: boolean;
   reloadProducts: boolean;
-  loadingProductTable :boolean
+  loadingProductTable: boolean;
 };
 interface SetKeyValueActionPayload {
   key:
@@ -20,7 +20,9 @@ interface SetKeyValueActionPayload {
     | "currentSelectedProducts"
     | "currentProductsList"
     | "reloadPage"
-    | "reloadProducts"|"allowButtonAction"|'loadingProductTable';
+    | "reloadProducts"
+    | "allowButtonAction"
+    | "loadingProductTable";
   value: any;
 }
 // Define a slice for the products
@@ -32,7 +34,9 @@ const productsSlice = createSlice({
     currentSelectedProducts: {},
     currentProductsList: [],
     reloadPage: false,
-    reloadProducts: false,allowButtonAction:true,loadingProductTable:false
+    reloadProducts: false,
+    allowButtonAction: true,
+    loadingProductTable: false,
   } as InitialStateType,
   reducers: {
     setPageProducts: (state, action) => {
@@ -56,6 +60,7 @@ const productsSlice = createSlice({
     },
     setKeyValue: (state, action: PayloadAction<SetKeyValueActionPayload>) => {
       const { key, value } = action.payload;
+      //@ts-ignore
       state[key] = value;
     },
   },

@@ -123,21 +123,26 @@ export const ProductSallaChecker: any = async (
       res &&
       next
     ) {
-      if (product)
-        product.options = product?.options.map((option: any, index: number) => {
-       /*    let newV = option.values.map((value: any, index: number) => {
-            return { ...value, name: index + " " + value.name };
-          }); */
-          return {
-            ...option,
-            /*      visibility: "always",
-            visibility_condition_type: "=",
-            visibility_condition_option: option.name + index,
-            visibility_condition_value: option.name + index, */
-            // values: newV,
-          };
-        });
+      /*       if (product){} */
+
+      let productObj = product.toObject();
+
+      let optionsLastElementIndex: number = productObj?.options?.length - 1;
+      let valuesLengthLastOption: number =
+        productObj?.options?.[optionsLastElementIndex]?.values?.length - 1;
+
+      if (
+        typeof optionsLastElementIndex === "number" &&
+        typeof valuesLengthLastOption === "number"
+      ) {
+        productObj.options[optionsLastElementIndex].values = productObj.options[
+          optionsLastElementIndex
+        ].values.slice(0, valuesLengthLastOption);
+      }
+
+      product.options = productObj.options;
       await product.save();
+      console.log("product.options", product.options);
       await LinkProductSalla2(req, res, next);
       return { message: "Cancel" };
     }

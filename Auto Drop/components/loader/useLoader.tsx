@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { BounceLoader } from "react-spinners";
-export const toggleLoadingState = () => {};
 export default function useLoader() {
   const [loading, setLoading] = useState(false);
   /*  const loading = useSelector(
     (state: any) => state.products.loadingProductTable
   );
  */
-  const setLoadingState = () => {};
 
   const overlayStyles = {
     opacity: 1,
@@ -18,7 +16,7 @@ export default function useLoader() {
   };
 
   const loadingHandler = () => {
-    // setLoading((prevLoadingState: boolean) => !loading);
+    setLoading((prevLoadingState: boolean) => !loading);
   };
 
   const LoaderComponent = loading ? (
@@ -44,6 +42,6 @@ export default function useLoader() {
     loadingHandler,
     LoaderComponent,
     loading,
-    setLoading: setLoadingState,
+    setLoading,
   };
 }
