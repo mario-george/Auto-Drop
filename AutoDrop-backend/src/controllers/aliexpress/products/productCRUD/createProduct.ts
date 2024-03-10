@@ -16,7 +16,7 @@ const attachShippingInfoToProuct = async (
       console.log(productId);
       if (product) {
         const getShippingInfo = {
-          url: process.env.Backend_Link + "/aliexpress/getShippingDetails",
+          url: process.env.Backend_Link + "aliexpress/getShippingDetails",
           method: "POST",
           headers: {
             "Content-Type": "application/json",

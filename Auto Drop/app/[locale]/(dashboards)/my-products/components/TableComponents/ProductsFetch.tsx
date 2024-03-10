@@ -14,6 +14,9 @@ export default function ProductsFetch(props: any) {
   const reloadProducts = useSelector(
     (state: any) => state.products.reloadProducts
   );
+  const reloadPage = useSelector(
+    (state: any) => state.products.reloadPage
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     const getMyProductsData = async () => {
@@ -50,7 +53,7 @@ export default function ProductsFetch(props: any) {
     };
 
     getMyProductsData();
-  }, [loadProducts, reloadProducts]);
+  }, [loadProducts, reloadProducts, reloadPage]);
 
   if (!myProducts) {
     return <div>Loading...</div>; // Replace with your loading state
