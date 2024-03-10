@@ -23,65 +23,70 @@ import { useSelector } from "react-redux";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
-  products?:any
+  products?: any;
 }
 
 export function DataTablePagination<TData>({
-  table,products
+  table,
+  products,
 }: DataTablePaginationProps<TData>) {
-  const [alreadyLoadedProducts,setAlreadyLoadedProducts] = useState(false)
+  const [alreadyLoadedProducts, setAlreadyLoadedProducts] = useState(false);
   const reloadPage = useSelector((state: any) => state.products.reloadPage);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  let searchPage:any = searchParams.get("page");
-  const [currPage, setCurrPage] = useState((searchPage||2)-1);
-console.log('products',products)
+  let searchPage: any = searchParams.get("page");
+  // index
+  if (!searchPage || (searchPage && searchPage > table.getPageCount())) {
+    searchPage = 1;
+  }
+
+  console.log("searchPage", searchPage);
+  // const [currPage, setCurrPage] = useState(searchPage - 1);
+  console.log("products", products);
+  console.log("rendered pagination");
+  if (
+    table.getState().pagination.pageIndex !== searchPage - 1 &&
+    searchPage - 1 <= table.getPageCount()
+  ) {
+    table.setPageIndex(searchPage - 1);
+  }
   useEffect(() => {
-
-    console.log('searchPage',searchPage)
-    if (searchPage && !alreadyLoadedProducts) {
-      setCurrPage(+searchPage);
-      table.setPageIndex(currPage-1);
-
-    } 
-    setAlreadyLoadedProducts(true)
-    /*    else {
-      setCurrPage(1);
-      table.setPageIndex(currPage-1);
-      
+    /*  if (products.length > 0) {
+      if (currPage !== Number(searchPage) - 1) {
+        setCurrPage(Number(searchPage) - 1);
+        console.log("exec 1 ");
+      } else {
+        if (table.getState().pagination.pageIndex !== currPage) {
+          table.setPageIndex(currPage);
+        }
+      }
+      console.log(
+        " table.getState().pagination.pageIndex !== searchPage - 1 &&searchPage - 1 <= table.getPageCount()",
+        table.getState().pagination.pageIndex !== searchPage - 1 &&
+          searchPage - 1 <= table.getPageCount()
+      );
     } */
-    console.log("table.getState().pagination.pageIndex + 1",table.getState().pagination.pageIndex + 1)
-  }, [products]);
-
-/*   useEffect(() => {
-    console.log("currPage",currPage)
-    try {
-      table.setPageIndex(currPage);
-      // table.setPageIndex(20);
-    } catch (err: any) {
-      console.log(err);
-      alert(err);
+    if (
+      table.getState().pagination.pageIndex !== searchPage - 1 &&
+      searchPage - 1 <= table.getPageCount()
+    ) {
+      table.setPageIndex(searchPage - 1);
     }
-    
-    
-  }, [reloadPage,products]);
- */
-  /*   useEffect(() => {
-      setCurrPage(searchPage)
-    
-    // table.setPageIndex(page)
-    // setPageState(table.getpage )
-  }, []); */
+  }, [
+    searchPage,
+    // currPage,
+    products,
+    table,
+    table.getState().pagination.pageIndex,
+    products.length,
+  ]);
+
   const handlePageChange = (pageIndex: number) => {
     let pageNum = pageIndex - 1;
-    setCurrPage(pageNum);
-    table.setPageIndex(pageNum);
+    // setCurrPage(pageNum);
+    // table.setPageIndex(pageNum);
     router.push(`${pathname}?page=${pageNum + 1}`, { scroll: false });
-    /* router.push(`${pathname}?router=${}`{
-      pathname: router.pathname,
-      query: { ...router.query, page: pageIndex },
-    }); */
   };
   return (
     <div className="flex items-center justify-center px-2">
@@ -117,7 +122,10 @@ console.log('products',products)
               <PaginationItem>
                 <Button
                   onClick={() => {
-                    table.nextPage();
+                    router.push(`${pathname}?page=${searchPage + 1}`, {
+                      scroll: false,
+                    });
+                    // table.nextPage();
                   }}
                   className="bg-white text-[#253439] hover:bg-white/90 shadow-md hover:bg-[#253439] hover:text-white"
                   disabled={!table.getCanNextPage()}
