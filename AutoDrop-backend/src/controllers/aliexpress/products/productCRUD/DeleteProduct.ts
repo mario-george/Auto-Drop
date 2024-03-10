@@ -32,7 +32,7 @@ export const DeleteProductById = catchAsync(
           "Content-Type": "application/json",
           Authorization: req.headers["authorization"],
         },
-        url: `  ${process.env.Backend_Link}/salla/deleteProduct/${product.salla_product_id}`,
+        url: `  ${process.env.Backend_Link}salla/deleteProduct/${product.salla_product_id}`,
       };
       let { data: deleteResp } = await axios.request(axiosOptions);
 
