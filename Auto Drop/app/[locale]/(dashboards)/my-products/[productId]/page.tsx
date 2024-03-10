@@ -1,5 +1,4 @@
 import axiosInstance from "../../_components/shared/AxiosInstance";
-import ProductEditHeader from "./_components/ProductEditHeader";
 import MotionWrapperExit from "../../_components/shared/MotionWrapperExit";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";

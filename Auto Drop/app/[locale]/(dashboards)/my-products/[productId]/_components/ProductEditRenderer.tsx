@@ -6,7 +6,7 @@ import MotionWrapperExit from "../../../_components/shared/MotionWrapperExit";
 import ProductEditForm from "./ProductEditForm";
 import Image from "next/image";
 export default function ProductEditRenderer(props: {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   params: { productId: string };
   locale: string;
 
