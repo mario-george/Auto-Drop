@@ -127,7 +127,6 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     durationToDeliver,
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
-  const [defaultProfitType, setDefaultProfitType] = useState("percentage");
 
   const [tagsList, setTagsList] = useState([]);
   const [shippingWithoutOrInclude, setShippingWithoutOrInclude] =
@@ -264,7 +263,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
 
       if (!product?.commissionPercentage) {
         setProfitChoosenType("number");
-        setDefaultProfitType("number");
+        // setDefaultProfitType("number");
       }
     }
   }, [product]);
@@ -458,7 +457,50 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     setSelectedTags,
     selectedTags,
   };
-
+  let SelectComponent = (
+    <Select
+      onValueChange={(value: any) => {
+        setProfitChoosenType(value);
+      }}
+      defaultValue="percentage"
+    >
+      <SelectTrigger className="bg-[#edf5f9] dark:text-black">
+        <SelectValue
+          className=" dark:text-[#253439]"
+          placeholder={percentage}
+        />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectItem value="number">{number}</SelectItem>
+          <SelectItem value="percentage">{percentage}</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
+  if (product && !product?.commissionPercentage) {
+    SelectComponent = (
+      <Select
+        onValueChange={(value: any) => {
+          setProfitChoosenType(value);
+        }}
+        defaultValue="number"
+      >
+        <SelectTrigger className="bg-[#edf5f9] dark:text-black">
+          <SelectValue
+            className=" dark:text-[#253439]"
+            placeholder={percentage}
+          />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="number">{number}</SelectItem>
+            <SelectItem value="percentage">{percentage}</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    );
+  }
   let uploadProductHandler = async (dataForm: any) => {
     try {
       let profitChoosenTypeName = "number";
@@ -600,25 +642,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
                 </div>
                 <div className="grid grid-cols-2 gap-4  my-4 min-w-full">
                   <span className="col-span-2">{profitType}</span>
-                  <Select
-                    onValueChange={(value: any) => {
-                      setProfitChoosenType(value);
-                    }}
-                    defaultValue={defaultProfitType}
-                  >
-                    <SelectTrigger className="bg-[#edf5f9] dark:text-black">
-                      <SelectValue
-                        className=" dark:text-[#253439]"
-                        placeholder={percentage}
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="number">{number}</SelectItem>
-                        <SelectItem value="percentage">{percentage}</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  {SelectComponent}
                   <div className=" flex items-center space-s-3 ">
                     <div className="relative mt-auto min-w-full">
                       <Input
