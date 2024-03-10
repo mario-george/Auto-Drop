@@ -3,7 +3,6 @@ import React from "react";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../../_components/shared/AxiosInstance";
 import MotionWrapperExit from "../../../_components/shared/MotionWrapperExit";
-import ProductEditHeader from "./ProductEditHeader";
 import ProductEditForm from "./ProductEditForm";
 import Image from "next/image";
 export default function ProductEditRenderer(props: {
