@@ -76,7 +76,6 @@ interface ProductEditFormProps {
   nameOfShippingComp: string;
   durationToDeliver: string;
   tag: string;
-  value: string;
   currentPiece: string;
   SEOTitle: string;
   SEODescription: string;
@@ -87,6 +86,7 @@ interface ProductEditFormProps {
   uploadProduct: string;
   productOptionsDetails:string
   withText:string
+  valueText:string
 }
 interface CategorySalla {
   id: number;
