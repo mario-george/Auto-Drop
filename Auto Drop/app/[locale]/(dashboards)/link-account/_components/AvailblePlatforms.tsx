@@ -85,7 +85,7 @@ export default function AvailablePlatforms({
     <>
       <motion.div initial="hidden" animate="visible" variants={variants}>
         <div
-          className={`flex flex-wrap  tab:max-w-full  w-full tab:space-s-8 tab:mx-0 space-y-6 tab:space-y-0  tab:flex-row justify-center items-stretch ${className}`}
+          className={`flex flex-wrap  tab:max-w-full  w-full tab:space-s-8 tab:mx-0 tab:space-y-0  tab:flex-row justify-center ${className}`}
         >
           {Cards.map((card: any, index: string) => {
             return (
@@ -136,7 +136,7 @@ export default function AvailablePlatforms({
                       )}
 
                       <Button
-                        className={`  bg-[#253439] min-w-full hover:bg-[#253439]  !rounded-t-none ${connectButtonClasses} ${
+                        className={`  bg-[#253439] min-w-full hover:bg-[#253439]   !rounded-t-none ${connectButtonClasses} ${
                           card.alt == "salla" && sallaToken && `bg-green-700`
                         } ${
                           card.alt == "aliexpress" &&
@@ -167,13 +167,13 @@ export default function AvailablePlatforms({
                             </div>
                           </div>
                         ) : (
-                          <div className="flex justify-center items-center cursor-pointer space-s-2  ">
+                          <div className="flex justify-center items-center cursor-pointer space-s-2 mb-2 transform translate-y-1  ">
                             <Image
                               width={24}
                               height={24}
                               src="/client/circleLink.svg"
                               alt="circleLink"
-                              className="ms:w-5 ms:h-5"
+                              className="ms:w-5 ms:h-5 "
                             />
                             <div className="text-white text-xs ml:text-[15px] lap:text-[20px] font-bold ">
                               {linkButton}

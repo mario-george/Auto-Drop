@@ -122,15 +122,22 @@ const PatchProduct = catchAsync(
       metadata_title,
       categoriesSalla,
       require_shipping,
-      choosenQuantity,
       selectedTags,
       checkboxesSelected,
 
       shippingIncludedChoice,
       shippingIncludedChoiceIndex,
+      productEditFormOrigin,
       ...body
     } = req.body;
     let sallaTags;
+
+    if (productEditFormOrigin) {
+      product.productEditFormOrigin = productEditFormOrigin;
+    } else {
+      product.productEditFormOrigin = false;
+    }
+
     if (selectedTags && selectedTags.length > 0) {
       sallaTags = await tagsSallaHandler(sallaAccessToken, selectedTags);
     }
@@ -193,9 +200,7 @@ const PatchProduct = catchAsync(
     if (categoriesSalla) {
       product.categoriesSalla = categoriesSalla;
     }
-    if (choosenQuantity) {
-      product.choosenQuantity = choosenQuantity;
-    }
+
     if (require_shipping) {
       product.require_shipping = require_shipping;
     }

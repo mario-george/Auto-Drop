@@ -75,10 +75,10 @@ export default function LinkAccount() {
             ? `ms:pl-1 mm:pl-3 ml:pl-2`
             : `ms:pr-1 mm:pr-2 ml:pr-1`
         }`}
-        cardClassName={`pt-12  tab:!pt-2 ms:!pt-[1.5rem] w-[45%] min-w-[45%] tab:min-w-0  mx-1 !my-1 ml:mx-2 ml:my-2`}
+        cardClassName={`pt-12   tab:!pt-2 ms:!pt-[1.5rem] w-[45%] min-w-[45%] tab:min-w-0  mx-1 !my-1 ml:mx-2 ml:my-2`}
         imageWrapperClasses={`!mb-2 `}
         soonButtonClasses="mt-6 ms:h-[30px] tab:h-[40px] ms:mt-auto tab:mt-auto tab:pt-4 lapl:mt-6"
-        connectButtonClasses="!mt-auto lapl:mt-12 ms:h-[30px] tab:h-[40px] ms:mt-auto "
+        connectButtonClasses="lapl:mt-12 ms:h-[30px] tab:h-[40px]"
         store={true}
       />
     </>

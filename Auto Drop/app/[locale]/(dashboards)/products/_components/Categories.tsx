@@ -11,8 +11,8 @@ export default function Categories({
   return (
     <>
       <div className="text-2xl my-3">{categories}</div>
-      <div className="bg-white rounded-lg shadow px-2 py-2 flex items-center">
-        <div className="flex space-s-3 items-center">
+      <div className="bg-white rounded-lg shadow px-2 py-2 flex items-center overflow-x-auto">
+        <div className="flex space-s-3 items-center dark:text-[#253439]">
           {allProducts}
           <Separator
             className="py-3 w-[1px] bg-black mx-2"

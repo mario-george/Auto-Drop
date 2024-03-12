@@ -38,6 +38,7 @@ import ProductCategoriesTags from "./ui/ProductCategoriesTags";
 
 import { cn } from "@/lib/utils";
 import ProductInfoDetails from "./ui/ProductInfoDetails";
+import ProductDetails from "./ui/ProductDetails";
 import ProductPriceDetails from "./ui/ProductPriceDetails";
 import ProductSEOInfo from "./ui/ProductSEOInfo";
 import Editor from "./ui/Editor";
@@ -84,6 +85,8 @@ interface ProductEditFormProps {
   offerPrice: string;
   addToCart: string;
   uploadProduct: string;
+  productOptionsDetails:string
+  withText:string
 }
 interface CategorySalla {
   id: number;
@@ -124,7 +127,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     uploadProduct,
     addToCart,
     nameOfShippingComp,
-    durationToDeliver,
+    durationToDeliver,productOptionsDetails,withText,valueText
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
 
@@ -176,7 +179,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     addToCartHandler,
     uploadProductHandler: formSubmmitedHandler,
   };
-  const { ProductHeaderComponent, choosenQuantity, setQuantity } =
+  const { ProductHeaderComponent, choosenCartQuantity, setQuantity } =
     useProductEditHeader({
       ...ProductEditHeaderProps,
     });
@@ -195,7 +198,9 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       metadata_description,
     } = product);
   }
-
+  const [variantsDetails, setVariantsDetails] = useState(
+    Array(product?.variantsArr.length).fill({price:0,originalPrice:0,quantity:0})
+   );
   useEffect(() => {
     if (
       product &&
@@ -256,7 +261,6 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         })
       );
       setShowDiscountPrice(product?.showDiscountPrice || false);
-      setQuantity(product?.choosenQuantity);
       setSelectedTags(
         product?.sallaTags.map((tag: { name: string; id: number }) => tag.name)
       );
@@ -265,11 +269,26 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         setProfitChoosenType("number");
         // setDefaultProfitType("number");
       }
+
+
+      let varDetails = product?.variantsArr?.map((variant:any)=>{
+        let {id ,relativeOptions} =variant 
+        let rO = relativeOptions.map((relativeOption:any)=>{
+let {sku_property_name:name,sku_property_value:value,sku_property_id:propertyId,property_value_id:propertyValueId,property_value_definition_name:propertyValueDefName} =relativeOption
+
+          return{name,value,propertyId,propertyValueId,propertyValueDefName,}
+        })
+        
+        return {id,rO} 
+      })
+      setVariantsDetails(varDetails)
+
     }
   }, [product]);
   const [commissionVal, setCommissionVal] = useState(
     product?.vendor_commission || 0
   );
+
   const [totalProfit, setTotalProfit] = useState(
     (product?.vendor_commission || 0) * product?.target_sale_price
   );
@@ -393,7 +412,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     }
   };
   if (!product) {
-    return <div>Fetching Product...</div>;
+    return <div className="dark:text-white">Fetching Product...</div>;
   }
   console.log(product);
   const productInfoProps = {
@@ -408,6 +427,12 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     formValues,
     setFormValues,
   };
+  let ProductDetailsProps = {
+    productOptionsDetails,
+    currentPiece,availableQuantity,
+    productQuantity:product?.quantity,tagetSalePrice:product?.target_sale_price,inputClasses,shippingIncluded,withoutShipping,originalPrice,withText,finalPrice
+,shippingChoosenValue:shippingWithoutOrInclude,variantsDetails,profitType,percentage,number,valueText
+  }
   const ProductPriceDetailsProps = {
     offerPrice,
     addOfferPrice,
@@ -535,7 +560,6 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         )
         .map((category: CategorySalla) => category.id);
 
-      console.log("choosenQuantity", choosenQuantity);
       console.log("selectedTags", selectedTags);
       console.log("checkboxesSelected", checkboxesSelected);
       console.log("choosenShippingIndex", choosenShippingIndex);
@@ -551,12 +575,11 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         showDiscountPrice,
         require_shipping,
         categoriesSalla,
-        choosenQuantity: choosenQuantity,
         selectedTags,
         checkboxesSelected,
         choosenShippingIndex,
         shippingIncludedChoice,
-        // shippingIncludedChoiceIndex: choosenShippingIndex,
+        productEditFormOrigin: true,
       };
       if (shippingWithoutOrInclude == "shippingIncluded") {
         data.shippingIncludedChoiceIndex = choosenShippingIndex;
@@ -585,7 +608,10 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       {/* <ProductEditHeader {...ProductEditHeaderProps} /> */}
       {ProductHeaderComponent}
       <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  dark:bg-[#2e464f] dark:text-white">
+        <div>
         <ProductImageRenderer product={product} />
+        <ProductDetails {...ProductDetailsProps}/>
+        </div>
         <div className="flex flex-col min-w-[55%]">
           <Form {...form}>
             <form

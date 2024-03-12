@@ -149,7 +149,7 @@ export default function SubmitProducts({
         submitHandler={submitHandler}
       >
         <Button
-          className="fixed bottom-12 !bg-blue-300 rounded-full min-w-[3rem] min-h-[3rem] shadow"
+          className="fixed bottom-12 !bg-blue-300 rounded-full min-w-[3rem] min-h-[3rem] shadow z-[20]"
           onClick={submitProductsHandler}
           disabled={toBeSentProductsArr.length === 0}
         >
@@ -186,7 +186,7 @@ function Dialog({
                     <>
                       <div
                         key={i}
-                        className="flex justify-between items-center text-[#253439] min-w-full my-4 border-2 rounded-lg p-2"
+                        className="flex justify-between items-center text-[#253439] min-w-full my-4 border-2 rounded-lg p-2 dark:text-white"
                       >
                         <span className="max-w-[80%]">
                           {product.product_title}

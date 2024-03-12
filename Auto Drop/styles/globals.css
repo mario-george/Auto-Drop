@@ -113,9 +113,23 @@ body,
   fill: white;
 }
 .productsContainerGrid {
-  @apply grid grid-cols-1 ml:grid-cols-2 tab:grid-cols-4 gap-y-10 gap-x-3 overflow-hidden;
+  @apply grid grid-cols-1 ml:grid-cols-2 tab:grid-cols-4 gap-y-10 gap-x-3 overflow-hidden ;
 }
 /* 
 wallet page sttyles
 */
 
+.svg-darkmode{
+  @apply  dark:stroke-white dark:stroke-[1.5] dark:fill-white
+}
+.svg-darkmode-v2{
+  @apply  dark:stroke-white
+}
+#svg-darkmode{
+  fill: white;
+  @apply dark:stroke-white
+}
+
+.productsCard{
+  @apply p-3 flex flex-col  gap-y-3 dark:bg-[#2e464f] dark:text-white
+}

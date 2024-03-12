@@ -32,6 +32,7 @@ import useProductsAR from "./hooks/useProductsAR";
 import useProductsEN from "./hooks/useProductsEN";
 import ProductsListEN from "./ui/ProductsListEN";
 import ProductsListAR from "./ui/ProductsListAR";
+import SearchProduct from "../../_components/shared/ui/SearchProduct";
 
 // pages / products  state
 
@@ -142,9 +143,15 @@ export default function ProductsRenderer({
     showShippingHandler,
   };
   return (
-    <div>
+    <div className="dark:text-white">
       <Header toogleLang={toogleLang} shops={shops} />
-      <Searchbar locale={locale} searchByProd={searchByProd} />
+      <SearchProduct
+        isAr={locale == "ar"}
+        placeholder={searchByProd}
+        onChange={() => {}}
+        value={""}
+        className="flex justify-center"
+      />
       <Categories categories={categories} allProducts={allProducts} />
 
       {lang == "en" ? (

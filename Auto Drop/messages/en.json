@@ -371,7 +371,9 @@
     "SEODescription": "SEO Description",
     "color": "Color",
     "offerPrice": "Offer Price Before discount",
-    "addOfferPrice": "Add Discount Price"
+    "addOfferPrice": "Add Discount Price",
+    "productOptionsDetails":"Details of options for the product"
+
   },
   "walletPage": {
     "wallet": "Wallet",

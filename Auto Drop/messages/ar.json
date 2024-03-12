@@ -356,7 +356,7 @@
     "tag": "الوسوم",
     "value": "القيمة",
     "sku": "رقم التخزين للمنتج",
-    "with": "مع:",
+    "with": "مع",
     "to": "الي",
     "currentPiece": "قطعة حالية",
     "shipping": "الشحن",
@@ -368,7 +368,8 @@
     "SEODescription": "وصف السيو",
     "color": "اللون",
     "offerPrice": " سعر البيع قبل التخفيض",
-    "addOfferPrice": "أضف سعر التخفيض"
+    "addOfferPrice": "أضف سعر التخفيض",
+    "productOptionsDetails":"تفاصيل الخيارات للمنتج"
   },
   "walletPage": {
     "wallet": "المحفظة",

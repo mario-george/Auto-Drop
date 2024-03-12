@@ -46,11 +46,11 @@ export default function PaginationRenderer({
 
   console.log(currPage);
   return (
-    <div className="flex items-center justify-center px-2">
+  <div className="flex items-center justify-center px-2 ">
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex space-s-3">
           <Pagination>
-            <PaginationContent className="space-s-4 mx-auto">
+            <PaginationContent className="space-s-1 justify-center tab:space-s-4 mx-auto flex flex-wrap">
               {Array.from({ length: 7 }, (_, i) => {
                 return i + 1;
               }).map((page) => {

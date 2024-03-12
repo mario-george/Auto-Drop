@@ -79,13 +79,13 @@ interface ProductSchema {
   commissionPercentage?: boolean;
   showDiscountPrice?: boolean;
   categoriesSalla?: number[];
-  choosenQuantity?: number;
 
   sallaTags?: { name: string; id: number }[];
 
   shippingIncludedChoice?: boolean;
-  shippingIncludedChoiceIndex?: number;
+shippingIncludedChoiceIndex?: number;
   checkboxesSelected?: any;
+  productEditFormOrigin?: boolean;
 }
 
 interface ProductDocument extends Document, ProductSchema {}
@@ -158,11 +158,11 @@ const options = {
   commissionPercentage: { type: Boolean, default: true },
   showDiscountPrice: { type: Boolean, default: false },
   categoriesSalla: { type: Array, default: [] },
-  choosenQuantity: { type: Number, default: 1 },
   sallaTags: { type: Array, default: [] },
   shippingIncludedChoice: { type: Boolean, default: false },
   checkboxesSelected: { type: Array, default: [] },
   shippingIncludedChoiceIndex: { type: Number, default: -1 },
+  productEditFormOrigin: { type: Boolean, default: false },
 };
 
 const schema = new Schema<ProductSchema>(options, { timestamps: true });

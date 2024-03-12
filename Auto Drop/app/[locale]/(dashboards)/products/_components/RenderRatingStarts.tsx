@@ -21,36 +21,40 @@ export default function renderRatingStars(rating: any) {
   for (let i = 1; i <= 5; i++) {
     if (i <= filledStars) {
       stars.push(
+        <div key={i}>
         <Image
           src={`/client/products/fullStar.svg`}
           alt={`full-star`}
           width={12}
           height={12}
+          className="relative z-[1]"
         />
-        // <FontAwesomeIcon icon={faStar} key={i} className="text-orange-500" />
+        </div>
       );
     } else if (i === filledStars + 1 && remainingPercentage >= 10) {
       stars.push(
-        /*   <FontAwesomeIcon
-          icon={faStarHalfStroke}
-          key={i}
-          className="text-orange-500"
-        /> */
+        <div key={i}>
+     
         <Image
           src={`/client/products/hStar.svg`}
           alt={`half-star`}
           width={12}
           height={12}
+          className="relative z-[1]"
         />
+        </div>
       );
     } else {
       stars.push(
+        <div key={i}>
         <Image
           src={`/client/products/emptyStar.svg`}
           alt={`empty-star`}
           width={12}
           height={12}
+          className="relative z-[1]"
         />
+        </div>
       );
     }
   }

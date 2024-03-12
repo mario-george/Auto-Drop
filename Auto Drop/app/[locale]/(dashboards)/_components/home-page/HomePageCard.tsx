@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/ProgressHome";
+import WalletSVG from '../../../../../public/client/home/WalletSVG';
+import CloudSVG from '../../../../../public/client/home/CloudSVG';
 
 interface HomePageCardProps {
   firstEl?: any;
@@ -94,13 +96,14 @@ export function WelcomeComponent({ goodMorning }: any) {
           <span>{name}</span>
         </div>
         <div className="dark:text-white">
-          <Image
+{/*           <Image
             src={`/client/home/cloud.svg`}
             alt={`cloud`}
             width={56.68}
             height={45.34}
             className="dark:fill-current"
-          />
+          /> */}
+          <CloudSVG/>
         </div>
       </div>
     </>
@@ -195,12 +198,13 @@ export function WalletComponent({ wallet, value }: any) {
             <span>{value}</span>
           </div>
         </div>
-        <Image
+        {/* <Image
           src={`/client/home/wallet.svg`}
           alt={`wallet`}
           width={32}
           height={32}
-        />{" "}
+        />{" "} */}
+        <WalletSVG/>
       </div>
     </>
   );

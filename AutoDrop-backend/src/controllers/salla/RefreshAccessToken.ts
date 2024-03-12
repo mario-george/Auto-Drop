@@ -9,7 +9,7 @@ export const RefreshTokenHandler = async (
   sallaTokenDocId: any
 ) => {
   /* let { data: resp } = await axios.patch(
-    `${process.env.Backend_Link}/salla/refreshToken/${oldToken}`,
+    `${process.env.Backend_Link}salla/refreshToken/${oldToken}`,
     {},
     {
       headers: {

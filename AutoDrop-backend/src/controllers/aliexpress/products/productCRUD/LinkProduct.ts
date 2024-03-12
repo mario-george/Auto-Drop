@@ -144,9 +144,8 @@ export const updateVariantFinalOption2 = async (
         sku_id,
         sku_price: oldPrice,
       } = el;
-      if (product?.choosenQuantity && quantity > product?.choosenQuantity) {
-        quantity = product?.choosenQuantity;
-      }
+      console.log("quantity", quantity);
+   
 
       if (product?.vendor_commission && !product?.commissionPercentage) {
         price = parseFloat(price) + product?.vendor_commission;
@@ -285,7 +284,7 @@ export async function LinkProductSalla2(
       name: req.query.name || product.name,
       price: totalPrice,
       product_type: product.product_type,
-      quantity: product?.choosenQuantity,
+      quantity: product?.quantity,
       description: product.description,
       cost_price: product.main_price,
       require_shipping: product.require_shipping,
@@ -302,25 +301,8 @@ export async function LinkProductSalla2(
       bodyDataSalla.tags = prodTags;
       console.log("prodTags", prodTags);
     }
-    let updatedQuantityVars = product?.variantsArr?.map((variant: any) => {
-      let tempQ = variant.sku_available_stock;
-      let choosenQuantity = product?.choosenQuantity;
-      if (variant?.sku_available_stock_original) {
-        tempQ = variant?.sku_available_stock_original;
-      }
-      if ((product?.choosenQuantity || 1) > tempQ) {
-        choosenQuantity = tempQ;
-      }
-
-      return {
-        ...variant,
-        sku_available_stock: choosenQuantity,
-        sku_available_stock_original: tempQ,
-      };
-    });
-    if (updatedQuantityVars) {
-      product.variantsArr = updatedQuantityVars;
-    }
+  
+   
     //@ts-ignore
     if (product?.options?.[0]?.name) {
       bodyDataSalla.options = product.options;

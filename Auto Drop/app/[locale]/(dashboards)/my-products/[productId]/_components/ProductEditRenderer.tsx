@@ -9,7 +9,7 @@ export default function ProductEditRenderer(props: {
   children?: React.ReactNode;
   params: { productId: string };
   locale: string;
-
+  productOptionsDetails:string
   prodNameTitle: string;
   prodNameTitlePlaceholder: string;
   sku: string;
@@ -36,7 +36,7 @@ export default function ProductEditRenderer(props: {
   nameOfShippingComp: string;
   durationToDeliver: string;
   tag: string;
-  value: string;
+  valueText: string;
   currentPiece: string;
   SEOTitle: string;
   SEODescription: string;
@@ -46,6 +46,7 @@ export default function ProductEditRenderer(props: {
   addOfferPrice: string;
   uploadProduct: string;
   addToCart: string;
+  withText: string;
 }) {
   let { locale, children } = props;
   const [product, setProduct] = useState<any>(null);

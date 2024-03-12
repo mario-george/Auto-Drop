@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BiSend } from "react-icons/bi";
 import renderRatingStars from "../RenderRatingStarts";
+import CartSVG from "../../../../../../public/client/products/CartSVG";
 
 export default function ProductsListEN({
   products,
@@ -61,8 +62,8 @@ export default function ProductsListEN({
                 {newShippingInfoActive ? (
                   <>
                     <MotionWrapperExit locale="en">
-                      <div className="text-[#253439] " dir="ltr">
-                        <div className="mx-auto bg-[#f0f3f4] text-center pt-16 p-6   ">
+                      <div className="text-[#253439] tab:text-sm  " dir="ltr">
+                        <div className="mx-auto bg-[#f0f3f4] text-center pt-16 p-6  ">
                           Information and shipping methods for the product
                         </div>
                         <ScrollArea className="h-[18rem]">
@@ -151,22 +152,27 @@ export default function ProductsListEN({
                       />
                     </div>
 
-                    <div className="p-3 flex flex-col  gap-y-3">
+                    <div className="productsCard">
                       <div
                         className=" flex items-center justify-between"
                         dir="ltr"
                       >
-                        <div className={` text-[#253439] text-xs`}>
+                        <div
+                          className={` text-[#253439] dark:text-white text-xs`}
+                        >
                           {product.product_title.substring(0, 35)}
                           ...
                         </div>
                         <div>
-                          <Image
+                          {/*     <Image
                             src={"/client/products/cart.svg"}
                             alt={`cart`}
                             width={24}
                             height={24}
-                          />
+                            className="fill-white text-white"
+                          /> */}
+
+                          <CartSVG />
                         </div>
                       </div>
 
@@ -174,7 +180,7 @@ export default function ProductsListEN({
                         className={`flex justify-between items-center w-full `}
                       >
                         <div className={`flex gap-x-2 items-center w-11/12 `}>
-                          <span className="text-sm text-[#253439]">
+                          <span className="text-sm text-[#253439] dark:text-white">
                             {CurrencyFormatter(product.target_sale_price)}
                           </span>
                           {product.target_original_price !==
@@ -191,7 +197,7 @@ export default function ProductsListEN({
                         className={`flex justify-between items-center `}
                         dir="ltr"
                       >
-                        <div className="flex flex-1 z-30">
+                        <div className="flex flex-1 z-10">
                           {product.evaluate_rate
                             ? renderRatingStars(
                                 product.evaluate_rate.split("%")[0]

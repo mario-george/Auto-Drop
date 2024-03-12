@@ -70,5 +70,5 @@ export default function useProductEditHeader({
       </div>
     </>
   );
-  return { ProductHeaderComponent, choosenQuantity: quantity, setQuantity };
+  return { ProductHeaderComponent, choosenCartQuantity: quantity, setQuantity };
 }

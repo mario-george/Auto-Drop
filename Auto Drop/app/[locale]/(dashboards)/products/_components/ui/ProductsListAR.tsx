@@ -25,9 +25,11 @@ export default function ProductsListAR({
   commissionV,
   setCommissionV,
   addCommissionHandler,
-  lang,showShippingForProduct,showShippingHandler
+  lang,
+  showShippingForProduct,
+  showShippingHandler,
 }: any) {
-  console.log("productsShippingInfoAR",productsShippingInfo)
+  console.log("productsShippingInfoAR", productsShippingInfo);
   return (
     <>
       {" "}
@@ -40,178 +42,172 @@ export default function ProductsListAR({
               productsShippingInfo[i] &&
               productsShippingInfo[i][0] &&
               productsShippingInfo[i][0].activated;
-              let newShippingInfoActive =
+            let newShippingInfoActive =
               productsShippingInfo &&
               productsShippingInfo[i] &&
               productsShippingInfo[i][0].activated &&
               showShippingForProduct?.[i];
-              let newShippingInfoPending = productsShippingInfo &&
+            let newShippingInfoPending =
+              productsShippingInfo &&
               productsShippingInfo[i] &&
               productsShippingInfo[i][0].loading === "pending" &&
-              showShippingForProduct?.[i]
-              
+              showShippingForProduct?.[i];
+
             return (
               <Card
-                className="relative flex flex-col !p-0 my-3 shadow-md rounded-lg justify-between overflow-hidden"
+                className="relative flex flex-col !p-0 my-3 shadow-md rounded-lg justify-between overflow-hidden "
                 key={i}
               >
-                {newShippingInfoPending&&(
-                    <FetchSpinner />
-                  )}
-                {newShippingInfoActive? (
-                    <>
-                      <MotionWrapperExit locale="en">
-                        <div className="text-[#253439]" dir="rtl">
-                          <div className="mx-auto bg-[#f0f3f4] text-center pt-16 p-6   ">
-                            معلومات و طرق الشحن للمنتج{" "}
-                          </div>
-                          <ScrollArea className="h-[18rem]  p-6">
-                            {productsShippingInfo[i].map( 
-                              (shipping: any, ind: number) => {
-                                if (shipping.noShipping) {
-                                  return (
-                                    <div
-                                      key={ind}
-                                      className="flex flex-col space-y-2 pl-2 mt-6"
-                                    >
-                                      <div className="flex space-s-3">
-                                        <span>نوع الشحن:</span>
-                                        <span className="text-[#008767]">
-                                          لا يوجد شحن متوفر.
-                                        </span>
-                                      </div>
-                                    </div>
-                                  );
-                                }
-
+                {newShippingInfoPending && <FetchSpinner />}
+                {newShippingInfoActive ? (
+                  <>
+                    <MotionWrapperExit locale="en">
+                      <div className="text-[#253439]" dir="rtl">
+                        <div className="mx-auto bg-[#f0f3f4] text-center pt-16 p-6   ">
+                          معلومات و طرق الشحن للمنتج{" "}
+                        </div>
+                        <ScrollArea className="h-[14rem] mm:h-[17rem] ml:h-[10rem] tab:h-[10rem] ">
+                          {productsShippingInfo[i].map(
+                            (shipping: any, ind: number) => {
+                              if (shipping.noShipping) {
                                 return (
-                                  <>
-                                    <div
-                                      dir="rtl"
-                                      key={ind}
-                                      className="flex flex-col space-y-2 pl-2 mt-6 "
-                                    >
-                                      <div className="flex space-s-3">
-                                        <span>نوع الشحن:</span>
-                                        <span className="text-[#008767]">
-                                          {shipping.shippingType}{" "}
-                                        </span>
-                                      </div>
-                                      <div className="flex space-s-3">
-                                        {" "}
-                                        <span>المدة:</span>{" "}
-                                        <span className="text-[#008767]">
-                                          {shipping.duration}
-                                        </span>
-                                      </div>
-                                      {/* <div className="flex space-s-3">
-                                        {" "}
-                                        <span>الربح بعد خصم الشحن: </span>{" "}
-                                        <span className="text-[#008767]">
-                                          {CurrencyFormatterShippingInfo(
-                                            shipping.profitAfterDiscount
-                                          )}
-                                        </span>{" "}
-                                      </div> */}
-                                      <div className="flex space-s-3 text-[#C1121F]">
-                                        {" "}
-                                        <span>السعر:</span>{" "}
-                                        <span>
-                                          {CurrencyFormatter(shipping.price)}
-                                        </span>{" "}
-                                      </div>
-                                      {ind !==
-                                        productsShippingInfo[i].length - 1 && (
-                                        <Separator />
-                                      )}
+                                  <div
+                                    key={ind}
+                                    className="flex flex-col space-y-2 pl-2 mt-6"
+                                  >
+                                    <div className="flex space-s-3">
+                                      <span>نوع الشحن:</span>
+                                      <span className="text-[#008767]">
+                                        لا يوجد شحن متوفر.
+                                      </span>
                                     </div>
-                                  </>
+                                  </div>
                                 );
                               }
-                            )}
-                          </ScrollArea>
-                        </div>
-                      </MotionWrapperExit>
-                    </>
-                  ): <>
-                   <div className="">
-                    <Image
-                      src={
-                        product.product_small_image_urls.productSmallImageUrl[0]
-                      }
-                      className="p-0 w-full min-h-[67.5%] mb-auto "
-                      height={300}
-                      width={300}
-                      alt="aliexpressProduct"
-                    />
-                  </div>
-                        <div className="p-3 flex flex-col  gap-y-3">
-                    <div
-                      className={`flex justify-between gap-x-2 items-center`}
-                    >
+
+                              return (
+                                <>
+                                  <div
+                                    dir="rtl"
+                                    key={ind}
+                                    className="flex flex-col space-y-2 pl-2 mt-6 "
+                                  >
+                                    <div className="flex space-s-3">
+                                      <span>نوع الشحن:</span>
+                                      <span className="text-[#008767]">
+                                        {shipping.shippingType}{" "}
+                                      </span>
+                                    </div>
+                                    <div className="flex space-s-3">
+                                      {" "}
+                                      <span>المدة:</span>{" "}
+                                      <span className="text-[#008767]">
+                                        {shipping.duration}
+                                      </span>
+                                    </div>
+
+                                    <div className="flex space-s-3 text-[#C1121F]">
+                                      {" "}
+                                      <span>السعر:</span>{" "}
+                                      <span>
+                                        {CurrencyFormatter(shipping.price)}
+                                      </span>{" "}
+                                    </div>
+                                    {ind !==
+                                      productsShippingInfo[i].length - 1 && (
+                                      <Separator />
+                                    )}
+                                  </div>
+                                </>
+                              );
+                            }
+                          )}
+                        </ScrollArea>
+                      </div>
+                    </MotionWrapperExit>
+                  </>
+                ) : (
+                  <>
+                    <div className="">
+                      <Image
+                        src={
+                          product.product_small_image_urls
+                            .productSmallImageUrl[0]
+                        }
+                        className="p-0 w-full min-h-[67.5%] mb-auto "
+                        height={300}
+                        width={300}
+                        alt="aliexpressProduct"
+                      />
+                    </div>
+                    <div className="productsCard">
                       <div
-                        className={`flex justify-between w-full items-center`}
+                        className={`flex justify-between gap-x-2 items-center`}
                       >
-                        <span
-                          className={`w-fit text-[#253439] text-xs ${
-                            lang === "ar" && "text-right "
-                          }`}
+                        <div
+                          className={`flex justify-between w-full items-center`}
                         >
-                          {lang === "en"
-                            ? product.product_title.substring(0, 25)
-                            : product.product_title.substring(0, 35)}
-                          ...
-                        </span>
-                        <div>
-                          <Image
-                            src={"/client/products/cart.svg"}
-                            alt={`cart`}
-                            width={24}
-                            height={24}
-                          />
+                          <span
+                            className={`w-fit text-[#253439] text-xs dark:text-white ${
+                              lang === "ar" && "text-right "
+                            }`}
+                          >
+                            {lang === "en"
+                              ? product.product_title.substring(0, 25)
+                              : product.product_title.substring(0, 35)}
+                            ...
+                          </span>
+                          <div>
+                            <Image
+                              src={"/client/products/cart.svg"}
+                              alt={`cart`}
+                              width={24}
+                              height={24}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className={`flex justify-between items-center w-full`}>
-                      <div className={`flex space-x-2 items-center `}>
-                        <span className="text-sm">
-                          {CurrencyFormatter(product.target_sale_price)}
-                        </span>
-                        {product.target_original_price !==
-                        product.target_sale_price ? (
-                          <span className="text-xs text-[#c2464f] line-through text-[12px]">
-                            {CurrencyFormatter(product.target_original_price)}
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    </div>
-                    <div
-                      className={`flex justify-between items-center`}
-                    >
-                      <div className="flex flex-1 z-30">
-                        {product.evaluate_rate
-                          ? renderRatingStars(
-                              product.evaluate_rate.split("%")[0]
-                            )
-                          : renderRatingStars(90)}
-                      </div>
-                      <a
-                        href={product.product_detail_url}
-                        target="_blank"
-                        className=" "
+                      <div
+                        className={`flex justify-between items-center w-full`}
                       >
-                        <Image
-                          src={`/client/products/aliexpressCard.svg`}
-                          width={66}
-                          height={21}
-                          alt="aliexpressCard"
-                        />
-                      </a>
+                        <div className={`flex space-x-2 items-center `}>
+                          <span className="text-sm">
+                            {CurrencyFormatter(product.target_sale_price)}
+                          </span>
+                          {product.target_original_price !==
+                          product.target_sale_price ? (
+                            <span className="text-xs text-[#c2464f] line-through text-[12px]">
+                              {CurrencyFormatter(product.target_original_price)}
+                            </span>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </div>
+                      <div className={`flex justify-between items-center`}>
+                        <div className="flex flex-1 z-10">
+                          {product.evaluate_rate
+                            ? renderRatingStars(
+                                product.evaluate_rate.split("%")[0]
+                              )
+                            : renderRatingStars(90)}
+                        </div>
+                        <a
+                          href={product.product_detail_url}
+                          target="_blank"
+                          className=" "
+                        >
+                          <Image
+                            src={`/client/products/aliexpressCard.svg`}
+                            width={66}
+                            height={21}
+                            alt="aliexpressCard"
+                          />
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                  </> }
+                  </>
+                )}
                 <div
                   className={cn(
                     "absolute top-[1rem] ",
@@ -221,7 +217,7 @@ export default function ProductsListAR({
                   <div
                     className="overflow-hidden"
                     onClick={() => {
-                    /*   if (
+                      /*   if (
                         product.checked &&
                         (product.vendor_commission || product.vendor_commission === 0)
                       ) {
@@ -257,7 +253,7 @@ export default function ProductsListAR({
                     />
                   </div>
                 )}
-          {/*       {!shippingInfoActive && (
+                {/*       {!shippingInfoActive && (
                   <div className="">
                     <Image
                       src={
@@ -271,7 +267,7 @@ export default function ProductsListAR({
                   </div>
                 )} */}
 
-            {/*     {product.checked && !shippingInfoActive ? (
+                {/*     {product.checked && !shippingInfoActive ? (
                   <>
                     <div className="space-y-3 flex flex-col pt-7">
                       <span className="mx-auto">من فضلك أدخل عمولتك. </span>

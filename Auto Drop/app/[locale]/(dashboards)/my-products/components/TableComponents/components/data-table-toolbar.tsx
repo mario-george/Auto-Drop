@@ -9,7 +9,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
-
+import SearchProduct from "../../../../_components/shared/ui/SearchProduct";
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   searchByProd: string;
@@ -66,7 +66,17 @@ export function DataTableToolbar<TData>({
   return (
     <div className="flex flex-col space-y-3 tab:space-y-0 tab:flex-row items-center justify-between bg-[#f0f3f4] px-3 py-1 tab:py-4 rounded-md  dark:bg-[#2e464f]">
       <div className="flex flex-col  items-center  space-x-2">
-        <div className="relative">
+        <SearchProduct
+          value={
+            (table.getColumn("prodName")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("prodName")?.setFilterValue(event.target.value)
+          }
+          placeholder={searchByProd}
+          isAr={isAr}
+        />
+        {/*   <div className="relative">
           <Input
             placeholder={searchByProd}
             value={
@@ -80,7 +90,7 @@ export function DataTableToolbar<TData>({
           <div
             className={cn(
               isAr ? ` left-[5%] ` : `right-[5%]`,
-              "absolute top-[20%]"
+              "absolute top-[35%] tab:top-[28%] lap:top-[20%]"
             )}
           >
             <Image
@@ -88,13 +98,13 @@ export function DataTableToolbar<TData>({
               alt={`search-bar`}
               width={24}
               height={24}
+              className="w-[15px] h-[15px] tab:w-[20px] tab:h-[20px] lap:w-[24px] lap:h-[24px] my-auto"
             />
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="flex  space-s-1 tab:space-s-6 items-center justify-between tab:mx-4 tab:min-w-none">
         <div className="flex items-center space-s-2 ">
-
           <div className="text-xs tab:text-lg ">{unAvProd}</div>
           <Checkbox
             checked={checked}
