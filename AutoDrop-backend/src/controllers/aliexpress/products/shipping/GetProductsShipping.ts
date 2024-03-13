@@ -126,7 +126,8 @@ export async function GetProductShippingDetailsByID(
       },
       tokenInfo
     );
-    // console.log(result);
+    
+    // console.log("result",result);
     if (!result) {
       result = [];
     }
