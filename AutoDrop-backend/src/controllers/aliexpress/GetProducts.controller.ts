@@ -371,46 +371,61 @@ export async function GetDetails({
 
           const { ae_item_sku_info_d_t_o: SKUs }: any =
             ae_item_sku_info_dtos || {};
-            const variantsArr = SKUs.map((variant:any)=>{
-              let obj:any={}
-              let {offer_sale_price,sku_available_stock,id,sku_code,sku_id,sku_price,offer_bulk_sale_price,sku_stock}=variant
-              obj.offer_sale_price=offer_sale_price
-              obj.sku_available_stock=sku_available_stock
-              obj.id=id
-              obj.sku_code=sku_code
-              obj.sku_id=sku_id
-              obj.sku_price=sku_price
-              obj.offer_bulk_sale_price=offer_bulk_sale_price
-              obj.sku_stock=sku_stock
-              
-              let {ae_sku_property_dtos} = variant
-              
-              let relativeOptions:any =  ae_sku_property_dtos?.ae_sku_property_d_t_o?.map((e: any) => {
-                return e
-              })
-              obj.relativeOptions=relativeOptions
-              return obj
-            })
-          const [{ price, quantities, options }, images] = await Promise.all([
+          const variantsArr = SKUs.map((variant: any) => {
+            let obj: any = {};
+            let {
+              offer_sale_price,
+              sku_available_stock,
+              id,
+              sku_code,
+              sku_id,
+              sku_price,
+              offer_bulk_sale_price,
+              sku_stock,
+            } = variant;
+            obj.offer_sale_price = offer_sale_price;
+            obj.sku_available_stock = sku_available_stock;
+            obj.id = id;
+            obj.sku_code = sku_code;
+            obj.sku_id = sku_id;
+            obj.sku_price = sku_price;
+            obj.offer_bulk_sale_price = offer_bulk_sale_price;
+            obj.sku_stock = sku_stock;
+
+            let { ae_sku_property_dtos } = variant;
+
+            let relativeOptions: any =
+              ae_sku_property_dtos?.ae_sku_property_d_t_o?.map((e: any) => {
+                return e;
+              });
+            obj.relativeOptions = relativeOptions;
+            return obj;
+          });
+
+          let totalQuantityVariants = 0;
+          variantsArr.forEach((variant: any) => {
+            let { sku_available_stock: quantity } = variant;
+            if (quantity) {
+              totalQuantityVariants += quantity;
+            }
+          });
+
+          const [{ price, options }, images] = await Promise.all([
             GetProductOptions(SKUs || []),
             GetProductImages(ae_multimedia_info_dto?.image_urls),
           ]);
 
-          const values = new Array().concat(
-            ...options?.map((e: any) => e.values)
-          );
-          const hasValues = values.length;
-          let targetSalePrice = Number(variantsArr[0].offer_sale_price) ||target_sale_price
-          let targetOriginalPrice = Number(variantsArr[0].sku_price) ||target_original_price
+          let targetSalePrice =
+            Number(variantsArr[0].offer_sale_price) || target_sale_price;
+          let targetOriginalPrice =
+            Number(variantsArr[0].sku_price) || target_original_price;
 
-
-          
           const data: ProductSchema = {
             name: subject,
             description: detail,
             price: price,
             main_price: price,
-            quantity: quantities,
+            quantity: totalQuantityVariants,
             sku: uuid(),
             images: images
               ?.slice(0, 10)
@@ -434,23 +449,11 @@ export async function GetDetails({
             category_id: ae_item_base_info_dto.category_id,
             first_level_category_name,
             second_level_category_name,
-            target_sale_price:targetSalePrice,
-            target_original_price:targetOriginalPrice,
-            variantsArr
+            target_sale_price: targetSalePrice,
+            target_original_price: targetOriginalPrice,
+            variantsArr,
           };
-          // console.log(data.category_id);
 
-          /*  let category_name = await fetchCategoryName({
-            category_id: data.category_id,
-            metadata_title: data.metadata_title,
-            original_product_id: data.original_product_id,
-            tokenInfo,
-          }); */
-          //@ts-ignore
-          /*   data.category_name = category_name;
-          console.log("cat name", category_name);
-          console.log(category_name);
-          console.log(category_name); */
           const product = new Product(data).toJSON();
           resolve(product);
         }
