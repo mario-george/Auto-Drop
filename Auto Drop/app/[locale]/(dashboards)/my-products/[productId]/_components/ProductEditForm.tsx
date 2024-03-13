@@ -32,7 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import ProductOptions from "./ui/ProductOptions";
+import useProductOptions from "./ui/useProductOptions";
 import ProductImageRenderer from "./ui/ProductImageRenderer";
 import ProductCategoriesTags from "./ui/ProductCategoriesTags";
 
@@ -84,9 +84,9 @@ interface ProductEditFormProps {
   offerPrice: string;
   addToCart: string;
   uploadProduct: string;
-  productOptionsDetails:string
-  withText:string
-  valueText:string
+  productOptionsDetails: string;
+  withText: string;
+  valueText: string;
 }
 interface CategorySalla {
   id: number;
@@ -127,10 +127,14 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     uploadProduct,
     addToCart,
     nameOfShippingComp,
-    durationToDeliver,productOptionsDetails,withText,valueText
+    durationToDeliver,
+    productOptionsDetails,
+    withText,
+    valueText,
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
-
+  const [currentlySelectedVariant, setCurrentlySelectedVariant] = useState({});
+  const [optionChoosenValues, setOptionChoosenValues] = useState([]);
   const [tagsList, setTagsList] = useState([]);
   const [shippingWithoutOrInclude, setShippingWithoutOrInclude] =
     useState("shippingIncluded");
@@ -199,8 +203,12 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     } = product);
   }
   const [variantsDetails, setVariantsDetails] = useState(
-    Array(product?.variantsArr.length).fill({price:0,originalPrice:0,quantity:0})
-   );
+    Array(product?.variantsArr.length).fill({
+      price: 0,
+      originalPrice: 0,
+      quantity: 0,
+    })
+  );
   useEffect(() => {
     if (
       product &&
@@ -264,25 +272,31 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       setSelectedTags(
         product?.sallaTags.map((tag: { name: string; id: number }) => tag.name)
       );
+      let initialChoosenValues = product?.options
+        ?.map((option: any) => option.values)
+        .map((values: any) => values[0].name);
+
+      setOptionChoosenValues(initialChoosenValues);
 
       if (!product?.commissionPercentage) {
         setProfitChoosenType("number");
-        // setDefaultProfitType("number");
       }
 
-
-      let varDetails = product?.variantsArr?.map((variant:any)=>{
-        let {id ,relativeOptions} =variant 
-        let rO = relativeOptions.map((relativeOption:any)=>{
-let {sku_property_name:name,sku_property_value:value,sku_property_id:propertyId,property_value_id:propertyValueId,property_value_definition_name:propertyValueDefName} =relativeOption
-
-          return{name,value,propertyId,propertyValueId,propertyValueDefName,}
-        })
-        
-        return {id,rO} 
-      })
-      setVariantsDetails(varDetails)
-
+      let updatedVariantsArr = product.variantsArr.map((variant: any) => {
+        let { commission, profitTypeValue, shippingChoice } = variant;
+        if (!variant?.shippingChoice) {
+          shippingChoice = "shippingIncluded";
+        }
+        if (!variant?.profitType) {
+          profitTypeValue = "percentage";
+        }
+        if (!variant?.commission) {
+          commission = 0;
+        }
+        return { ...variant, shippingChoice, profitTypeValue, commission };
+      });
+      setVariantsDetails(updatedVariantsArr);
+      setCurrentlySelectedVariant(product?.variantsArr[0]);
     }
   }, [product]);
   const [commissionVal, setCommissionVal] = useState(
@@ -427,12 +441,7 @@ let {sku_property_name:name,sku_property_value:value,sku_property_id:propertyId,
     formValues,
     setFormValues,
   };
-  let ProductDetailsProps = {
-    productOptionsDetails,
-    currentPiece,availableQuantity,
-    productQuantity:product?.quantity,tagetSalePrice:product?.target_sale_price,inputClasses,shippingIncluded,withoutShipping,originalPrice,withText,finalPrice
-,shippingChoosenValue:shippingWithoutOrInclude,variantsDetails,profitType,percentage,number,valueText
-  }
+
   const ProductPriceDetailsProps = {
     offerPrice,
     addOfferPrice,
@@ -469,6 +478,8 @@ let {sku_property_name:name,sku_property_value:value,sku_property_id:propertyId,
     optionCheckHandler,
     checkboxesSelected,
     checkboxHandler,
+    setOptionChoosenValues,
+    optionChoosenValues,
   };
 
   const ProductCategoriesTagsProps = {
@@ -481,6 +492,33 @@ let {sku_property_name:name,sku_property_value:value,sku_property_id:propertyId,
     tagsList,
     setSelectedTags,
     selectedTags,
+  };
+
+  const { ProductOptionsComponent } = useProductOptions({
+    ...ProductOptionsProps,
+  });
+  let ProductDetailsProps = {
+    productOptionsDetails,
+    currentPiece,
+    availableQuantity,
+    productQuantity: product?.quantity,
+    tagetSalePrice: product?.target_sale_price,
+    inputClasses,
+    shippingIncluded,
+    withoutShipping,
+    originalPrice,
+    withText,
+    shippingChoosenValue: shippingWithoutOrInclude,
+    variantsDetails,
+    profitType,
+    percentage,
+    number,
+    valueText,
+    optionChoosenValues,
+    setCurrentlySelectedVariant,
+    currentlySelectedVariant,
+    finalPriceText: editedPrice,
+    profitText: profit,
   };
   let SelectComponent = (
     <Select
@@ -605,12 +643,11 @@ let {sku_property_name:name,sku_property_value:value,sku_property_id:propertyId,
   return (
     <>
       {LoaderComponent}
-      {/* <ProductEditHeader {...ProductEditHeaderProps} /> */}
       {ProductHeaderComponent}
       <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  dark:bg-[#2e464f] dark:text-white">
         <div>
-        <ProductImageRenderer product={product} />
-        <ProductDetails {...ProductDetailsProps}/>
+          <ProductImageRenderer product={product} />
+          <ProductDetails {...ProductDetailsProps} />
         </div>
         <div className="flex flex-col min-w-[55%]">
           <Form {...form}>
@@ -698,7 +735,7 @@ let {sku_property_name:name,sku_property_value:value,sku_property_id:propertyId,
                 <Separator />
                 <ProductSEOInfo {...ProductSEOInfoProps} />
 
-                <ProductOptions {...ProductOptionsProps} />
+                {ProductOptionsComponent}
                 {shippingWithoutOrInclude == "shippingIncluded" &&
                   ProductShippingComponent}
 
@@ -708,9 +745,6 @@ let {sku_property_name:name,sku_property_value:value,sku_property_id:propertyId,
                     value={descriptionField}
                     onChange={(value) => setDescriptionField(value)}
                   />
-                  {/*   {errors?.description ? (
-                  <span className="form-error">{errors?.description}</span>
-                ) : null} */}
                 </div>
               </div>
             </form>
