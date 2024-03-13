@@ -22,9 +22,10 @@ export const getProductShippingServices = async (
       sign_method: "sha256",
     };
     MakeRequest(data, tokenInfo).then(({ data }) => {
+      // console.log("data",data?.aliexpress_logistics_buyer_freight_get_response?.result?.aeop_freight_calculate_result_for_buyer_dtolist)
       const error = data.error_response;
       const result =
-        data?.aliexpress_cs_buyer_freight_get_response?.result
+        data?.aliexpress_logistics_buyer_freight_get_response?.result
           ?.aeop_freight_calculate_result_for_buyer_dtolist
           ?.aeop_freight_calculate_result_for_buyer_d_t_o;
       if (error) return reject(new AppError("UnprocessableEntity", 400));
