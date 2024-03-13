@@ -319,8 +319,8 @@ export default function useProducts({
       const resp = await axiosInstance.post("/aliexpress/getShippingDetails", {
         product_id,
       });
-
       return resp.data.shipping;
+
     } catch (e: any) {
       console.log(e);
       return [];
