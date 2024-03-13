@@ -9,6 +9,8 @@ export default function WalletPage() {
 
   return (
     <>
+    <div className="dark:text-white">
+
       <Wallet
         locale={locale}
         wallet={t("wallet")}
@@ -16,6 +18,7 @@ export default function WalletPage() {
         addCard={t("addCard")}
         chargeWallet={t("chargeWallet")}
       />{" "}
+    </div>
     </>
   );
 }
