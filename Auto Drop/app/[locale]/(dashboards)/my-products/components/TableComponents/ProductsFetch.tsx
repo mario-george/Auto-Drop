@@ -14,9 +14,7 @@ export default function ProductsFetch(props: any) {
   const reloadProducts = useSelector(
     (state: any) => state.products.reloadProducts
   );
-  const reloadPage = useSelector(
-    (state: any) => state.products.reloadPage
-  );
+  const reloadPage = useSelector((state: any) => state.products.reloadPage);
   const dispatch = useDispatch();
   useEffect(() => {
     const getMyProductsData = async () => {
