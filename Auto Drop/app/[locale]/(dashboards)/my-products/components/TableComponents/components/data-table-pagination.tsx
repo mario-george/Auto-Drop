@@ -127,7 +127,7 @@ export function DataTablePagination<TData>({
                     });
                     // table.nextPage();
                   }}
-                  className="bg-white text-[#253439] hover:bg-white/90 shadow-md hover:bg-[#253439] hover:text-white"
+                  className="bg-white text-[#253439] hover:bg-white/90 shadow-md hover:bg-[#253439] hover:text-white dark:text-black"
                   disabled={!table.getCanNextPage()}
                 >
                   Next
