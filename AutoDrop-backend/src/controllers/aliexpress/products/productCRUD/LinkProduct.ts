@@ -136,34 +136,53 @@ export const updateVariantFinalOption2 = async (
     // console.log("productsVariantsArr", product?.variantsArr);
 
     let { variantsArr, showDiscountPrice } = product;
+    console.log("variantsArr",variantsArr)
     let promises = variantsArr.map((el: any, index: number) => {
       let variantId = variantsIds[index];
       let {
         offer_sale_price: price,
         sku_available_stock: quantity,
         sku_id,
-        sku_price: oldPrice,
+        sku_price: oldPrice,shippingChoice,commission,profitTypeValue
       } = el;
       console.log("quantity", quantity);
-   
+   if(commission!=0 && commission>0){
+    if (profitTypeValue=="number") {
+      price = parseFloat(price) + commission;
+    } else if (profitTypeValue=="percentage") {
+      price =
+        (commission / 100) * parseFloat(price) +
+        parseFloat(price);
+    }
+   }else{
 
-      if (product?.vendor_commission && !product?.commissionPercentage) {
-        price = parseFloat(price) + product?.vendor_commission;
-      } else if (product?.vendor_commission && product?.commissionPercentage) {
-        price =
-          (product?.vendor_commission / 100) * parseFloat(price) +
-          parseFloat(price);
-      }
+     if (product?.vendor_commission && !product?.commissionPercentage) {
+       price = parseFloat(price) + product?.vendor_commission;
+     } else if (product?.vendor_commission && product?.commissionPercentage) {
+       price =
+         (product?.vendor_commission / 100) * parseFloat(price) +
+         parseFloat(price);
+     }
+   }
+/*    console.log(
+    "product?.shippingIncludedChoice &&  product?.shippingIncludedChoiceIndex",
+    product?.shippingIncludedChoice &&
+      product?.shippingIncludedChoiceIndex
+  );  */
+  console.log("product?.options",product?.options)
       if (
-        product?.shippingIncludedChoice &&
-        product?.shippingIncludedChoiceIndex
+        //@ts-ignore
+        product?.shipping?.length!=0 && shippingChoice =="shippingIncluded"
       ) {
-        console.log(
+/*          console.log(
           "product?.shippingIncludedChoice &&  product?.shippingIncludedChoiceIndex",
           product?.shippingIncludedChoice &&
             product?.shippingIncludedChoiceIndex
-        );
+        );  */
+
+        let shippingIncludedChoiceIndex = product?.shippingIncludedChoiceIndex || 0 ;
         //@ts-ignore
+       
         let extraShippingCost =
           //@ts-ignore
           product?.shipping?.[shippingIncludedChoiceIndex]?.freight?.cent / 100;
@@ -201,8 +220,12 @@ export const updateVariantFinalOption2 = async (
     });
 
     let results = await Promise.all(promises);
-
+console.log("results.length",results.length)
     results.forEach((result) => {
+      
+      if(!result){
+        console.log("A VARIANT IS UNDEFINED")
+      }
       console.log(result?.data);
     });
     return;
@@ -263,9 +286,14 @@ export async function LinkProductSalla2(
       totalPrice = product?.vendor_commission + prodPrice;
     }
     if (
+      //@ts-ignore
+      product?.shipping?.length!=0&&
       product.shippingIncludedChoice &&
       product.shippingIncludedChoiceIndex !== -1
     ) {
+
+
+    
       console.log(
         "product.shippingIncludedChoice",
         product.shippingIncludedChoice
