@@ -129,7 +129,7 @@ let {property_id, name} = elementFound;
                       </Radio>
              
              <DeleteOptionDialog deleteOptionHandler={removeOptionHandler} element={el} optIndex={optIndex} index={index} messageHeader="Do you want to delete this option" messageDescription={`you won't be able to retrieve this option again (${el.name}).`}>
-                <div className="absolute top-0 left-0">
+                <div className={` ${optImage ? `absolute -top-2 left-0` :`absolute -top-6 -left-6`}`}>
                 <svg
                         width="24"
                         height="24"
