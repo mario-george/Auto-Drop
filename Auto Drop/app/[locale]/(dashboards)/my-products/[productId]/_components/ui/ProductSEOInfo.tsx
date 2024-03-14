@@ -89,7 +89,9 @@ export default function ProductSEOInfo({
           <div></div>
         </div> */}
       </div>
+      <div className="my-2 tab:my-4">
       <Separator />
+    </div>
     </div>
   );
 }
