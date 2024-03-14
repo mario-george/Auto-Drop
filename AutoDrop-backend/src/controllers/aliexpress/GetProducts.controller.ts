@@ -304,12 +304,12 @@ async function GetProductOptions(SKUs: object[]) {
           values,
         };
       })
-      .filter((e) => e.name !== "Ships From")
+      // .filter((e) => e.name !== "Ships From")
   );
 
   return { price, quantities, options };
 }
-
+  
 async function GetProductImages(URLs: string) {
   // const splitImages = ae_multimedia_info_dto?.image_urls?.split(";");
   const splitImages = URLs?.split(";");
