@@ -133,6 +133,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     valueText,
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
+  const [productOptions,setProductOptions] = useState([])
   const [currentlySelectedVariant, setCurrentlySelectedVariant] = useState({});
   const [optionChoosenValues, setOptionChoosenValues] = useState([]);
   const [tagsList, setTagsList] = useState([]);
@@ -274,8 +275,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       );
       let initialChoosenValues = product?.options
         ?.map((option: any) => option.values)
-        .map((values: any) => values[0].name);
-
+        .map((values: any,optionIndex:number) => {return {name: values[0].name,property_id: values[0].property_id,optionIndex,valueIndex:'0'}});
+console.log("initialChoosenValues",initialChoosenValues);
       setOptionChoosenValues(initialChoosenValues);
 
       if (!product?.commissionPercentage) {
@@ -283,7 +284,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       }
 
       let updatedVariantsArr = product.variantsArr.map((variant: any) => {
-        let { commission, profitTypeValue, shippingChoice } = variant;
+        let { commission, profitTypeValue, shippingChoice ,require_shipping} = variant;
         if (!variant?.shippingChoice) {
           shippingChoice = "shippingIncluded";
         }
@@ -293,10 +294,14 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         if (!variant?.commission) {
           commission = 0;
         }
-        return { ...variant, shippingChoice, profitTypeValue, commission };
+        if (!variant?.require_shipping) {
+          require_shipping = false;
+        }
+        return { ...variant, shippingChoice, profitTypeValue, commission ,require_shippings};
       });
       setVariantsDetails(updatedVariantsArr);
       setCurrentlySelectedVariant(product?.variantsArr[0]);
+      setProductOptions(product.options)
     }
   }, [product]);
   const [commissionVal, setCommissionVal] = useState(
@@ -466,7 +471,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     form,
   };
   const ProductOptionsProps = {
-    options: product.options,
+    options: productOptions,
     choosenSizes,
     choosenColors,
     setChoosenColors,
@@ -479,7 +484,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     checkboxesSelected,
     checkboxHandler,
     setOptionChoosenValues,
-    optionChoosenValues,
+    optionChoosenValues,setProductOptions,setVariantsDetails
   };
 
   const ProductCategoriesTagsProps = {
@@ -518,7 +523,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     setCurrentlySelectedVariant,
     currentlySelectedVariant,
     finalPriceText: editedPrice,
-    profitText: profit,
+    profitText: profit,setVariantsDetails,shippingTotalCost
   };
   let SelectComponent = (
     <Select
@@ -618,6 +623,9 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         choosenShippingIndex,
         shippingIncludedChoice,
         productEditFormOrigin: true,
+        options:productOptions,
+        variantsArr:variantsDetails,
+
       };
       if (shippingWithoutOrInclude == "shippingIncluded") {
         data.shippingIncludedChoiceIndex = choosenShippingIndex;
