@@ -11,6 +11,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import CurrencyFormatter from "../../../../products/_components/CurrencyFormatter";
 import { Radio, RadioGroup } from "@chakra-ui/react";
+import VariantExtractor from './features/VariantExtractor';
 import {
   Select,
   SelectContent,
@@ -46,10 +47,12 @@ export default function ProductDetails({
   optionChoosenValues,
   setCurrentlySelectedVariant,
   currentlySelectedVariant,
+  setVariantsDetails,shippingTotalCost
 }: any) {
   console.log("shippingChoosenValue", shippingChoosenValue);
   const [value, setValue] = React.useState(shippingChoosenValue);
   console.log("optionChoosenValues", optionChoosenValues);
+  console.log("currentlySelectedVariant", currentlySelectedVariant);
   let {
     id,
     sku_price: originalPriceValue,
@@ -60,7 +63,10 @@ export default function ProductDetails({
     commission,
   } = currentlySelectedVariant;
   console.log("variantsDetails", variantsDetails);
-  function VariantExtractor() {
+  if(price){
+    price = Number(price)
+  }
+ /*  function VariantExtractor() {
     if (!variantsDetails) {
       return;
     }
@@ -68,75 +74,108 @@ export default function ProductDetails({
 
     let choosenOptionsFullDetails: any = [];
     if (optionChoosenValues) {
-      optionChoosenValues.forEach((element: any, index: number) => {
-        for (let i = 0; i < variantsDetails.length; i++) {
-          if (variantsDetails?.[i]?.relativeOptions?.[index]) {
-            let valueToBeChecked =
-              variantsDetails?.[i]?.relativeOptions?.[index];
-            if (
-              valueToBeChecked?.property_value_definition_name &&
-              valueToBeChecked?.property_value_definition_name == element
-            ) {
-              choosenOptionsFullDetails.push(valueToBeChecked);
-              break;
-            }
+      let getVariant = [];
 
-            if (valueToBeChecked.sku_property_value == element) {
-              choosenOptionsFullDetails.push(valueToBeChecked);
-              break;
-            }
+      for (let i = 0; i < variantsDetails.length; i++) {
+        let relativeOptions = variantsDetails[i].relativeOptions;
+        let valid = true;
+        let element = variantsDetails[i];
+        for (let i = 0; i < optionChoosenValues.length; i++) {
+          console.log(
+            relativeOptions[i].property_value_id,
+            "relativeOptions[i].property_value_id"
+          );
+          console.log(
+            optionChoosenValues[i].property_id,
+            "optionChoosenValues[i].property_id"
+          );
+
+          if (
+            relativeOptions[i].property_value_id !=
+            optionChoosenValues[i].property_id
+          ) {
+            valid = false;
           }
         }
-      });
-    }
-    let currentVariantIds = [];
-    if (choosenOptionsFullDetails.length !== 0) {
-      choosenOptionsFullDetails.forEach((option: any) => {
-        let { sku_property_id, property_value_id } = option;
-        let currentVariantId = `${sku_property_id}:${property_value_id}`;
-        /*    if(!currentVariantId){
-       currentVariantId= `${sku_property_id}:${property_value_id}`
-    }    else{
-       currentVariantId+= `${sku_property_id}:${property_value_id}`
-    } */
-        currentVariantIds.push(currentVariantId);
-      });
-    }
-    // let currentVariantInfo
-    if (currentVariantIds.length !== 0) {
-      if (variantsDetails.length == 1) {
-        currentVariantInfo.push(variantsDetails[0]);
-      } else {
-        variantsDetails.forEach((variant: any) => {
-          let match = true;
-          currentVariantIds.forEach((key: string) => {
-            if (!variant.sku_code.includes(key)) {
-              match = false;
-            }
-          });
-          if (match) {
-            console.log();
-            currentVariantInfo.push(variant);
-          }
-        });
+        if (valid) {
+          getVariant.push(element);
+          break;
+        }
       }
+      console.log("getVariant", getVariant);
+      return getVariant;
+
+
     }
-    return currentVariantInfo;
+  
+  } */
+
+  function changeVariantOptionsHandler(option: string, value: string | number) {
+    let ids = foundElement?.map((element: any) => element.id);
+    if (option == "shipping") {
+      let require_shipping:boolean;
+      if (shippingChoice == "shippingIncluded") {
+        require_shipping = false;
+      } else {
+        require_shipping = true;
+      }
+      setVariantsDetails((prev: any) => {
+        let updatedVars = [...prev];
+
+        updatedVars = updatedVars.map((variant: any) => {
+          if (ids?.includes(variant.id)) {
+            return { ...variant, shippingChoice: value ,require_shipping};
+          }
+          console.log("updatedVars", updatedVars);
+          return variant;
+        });
+
+        return updatedVars;
+      });
+    } else if (option == "commission") {
+      setVariantsDetails((prev: any) => {
+        let updatedVars = [...prev];
+
+        updatedVars = updatedVars.map((variant: any) => {
+          if (ids?.includes(variant.id)) {
+            return { ...variant, commission: value };
+          }
+          return variant;
+        });
+
+        return updatedVars;
+      });
+    } else if (option == "profitType") {
+      setVariantsDetails((prev: any) => {
+        let updatedVars = [...prev];
+
+        updatedVars = updatedVars.map((variant: any) => {
+          if (ids?.includes(variant.id)) {
+            return { ...variant, profitTypeValue: value };
+          }
+          return variant;
+        });
+
+        return updatedVars;
+      });
+    }
   }
-  let foundElement = VariantExtractor();
-  if (foundElement?.length > 0) {
+  let foundElement = VariantExtractor(optionChoosenValues,variantsDetails);
+  if (foundElement && foundElement?.length > 0) {
     setCurrentlySelectedVariant(foundElement[0]);
   }
   console.log("foundElement", foundElement);
-  // console.log("currentVariant",currentVariant)
-  // console.log("choosenOptionsFullDetails",choosenOptionsFullDetails)
-  console.log("variantsDetails", variantsDetails);
+
+  // console.log("variantsDetails", variantsDetails);
+  console.log("profitTypeValue", profitTypeValue);
   let SelectComponent = (
     <Select
       onValueChange={(value: any) => {
-        // setProfitChoosenType(value);
+        console.log("profitTypeeee", value);
+        changeVariantOptionsHandler("profitType", value);
       }}
-      defaultValue="percentage"
+      // defaultValue="percentage"
+      value={profitTypeValue}
     >
       <SelectTrigger className="bg-[#edf5f9] dark:text-black">
         <SelectValue
@@ -152,30 +191,21 @@ export default function ProductDetails({
       </SelectContent>
     </Select>
   );
-  let product = null;
-  if (false) {
-    SelectComponent = (
-      <Select
-        onValueChange={(value: any) => {
-          // setProfitChoosenType(value);
-        }}
-        defaultValue="number"
-      >
-        <SelectTrigger className="bg-[#edf5f9] dark:text-black">
-          <SelectValue
-            className=" dark:text-[#253439]"
-            placeholder={percentage}
-          />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem value="number">{number}</SelectItem>
-            <SelectItem value="percentage">{percentage}</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    );
-  }
+  let finalTargetPrice=price||0
+if(profitTypeValue == "percentage"&&commission!==0){
+  console.log("price",price)
+  console.log("commission",commission)
+finalTargetPrice = (commission*price)/100 +price
+}else if(profitTypeValue == "number"&&commission!==0){
+  finalTargetPrice =price+ commission
+}
+let shippingVariantTotalCost = 0 
+if(shippingChoice=="shippingIncluded"){
+  shippingVariantTotalCost = shippingTotalCost
+}else{
+  shippingVariantTotalCost=0
+}
+
   return (
     <div>
       <span>{productOptionsDetails}</span>
@@ -186,7 +216,10 @@ export default function ProductDetails({
             {productQuantityValue} {currentPiece}
           </span>
         </div>
+        <div className="my-2">
+
         <Separator />
+        </div>
         <div className="grid grid-cols-3  tab:gap-4   my-4 min-w-full gap-6 ">
           <span className="">{originalPrice}:</span>
           <Input
@@ -195,8 +228,12 @@ export default function ProductDetails({
           />{" "}
           <span>{withText}:</span>
           <RadioGroup
-            value={value}
+            value={shippingChoice}
             className="grid grid-cols-1 ml:grid-cols-2 gap-2 tab:my-0 my-2 ml:my-3 w-full col-span-2"
+            onChange={(value: string) => {
+              console.log("value", value);
+              changeVariantOptionsHandler("shipping", value);
+            }}
           >
             <div className="flex items-center space-x-2  bg-[#edf5f9] p-2 rounded-md">
               <Radio value="withoutShipping" id="r1" />
@@ -221,35 +258,50 @@ export default function ProductDetails({
             <span className="">{profitType}</span>
             <div className="col-span-2">{SelectComponent}</div>
             <span>{valueText}:</span>
-            {/* <div className=" flex items-center space-s-3  "> */}
             <div className="relative mt-auto min-w-full col-span-2">
               <Input
                 type="number"
                 className="inputField px-6"
-                // value={commissionVal}
-                /*       onChange={(e: any) => {
-                          if (e.target.value) {
-                            setCommissionVal(parseInt(e.target.value));
-                          } else {
-                            setCommissionVal(0);
-                          }
-                        }} */
+                value={commission}
+                onChange={(e: any) => {
+                  let price = parseInt(e.target.value);
+                  if (e.target.value) {
+                    changeVariantOptionsHandler("commission", price);
+
+                    // setCommissionVal();
+                  } else {
+                    price = 0;
+                    changeVariantOptionsHandler("commission", price);
+
+                    // setCommissionVal(0);
+                  }
+                }}
               />
               <span className="absolute inset-y-0 right-0 pr-2 flex items-center text-gray-500">
-                {/* {profitChoosenType == "percentage" ? <>%</> : <></>} */}
+                {profitTypeValue == "percentage" ? <>%</> : <></>}
               </span>
             </div>
             {/* </div> */}
           </div>
+
+          <div className="col-span-full my-2">
+          <Separator />
+          </div>
+
           <div className="grid grid-cols-6 min-w-full col-span-3 gap-3 items-center">
             <span className="">{finalPriceText}</span>
-            <div className="col-span-2">{SelectComponent}</div>
-            <span>{profitText}:</span>
-            {/* <div className=" flex items-center space-s-3  "> */}
-            <div className="relative mt-auto min-w-full col-span-2">
+            <div className="col-span-2">
               <Input
                 className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#636867] ${inputClasses} `}
-                value={CurrencyFormatter(20)}
+                value={CurrencyFormatter(finalTargetPrice+shippingVariantTotalCost)}
+              />
+            </div>
+            <span>{profitText}:</span>
+            {/* <div className=" flex items-center space-s-3  "> */}
+            <div className="relative  min-w-full col-span-2">
+              <Input
+                className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
+                value={CurrencyFormatter(finalTargetPrice-price)}
               />
               <span className="absolute inset-y-0 right-0 pr-2 flex items-center text-gray-500">
                 {/* {profitChoosenType == "percentage" ? <>%</> : <></>} */}
