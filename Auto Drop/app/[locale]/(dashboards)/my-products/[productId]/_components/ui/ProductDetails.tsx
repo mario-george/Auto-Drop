@@ -38,7 +38,7 @@ export default function ProductDetails({
   inputClasses,
   withoutShipping,
   shippingIncluded,
-  shippingChoosenValue,
+  // shippingChoosenValue,
   profitType,
   variantsDetails,
   percentage,
@@ -49,8 +49,8 @@ export default function ProductDetails({
   currentlySelectedVariant,
   setVariantsDetails,shippingTotalCost
 }: any) {
-  console.log("shippingChoosenValue", shippingChoosenValue);
-  const [value, setValue] = React.useState(shippingChoosenValue);
+  // console.log("shippingChoosenValue", shippingChoosenValue);
+  // const [value, setValue] = React.useState(shippingChoosenValue);
   console.log("optionChoosenValues", optionChoosenValues);
   console.log("currentlySelectedVariant", currentlySelectedVariant);
   let {
@@ -63,6 +63,9 @@ export default function ProductDetails({
     commission,
   } = currentlySelectedVariant;
   console.log("variantsDetails", variantsDetails);
+  console.log("shippingChoice", shippingChoice);
+
+  
   if(price){
     price = Number(price)
   }
