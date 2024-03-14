@@ -8,7 +8,8 @@ import Image from "next/image";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {Radio,RadioGroup} from '@chakra-ui/react'
 
 import {
   Form,
@@ -297,7 +298,7 @@ console.log("initialChoosenValues",initialChoosenValues);
         if (!variant?.require_shipping) {
           require_shipping = false;
         }
-        return { ...variant, shippingChoice, profitTypeValue, commission ,require_shippings};
+        return { ...variant, shippingChoice, profitTypeValue, commission ,require_shipping};
       });
       setVariantsDetails(updatedVariantsArr);
       setCurrentlySelectedVariant(product?.variantsArr[0]);
@@ -513,7 +514,7 @@ console.log("initialChoosenValues",initialChoosenValues);
     withoutShipping,
     originalPrice,
     withText,
-    shippingChoosenValue: shippingWithoutOrInclude,
+    // shippingChoosenValue: shippingWithoutOrInclude,
     variantsDetails,
     profitType,
     percentage,
@@ -685,29 +686,36 @@ console.log("initialChoosenValues",initialChoosenValues);
                     value={CurrencyFormatter(product?.target_sale_price)}
                   />{" "}
                   <RadioGroup
-                    defaultValue="shippingIncluded"
+                    // defaultValue="shippingIncluded"
                     className="grid grid-cols-1 ml:grid-cols-2 gap-2 tab:my-0 my-2 ml:my-3 w-full"
-                    onValueChange={(value: string) => {
+      /*               onValueChange={(value: string) => {
+                      setShippingWithoutOrInclude(value);
+                    }} */
+                    onChange={(value: string) => {
                       setShippingWithoutOrInclude(value);
                     }}
+                    value={shippingWithoutOrInclude}
                   >
                     <div className="flex items-center space-x-2  bg-[#edf5f9] p-2 rounded-md">
-                      <RadioGroupItem value="withoutShipping" id="r1" />
-                      <Label
-                        className="whitespace-nowrap  text-xs mm:text-sm ml:text-md dark:text-black"
-                        htmlFor="r1"
+                      <Radio value="withoutShipping"  >
+                      <div
+                        className=" text-xs dark:text-black whitespace-nowrap"
+                        // htmlFor="r11"
                       >
                         {withoutShipping}
-                      </Label>
+                      </div>
+                      </Radio>
+
                     </div>
                     <div className="flex items-center space-x-2 bg-[#edf5f9] p-2 rounded-md">
-                      <RadioGroupItem value="shippingIncluded" id="r2" />
-                      <Label
-                        className="whitespace-nowrap text-xs mm:text-sm ml:text-md dark:text-black"
-                        htmlFor="r2"
+                      <Radio value="shippingIncluded" >
+                      <div
+                        className="text-xs  dark:text-black whitespace-nowrap"
+                        // htmlFor="r22"
                       >
                         {shippingIncluded}
-                      </Label>
+                      </div>
+                      </Radio>
                     </div>
                   </RadioGroup>
                 </div>
