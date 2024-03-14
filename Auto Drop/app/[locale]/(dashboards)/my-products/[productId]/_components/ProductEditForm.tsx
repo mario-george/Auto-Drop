@@ -154,6 +154,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   const [descriptionField, setDescriptionField] = useState(
     product?.description
   );
+  
   const [showDiscountPrice, setShowDiscountPrice] = useState<boolean>(false);
   const formSubmmitedHandler = () => {
     buttonRef?.current?.click();
@@ -431,6 +432,25 @@ console.log("initialChoosenValues",initialChoosenValues);
       setIsLoading(false);
     }
   };
+  const ProductOptionsProps = {
+    options: productOptions,
+    choosenSizes,
+    choosenColors,
+    setChoosenColors,
+    setChoosenSizes,
+    setChoosenMaterials,
+    choosenMaterials,
+    optionsSelected,
+    setOptionsSelected,
+    optionCheckHandler,
+    checkboxesSelected,
+    checkboxHandler,
+    setOptionChoosenValues,
+    optionChoosenValues,setProductOptions,setVariantsDetails
+  };
+  const { ProductOptionsComponent } = useProductOptions({
+    ...ProductOptionsProps,
+  });
   if (!product) {
     return <div className="dark:text-white">Fetching Product...</div>;
   }
@@ -471,23 +491,7 @@ console.log("initialChoosenValues",initialChoosenValues);
     setMetadataTitle,
     form,
   };
-  const ProductOptionsProps = {
-    options: productOptions,
-    choosenSizes,
-    choosenColors,
-    setChoosenColors,
-    setChoosenSizes,
-    setChoosenMaterials,
-    choosenMaterials,
-    optionsSelected,
-    setOptionsSelected,
-    optionCheckHandler,
-    checkboxesSelected,
-    checkboxHandler,
-    setOptionChoosenValues,
-    optionChoosenValues,setProductOptions,setVariantsDetails
-  };
-
+ 
   const ProductCategoriesTagsProps = {
     category,
     tag,
@@ -500,9 +504,7 @@ console.log("initialChoosenValues",initialChoosenValues);
     selectedTags,
   };
 
-  const { ProductOptionsComponent } = useProductOptions({
-    ...ProductOptionsProps,
-  });
+
   let ProductDetailsProps = {
     productOptionsDetails,
     currentPiece,
@@ -654,7 +656,7 @@ console.log("initialChoosenValues",initialChoosenValues);
       {LoaderComponent}
       {ProductHeaderComponent}
       <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  dark:bg-[#2e464f] dark:text-white">
-        <div>
+        <div className=" lap:max-w-[35%]">
           <ProductImageRenderer product={product} />
           <ProductDetails {...ProductDetailsProps} />
         </div>
