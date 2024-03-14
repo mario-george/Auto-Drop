@@ -55,7 +55,7 @@ export default function ProductsListEN({
               showShippingForProduct?.[i];
             return (
               <Card
-                className="relative flex flex-col !p-0 my-3 shadow-md rounded-lg justify-between overflow-hidden"
+                className="relative flex flex-col !p-0 my-3 shadow-md rounded-lg justify-between overflow-hidden dark:bg-[#2e464f]"
                 key={i}
               >
                 {newShippingInfoPending && <FetchSpinner />}
@@ -139,26 +139,29 @@ export default function ProductsListEN({
                   </>
                 ) : (
                   <>
-                    <div className="">
+                    <div className="tab:max-h-[19rem] overflow-hidden">
                       <Image
                         src={
                           product.product_small_image_urls
                             .productSmallImageUrl[0]
                         }
-                        className="p-0 w-full min-h-[67.5%] mb-auto "
+                        className="p-0 w-full min-h-[67.5%] mb-auto   "
                         height={300}
                         width={300}
                         alt="aliexpressProduct"
+
+                        // objectFit="contain" // or "contain"
+
                       />
                     </div>
 
-                    <div className="productsCard">
+                    <div className="productsCard mt-auto">
                       <div
                         className=" flex items-center justify-between"
                         dir="ltr"
                       >
                         <div
-                          className={` text-[#253439] dark:text-white text-xs`}
+                          className={` text-[#253439] dark:text-white text-xs `}
                         >
                           {product.product_title.substring(0, 35)}
                           ...
@@ -214,6 +217,7 @@ export default function ProductsListEN({
                             width={66}
                             height={21}
                             alt="aliexpressCard"
+                            
                           />
                         </a>
                       </div>
