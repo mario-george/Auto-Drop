@@ -38,7 +38,7 @@ export default function ProductDetails({
   inputClasses,
   withoutShipping,
   shippingIncluded,
-  shippingChoosenValue,
+  // shippingChoosenValue,
   profitType,
   variantsDetails,
   percentage,
@@ -49,8 +49,8 @@ export default function ProductDetails({
   currentlySelectedVariant,
   setVariantsDetails,shippingTotalCost
 }: any) {
-  console.log("shippingChoosenValue", shippingChoosenValue);
-  const [value, setValue] = React.useState(shippingChoosenValue);
+  // console.log("shippingChoosenValue", shippingChoosenValue);
+  // const [value, setValue] = React.useState(shippingChoosenValue);
   console.log("optionChoosenValues", optionChoosenValues);
   console.log("currentlySelectedVariant", currentlySelectedVariant);
   let {
@@ -63,6 +63,9 @@ export default function ProductDetails({
     commission,
   } = currentlySelectedVariant;
   console.log("variantsDetails", variantsDetails);
+  console.log("shippingChoice", shippingChoice);
+
+  
   if(price){
     price = Number(price)
   }
@@ -113,17 +116,17 @@ export default function ProductDetails({
   function changeVariantOptionsHandler(option: string, value: string | number) {
     let ids = foundElement?.map((element: any) => element.id);
     if (option == "shipping") {
-      let require_shipping:boolean;
-      if (shippingChoice == "shippingIncluded") {
-        require_shipping = false;
-      } else {
-        require_shipping = true;
-      }
       setVariantsDetails((prev: any) => {
         let updatedVars = [...prev];
-
+        
         updatedVars = updatedVars.map((variant: any) => {
           if (ids?.includes(variant.id)) {
+            let require_shipping:boolean;
+            if (shippingChoice == "shippingIncluded") {
+              require_shipping = false;
+            } else {
+              require_shipping = true;
+            }
             return { ...variant, shippingChoice: value ,require_shipping};
           }
           console.log("updatedVars", updatedVars);
@@ -207,9 +210,9 @@ if(shippingChoice=="shippingIncluded"){
 }
 
   return (
-    <div>
+    <div className={`text-xs tab:text-sm`}>
       <span>{productOptionsDetails}</span>
-      <div className="border rounded-lg p-5">
+      <div className="border rounded-lg p-5 my-2">
         <div className="flex items-center space-s-2">
           <span>{availableQuantity}</span>
           <span className="text-[#8d9598]">
@@ -220,48 +223,52 @@ if(shippingChoice=="shippingIncluded"){
 
         <Separator />
         </div>
-        <div className="grid grid-cols-3  tab:gap-4   my-4 min-w-full gap-6 ">
-          <span className="">{originalPrice}:</span>
+        <div className="grid grid-cols-1 tab:grid-cols-3  tab:gap-4   my-4 min-w-full gap-6 items-center ">
+          <span className="col-span-1">{originalPrice}:</span>
           <Input
             className={`shadow-sm text-sm md:text-base col-span-2 bg-[#edf5f9] ${inputClasses} `}
             value={CurrencyFormatter(price)}
           />{" "}
-          <span>{withText}:</span>
+          <div className="col-span-full grid tab:grid-cols-6 min-w-full gap-2  items-center">
+
+
+          <span className="col-span-1">{withText}:</span>
           <RadioGroup
             value={shippingChoice}
-            className="grid grid-cols-1 ml:grid-cols-2 gap-2 tab:my-0 my-2 ml:my-3 w-full col-span-2"
+            className="grid grid-cols-1 ml:grid-cols-2 gap-2 tab:my-0 my-2 ml:my-3 w-full col-span-5"
             onChange={(value: string) => {
               console.log("value", value);
               changeVariantOptionsHandler("shipping", value);
             }}
           >
-            <div className="flex items-center space-x-2  bg-[#edf5f9] p-2 rounded-md">
+            <div className="flex items-center space-s-1  bg-[#edf5f9] p-1 py-2 rounded-md">
               <Radio value="withoutShipping" id="r1" />
               <label
-                className="whitespace-nowrap  text-xs mm:text-sm ml:text-md dark:text-black"
+                className="whitespace-nowrap  text-xs  dark:text-black"
                 htmlFor="r1"
               >
                 {withoutShipping}
               </label>
             </div>
-            <div className="flex items-center space-x-2 bg-[#edf5f9] p-2 rounded-md">
+            <div className="flex items-center space-s-1 bg-[#edf5f9] p-1 py-2 rounded-md">
               <Radio value="shippingIncluded" id="r2" />
               <label
-                className="whitespace-nowrap text-xs mm:text-sm ml:text-md dark:text-black"
+                className="whitespace-nowrap text-xs dark:text-black"
                 htmlFor="r2"
               >
                 {shippingIncluded}
               </label>
             </div>
           </RadioGroup>
-          <div className="grid grid-cols-6 min-w-full col-span-3 gap-3 items-center">
+          </div>
+          <div className="grid grid-cols-6 min-w-full col-span-3 gap-3 items-center ">
             <span className="">{profitType}</span>
             <div className="col-span-2">{SelectComponent}</div>
-            <span>{valueText}:</span>
+            <span className="whitespace-nowrap">{valueText}:</span>
             <div className="relative mt-auto min-w-full col-span-2">
               <Input
                 type="number"
-                className="inputField px-6"
+                className="inputField px-6 "
                 value={commission}
                 onChange={(e: any) => {
                   let price = parseInt(e.target.value);
@@ -292,7 +299,7 @@ if(shippingChoice=="shippingIncluded"){
             <span className="">{finalPriceText}</span>
             <div className="col-span-2">
               <Input
-                className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#636867] ${inputClasses} `}
+                className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#636867] ${inputClasses}  `}
                 value={CurrencyFormatter(finalTargetPrice+shippingVariantTotalCost)}
               />
             </div>

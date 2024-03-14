@@ -8,7 +8,8 @@ import Image from "next/image";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {Radio,RadioGroup} from '@chakra-ui/react'
 
 import {
   Form,
@@ -153,6 +154,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   const [descriptionField, setDescriptionField] = useState(
     product?.description
   );
+  
   const [showDiscountPrice, setShowDiscountPrice] = useState<boolean>(false);
   const formSubmmitedHandler = () => {
     buttonRef?.current?.click();
@@ -297,7 +299,7 @@ console.log("initialChoosenValues",initialChoosenValues);
         if (!variant?.require_shipping) {
           require_shipping = false;
         }
-        return { ...variant, shippingChoice, profitTypeValue, commission ,require_shippings};
+        return { ...variant, shippingChoice, profitTypeValue, commission ,require_shipping};
       });
       setVariantsDetails(updatedVariantsArr);
       setCurrentlySelectedVariant(product?.variantsArr[0]);
@@ -430,6 +432,25 @@ console.log("initialChoosenValues",initialChoosenValues);
       setIsLoading(false);
     }
   };
+  const ProductOptionsProps = {
+    options: productOptions,
+    choosenSizes,
+    choosenColors,
+    setChoosenColors,
+    setChoosenSizes,
+    setChoosenMaterials,
+    choosenMaterials,
+    optionsSelected,
+    setOptionsSelected,
+    optionCheckHandler,
+    checkboxesSelected,
+    checkboxHandler,
+    setOptionChoosenValues,
+    optionChoosenValues,setProductOptions,setVariantsDetails
+  };
+  const { ProductOptionsComponent } = useProductOptions({
+    ...ProductOptionsProps,
+  });
   if (!product) {
     return <div className="dark:text-white">Fetching Product...</div>;
   }
@@ -470,23 +491,7 @@ console.log("initialChoosenValues",initialChoosenValues);
     setMetadataTitle,
     form,
   };
-  const ProductOptionsProps = {
-    options: productOptions,
-    choosenSizes,
-    choosenColors,
-    setChoosenColors,
-    setChoosenSizes,
-    setChoosenMaterials,
-    choosenMaterials,
-    optionsSelected,
-    setOptionsSelected,
-    optionCheckHandler,
-    checkboxesSelected,
-    checkboxHandler,
-    setOptionChoosenValues,
-    optionChoosenValues,setProductOptions,setVariantsDetails
-  };
-
+ 
   const ProductCategoriesTagsProps = {
     category,
     tag,
@@ -499,9 +504,7 @@ console.log("initialChoosenValues",initialChoosenValues);
     selectedTags,
   };
 
-  const { ProductOptionsComponent } = useProductOptions({
-    ...ProductOptionsProps,
-  });
+
   let ProductDetailsProps = {
     productOptionsDetails,
     currentPiece,
@@ -513,7 +516,7 @@ console.log("initialChoosenValues",initialChoosenValues);
     withoutShipping,
     originalPrice,
     withText,
-    shippingChoosenValue: shippingWithoutOrInclude,
+    // shippingChoosenValue: shippingWithoutOrInclude,
     variantsDetails,
     profitType,
     percentage,
@@ -653,7 +656,7 @@ console.log("initialChoosenValues",initialChoosenValues);
       {LoaderComponent}
       {ProductHeaderComponent}
       <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  dark:bg-[#2e464f] dark:text-white">
-        <div>
+        <div className=" lap:max-w-[35%]">
           <ProductImageRenderer product={product} />
           <ProductDetails {...ProductDetailsProps} />
         </div>
@@ -685,29 +688,36 @@ console.log("initialChoosenValues",initialChoosenValues);
                     value={CurrencyFormatter(product?.target_sale_price)}
                   />{" "}
                   <RadioGroup
-                    defaultValue="shippingIncluded"
+                    // defaultValue="shippingIncluded"
                     className="grid grid-cols-1 ml:grid-cols-2 gap-2 tab:my-0 my-2 ml:my-3 w-full"
-                    onValueChange={(value: string) => {
+      /*               onValueChange={(value: string) => {
+                      setShippingWithoutOrInclude(value);
+                    }} */
+                    onChange={(value: string) => {
                       setShippingWithoutOrInclude(value);
                     }}
+                    value={shippingWithoutOrInclude}
                   >
                     <div className="flex items-center space-x-2  bg-[#edf5f9] p-2 rounded-md">
-                      <RadioGroupItem value="withoutShipping" id="r1" />
-                      <Label
-                        className="whitespace-nowrap  text-xs mm:text-sm ml:text-md dark:text-black"
-                        htmlFor="r1"
+                      <Radio value="withoutShipping"  >
+                      <div
+                        className=" text-xs dark:text-black whitespace-nowrap"
+                        // htmlFor="r11"
                       >
                         {withoutShipping}
-                      </Label>
+                      </div>
+                      </Radio>
+
                     </div>
                     <div className="flex items-center space-x-2 bg-[#edf5f9] p-2 rounded-md">
-                      <RadioGroupItem value="shippingIncluded" id="r2" />
-                      <Label
-                        className="whitespace-nowrap text-xs mm:text-sm ml:text-md dark:text-black"
-                        htmlFor="r2"
+                      <Radio value="shippingIncluded" >
+                      <div
+                        className="text-xs  dark:text-black whitespace-nowrap"
+                        // htmlFor="r22"
                       >
                         {shippingIncluded}
-                      </Label>
+                      </div>
+                      </Radio>
                     </div>
                   </RadioGroup>
                 </div>
