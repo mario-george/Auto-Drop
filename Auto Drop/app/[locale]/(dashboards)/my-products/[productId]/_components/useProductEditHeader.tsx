@@ -31,21 +31,21 @@ export default function useProductEditHeader({
           {uploadProduct}
         </Button>
         <Button
-          className="bg-white text-black shadow-md"
+          className="bg-white text-black shadow-md dark:text-black"
           onClick={addToCartHandler}
         >
           {addToCart}
         </Button>
         <div className="flex justify-center bg-white text-black rounded-xl shadow-md items-center ">
           <Button
-            className="bg-white text-black hover:bg-white/80"
+            className="bg-white text-black hover:bg-white/80 dark:text-black"
             onClick={decreaseQuantity}
           >
             -
           </Button>
           <Label>{quantity}</Label>
           <Button
-            className="bg-white text-black hover:bg-white/80"
+            className="bg-white text-black hover:bg-white/80 dark:text-black"
             onClick={increaseQuantity}
           >
             +
