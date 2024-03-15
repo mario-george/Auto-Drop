@@ -10,6 +10,7 @@ import slugify from "slugify";
 import { ImageType, Product, ProductSchema } from "../../models/product.model";
 import { v4 as uuid } from "uuid";
 import fetchCategoryName from "./products/Category/FetchNameOfCategory";
+import catchAsync from "../../utils/catchAsync";
 
 function generateRandomNumber(start: any, end: any) {
   // Generate a random decimal between 0 and 1
@@ -119,80 +120,73 @@ export async function GetProductByName(
   console.log(respData);
   res.json({ response });
 }
-export async function GetRecommendedProductsPost(
-  req: Request & any,
-  res: Response,
-  next: NextFunction
-) {
-  console.log(req.query);
-  let user: any = await TokenUserExtractor(req);
-  if (!user) return res.status(401).json({ message: "token is invalid" });
-  let aliexpressToken = await AliExpressToken.findOne({ userId: user?._id });
-  const { lang } = req.query;
-  let result: any = [];
-  let response = await MakeRequest(
-    {
-      method: "aliexpress.ds.feedname.get",
-      sign_method: "sha256",
-    },
-    {
-      aliExpressAccessToken: aliexpressToken?.accessToken,
-      aliExpressRefreshToken: aliexpressToken?.refreshToken,
-    }
-  );
-  let respData = response;
-  console.log(
-    respData.data.aliexpress_ds_feedname_get_response?.resp_result.result.promos
-      .promo[3]
-  );
-  while (result.length < 20) {
-    console.log(
-      respData.data.aliexpress_ds_feedname_get_response?.resp_result.result
-        .promos.promo.length
-    );
-    const randomPage = generateRandomNumber(
-      0,
-      respData.data.aliexpress_ds_feedname_get_response?.resp_result.result
-        .promos.promo.length - 1
-    );
-    const randomFeedName =
-      respData.data.aliexpress_ds_feedname_get_response?.resp_result.result
-        .promos.promo[randomPage].promo_name;
-    console.log(randomFeedName);
-    let response2 = await MakeRequest(
+export const GetRecommendedProductsPost = catchAsync(
+  async (req: Request & any, res: Response, next: NextFunction) => {
+    console.log(req.query);
+    let user: any = await TokenUserExtractor(req);
+    if (!user) return res.status(401).json({ message: "token is invalid" });
+    let aliexpressToken = await AliExpressToken.findOne({ userId: user?._id });
+    const { lang } = req.query;
+    let result: any = [];
+    let response = await MakeRequest(
       {
-        method: "aliexpress.ds.recommend.feed.get",
-        target_currency: "SAR",
-        country: "SA",
-        feed_name: randomFeedName,
-        // feed_name: "DS_Sports&Outdoors_bestsellers",
-        target_language: lang,
-        // page_no: req.body.page,
-        page_size: 10,
+        method: "aliexpress.ds.feedname.get",
         sign_method: "sha256",
-        //
-        // category_id: "7",
-        //
       },
       {
         aliExpressAccessToken: aliexpressToken?.accessToken,
         aliExpressRefreshToken: aliexpressToken?.refreshToken,
       }
     );
-    let resPage = response2;
-    const products =
-      resPage?.data.aliexpress_ds_recommend_feed_get_response?.result?.products?.traffic_product_d_t_o;
+    let respData = response;
 
-    if (products) {
-      result.push(...products);
-      console.log(result.length);
+    while (result.length < 20) {
+
+      const randomPage = generateRandomNumber(
+        0,
+        respData.data.aliexpress_ds_feedname_get_response?.resp_result.result
+          .promos.promo.length - 1
+      );
+      const randomFeedName =
+        respData.data.aliexpress_ds_feedname_get_response?.resp_result.result
+          .promos.promo[randomPage].promo_name;
+      console.log(randomFeedName);
+      let response2 = await MakeRequest(
+        {
+          method: "aliexpress.ds.recommend.feed.get",
+          target_currency: "SAR",
+          country: "SA",
+          feed_name: randomFeedName,
+          // feed_name: "DS_Sports&Outdoors_bestsellers",
+          target_language: lang,
+          // page_no: req.body.page,
+          page_size: 10,
+          sign_method: "sha256",
+          //
+          // category_id: "7",
+          //
+        },
+        {
+          aliExpressAccessToken: aliexpressToken?.accessToken,
+          aliExpressRefreshToken: aliexpressToken?.refreshToken,
+        }
+      );
+      let resPage = response2;
+      const products =
+        resPage?.data.aliexpress_ds_recommend_feed_get_response?.result
+          ?.products?.traffic_product_d_t_o;
+
+      if (products) {
+        result.push(...products);
+        console.log(result.length);
+      }
     }
-  }
-  console.log(result.length);
+    console.log(result.length);
 
-  if (!result.length) throw new AppError("Products Not Found", 409);
-  res.json({ result: result.slice(0, 20) });
-}
+    if (!result.length) throw new AppError("Products Not Found", 409);
+    res.json({ result: result.slice(0, 20) });
+  }
+);
 // two methods will be used
 async function GetProductOptions(SKUs: object[]) {
   let quantities: number = 0,
@@ -237,78 +231,77 @@ async function GetProductOptions(SKUs: object[]) {
   let sku_image_1;
 
   options = await Promise.all(
-    collectOptions
-      .map((option: string, index: number) => {
-        const uniqValues = uniqBy(
-          concatValues
-            ?.filter((val) => val?.sku_property_name === option)
-            .map((e: any) => ({
-              ...e,
-              property_value_definition_name:
-                e?.property_value_definition_name || e?.sku_property_value,
-            })),
-          "sku_property_value"
-        );
+    collectOptions.map((option: string, index: number) => {
+      const uniqValues = uniqBy(
+        concatValues
+          ?.filter((val) => val?.sku_property_name === option)
+          .map((e: any) => ({
+            ...e,
+            property_value_definition_name:
+              e?.property_value_definition_name || e?.sku_property_value,
+          })),
+        "sku_property_value"
+      );
 
-        // console.log(uniqValues)
-        const values = uniqValues?.map((val: any, idx: number) => {
-          const isFirst = index == 0 && idx == 0;
-          const {
-            sku_image,
-            property_value_definition_name,
-            quantity,
-            property_value_id,
-            sku_property_id,
-            id,
-            sku_price,
-            offer_sale_price,
-          } = val;
-          const valuePrice = parseFloat(sku_price);
-          const offerPrice = parseFloat(offer_sale_price);
-          const valPrice = valuePrice === offerPrice ? valuePrice : offerPrice;
-          /*    const displayValue = slugify(property_value_definition_name, {
+      // console.log(uniqValues)
+      const values = uniqValues?.map((val: any, idx: number) => {
+        const isFirst = index == 0 && idx == 0;
+        const {
+          sku_image,
+          property_value_definition_name,
+          quantity,
+          property_value_id,
+          sku_property_id,
+          id,
+          sku_price,
+          offer_sale_price,
+        } = val;
+        const valuePrice = parseFloat(sku_price);
+        const offerPrice = parseFloat(offer_sale_price);
+        const valPrice = valuePrice === offerPrice ? valuePrice : offerPrice;
+        /*    const displayValue = slugify(property_value_definition_name, {
             lower: true,
           }); */
-          let displayValue;
+        let displayValue;
 
-          if (property_value_definition_name) {
-            displayValue = slugify(property_value_definition_name, {
-              lower: true,
-            });
-          }
-          sku_image_1 = sku_image;
+        if (property_value_definition_name) {
+          displayValue = slugify(property_value_definition_name, {
+            lower: true,
+          });
+        }
+        sku_image_1 = sku_image;
 
-          if (isFirst) {
-            price = valPrice;
-          }
+        if (isFirst) {
+          price = valPrice;
+        }
 
-          return {
-            name: property_value_definition_name,
-            price: valPrice,
-            original_price: valPrice,
-            quantity: quantity,
-            is_default: isFirst,
-            property_id: property_value_id,
-            sku_id: val.sku_id,
-            display_value: displayValue,
-            sku: [sku_property_id, property_value_id].join(":"),
-            id,
-            sku_image,
-          };
-        });
         return {
-          name: option,
-          // display_type: sku_image_1 ? "image" : "text",
-          display_type: "text",
-          values,
+          name: property_value_definition_name,
+          price: valPrice,
+          original_price: valPrice,
+          quantity: quantity,
+          is_default: isFirst,
+          property_id: property_value_id,
+          sku_id: val.sku_id,
+          display_value: displayValue,
+          sku: [sku_property_id, property_value_id].join(":"),
+          id,
+          sku_image,
         };
-      })
-      // .filter((e) => e.name !== "Ships From")
+      });
+      return {
+        name: option,
+        // display_type: sku_image_1 ? "image" : "text",
+        display_type: "text",
+        values,
+      };
+    })
+    // .filter((e) => e.name !== "Ships From")
   );
 
   return { price, quantities, options };
 }
-  
+
 async function GetProductImages(URLs: string) {
   // const splitImages = ae_multimedia_info_dto?.image_urls?.split(";");
   const splitImages = URLs?.split(";");
