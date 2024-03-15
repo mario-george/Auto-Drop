@@ -5,11 +5,12 @@ import { RootState } from "@/store";
 import { useDispatch } from "react-redux";
 import { userActions } from "@/store/user-slice";
 import axiosInstance from "../_components/shared/AxiosInstance";
+import { useRouter } from '@/navigation';
 
 const TokenExtractor: React.FC = () => {
   const userId = useSelector((state: RootState) => state.user.id);
   const dispatch = useDispatch();
-
+const router  = useRouter()
   useEffect(() => {
     // Send a request to the API when the component mounts
     // Get the user token from the Redux store
@@ -27,7 +28,7 @@ const TokenExtractor: React.FC = () => {
           refreshToken,
           userId,
         });
-        console.log("resp", resp);
+        console.log("resp", resp);  
         /*   const response = await fetch(
           process.env.NEXT_PUBLIC_BACK_URL + "auth/saveToken",
           {
@@ -80,7 +81,11 @@ const TokenExtractor: React.FC = () => {
     };
 
     sendData();
-    // window.location.href = "/";
+
+    setTimeout(()=>{
+
+      router.push('/')
+    },1000)
   }, []);
 
   return <div></div>;
