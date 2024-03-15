@@ -23,16 +23,18 @@ const handleImageDefaultChange = (newIndexString:string)=>{
   let newIndex = Number(newIndexString)
   setProductImages((prevImages:ProductImage[])=>{
 let tempImages = [...prevImages]
+let firstImage =tempImages[newIndex]
 tempImages = tempImages.map((image:ProductImage)=>{
   return {...image,default:false}
-})
-tempImages[newIndex].default =true
-return tempImages
+}).filter((image:ProductImage,index:number)=>{return index!==newIndex})
+
+firstImage.default =true
+return [firstImage,...tempImages]
   })
 }
-let productDefaultImage 
 
   // console.log("product.images", product.images);
+  console.log("productImages", productImages);
   return (
     <div>
       <div className="flex flex-col">
