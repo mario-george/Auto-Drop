@@ -9,7 +9,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 // import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {Radio,RadioGroup} from '@chakra-ui/react'
+import { Radio, RadioGroup } from "@chakra-ui/react";
 
 import {
   Form,
@@ -134,8 +134,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     valueText,
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
-  const [productOptions,setProductOptions] = useState([])
-  const [productImages,setProductImages] = useState([])
+  const [productOptions, setProductOptions] = useState([]);
+  const [productImages, setProductImages] = useState([]);
   const [currentlySelectedVariant, setCurrentlySelectedVariant] = useState({});
   const [optionChoosenValues, setOptionChoosenValues] = useState([]);
   const [tagsList, setTagsList] = useState([]);
@@ -155,7 +155,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   const [descriptionField, setDescriptionField] = useState(
     product?.description
   );
-  
+
   const [showDiscountPrice, setShowDiscountPrice] = useState<boolean>(false);
   const formSubmmitedHandler = () => {
     buttonRef?.current?.click();
@@ -278,8 +278,15 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       );
       let initialChoosenValues = product?.options
         ?.map((option: any) => option.values)
-        .map((values: any,optionIndex:number) => {return {name: values[0].name,property_id: values[0].property_id,optionIndex,valueIndex:'0'}});
-console.log("initialChoosenValues",initialChoosenValues);
+        .map((values: any, optionIndex: number) => {
+          return {
+            name: values[0].name,
+            property_id: values[0].property_id,
+            optionIndex,
+            valueIndex: "0",
+          };
+        });
+      console.log("initialChoosenValues", initialChoosenValues);
       setOptionChoosenValues(initialChoosenValues);
 
       if (!product?.commissionPercentage) {
@@ -287,7 +294,8 @@ console.log("initialChoosenValues",initialChoosenValues);
       }
 
       let updatedVariantsArr = product.variantsArr.map((variant: any) => {
-        let { commission, profitTypeValue, shippingChoice ,require_shipping} = variant;
+        let { commission, profitTypeValue, shippingChoice, require_shipping } =
+          variant;
         if (!variant?.shippingChoice) {
           shippingChoice = "shippingIncluded";
         }
@@ -300,12 +308,18 @@ console.log("initialChoosenValues",initialChoosenValues);
         if (!variant?.require_shipping) {
           require_shipping = false;
         }
-        return { ...variant, shippingChoice, profitTypeValue, commission ,require_shipping};
+        return {
+          ...variant,
+          shippingChoice,
+          profitTypeValue,
+          commission,
+          require_shipping,
+        };
       });
       setVariantsDetails(updatedVariantsArr);
       setCurrentlySelectedVariant(product?.variantsArr[0]);
-      setProductOptions(product.options)
-      setProductImages(product.images)
+      setProductOptions(product.options);
+      setProductImages(product.images);
     }
   }, [product]);
   const [commissionVal, setCommissionVal] = useState(
@@ -448,7 +462,9 @@ console.log("initialChoosenValues",initialChoosenValues);
     checkboxesSelected,
     checkboxHandler,
     setOptionChoosenValues,
-    optionChoosenValues,setProductOptions,setVariantsDetails
+    optionChoosenValues,
+    setProductOptions,
+    setVariantsDetails,
   };
   const { ProductOptionsComponent } = useProductOptions({
     ...ProductOptionsProps,
@@ -493,7 +509,7 @@ console.log("initialChoosenValues",initialChoosenValues);
     setMetadataTitle,
     form,
   };
- 
+
   const ProductCategoriesTagsProps = {
     category,
     tag,
@@ -506,9 +522,10 @@ console.log("initialChoosenValues",initialChoosenValues);
     selectedTags,
   };
 
-let ProductImageProps = {
-  setProductImages,productImages
-}
+  let ProductImageProps = {
+    setProductImages,
+    productImages,
+  };
   let ProductDetailsProps = {
     productOptionsDetails,
     currentPiece,
@@ -530,7 +547,9 @@ let ProductImageProps = {
     setCurrentlySelectedVariant,
     currentlySelectedVariant,
     finalPriceText: editedPrice,
-    profitText: profit,setVariantsDetails,shippingTotalCost
+    profitText: profit,
+    setVariantsDetails,
+    shippingTotalCost,
   };
   let SelectComponent = (
     <Select
@@ -630,9 +649,9 @@ let ProductImageProps = {
         choosenShippingIndex,
         shippingIncludedChoice,
         productEditFormOrigin: true,
-        options:productOptions,
-        variantsArr:variantsDetails,images:productImages
-
+        options: productOptions,
+        variantsArr: variantsDetails,
+        images: productImages,
       };
       if (shippingWithoutOrInclude == "shippingIncluded") {
         data.shippingIncludedChoiceIndex = choosenShippingIndex;
@@ -661,7 +680,7 @@ let ProductImageProps = {
       {ProductHeaderComponent}
       <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  dark:bg-[#2e464f] dark:text-white">
         <div className=" lap:max-w-[35%]">
-          <ProductImageRenderer {...ProductImageProps}/>
+          <ProductImageRenderer {...ProductImageProps} />
           <ProductDetails {...ProductDetailsProps} />
         </div>
         <div className="flex flex-col min-w-[55%]">
@@ -694,7 +713,7 @@ let ProductImageProps = {
                   <RadioGroup
                     // defaultValue="shippingIncluded"
                     className="grid grid-cols-1 ml:grid-cols-2 gap-2 tab:my-0 my-2 ml:my-3 w-full"
-      /*               onValueChange={(value: string) => {
+                    /*               onValueChange={(value: string) => {
                       setShippingWithoutOrInclude(value);
                     }} */
                     onChange={(value: string) => {
@@ -703,24 +722,23 @@ let ProductImageProps = {
                     value={shippingWithoutOrInclude}
                   >
                     <div className="flex items-center space-x-2  bg-[#edf5f9] p-2 rounded-md">
-                      <Radio value="withoutShipping"  >
-                      <div
-                        className=" text-xs dark:text-black whitespace-nowrap"
-                        // htmlFor="r11"
-                      >
-                        {withoutShipping}
-                      </div>
+                      <Radio value="withoutShipping">
+                        <div
+                          className=" text-xs dark:text-black whitespace-nowrap"
+                          // htmlFor="r11"
+                        >
+                          {withoutShipping}
+                        </div>
                       </Radio>
-
                     </div>
                     <div className="flex items-center space-x-2 bg-[#edf5f9] p-2 rounded-md">
-                      <Radio value="shippingIncluded" >
-                      <div
-                        className="text-xs  dark:text-black whitespace-nowrap"
-                        // htmlFor="r22"
-                      >
-                        {shippingIncluded}
-                      </div>
+                      <Radio value="shippingIncluded">
+                        <div
+                          className="text-xs  dark:text-black whitespace-nowrap"
+                          // htmlFor="r22"
+                        >
+                          {shippingIncluded}
+                        </div>
                       </Radio>
                     </div>
                   </RadioGroup>

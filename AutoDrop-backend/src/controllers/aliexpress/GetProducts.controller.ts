@@ -156,7 +156,7 @@ export async function GetRecommendedProductsPost(
         .promos.promo.length - 1
     );
     const randomFeedName =
-      respData.data.aliexpress_ds_feedname_get_response.resp_result.result
+      respData.data.aliexpress_ds_feedname_get_response?.resp_result.result
         .promos.promo[randomPage].promo_name;
     console.log(randomFeedName);
     let response2 = await MakeRequest(

@@ -127,20 +127,23 @@ const PatchProduct = catchAsync(
 
       shippingIncludedChoice,
       shippingIncludedChoiceIndex,
-      productEditFormOrigin,variantsArr,options,images,
+      productEditFormOrigin,
+      variantsArr,
+      options,
+      images,
       ...body
     } = req.body;
     let sallaTags;
-if(options){
-  product.options=options
-}
-if(images){
-  product.images=images
-}
+    if (options) {
+      product.options = options;
+    }
+    if (images) {
+      product.images = images;
+    }
 
-if(variantsArr){
-  product.variantsArr=variantsArr
-}
+    if (variantsArr) {
+      product.variantsArr = variantsArr;
+    }
     if (productEditFormOrigin) {
       product.productEditFormOrigin = productEditFormOrigin;
     } else {

@@ -58,9 +58,9 @@ export default function PaginationRenderer({
                   <PaginationItem key={page}>
                     <PaginationLink
                       isActive={currPage === page.toString()}
-                      className={`shadow-md text-[#253439] hover:text-white hover:bg-[#253439] hover:cursor-pointer bg-white ${
+                      className={`shadow-md text-[#253439] hover:text-white hover:bg-[#253439] hover:cursor-pointer bg-white dark:text-white dark:bg-[#2e464f] dark:hover:bg-[#253439] ${
                         currPage === page.toString()
-                          ? `bg-[#253439] text-white`
+                          ? `bg-[#253439] dark:bg-[#253439] text-white`
                           : ``
                       }`}
                       onClick={() => {
@@ -82,7 +82,7 @@ export default function PaginationRenderer({
                     router.push(`?page=${+currPage + 1}`);
                     setCurrPage((+currPage + 1).toString());
                   }}
-                  className="bg-white text-[#253439] hover:bg-white/90 shadow-md"
+                  className="bg-white text-[#253439] hover:bg-white/90 shadow-md dark:text-black  dark:hover:bg-[#253439]/50 dark:hover:text-white"
                   disabled={currPage === "7"}
                 >
                   Next
