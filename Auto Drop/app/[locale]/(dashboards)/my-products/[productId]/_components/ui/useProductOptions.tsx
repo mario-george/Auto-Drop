@@ -41,7 +41,7 @@ export default function useProductOptions({
     // VariantExtractor()
 //check if options object is only 1 element if so throw a toast error
 
-    if(productOptions?.[optIndex]?.values?.length==1){
+    if(options?.[optIndex]?.values?.length==1){
 
 toast({variant:'destructive',description:"This is the last variant and cann't be removed"} )
       return
