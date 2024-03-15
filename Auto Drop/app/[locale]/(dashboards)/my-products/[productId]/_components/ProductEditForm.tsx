@@ -668,7 +668,7 @@ let ProductImageProps = {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmitHandler)}
-              className="flex flex-col rounded-lg tab:p-8 space-y-4  "
+              className="flex flex-col rounded-lg tab:p-3 space-y-4  "
               dir={locale === "ar" ? "rtl" : "ltr"}
             >
               <button type="submit" ref={buttonRef} className="hidden">
