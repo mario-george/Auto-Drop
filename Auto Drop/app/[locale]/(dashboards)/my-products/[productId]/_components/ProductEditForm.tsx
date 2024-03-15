@@ -717,7 +717,7 @@ toast({variant:"destructive",description:"SallaToken Not Found."})
       {LoaderComponent}
       {ProductHeaderComponent}
       <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  dark:bg-[#2e464f] dark:text-white">
-        <div className=" lap:max-w-[35%]">
+        <div className=" lap:max-w-[35%] min-w-[31%]">
           <ProductImageRenderer {...ProductImageProps} />
           <ProductDetails {...ProductDetailsProps} />
         </div>
