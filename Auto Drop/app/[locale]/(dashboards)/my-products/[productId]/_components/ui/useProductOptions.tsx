@@ -1,3 +1,4 @@
+'use client' 
 import Image from "next/image";
 import React from "react";
 import { Separator } from "@/components/ui/separator";
@@ -5,7 +6,7 @@ import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
 
 import { Image as ImageChakra, RadioGroup, Radio } from "@chakra-ui/react";
 import DeleteOptionDialog from "./features/DeleteOptionDialog";
-
+import {useToast} from '@/components/ui/use-toast'
 export default function useProductOptions({
   options,
   choosenColors,
@@ -23,6 +24,7 @@ export default function useProductOptions({
   setOptionChoosenValues,
   optionChoosenValues,setVariantsDetails,setProductOptions
 }: any) {
+  const {toast} = useToast() 
   /*   if (!options) {
     return <div>No options Found</div>;
   } */
@@ -37,6 +39,15 @@ export default function useProductOptions({
   console.log("optionChoosenValues", optionChoosenValues);
   const removeOptionHandler = (optIndex:number,element:any)=>{
     // VariantExtractor()
+//check if options object is only 1 element if so throw a toast error
+
+    if(productOptions?.[optIndex]?.values?.length==1){
+
+toast({variant:'destructive',description:"This is the last variant and cann't be removed"} )
+      return
+    }
+
+    
     setProductOptions((prevOptions:any)=>{
 console.log("prevOptions",prevOptions)
 console.log("optIndex",optIndex)
