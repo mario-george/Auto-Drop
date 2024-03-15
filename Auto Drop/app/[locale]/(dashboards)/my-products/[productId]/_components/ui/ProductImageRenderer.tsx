@@ -14,7 +14,7 @@ export default function ProductImageRenderer({ product }: any) {
             className="rounded-md mx-auto"
           />{" "}
         </div>
-        <div className="flex flex-wrap space-s-3 my-3">
+        <div className="grid grid-cols-3 tab:grid-cols-5 justify-center gap-3 my-3">
           {product?.images.map((image: any, index: number) => {
             return (
               index > 0 && (
