@@ -631,7 +631,7 @@ let ProductImageProps = {
         shippingIncludedChoice,
         productEditFormOrigin: true,
         options:productOptions,
-        variantsArr:variantsDetails,
+        variantsArr:variantsDetails,images:productImages
 
       };
       if (shippingWithoutOrInclude == "shippingIncluded") {
