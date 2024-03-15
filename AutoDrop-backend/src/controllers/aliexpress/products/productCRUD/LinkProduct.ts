@@ -30,101 +30,9 @@ export const updateVariantFinalOption2 = async (
   const jsonProduct = product.toJSON();
   const data = await getProductVariants(product.salla_product_id, 1, token);
   console.log(data?.pagination?.totalPages);
-  if (false) {
-    for (let i = 0; i < data.pagination.totalPages; i++) {
-      const vr = await getProductVariants(
-        product.salla_product_id,
-        i + 1,
-        token
-      );
-      const variants = vr.data.filter((e: any) => !e.sku);
-      if (!variants.length) return;
-      await Promise.all(
-        variants.map(async (variant: any) => {
-          if (!variant.sku) {
-            const salla_option_ids = variant.related_option_values;
-            const values = await Promise.all(
-              jsonProduct.options.map(async (option: OptionType) => {
-                const value = option.values.find((val) =>
-                  salla_option_ids.includes(val?.salla_value_id)
-                );
-                return value;
-              })
-            );
-            const getSkusId = async (values: any) => {
-              const skus = await getProductSkus(product.original_product_id);
-              const keyWords = values.map((val: any) => val.name);
-              await Promise.all(
-                skus.map(async (sku: any) => {
-                  const skusOptions =
-                    sku.ae_sku_property_dtos.ae_sku_property_d_t_o;
-                  const check =
-                    sku.ae_sku_property_dtos.ae_sku_property_d_t_o.filter(
-                      (property: any, idx: number) => {
-                        if (property.property_value_definition_name) {
-                          if (
-                            keyWords.includes(
-                              property.property_value_definition_name
-                            )
-                          )
-                            return property;
-                        } else {
-                          if (
-                            keyWords.includes(property.sku_property_value) ||
-                            property.sku_property_name === "Ships From"
-                          )
-                            return property;
-                        }
-                      }
-                    );
-                  if (check.length === skusOptions.length) {
-                    const optionValue = values.find(
-                      (val: any) =>
-                        val.name === sku.id.split(";")[0].split("#")[1] ||
-                        val.sku === sku.id.split(";")[0]
-                    );
-                    const { price, quantity } = optionValue;
-                    let mnp = getRandomInt(100000000000000, 999999999999999);
-                    let gitin = getRandomInt(10000000000000, 99999999999999);
-                    let barcode = [mnp, gitin].join("");
-                    let result = await UpdateProductVariant(
-                      variant.id,
-                      barcode,
-                      price,
-                      quantity,
-                      mnp,
-                      gitin,
-                      sku.sku_id,
-                      token
-                    );
-                    while (!result) {
-                      mnp = getRandomInt(100000000000000, 999999999999999);
-                      gitin = getRandomInt(10000000000000, 99999999999999);
-                      barcode = [mnp, gitin].join("");
-                      result = await UpdateProductVariant(
-                        variant.id,
-                        barcode,
-                        price,
-                        quantity,
-                        mnp,
-                        gitin,
-                        sku.sku_id,
-                        token
-                      );
-                    }
-                  }
-                })
-              );
-            };
-            await getSkusId(values);
-          }
-        })
-      );
-    }
-  } else {
+
     const variants = data.data.filter((e: any) => !e.sku);
 
-    // console.log("variants", variants);
     let variantsIds = variants.map((el: any) => {
       return el.id;
     });
@@ -133,7 +41,6 @@ export const updateVariantFinalOption2 = async (
     console.log("variantsIds.length", variantsIds.length);
     console.log("variantsIds.length", variantsIds.length);
     console.log("variantsIds.length", variantsIds.length);
-    // console.log("productsVariantsArr", product?.variantsArr);
 
     let { variantsArr, showDiscountPrice } = product;
     console.log("variantsArr",variantsArr)
@@ -166,21 +73,12 @@ export const updateVariantFinalOption2 = async (
          (price);
      }
    }
-/*    console.log(
-    "product?.shippingIncludedChoice &&  product?.shippingIncludedChoiceIndex",
-    product?.shippingIncludedChoice &&
-      product?.shippingIncludedChoiceIndex
-  );  */
+
   console.log("product?.options",product?.options)
       if (
         //@ts-ignore
         product?.shipping?.length!=0 && shippingChoice =="shippingIncluded"
       ) {
-/*          console.log(
-          "product?.shippingIncludedChoice &&  product?.shippingIncludedChoiceIndex",
-          product?.shippingIncludedChoice &&
-            product?.shippingIncludedChoiceIndex
-        );  */
 
         let shippingIncludedChoiceIndex = product?.shippingIncludedChoiceIndex || 0 ;
         //@ts-ignore
@@ -235,7 +133,7 @@ let errorArrayVariants :any= []
     });
     console.log("errorArrayVariants",errorArrayVariants)
     return;
-  }
+  
 };
 
 function getRandomInt(min: any, max: any) {
@@ -263,6 +161,11 @@ export async function LinkProductSalla2(
     const sallaTokenDocument = await SallaToken.findOne({
       _id: req.user.sallaToken,
     });
+
+    if (!req.user.sallaToken || !sallaTokenDocument) {
+      return res.status(404).json({ message: "SallaToken Not Found." });
+    }
+
     const aliexpressDoc = await AliExpressToken.findOne({
       _id: req.user.aliExpressToken,
     });

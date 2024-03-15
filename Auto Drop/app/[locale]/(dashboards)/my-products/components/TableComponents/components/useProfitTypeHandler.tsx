@@ -27,6 +27,8 @@ export default function useProfitTypeHandler(props: any) {
   ); */
   let { profitType, percentage, number, upProducts, val } = props;
   const productsState = useSelector((state: any) => state.products);
+  const sallaToken = useSelector((state: any) => state.user.sallaToken);
+console.log("sallaToken",sallaToken)
   let { allowButtonAction } = productsState;
   console.log("allowButtonAction", allowButtonAction);
   let { currentProductsList, currentSelectedProducts } = productsState;
@@ -41,21 +43,53 @@ export default function useProfitTypeHandler(props: any) {
 return
     } */
     // setLoading(true);
+    let selectedProds: any = currentProductsList.filter(
+      (_: any, index: number) => currentSelectedProducts[index]
+    );
+
+    if ( selectedProds.length == 0) {
+      toast({
+        variant: "destructive",
+        title: "No product was selected please try again.",
+      });
+     
+
+    
+      return
+    }
+    if (!sallaToken || sallaToken=="" ) {
+      toast({
+        variant: "destructive",
+        title: "Please link your account with salla and try again.",
+      });
+     
+
+    
+      return
+    }
     dispatch(
       setKeyValue({
         key: "loadingProductTable",
         value: true,
       })
     );
-    let selectedProds: any = currentProductsList.filter(
-      (_: any, index: number) => currentSelectedProducts[index]
-    );
-    if (selectedProds.length == 0) {
+    console.log("selectedProds.length",selectedProds.length)
+   /*  if (selectedProds.length == 0) {
       toast({
         variant: "destructive",
         title: "No product was selected please try again.",
       });
-    }
+      setTimeout(()=>{
+        setKeyValue({
+          key: "loadingProductTable",
+          value: false,
+        })
+
+
+      },1000)
+      return
+    } */
+
     let promisesArr = selectedProds?.map((product: any) => {
       let { salla_product_id, _id: id } = product;
       /*       if (salla_product_id) {

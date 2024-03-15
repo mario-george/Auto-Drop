@@ -85,7 +85,7 @@ export default function AvailablePlatforms({
     <>
       <motion.div initial="hidden" animate="visible" variants={variants}>
         <div
-          className={`flex flex-wrap  tab:max-w-full  w-full tab:space-s-8 tab:mx-0 tab:space-y-0  tab:flex-row justify-center ${className}`}
+          className={`relative flex flex-wrap  tab:max-w-full  w-full tab:space-s-8 tab:mx-0 tab:space-y-0  tab:flex-row justify-center ${className}`}
         >
           {Cards.map((card: any, index: string) => {
             return (
@@ -118,20 +118,52 @@ export default function AvailablePlatforms({
                 </div>
                 {card.circleLink ? (
                   <>
-                    <div className="relative min-w-full mt-auto">
+                    <div className=" min-w-full mt-auto">
                       {((card.alt == "salla" && sallaToken) ||
                         (card.alt == "aliexpress" && aliExpressToken)) && (
                         <div
                           onClick={() => {
                             deleteTokenHandler(card.alt);
                           }}
-                          className={`absolute  ${
+                          /* className={`absolute  ${
                             isAr
                               ? `top-[9px] ms:right-[15px] mm:right-[30px] tab:right-[23px] tab:top-[11px] lap:top-[20%] lap:right-[10%] lapl:right-[25%] k4:right-[220px]`
                               : `top-2 ms:left-[15px] mm:left-[30px] tab:left-[18px] tab:top-[10px] lap:top-[20%] lap:left-[7%] lapl:left-[20%] k4:left-[200px] `
-                          }  x left-20 cursor-pointer z-[2]`}
+                          }  x left-20 cursor-pointer z-[2]`} */
+                          className={`absolute hover:cursor-pointer ${isAr ? `top-2` : `top-2 tab:left-6`}`}
                         >
-                          <FaUnlink className="bg-white  ms:text-sm rounded-full lap:w-6 lap:h-6 text-red-500 tab:text-[18px] lap:text-[20px] " />
+                          {/* <FaUnlink className="bg-white  ms:text-sm rounded-full lap:w-6 lap:h-6 text-red-500 tab:text-[18px] lap:text-[20px] " />
+                           */}
+                            <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className=" tab:w-[30px] tab:h-[30px]"
+                      >
+                        <circle
+                          cx="11.6133"
+                          cy="12.3652"
+                          r="10"
+                          fill="#2E464F"
+                          stroke="white"
+                        />
+                        <line
+                          x1="7.4863"
+                          y1="8.85141"
+                          x2="15.4336"
+                          y2="15.481"
+                          stroke="white"
+                        />
+                        <line
+                          x1="14.3659"
+                          y1="8.1459"
+                          x2="8.95408"
+                          y2="16.4352"
+                          stroke="white"
+                        />
+                      </svg>
                         </div>
                       )}
 

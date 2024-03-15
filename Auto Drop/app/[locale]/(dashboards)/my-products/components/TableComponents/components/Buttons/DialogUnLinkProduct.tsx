@@ -18,17 +18,31 @@ import useLoader from "@/components/loader/useLoader";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setKeyValue } from "@/store/productsSlice";
+import {useToast } from "@/components/ui/use-toast";
 export default function SubmitProducts({
   sallaProductId,
   setLoadProducts,
 }: any) {
   const router = useRouter();
+  const sallaToken = useSelector((state: any) => state.user.sallaToken);
+  
   const { setLoading, LoaderComponent } = useLoader();
   const productsState = useSelector((state: any) => state.products);
   const dispatch = useDispatch();
+  const {toast } = useToast()
   let { reloadPage,loadingProductTable } = productsState;
   console.log("loadingProductTable",loadingProductTable)
   let submitHandler = async () => {
+    if (!sallaToken || sallaToken=="" ) {
+      toast({
+        variant: "destructive",
+        title: "Please link your account with salla and try again.",
+      });
+     
+
+    
+      return
+    }
 try{
 
   dispatch(
@@ -43,14 +57,29 @@ try{
   console.log(resp.data);
   dispatch(setKeyValue({ key: "reloadPage", value: !reloadPage }));
   if (resp.status >= 200 && resp.status < 300) {
-    dispatch(
+/*     dispatch(
       setKeyValue({
         key: "loadingProductTable",
         value: false,
       })
-    );
+    ); */
   }
-}catch(err){console.error(err)}
+}catch(err:any){
+  console.log("err",err)
+  if(err?.response?.data?.message.includes("Salla")){
+    toast({variant:"destructive",description:"Please Link your account with salla and try again."})
+      
+      }  
+  console.error(err)
+}finally{
+  dispatch(
+    setKeyValue({
+      key: "loadingProductTable",
+      value: false,
+    })
+  );
+
+}
 
   };
   let buttonClassL = `rounded-full bg-[#008767] hover:bg-[#008767]/90 px-2 py-2 w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem] hover:cursor-pointer `;

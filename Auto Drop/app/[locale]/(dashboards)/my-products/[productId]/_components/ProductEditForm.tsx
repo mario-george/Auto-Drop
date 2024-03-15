@@ -47,6 +47,9 @@ import useLoader from "@/components/loader/useLoader";
 import CurrencyFormatter from "../../../products/_components/CurrencyFormatter";
 import useOptionHook from "./hooks/useOptionHook";
 import useProductShipping from "./ui/useProductShipping";
+import {useToast } from "@/components/ui/use-toast";
+
+import {useSelector} from 'react-redux'
 interface ProductEditFormProps {
   prodNameTitle: string;
   prodNameTitlePlaceholder: string;
@@ -133,11 +136,14 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     withText,
     valueText,
   } = props;
+
+  const {toast} = useToast()
   const [categoriesList, setCategoriesList] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [productImages, setProductImages] = useState([]);
   const [currentlySelectedVariant, setCurrentlySelectedVariant] = useState({});
   const [optionChoosenValues, setOptionChoosenValues] = useState([]);
+  const sallaToken = useSelector((state: any) => state.user.sallaToken);
   const [tagsList, setTagsList] = useState([]);
   const [shippingWithoutOrInclude, setShippingWithoutOrInclude] =
     useState("shippingIncluded");
@@ -434,6 +440,16 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   });
 
   const onSubmitHandler = async (data: z.infer<typeof formSchema>) => {
+    if (!sallaToken || sallaToken=="" ) {
+      toast({
+        variant: "destructive",
+        title: "Please link your account with salla and try again.",
+      });
+     
+
+    
+      return
+    }
     setLoading(true);
     console.log(data.SEOTitleText);
     console.log(data);
@@ -596,6 +612,17 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     );
   }
   let uploadProductHandler = async (dataForm: any) => {
+/*     console.log("sallaToken",sallaToken)
+    if (!sallaToken || sallaToken=="" ) {
+      toast({
+        variant: "destructive",
+        title: "Please link your account with salla and try again.",
+      });
+     
+
+    
+      return
+    } */
     try {
       let profitChoosenTypeName = "number";
       console.log("percentage", percentage);
@@ -662,12 +689,23 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         `aliexpress/product/updateProduct/${product._id}`,
         data
       );
+
+if(res?.data?.message=="SallaToken Not Found."){
+toast({variant:"destructive",description:"SallaToken Not Found."})
+  return 
+  }
+
       if (res.status >= 200 && res.status < 300) {
         console.log("Product updated");
       } else {
         console.log("error");
       }
     } catch (e: any) {
+      if(e?.response?.data?.message=="SallaToken Not Found."){
+        toast({variant:"destructive",description:"Please Link your account with salla and try again."})
+          
+          }
+        
       console.error(e);
     } finally {
       setLoading(false);
