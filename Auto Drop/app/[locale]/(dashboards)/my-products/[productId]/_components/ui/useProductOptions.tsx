@@ -63,6 +63,13 @@ if (`${sku_property_id}:${property_value_id}` == element.sku){
 })
 return tempVariants
     })
+       setOptionChoosenValues((prevValues: any) => {
+                    let tempValues = [...prevValues];
+let elementFound = options?.[optIndex]?.values?.[0];
+let {property_id, name} = elementFound; 
+                    tempValues[optIndex] = {name,property_id};
+                    return tempValues;
+       })
   }
   // console.log("optionsSelected",optionsSelected)
 
