@@ -6,8 +6,10 @@ import {
   ProductSchema,
 } from "../../../../models/product.model";
 import axios from "axios";
+import SallaToken from "../../../../models/SallaTokenModel";
+
 export const DeleteProductById = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request &any, res: Response, next: NextFunction) => {
     if (!req.params) {
       return res
         .status(400)
@@ -21,6 +23,12 @@ export const DeleteProductById = catchAsync(
       merchant: req.user._id as any,
       _id: productId,
     });
+    const sallaTokenDocument = await SallaToken.findOne({
+      _id: req.user.sallaToken,
+    });
+    if (!sallaTokenDocument || !req.user.sallaToken ) {
+      return res.status(404).json({ message: "SallaToken Not Found." });
+    }
     if (!product) {
       console.log("No product found");
       return res.status(404).json({ message: "Product Not Found." });

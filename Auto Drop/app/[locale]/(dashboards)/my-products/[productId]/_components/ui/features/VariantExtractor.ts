@@ -14,17 +14,17 @@ export default  function VariantExtractor(optionChoosenValues:any,variantsDetail
         let element = variantsDetails[i];
         for (let i = 0; i < optionChoosenValues.length; i++) {
           console.log(
-            relativeOptions[i].property_value_id,
+            relativeOptions?.[i]?.property_value_id,
             "relativeOptions[i].property_value_id"
           );
           console.log(
-            optionChoosenValues[i].property_id,
+            optionChoosenValues?.[i]?.property_id,
             "optionChoosenValues[i].property_id"
           );
 
           if (
-            relativeOptions[i].property_value_id !=
-            optionChoosenValues[i].property_id
+            relativeOptions?.[i]?.property_value_id !=
+            optionChoosenValues?.[i]?.property_id
           ) {
             valid = false;
           }

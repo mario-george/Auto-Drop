@@ -8,6 +8,7 @@ import useLoader from "@/components/loader/useLoader";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { setKeyValue } from "@/store/productsSlice";
+import {useToast } from "@/components/ui/use-toast";
 export default function ButtonsRenderer({
   id,
   setMyProducts,
@@ -19,7 +20,9 @@ export default function ButtonsRenderer({
   const locale = useLocale();
   const dispatch = useDispatch();
   const productsState = useSelector((state: any) => state.products);
+  const sallaToken = useSelector((state: any) => state.user.sallaToken);
 
+const {toast} = useToast()
   let { reloadPage, allowButtonAction } = productsState;
   let buttonClassD =
     "rounded-full bg-[#c1121f] w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem]  px-2 py-2 tab:px-0 tab:py-0 hover:cursor-pointer  hover:bg-[#c1121f]/90 ";
@@ -29,6 +32,16 @@ export default function ButtonsRenderer({
   let buttonClassS =
     "rounded-full bg-[#f79042] w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem] hover:cursor-pointer  px-2 py-2 tab:px-0 tab:py-0 hover:bg-[#f79042]/90 ";
   let linkProductHandler = async () => {
+    if (!sallaToken || sallaToken=="" ) {
+      toast({
+        variant: "destructive",
+        title: "Please link your account with salla and try again.",
+      });
+     
+
+    
+      return
+    }
     try {
       if (salla_product_id) {
         return;
@@ -49,10 +62,32 @@ export default function ButtonsRenderer({
       dispatch(setKeyValue({ key: "reloadPage", value: !reloadPage }));
      
     } catch (err: any) {
+      if(err?.response?.data?.message=="SallaToken Not Found."){
+        toast({variant:"destructive",description:"Please Link your account with salla and try again."})
+          
+          }
       console.error(err);
+    }finally{
+      dispatch(
+        setKeyValue({
+          key: "loadingProductTable",
+          value: false,
+        })
+      );
+   
     }
   };
   let deleteProductHandler = async () => {
+    if (!sallaToken || sallaToken=="" ) {
+      toast({
+        variant: "destructive",
+        title: "Please link your account with salla and try again.",
+      });
+     
+
+    
+      return
+    }
     try {
 
       dispatch(
@@ -66,13 +101,13 @@ export default function ButtonsRenderer({
       );
       if (res.status >= 200 && res.status < 300) {
         console.log("Product deleted");
-        dispatch(
+   /*      dispatch(
           setKeyValue({
             key: "loadingProductTable",
             value: false,
           })
         );
-     
+      */
         dispatch(setKeyValue({ key: "reloadPage", value: !reloadPage }));
 
       
@@ -80,7 +115,19 @@ export default function ButtonsRenderer({
         console.log("error");
       }
     } catch (err: any) {
+      if(err?.response?.data?.message=="SallaToken Not Found."){
+        toast({variant:"destructive",description:"Please Link your account with salla and try again."})
+          
+          }
       console.error(err);
+    }finally{
+      dispatch(
+        setKeyValue({
+          key: "loadingProductTable",
+          value: false,
+        })
+      );
+   
     }
   };
 

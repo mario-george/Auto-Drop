@@ -181,8 +181,7 @@ export async function GetRecommendedProductsPost(
     );
     let resPage = response2;
     const products =
-      resPage.data.aliexpress_ds_recommend_feed_get_response.result.products
-        .traffic_product_d_t_o;
+      resPage?.data.aliexpress_ds_recommend_feed_get_response?.result?.products?.traffic_product_d_t_o;
 
     if (products) {
       result.push(...products);
