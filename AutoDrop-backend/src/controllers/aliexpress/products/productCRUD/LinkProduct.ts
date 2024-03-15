@@ -140,28 +140,30 @@ export const updateVariantFinalOption2 = async (
     let promises = variantsArr.map((el: any, index: number) => {
       let variantId = variantsIds[index];
       let {
-        offer_sale_price: price,
+        offer_sale_price: priceString,
         sku_available_stock: quantity,
         sku_id,
         sku_price: oldPrice,shippingChoice,commission,profitTypeValue
-      } = el;
+      } = el satisfies {commission:number};
+
+      let price = parseFloat(priceString)
       console.log("quantity", quantity);
    if(commission!=0 && commission>0){
     if (profitTypeValue=="number") {
-      price = parseFloat(price) + commission;
+      price = (price) + commission;
     } else if (profitTypeValue=="percentage") {
       price =
-        (commission / 100) * parseFloat(price) +
-        parseFloat(price);
+        (commission / 100) * (price) +
+        (price);
     }
    }else{
 
      if (product?.vendor_commission && !product?.commissionPercentage) {
-       price = parseFloat(price) + product?.vendor_commission;
+       price = (price) + product?.vendor_commission;
      } else if (product?.vendor_commission && product?.commissionPercentage) {
        price =
-         (product?.vendor_commission / 100) * parseFloat(price) +
-         parseFloat(price);
+         (product?.vendor_commission / 100) * (price) +
+         (price);
      }
    }
 /*    console.log(
@@ -221,13 +223,17 @@ export const updateVariantFinalOption2 = async (
 
     let results = await Promise.all(promises);
 console.log("results.length",results.length)
+
+let errorArrayVariants :any= []
     results.forEach((result) => {
       
       if(!result){
+        errorArrayVariants.push(result)
         console.log("A VARIANT IS UNDEFINED")
       }
       console.log(result?.data);
     });
+    console.log("errorArrayVariants",errorArrayVariants)
     return;
   }
 };

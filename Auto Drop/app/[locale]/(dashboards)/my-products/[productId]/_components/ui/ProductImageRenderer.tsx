@@ -1,24 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
+import { Radio, RadioGroup } from '@chakra-ui/react';
 
-export default function ProductImageRenderer({ product }: any) {
+interface ProductImage {
+  alt:string
+  default:boolean
+  original:string
+  thumbnail:string
+}
+
+export default function ProductImageRenderer({ setProductImages ,productImages}: any) {
+  // const [value,setValue]=useState(product?.images[0].original)
+
+
+  let defaultImageIndex = 0
+if(productImages&&productImages?.length>0){
+defaultImageIndex = productImages.findIndex((image:ProductImage)=>{
+return image.default
+})
+}
+const handleImageDefaultChange = (newIndexString:string)=>{
+  let newIndex = Number(newIndexString)
+  setProductImages((prevImages:ProductImage[])=>{
+let tempImages = [...prevImages]
+let firstImage =tempImages[newIndex]
+tempImages = tempImages.map((image:ProductImage)=>{
+  return {...image,default:false}
+}).filter((image:ProductImage,index:number)=>{return index!==newIndex})
+
+firstImage.default =true
+return [firstImage,...tempImages]
+  })
+}
+
+  // console.log("product.images", product.images);
+  console.log("productImages", productImages);
   return (
     <div>
       <div className="flex flex-col">
         <div className="flex">
           <Image
-            src={product?.images[0].original}
+            src={productImages[defaultImageIndex]?.original}
             alt="Product Image"
             width={518}
             height={691}
             className="rounded-md mx-auto"
           />{" "}
         </div>
-        <div className="flex flex-wrap space-s-3 my-3">
-          {product?.images.map((image: any, index: number) => {
+        <RadioGroup value={defaultImageIndex.toString()} onChange={handleImageDefaultChange}>
+        <div className="grid grid-cols-3 tab:grid-cols-5 justify-center gap-3 my-3">
+          {productImages.map((image: any, index: number) => {
             return (
-              index > 0 && (
-                
+               (
+                <Radio  value={index.toString()}>
                 <Image
                   src={image.original}
                   alt="Product Image"
@@ -26,10 +60,14 @@ export default function ProductImageRenderer({ product }: any) {
                   height={1200}
                   className="rounded-md w-[57px] h-[75px]"
                 />
+
+</Radio>
+
               )
             );
           })}
         </div>
+        </RadioGroup>
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import CurrencyFormatter from "../../../../products/_components/CurrencyFormatter";
 import { Radio, RadioGroup } from "@chakra-ui/react";
-import VariantExtractor from './features/VariantExtractor';
+import VariantExtractor from "./features/VariantExtractor";
 import {
   Select,
   SelectContent,
@@ -47,7 +47,8 @@ export default function ProductDetails({
   optionChoosenValues,
   setCurrentlySelectedVariant,
   currentlySelectedVariant,
-  setVariantsDetails,shippingTotalCost
+  setVariantsDetails,
+  shippingTotalCost,
 }: any) {
   // console.log("shippingChoosenValue", shippingChoosenValue);
   // const [value, setValue] = React.useState(shippingChoosenValue);
@@ -65,69 +66,25 @@ export default function ProductDetails({
   console.log("variantsDetails", variantsDetails);
   console.log("shippingChoice", shippingChoice);
 
-  
-  if(price){
-    price = Number(price)
+  if (price) {
+    price = Number(price);
   }
- /*  function VariantExtractor() {
-    if (!variantsDetails) {
-      return;
-    }
-    let currentVariantInfo: any = [];
-
-    let choosenOptionsFullDetails: any = [];
-    if (optionChoosenValues) {
-      let getVariant = [];
-
-      for (let i = 0; i < variantsDetails.length; i++) {
-        let relativeOptions = variantsDetails[i].relativeOptions;
-        let valid = true;
-        let element = variantsDetails[i];
-        for (let i = 0; i < optionChoosenValues.length; i++) {
-          console.log(
-            relativeOptions[i].property_value_id,
-            "relativeOptions[i].property_value_id"
-          );
-          console.log(
-            optionChoosenValues[i].property_id,
-            "optionChoosenValues[i].property_id"
-          );
-
-          if (
-            relativeOptions[i].property_value_id !=
-            optionChoosenValues[i].property_id
-          ) {
-            valid = false;
-          }
-        }
-        if (valid) {
-          getVariant.push(element);
-          break;
-        }
-      }
-      console.log("getVariant", getVariant);
-      return getVariant;
-
-
-    }
-  
-  } */
 
   function changeVariantOptionsHandler(option: string, value: string | number) {
     let ids = foundElement?.map((element: any) => element.id);
     if (option == "shipping") {
       setVariantsDetails((prev: any) => {
         let updatedVars = [...prev];
-        
+
         updatedVars = updatedVars.map((variant: any) => {
           if (ids?.includes(variant.id)) {
-            let require_shipping:boolean;
+            let require_shipping: boolean;
             if (shippingChoice == "shippingIncluded") {
               require_shipping = false;
             } else {
               require_shipping = true;
             }
-            return { ...variant, shippingChoice: value ,require_shipping};
+            return { ...variant, shippingChoice: value, require_shipping };
           }
           console.log("updatedVars", updatedVars);
           return variant;
@@ -163,7 +120,7 @@ export default function ProductDetails({
       });
     }
   }
-  let foundElement = VariantExtractor(optionChoosenValues,variantsDetails);
+  let foundElement = VariantExtractor(optionChoosenValues, variantsDetails);
   if (foundElement && foundElement?.length > 0) {
     setCurrentlySelectedVariant(foundElement[0]);
   }
@@ -194,25 +151,25 @@ export default function ProductDetails({
       </SelectContent>
     </Select>
   );
-  let finalTargetPrice=price||0
-if(profitTypeValue == "percentage"&&commission!==0){
-  console.log("price",price)
-  console.log("commission",commission)
-finalTargetPrice = (commission*price)/100 +price
-}else if(profitTypeValue == "number"&&commission!==0){
-  finalTargetPrice =price+ commission
-}
-let shippingVariantTotalCost = 0 
-if(shippingChoice=="shippingIncluded"){
-  shippingVariantTotalCost = shippingTotalCost
-}else{
-  shippingVariantTotalCost=0
-}
+  let finalTargetPrice = price || 0;
+  if (profitTypeValue == "percentage" && commission !== 0) {
+    console.log("price", price);
+    console.log("commission", commission);
+    finalTargetPrice = (commission * price) / 100 + price;
+  } else if (profitTypeValue == "number" && commission !== 0) {
+    finalTargetPrice = price + commission;
+  }
+  let shippingVariantTotalCost = 0;
+  if (shippingChoice == "shippingIncluded") {
+    shippingVariantTotalCost = shippingTotalCost;
+  } else {
+    shippingVariantTotalCost = 0;
+  }
 
   return (
     <div className={`text-xs tab:text-sm`}>
       <span>{productOptionsDetails}</span>
-      <div className="border rounded-lg p-5 my-2">
+      <div className="border rounded-lg p-2 tab:p-5 my-2">
         <div className="flex items-center space-s-2">
           <span>{availableQuantity}</span>
           <span className="text-[#8d9598]">
@@ -220,48 +177,49 @@ if(shippingChoice=="shippingIncluded"){
           </span>
         </div>
         <div className="my-2">
-
-        <Separator />
+          <Separator />
         </div>
-        <div className="grid grid-cols-1 tab:grid-cols-3  tab:gap-4   my-4 min-w-full gap-6 items-center ">
-          <span className="col-span-1">{originalPrice}:</span>
+        <div className="grid grid-cols-1 tab:grid-cols-3  tab:gap-4   my-4 min-w-full gap-2 tab:gap-6 items-center ">
+<div className="">
+
+          <span className="">{originalPrice}:</span>
+</div>
+
           <Input
-            className={`shadow-sm text-sm md:text-base col-span-2 bg-[#edf5f9] ${inputClasses} `}
+            className={`shadow-sm text-sm md:text-base tab:col-span-2 bg-[#edf5f9] ${inputClasses} `}
             value={CurrencyFormatter(price)}
           />{" "}
           <div className="col-span-full grid tab:grid-cols-6 min-w-full gap-2  items-center">
-
-
-          <span className="col-span-1">{withText}:</span>
-          <RadioGroup
-            value={shippingChoice}
-            className="grid grid-cols-1 ml:grid-cols-2 gap-2 tab:my-0 my-2 ml:my-3 w-full col-span-5"
-            onChange={(value: string) => {
-              console.log("value", value);
-              changeVariantOptionsHandler("shipping", value);
-            }}
-          >
-            <div className="flex items-center space-s-1  bg-[#edf5f9] p-1 py-2 rounded-md">
-              <Radio value="withoutShipping" id="r1" />
-              <label
-                className="whitespace-nowrap  text-xs  dark:text-black"
-                htmlFor="r1"
-              >
-                {withoutShipping}
-              </label>
-            </div>
-            <div className="flex items-center space-s-1 bg-[#edf5f9] p-1 py-2 rounded-md">
-              <Radio value="shippingIncluded" id="r2" />
-              <label
-                className="whitespace-nowrap text-xs dark:text-black"
-                htmlFor="r2"
-              >
-                {shippingIncluded}
-              </label>
-            </div>
-          </RadioGroup>
+            <span className="col-span-1">{withText}:</span>
+            <RadioGroup
+              value={shippingChoice}
+              className="grid grid-cols-1 ml:grid-cols-2 gap-2 tab:my-0 my-2 ml:my-3 w-full col-span-5"
+              onChange={(value: string) => {
+                console.log("value", value);
+                changeVariantOptionsHandler("shipping", value);
+              }}
+            >
+              <div className="flex items-center space-s-1  bg-[#edf5f9] p-1 py-2 rounded-md">
+                <Radio value="withoutShipping" id="r1" />
+                <label
+                  className="whitespace-nowrap  text-xs  dark:text-black"
+                  htmlFor="r1"
+                >
+                  {withoutShipping}
+                </label>
+              </div>
+              <div className="flex items-center space-s-1 bg-[#edf5f9] p-1 py-2 rounded-md">
+                <Radio value="shippingIncluded" id="r2" />
+                <label
+                  className="whitespace-nowrap text-xs dark:text-black"
+                  htmlFor="r2"
+                >
+                  {shippingIncluded}
+                </label>
+              </div>
+            </RadioGroup>
           </div>
-          <div className="grid grid-cols-6 min-w-full col-span-3 gap-3 items-center ">
+          <div className="grid tab:grid-cols-6 min-w-full tab:col-span-3 gap-3 items-center ">
             <span className="">{profitType}</span>
             <div className="col-span-2">{SelectComponent}</div>
             <span className="whitespace-nowrap">{valueText}:</span>
@@ -288,33 +246,29 @@ if(shippingChoice=="shippingIncluded"){
                 {profitTypeValue == "percentage" ? <>%</> : <></>}
               </span>
             </div>
-            {/* </div> */}
           </div>
-
           <div className="col-span-full my-2">
-          <Separator />
-          </div>
-
-          <div className="grid grid-cols-6 min-w-full col-span-3 gap-3 items-center">
+            <Separator />
+          </div> 
+          <div className="grid tab:grid-cols-6 min-w-full tab:col-span-3 gap-3 items-center">
             <span className="">{finalPriceText}</span>
             <div className="col-span-2">
               <Input
                 className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#636867] ${inputClasses}  `}
-                value={CurrencyFormatter(finalTargetPrice+shippingVariantTotalCost)}
+                value={CurrencyFormatter(
+                  finalTargetPrice + shippingVariantTotalCost
+                )}
               />
             </div>
             <span>{profitText}:</span>
-            {/* <div className=" flex items-center space-s-3  "> */}
             <div className="relative  min-w-full col-span-2">
               <Input
                 className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
-                value={CurrencyFormatter(finalTargetPrice-price)}
+                value={CurrencyFormatter(finalTargetPrice - price)}
               />
               <span className="absolute inset-y-0 right-0 pr-2 flex items-center text-gray-500">
-                {/* {profitChoosenType == "percentage" ? <>%</> : <></>} */}
               </span>
             </div>
-            {/* </div> */}
           </div>
         </div>
       </div>

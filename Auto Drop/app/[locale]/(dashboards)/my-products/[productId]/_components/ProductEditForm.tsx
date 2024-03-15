@@ -135,6 +135,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   } = props;
   const [categoriesList, setCategoriesList] = useState([]);
   const [productOptions,setProductOptions] = useState([])
+  const [productImages,setProductImages] = useState([])
   const [currentlySelectedVariant, setCurrentlySelectedVariant] = useState({});
   const [optionChoosenValues, setOptionChoosenValues] = useState([]);
   const [tagsList, setTagsList] = useState([]);
@@ -304,6 +305,7 @@ console.log("initialChoosenValues",initialChoosenValues);
       setVariantsDetails(updatedVariantsArr);
       setCurrentlySelectedVariant(product?.variantsArr[0]);
       setProductOptions(product.options)
+      setProductImages(product.images)
     }
   }, [product]);
   const [commissionVal, setCommissionVal] = useState(
@@ -504,7 +506,9 @@ console.log("initialChoosenValues",initialChoosenValues);
     selectedTags,
   };
 
-
+let ProductImageProps = {
+  setProductImages,productImages
+}
   let ProductDetailsProps = {
     productOptionsDetails,
     currentPiece,
@@ -627,7 +631,7 @@ console.log("initialChoosenValues",initialChoosenValues);
         shippingIncludedChoice,
         productEditFormOrigin: true,
         options:productOptions,
-        variantsArr:variantsDetails,
+        variantsArr:variantsDetails,images:productImages
 
       };
       if (shippingWithoutOrInclude == "shippingIncluded") {
@@ -657,14 +661,14 @@ console.log("initialChoosenValues",initialChoosenValues);
       {ProductHeaderComponent}
       <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  dark:bg-[#2e464f] dark:text-white">
         <div className=" lap:max-w-[35%]">
-          <ProductImageRenderer product={product} />
+          <ProductImageRenderer {...ProductImageProps}/>
           <ProductDetails {...ProductDetailsProps} />
         </div>
         <div className="flex flex-col min-w-[55%]">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmitHandler)}
-              className="flex flex-col rounded-lg tab:p-8 space-y-4  "
+              className="flex flex-col rounded-lg tab:p-3 space-y-4  "
               dir={locale === "ar" ? "rtl" : "ltr"}
             >
               <button type="submit" ref={buttonRef} className="hidden">

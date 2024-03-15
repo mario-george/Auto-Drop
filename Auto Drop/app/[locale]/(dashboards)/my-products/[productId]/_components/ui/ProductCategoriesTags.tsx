@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { IoMdSend } from "react-icons/io";
 export default function ProductCategoriesTags({
   category,
@@ -44,8 +45,8 @@ export default function ProductCategoriesTags({
   return (
     <div>
       {" "}
-      <div className="grid grid-cols-2 gap-4 my-4 min-w-full">
-        <div className={cn(isAr ? "border-l" : "border-r", "border-gray-400")}>
+      <div className="grid tab:grid-cols-2 gap-4 my-4 min-w-full">
+        <div className={cn(isAr ? "tab:border-l" : "tab:border-r", "border-gray-400")}>
           <span>{category}</span>{" "}
           <Select
             onValueChange={(value: string) => {
@@ -149,7 +150,12 @@ export default function ProductCategoriesTags({
             );
           })}
         </div>
+
         <div>
+<div className="tab:hidden my-2">
+  <Separator/>
+</div>
+
           <span>{tag}</span>{" "}
           <div className="flex space-s-3 items-center my-3">
             {!isAr && (
