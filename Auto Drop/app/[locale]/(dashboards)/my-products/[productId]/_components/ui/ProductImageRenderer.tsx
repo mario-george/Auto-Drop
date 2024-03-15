@@ -52,7 +52,7 @@ return [firstImage,...tempImages]
           {productImages.map((image: any, index: number) => {
             return (
                (
-                <Radio  value={index.toString()}>
+                <Radio  value={index.toString()} key={index.toString()}>
                 <Image
                   src={image.original}
                   alt="Product Image"
