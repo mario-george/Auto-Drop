@@ -3,7 +3,7 @@ import {
   GetProductByName,
   GetProductDetails,
   GetRecommendedProducts,
-  GetRecommendedProductsPost,
+  GetRecommendedProductsPost,GetProductDetailsTest
 } from "../controllers/aliexpress/GetProducts.controller";
 import { GetProductShippingDetailsByID } from "../controllers/aliexpress/products/shipping/GetProductsShipping";
 import Authentication from "../assits/Authentication";
@@ -21,6 +21,10 @@ router.get("/products", GetRecommendedProducts);
 router.post("/products", GetRecommendedProductsPost);
 router.get("/productsByName", GetProductByName);
 router.post("/getProductDetails", GetProductDetails);
+router.post("/getProductDetails/v2", [Authentication()],GetProductDetailsTest);
+
+
+
 router.post("/getShippingDetails", GetProductShippingDetailsByID);
 //delete later
 router.post(

@@ -514,3 +514,146 @@ export async function GetProductDetails(
     next(error);
   }
 }
+
+export async function GetProductDetailsTest(
+  req: Request&any,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const {
+      url,
+      first_level_category_name,
+      second_level_category_name,
+      target_sale_price,
+      target_original_price,
+    } = req.body;
+    let user: any = await TokenUserExtractor(req);
+    if (!user) return res.status(401).json({ message: "token is invalid" });
+    let aliexpressToken = await AliExpressToken.findOne({ userId: user?._id });
+    let tokenInfo = {
+      aliExpressAccessToken: aliexpressToken?.accessToken,
+      aliExpressRefreshToken: aliexpressToken?.refreshToken,
+    };
+    const product_id = await GetProductId(url);
+    /*     if (userType === "vendor")
+      await CheckSubscription(user_id, "products_limit"); */
+
+    const productInfo = await GetDetails({
+      product_id,
+      tokenInfo,
+      first_level_category_name,
+      second_level_category_name,
+      target_sale_price,
+      target_original_price,
+    });
+    const result = await getProductShippingServices(
+      {
+        sku_id: productInfo.sku_id,
+        country_code: "SA",
+        product_id,
+        product_num: "1",
+        price_currency: "SAR",
+      },
+      tokenInfo
+    );
+
+    
+    // 
+
+    let {
+      merchant,
+      main_price,
+      metadata_title,
+      metadata_description,
+      name,
+      price,
+      ...body
+    } = pick(productInfo, [
+      "name",
+      "description",
+      "vendor_commission",
+      "main_price",
+      "price",
+      "quantity",
+      "sku",
+      "images",
+      "options",
+      "metadata_title",
+      "metadata_description",
+      "product_type",
+      "original_product_id",
+      "merchant",
+    ]) satisfies Partial<ProductSchema>;
+
+    if (price < main_price) {
+      [price, main_price] = [main_price, price];
+    }
+    const { role, _id } = req.user;
+
+    const product = new Product({
+      name: name,
+      ...body,
+      price,
+      vendor_commission:0,
+      main_price,
+      merchant: role === "client" ? _id : merchant,
+      sku_id: req.body.sku_id,
+      vat: req.body?.vat && true,
+      first_level_category_name,
+      second_level_category_name,
+      target_sale_price,
+      target_original_price,
+      variantsArr:productInfo.variantsArr,
+    });
+
+
+
+    product.metadata_title = metadata_title;
+    product.metadata_description = metadata_description;
+
+    const options = body?.options?.map((option: any) => {
+      const values = option.values;
+      return {
+        ...option,
+        values: values?.map((value: any) => {
+          const valuePrice = value.original_price;
+          /* const vendorOptionPrice = parseFloat(
+            (valuePrice + (valuePrice * vendor_commission) / 100).toFixed(2)
+          ); */
+
+          return {
+            ...value,
+            original_price: valuePrice,
+            price: valuePrice,
+          };
+        }),
+      };
+    });
+
+    product.options = options;
+    let { category_id, category_name } = req.body;
+    product.category_name = category_name;
+    product.category_id = category_id;
+    //@ts-ignore
+    product.shipping = result;
+    
+    const jsonProduct = product.toJSON();
+   
+    await product.save();
+   return res.status(201).json({ product, success: true });
+/* 
+    attachShippingInfoToProuct(
+      product._id.toString(),
+      product.original_product_id,
+      req
+    ); */
+    // 
+    return res.json({ product, shipping: result ,message:"success"});
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+}
+
+

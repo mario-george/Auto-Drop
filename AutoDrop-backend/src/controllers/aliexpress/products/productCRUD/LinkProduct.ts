@@ -79,10 +79,13 @@ export const updateVariantFinalOption2 = async (
         //@ts-ignore
         product?.shipping?.length!=0 && shippingChoice =="shippingIncluded"
       ) {
-
-        let shippingIncludedChoiceIndex = product?.shippingIncludedChoiceIndex || 0 ;
+        let shippingIncludedChoiceIndex =  0 ;
+if(product?.shippingIncludedChoice){
+  shippingIncludedChoiceIndex = product?.shippingIncludedChoiceIndex || 0; 
+}
         //@ts-ignore
-       
+       console.log("product?.shippingIncludedChoice",product?.shippingIncludedChoice)
+       console.log("product?.shippingIncludedChoiceIndex",product?.shippingIncludedChoiceIndex)
         let extraShippingCost =
           //@ts-ignore
           product?.shipping?.[shippingIncludedChoiceIndex]?.freight?.cent / 100;

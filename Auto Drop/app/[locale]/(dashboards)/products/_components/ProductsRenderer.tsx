@@ -55,13 +55,10 @@ export default function ProductsRenderer({
   const { fetchAndSetAR, handleCheckChangeAR, productsAR, setProductsAR } =
     useProductsAR(lang);
   let {
-    commissionV,
     products,
-    addCommissionHandler,
-    setCommissionV,
+ 
     handleCheckChange,
     productsShippingInfo,
-    shippingInfoPending,
     setProducts,
     fetchAndSet2,
     setProductsShippingInfo,
@@ -77,24 +74,6 @@ export default function ProductsRenderer({
 
   const dispatch = useDispatch();
 
-  const toggleShoppingCartActivated = (index: number) => {
-    console.log(productsShippingInfo[index][0].activated);
-    setProductsShippingInfo((productsShipping) => {
-      return productsShipping.map((shipping, shippingIndex) => {
-        if (shippingIndex === index) {
-          return [
-            {
-              ...shipping[0],
-              activated: !shipping[0].activated,
-            },
-            ...shipping.slice(1),
-          ];
-        } else {
-          return shipping;
-        }
-      });
-    });
-  };
 
   const pagesProducts = useSelector((state: RootState) => state.products.pages);
 
@@ -104,7 +83,6 @@ export default function ProductsRenderer({
       setLang(language);
       setProductsAR([]);
       setProducts([]);
-      setCommissionV([]);
     });
 
     dispatch(resetPagesProducts());
@@ -120,24 +98,16 @@ export default function ProductsRenderer({
     showShippingHandler,
     products,
     productsShippingInfo,
-    toggleShoppingCartActivated,
     handleCheckChange,
     locale,
-    shippingInfoPending,
-    commissionV,
-    setCommissionV,
-    addCommissionHandler,
+
   };
   let ProductsListARProps = {
     productsAR,
     productsShippingInfo,
-    toggleShoppingCartActivated,
     handleCheckChangeAR,
     locale,
-    shippingInfoPending,
-    commissionV,
-    setCommissionV,
-    addCommissionHandler,
+
     lang,
     showShippingForProduct,
     showShippingHandler,

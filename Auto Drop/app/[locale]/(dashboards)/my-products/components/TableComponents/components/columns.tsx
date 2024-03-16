@@ -86,10 +86,10 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
       cell: ({ row }) => {
         let price: any = row.getValue("sellPrice");
         //@ts-ignore
-        let { variantsArr } = row.original;
-        if (price == 0 || price == null) {
+        // let { variantsArr } = row.original;
+      /*   if (price == 0 || price == null) {
           price = variantsArr[0].offer_sale_price;
-        }
+        } */
         return (
           <div className="flex justify-center space-s-1 ">
             <span>{price}</span>
@@ -138,10 +138,10 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
       cell: ({ row }) => {
         let inventory: any = row.getValue("inventory");
         //@ts-ignore
-        let { variantsArr } = row.original;
-        if (inventory == 0 || inventory == null) {
+        // let { variantsArr } = row.original;
+       /*  if (inventory == 0 || inventory == null) {
           inventory = variantsArr[0].sku_available_stock;
-        }
+        } */
         return <div className="flex justify-center">{inventory}</div>;
       },
       enableSorting: false,

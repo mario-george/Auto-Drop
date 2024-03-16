@@ -14,8 +14,8 @@ export async function getUserProducts(
     const { role, _id } = req.user;
     console.log( req.user._id )
     console.log( typeof req.user._id )
-    const userProducts = await Product.find({ merchant: req.user._id });
-
+    // const userProducts = await Product.find({ merchant: req.user._id });
+    const userProducts = await Product.find({ merchant: req.user._id }).select('_id name price quantity images first_level_category_name salla_product_id');
     return res.json({ userProducts, success: true });
     let {
       merchant,
