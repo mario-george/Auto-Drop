@@ -131,5 +131,24 @@ wallet page sttyles
 }
 
 .productsCard{
-  @apply p-3 flex flex-col  gap-y-3 dark:bg-[#2e464f] dark:text-white
+  @apply p-3 flex flex-col  gap-y-3 dark:bg-[#2e464f] dark:text-white mt-auto
+}
+
+.shippingInfoInnerContainer {
+@apply flex flex-col space-y-2 pl-2 mt-6 p-3
+}
+.scrollAreaShipping{
+  @apply h-[14rem] ml:h-[10rem] mm:h-[18.3rem] tab:h-[8rem] lap:h-[18rem]
+}
+.shippingCartIcon {
+
+  @apply absolute top-3 k4:top-[1rem]
+}
+
+.shippingCartIconImage{
+  @apply rounded-full cursor-pointer w-[30px] h-[30px] tab:w-auto tab:h-auto
+}
+
+.shippingMethodsTitle{
+  @apply mx-auto bg-[#f0f3f4] text-center pt-10  p-6 text-sm 
 }
