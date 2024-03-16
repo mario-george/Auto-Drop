@@ -641,7 +641,7 @@ export async function GetProductDetailsTest(
     const jsonProduct = product.toJSON();
    
     await product.save();
-   return res.status(201).json({ product, success: true });
+   return res.status(201).json({  success: true });
 /* 
     attachShippingInfoToProuct(
       product._id.toString(),
