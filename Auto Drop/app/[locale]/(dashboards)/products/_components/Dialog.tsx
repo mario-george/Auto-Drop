@@ -30,10 +30,7 @@ export default function SubmitProducts({
   let submitHandler = async () => {
     setLoading(true);
     console.log(toBeSentProductsArr);
-    console.log(toBeSentProductsArr);
-    console.log(toBeSentProductsArr);
-    console.log(toBeSentProductsArr);
-    console.log(toBeSentProductsArr);
+
     const promises = toBeSentProductsArr.map((prod: any) => {
       let {
         first_level_category_name,
@@ -42,72 +39,42 @@ export default function SubmitProducts({
         target_original_price,
         product_detail_url: url,
       } = prod;
-      console.log(
-        first_level_category_name,
-        second_level_category_name,
-        target_sale_price,
-        target_original_price,
-        url
-      );
-      return axiosInstance.post("/aliexpress/getProductDetails", {
+ 
+  /*     return axiosInstance.post("/aliexpress/getProductDetails", {
         url: prod.product_detail_url,
         first_level_category_name,
         second_level_category_name,
         target_sale_price,
         target_original_price,
       });
+    }); */
+    return axiosInstance.post("/aliexpress/getProductDetails/v2", {
+      url: prod.product_detail_url,
+      first_level_category_name,
+      second_level_category_name,
+      target_sale_price,
+      target_original_price,
     });
+  });
     try {
       const productsDetails = await Promise.allSettled(promises);
-      console.log(productsDetails);
       const promises2 = productsDetails.map(
         (result: any, index: number): any => {
           if (result.status === "rejected") {
             console.error(`Promise ${index} failed with ${result.reason}`);
             return;
           }
-          let prodDetail = result.value;
-
-          console.log("prodDetail.data", prodDetail.data);
-
-          let price;
-          if (prodDetail.data.product.options) {
-            const collectValues = new Array().concat(
-              ...prodDetail.data.product.options.map(
-                (option: any) => option.values
-              )
-            );
-            // you can make an array for prices for variants here aswell
-            let total =
-              (collectValues && collectValues[0]?.original_price) || 0;
-            const commissionPrice =
-              total *
-              ((Number(toBeSentProductsArr[index].vendor_commission) || 0) /
-                100);
-            price = parseFloat((total + commissionPrice).toFixed(2));
-          }
-
-          console.log(
-            "vendor_commission",
-            prodDetail?.data?.product?.vendor_commission
-          );
-          console.log(
-            "vendor_commission",
-            prodDetail?.data?.product?.vendor_commission
-          );
-          console.log("product", prodDetail?.data?.product);
-          console.log("product", prodDetail?.data?.product);
-          console.log("product", prodDetail?.data?.product);
-          return axiosInstance.post("/aliexpress/product/createProduct", {
+console.log(result)
+          /* return axiosInstance.post("/aliexpress/product/createProduct", {
             ...prodDetail.data.product,
             vendor_commission:
               Number(toBeSentProductsArr[index].vendor_commission) || 0,
             price,
-          });
+          }); */
         }
       );
-      const res = await Promise.all(promises2);
-      console.log(res);
+      // const res = await Promise.all(promises2);
+      // console.log(res);
     } catch (error) {
       console.error(error);
     }
