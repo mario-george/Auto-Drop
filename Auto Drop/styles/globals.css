@@ -138,7 +138,7 @@ wallet page sttyles
 @apply flex flex-col space-y-2 pl-2 mt-6 p-3
 }
 .scrollAreaShipping{
-  @apply h-[14rem] ml:h-[10rem] mm:h-[18.3rem] tab:h-[8rem] lap:h-[18rem]
+  @apply h-[14rem] ml:h-[10rem] mm:h-[18.3rem] tab:h-[8rem] lap:h-[13rem]
 }
 .shippingCartIcon {
 
@@ -151,4 +151,8 @@ wallet page sttyles
 
 .shippingMethodsTitle{
   @apply mx-auto bg-[#f0f3f4] text-center pt-10  p-6 text-sm 
+}
+
+.productsOriginalPriceText{
+  @apply text-xs text-[#c2464f] dark:text-red-500 line-through tab:text-[10px] ml:text-[10px] lap:text-[12px]
 }

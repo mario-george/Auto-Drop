@@ -3,16 +3,11 @@ import { FetchSpinner } from "../ProductsSpinner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import MotionWrapperExit from "../../../_components/shared/MotionWrapperExit";
 import MotionWrapper from "../../../_components/shared/MotionWrapper";
-import CurrencyFormatter, {
-  CurrencyFormatterShippingInfo,
-} from "../CurrencyFormatter";
+import CurrencyFormatter from "../CurrencyFormatter";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { BiSend } from "react-icons/bi";
 import renderRatingStars from "../RenderRatingStarts";
 import CartSVG from "../../../../../../public/client/products/CartSVG";
 
@@ -21,7 +16,6 @@ export default function ProductsListAR({
   productsShippingInfo,
   handleCheckChangeAR,
   locale,
-
   lang,
   showShippingForProduct,
   showShippingHandler,
@@ -33,12 +27,6 @@ export default function ProductsListAR({
       <MotionWrapper locale="ar">
         <div className="productsContainerGrid">
           {productsAR?.map((product: any, i: number) => {
-            let shippingInfoActive =
-              productsShippingInfo &&
-              productsShippingInfo.length == productsAR.length &&
-              productsShippingInfo[i] &&
-              productsShippingInfo[i][0] &&
-              productsShippingInfo[i][0].activated;
             let newShippingInfoActive =
               productsShippingInfo &&
               productsShippingInfo[i] &&
@@ -148,14 +136,11 @@ export default function ProductsListAR({
                           <div
                             className={` text-[#253439] text-xs dark:text-white`}
                           >
-                            {
-                               product.product_title.substring(0, 25)}
+                            {product.product_title.substring(0, 25)}
                             ...
                           </div>
                           <div>
-                           
-                          <CartSVG />
-
+                            <CartSVG />
                           </div>
                         </div>
                       </div>
@@ -168,7 +153,7 @@ export default function ProductsListAR({
                           </span>
                           {product.target_original_price !==
                           product.target_sale_price ? (
-                            <span className="text-xs text-[#c2464f] dark:text-red-500 line-through text-[12px]">
+                            <span className="productsOriginalPriceText" >
                               {CurrencyFormatter(product.target_original_price)}
                             </span>
                           ) : (
@@ -203,13 +188,14 @@ export default function ProductsListAR({
                 <div
                   className={cn(
                     "shippingCartIcon ",
-                    locale == "ar" ? `right-[1rem]` : `left-3 tab:left-2 k4:left-[1rem]`
+                    locale == "ar"
+                      ? `right-[1rem]`
+                      : `left-3 tab:left-2 k4:left-[1rem]`
                   )}
                 >
                   <div
                     className="overflow-hidden"
                     onClick={() => {
-                 
                       showShippingHandler(i);
                     }}
                   >
@@ -240,7 +226,6 @@ export default function ProductsListAR({
                     />
                   </div>
                 )}
-          
               </Card>
             );
           })}

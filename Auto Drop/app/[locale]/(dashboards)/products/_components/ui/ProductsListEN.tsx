@@ -3,16 +3,12 @@ import { FetchSpinner } from "../ProductsSpinner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import MotionWrapperExit from "../../../_components/shared/MotionWrapperExit";
 import MotionWrapper from "../../../_components/shared/MotionWrapper";
-import CurrencyFormatter, {
-  CurrencyFormatterShippingInfo,
-} from "../CurrencyFormatter";
+import CurrencyFormatter from "../CurrencyFormatter";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { BiSend } from "react-icons/bi";
+
 import renderRatingStars from "../RenderRatingStarts";
 import CartSVG from "../../../../../../public/client/products/CartSVG";
 
@@ -32,12 +28,6 @@ export default function ProductsListEN({
       <MotionWrapper locale="en">
         <div className="productsContainerGrid">
           {products?.map((product: any, i: number) => {
-            let shippingInfoActive =
-              productsShippingInfo &&
-              productsShippingInfo.length == products.length &&
-              productsShippingInfo[i] &&
-              productsShippingInfo[i][0] &&
-              productsShippingInfo[i][0].activated;
             let newShippingInfoActive =
               productsShippingInfo &&
               productsShippingInfo[i] &&
@@ -103,7 +93,7 @@ export default function ProductsListEN({
                                         {shipping.duration}
                                       </span>
                                     </div>
-                                 
+
                                     <div className="flex space-s-3 text-[#C1121F]">
                                       {" "}
                                       <span>Price:</span>{" "}
@@ -136,8 +126,6 @@ export default function ProductsListEN({
                         height={300}
                         width={300}
                         alt="aliexpressProduct"
-
-
                       />
                     </div>
 
@@ -153,8 +141,6 @@ export default function ProductsListEN({
                           ...
                         </div>
                         <div>
-                        
-
                           <CartSVG />
                         </div>
                       </div>
@@ -197,7 +183,6 @@ export default function ProductsListEN({
                             width={66}
                             height={21}
                             alt="aliexpressCard"
-                            
                           />
                         </a>
                       </div>
@@ -213,7 +198,6 @@ export default function ProductsListEN({
                   <div
                     className="overflow-hidden"
                     onClick={() => {
-                   
                       showShippingHandler(i);
                     }}
                   >
@@ -245,7 +229,6 @@ export default function ProductsListEN({
                     />
                   </div>
                 )}
-           
               </Card>
             );
           })}
