@@ -31,8 +31,20 @@ export const updateVariantFinalOption2 = async (
   const data = await getProductVariants(product.salla_product_id, 1, token);
   console.log(data?.pagination?.totalPages);
 
-    const variants = data.data.filter((e: any) => !e.sku);
+    const variants = data?.data?.filter((e: any) => !e.sku);
+if(!variants){
 
+  console.log("No variants")
+  console.log("No variants")
+  console.log("No variants")
+  console.log("No variants")
+  console.log("No variants")
+  console.log("No variants")
+  console.log("No variants")
+  console.log("No variants")
+  console.log("No variants")
+  console.log("No variants")
+}
     let variantsIds = variants.map((el: any) => {
       return el.id;
     });
@@ -74,7 +86,7 @@ export const updateVariantFinalOption2 = async (
      }
    }
 
-  console.log("product?.options",product?.options)
+  // console.log("product?.options",product?.options)
       if (
         //@ts-ignore
         product?.shipping?.length!=0 && shippingChoice =="shippingIncluded"

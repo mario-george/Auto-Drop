@@ -608,9 +608,9 @@ export async function GetProductDetailsTest(
     });
 
 
-
-    product.metadata_title = metadata_title;
-    product.metadata_description = metadata_description;
+    product.metadata_title = productInfo.metadata_title;
+    product.metadata_description = productInfo.metadata_description;
+    product.description = productInfo.description;
 
     const options = body?.options?.map((option: any) => {
       const values = option.values;
