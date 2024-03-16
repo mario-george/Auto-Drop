@@ -11,11 +11,7 @@ export default function useProducts({
   productsAR,
 }: any) {
   const [products, setProducts] = useState<any[]>([]);
-  const [shippingInfoPending, setShippingInfoPending] =
-    useState<boolean>(false);
-  const [commissionV, setCommissionV] = useState(
-    Array(products.length).fill(0)
-  );
+
   let lengthOfProducts = products.length;
   if (lang == "ar") {
     lengthOfProducts = productsAR.length;
@@ -46,13 +42,7 @@ export default function useProducts({
     return resp.data.result;
   }, []);
   useEffect(() => {
-    console.log("use effect reset is active");
-    if (lang == "en" && products.length !== commissionV.length) {
-      setCommissionV(Array(products.length).fill(0));
-    }
-    if (lang == "ar" && productsAR.length !== commissionV.length) {
-      setCommissionV(Array(productsAR.length).fill(0));
-    }
+
     if (products.length !== productsShippingInfo.length && lang == "en") {
       setProductsShippingInfo(
         Array(products.length).fill([
@@ -116,22 +106,7 @@ export default function useProducts({
       })
     );
   };
-  /*   useEffect(() => {
-    if (products.length !== productsShippingInfo.length) {
-      setProductsShippingInfo(
-        Array(products.length).fill([
-          {
-            shippingType: "",
-            price: "",
-            profitAfterDiscount: "",
-            duration: "",
-            activated: false,
-            loading: false,
-          },
-        ])
-      );
-    }
-  }, [products.length]); */
+
   useEffect(() => {
     const productsPage = pagesProducts.find(
       (p) => p.page === currPage && p.lang === lang
@@ -162,114 +137,6 @@ export default function useProducts({
     }
   }, [pagesProducts, currPage]);
 
-  const addCommissionHandler = async (
-    index: number,
-    product: any,
-    value: any
-  ) => {
-    setShippingInfoPending(true);
-    if (!value) {
-      value = 0;
-    }
-    console.log(lang);
-    console.log(product);
-    /*   if (lang == "en") {
-      setProducts((products) =>
-        products.map((product, i) => {
-          if (i === index) {
-            return { ...product, vendor_commission: value };
-          }
-          return product;
-        })
-      );
-    } else {
-      setProductsAR((products: any) => {
-        return productsAR.map((product: any, i: number) => {
-          if (i === index) {
-            return { ...product, vendor_commission: value };
-          }
-          return product;
-        });
-      });
-    }
-    */
-    setProductsShippingInfo((productsShipping) => {
-      return productsShipping.map((shipping, shippingIndex) => {
-        if (shippingIndex === index) {
-          return [{ ...shipping[0], loading: "pending" }];
-        } else {
-          return shipping;
-        }
-      });
-    });
-    console.log(product.product_id);
-    const shippingArr = await shoppingCartHandler(product.product_id);
-    console.log(productsShippingInfo);
-
-    if (shippingArr.length !== 0) {
-      shippingArr.forEach((element: any, shippingIndexNumber: number) => {
-        let profitAfterDiscount =
-          (product.target_sale_price * value) / 100 -
-          element.freight.cent / 100; //subtract the shipping cost
-        let price = product.target_sale_price;
-        let shipping_method = element.shipping_method;
-        let duration = element.estimated_delivery_time;
-
-        setProductsShippingInfo((productsShipping) => {
-          return productsShipping.map((shipping, shippingIndex) => {
-            if (shippingIndex === index) {
-              if (shippingIndexNumber == 0) {
-                return [
-                  {
-                    shippingType: shipping_method,
-                    duration,
-                    activated: true,
-                    price,
-                    profitAfterDiscount,
-                    loading: false,
-                  },
-                ];
-              }
-              return [
-                ...shipping,
-                {
-                  shippingType: shipping_method,
-                  duration,
-                  activated: true,
-                  price,
-                  profitAfterDiscount,
-                  loading: false,
-                },
-              ];
-            } else {
-              return shipping;
-            }
-          });
-        });
-      });
-    } else {
-      setProductsShippingInfo((productsShipping: any): any => {
-        return productsShipping.map((shipping: any, shippingIndex: number) => {
-          if (index === shippingIndex) {
-            return [
-              {
-                ...shipping[0],
-                loading: false,
-                noShipping: true,
-                activated: true,
-              },
-            ];
-          } else {
-            return shipping;
-          }
-        });
-      });
-    }
-    setShippingInfoPending(false);
-
-    console.log(shippingArr);
-    console.log(productsShippingInfo);
-  };
   useEffect(() => {
     let updateAllProductShipping = async function () {
       let prodSh;
@@ -336,13 +203,9 @@ export default function useProducts({
   };
 
   return {
-    commissionV,
     products,
-    addCommissionHandler,
-    setCommissionV,
     handleCheckChange,
     productsShippingInfo,
-    shippingInfoPending,
     setProducts,
     fetchAndSet2,
     setProductsShippingInfo,
