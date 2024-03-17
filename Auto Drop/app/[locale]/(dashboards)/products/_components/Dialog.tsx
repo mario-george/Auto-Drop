@@ -29,7 +29,7 @@ export default function SubmitProducts({
 
   let submitHandler = async () => {
     setLoading(true);
-    console.log(toBeSentProductsArr);
+    // console.log(toBeSentProductsArr);
 
     const promises = toBeSentProductsArr.map((prod: any) => {
       let {
@@ -64,7 +64,7 @@ export default function SubmitProducts({
             console.error(`Promise ${index} failed with ${result.reason}`);
             return;
           }
-console.log(result)
+// console.log(result)
           /* return axiosInstance.post("/aliexpress/product/createProduct", {
             ...prodDetail.data.product,
             vendor_commission:
