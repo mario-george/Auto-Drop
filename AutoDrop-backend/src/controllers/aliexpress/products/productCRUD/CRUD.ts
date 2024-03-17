@@ -658,7 +658,7 @@ export const getProductVariants = async (
 
   const options = {
     method: "GET",
-    url: `https://api.salla.dev/admin/v2/products/${id}/variants`,
+    url: `https://api.salla.dev/admin/v2/products/${id}/variants?page=${pages}`,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -667,6 +667,7 @@ export const getProductVariants = async (
   };
   try {
     const { data } = await axios.request(options);
+    console.log("variantsData",data)
     if (data.status === 200) {
       return data;
     } else return;
