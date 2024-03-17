@@ -195,7 +195,6 @@ async function GetProductOptions(SKUs: object[]) {
     concatValues: any[] = [],
     collectOptions: any[] = [],
     collectValues: any[] = [];
-
   collectValues = SKUs.map((sku: any) => {
     return sku?.ae_sku_property_dtos?.ae_sku_property_d_t_o?.map((ev: any) => {
       const {
@@ -225,11 +224,9 @@ async function GetProductOptions(SKUs: object[]) {
       };
     });
   });
-
   concatValues = await Promise.all(new Array().concat(...collectValues));
   collectOptions = uniq(map(concatValues, "sku_property_name"));
   let sku_image_1;
-
   options = await Promise.all(
     collectOptions.map((option: string, index: number) => {
       const uniqValues = uniqBy(
@@ -240,7 +237,9 @@ async function GetProductOptions(SKUs: object[]) {
             property_value_definition_name:
               e?.property_value_definition_name || e?.sku_property_value,
           })),
-        "sku_property_value"
+        "property_value_id"
+        // sku_property_value
+        // old property used for filtering
       );
 
       // console.log(uniqValues)
@@ -315,7 +314,6 @@ async function GetProductImages(URLs: string) {
   return images;
 }
 
-//
 export async function GetDetails({
   product_id,
   tokenInfo,
@@ -607,9 +605,18 @@ export async function GetProductDetailsTest(
       variantsArr:productInfo.variantsArr,
     });
 
+let metadataDescSliced =  productInfo.metadata_description
+if( productInfo?.metadata_description?.length > 70){
+  metadataDescSliced = productInfo.metadata_description.slice(0,70)
 
+}
+console.log("productInfo.description",productInfo.description.slice(0,20))
+if(!productInfo.description ){
+
+  console.log("NO DESCRIPTION")
+}
     product.metadata_title = productInfo.metadata_title;
-    product.metadata_description = productInfo.metadata_description;
+    product.metadata_description =metadataDescSliced;
     product.description = productInfo.description;
 
     const options = body?.options?.map((option: any) => {
