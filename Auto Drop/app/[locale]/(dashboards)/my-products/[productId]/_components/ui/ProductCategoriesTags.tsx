@@ -33,6 +33,8 @@ export default function ProductCategoriesTags({
 }) {
   let isAr = locale == "ar";
   const addTagHandler = () => {
+
+    if(inputRef.current?.value=="") return 
     let val: string = inputRef.current?.value ?? "";
     console.log("val", val);
     console.log(val);
@@ -40,6 +42,7 @@ export default function ProductCategoriesTags({
     setSelectedTags((prevTags: any) => {
       return prevTags ? [...prevTags, val] : [val];
     });
+    if(inputRef.current) inputRef.current.value = ""
   };
   const inputRef = React.useRef<HTMLInputElement>(null);
   return (
