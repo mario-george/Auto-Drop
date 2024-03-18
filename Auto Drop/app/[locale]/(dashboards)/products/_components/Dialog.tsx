@@ -22,10 +22,10 @@ export default function SubmitProducts({
   currPageProdEN,
   currPageProdAR,
   currPage,
-  locale,
+  locale,setLoading
 }: any) {
   const router = useRouter();
-  const { LoaderComponent, setLoading } = useLoader();
+  // const { LoaderComponent, setLoading } = useLoader();
 
   let submitHandler = async () => {
     setLoading(true);
@@ -110,16 +110,16 @@ export default function SubmitProducts({
   };
   return (
     <>
-      {LoaderComponent}
+        {/* {LoaderComponent} */}
       <Dialog
         toBeSentProductsArr={toBeSentProductsArr}
         submitHandler={submitHandler}
-      >
+        >
         <Button
           className="fixed bottom-12 !bg-blue-300 rounded-full min-w-[3rem] min-h-[3rem] shadow z-[20]"
           onClick={submitProductsHandler}
           disabled={toBeSentProductsArr.length === 0}
-        >
+          >
           <FaPlus className="text-black" />
         </Button>
       </Dialog>
