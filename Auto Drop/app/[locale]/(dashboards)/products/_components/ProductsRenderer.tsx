@@ -10,7 +10,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store";
 import { useRouter, useSearchParams } from "next/navigation";
 import Header from "./Header";
-import Categories from "./Categories";
 import Searchbar from "../../_components/Products/Searchbar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
@@ -34,6 +33,7 @@ import ProductsListEN from "./ui/ProductsListEN";
 import ProductsListAR from "./ui/ProductsListAR";
 import SearchProduct from "../../_components/shared/ui/SearchProduct";
 import useLoader from "@/components/loader/useLoader";
+import useCategories from "./Categories";
 
 // pages / products  state
 
@@ -98,8 +98,22 @@ export default function ProductsRenderer({
   });
 
   const dispatch = useDispatch();
-
-
+  let CategoriesProps = {
+    categories,
+    allProducts,
+    searchByProd,
+     smartDevices,
+    electronics,
+    clothes,
+    accessories,
+    perfumes,
+    decor,
+    sportsSupplies,
+    stationary,
+    cosmeticProducts,
+  
+  }
+let  {currentCategory,CategoriesRendererComponent} = useCategories(CategoriesProps)
   const pagesProducts = useSelector((state: RootState) => state.products.pages);
 
   const toogleLang = async (language: string) => {
@@ -137,21 +151,7 @@ export default function ProductsRenderer({
     showShippingForProduct,
     showShippingHandler,
   };
-  let CategoriesProps = {
-    categories,
-    allProducts,
-    searchByProd,
-     smartDevices,
-    electronics,
-    clothes,
-    accessories,
-    perfumes,
-    decor,
-    sportsSupplies,
-    stationary,
-    cosmeticProducts,
-  
-  }
+
   return (
     <div className="dark:text-white">
 
@@ -164,7 +164,7 @@ export default function ProductsRenderer({
         value={""}
         className="flex justify-center"
       />
-      <Categories {...CategoriesProps} />
+      {CategoriesRendererComponent}
 
       {lang == "en" ? (
         <>
