@@ -436,7 +436,7 @@ export async function GetDetails({
             shipping: { name: "default", price: 0 },
             sku_id: SKUs[0].sku_id,
             vat: false,
-            category_id: ae_item_base_info_dto.category_id,
+            // category_id: ae_item_base_info_dto.category_id,
             first_level_category_name,
             second_level_category_name,
             target_sale_price: targetSalePrice,
@@ -640,8 +640,8 @@ if(!productInfo.description ){
 
     product.options = options;
     let { category_id, category_name } = req.body;
-    product.category_name = category_name;
-    product.category_id = category_id;
+    // product.category_name = category_name;
+    // product.category_id = category_id;
     //@ts-ignore
     product.shipping = result;
     
