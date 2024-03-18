@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Radio, RadioGroup } from "@chakra-ui/react";
 
@@ -14,10 +14,21 @@ export default function ProductImageRenderer({
   productImages,
 }: any) {
   // const [value,setValue]=useState(product?.images[0].original)
-
-  let defaultImageIndex = 0;
-  if (productImages && productImages?.length > 0) {
+const [initialImages,setInitialImages]=useState(productImages||[])
+useEffect(()=>{
+  if(productImages.length!==initialImages.length){
+  setInitialImages(productImages)
+  }
+},[])
+let defaultImageIndex = 0;
+/*   if (productImages && productImages?.length > 0) {
     defaultImageIndex = productImages.findIndex((image: ProductImage) => {
+      return image.default;
+    });
+  }
+ */
+  if (initialImages && initialImages?.length > 0) {
+    defaultImageIndex = initialImages.findIndex((image: ProductImage) => {
       return image.default;
     });
   }
@@ -37,6 +48,17 @@ export default function ProductImageRenderer({
       firstImage.default = true;
       return [firstImage, ...tempImages];
     });
+
+    setInitialImages((prevImages: ProductImage[]) => {
+
+      let tempImages = [...prevImages ]
+      tempImages = tempImages.map((image: ProductImage) => {
+        return { ...image, default: false };
+      })
+
+      tempImages[+newIndexString].default = true  
+return tempImages
+    })
   };
 
   // console.log("product.images", product.images);
@@ -46,7 +68,7 @@ export default function ProductImageRenderer({
       <div className="flex flex-col">
         <div className="flex">
           <Image
-            src={productImages[defaultImageIndex]?.original}
+            src={initialImages[defaultImageIndex]?.original}
             alt="Product Image"
             width={518}
             height={691}
@@ -58,7 +80,7 @@ export default function ProductImageRenderer({
           onChange={handleImageDefaultChange}
         >
           <div className="grid grid-cols-3 tab:grid-cols-5 justify-center gap-3 my-3">
-            {productImages.map((image: any, index: number) => {
+            {initialImages.map((image: any, index: number) => {
               return (
                 <Radio value={index.toString()} key={index.toString()}>
                   <Image
