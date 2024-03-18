@@ -33,6 +33,7 @@ import useProductsEN from "./hooks/useProductsEN";
 import ProductsListEN from "./ui/ProductsListEN";
 import ProductsListAR from "./ui/ProductsListAR";
 import SearchProduct from "../../_components/shared/ui/SearchProduct";
+import useLoader from "@/components/loader/useLoader";
 
 // pages / products  state
 
@@ -50,6 +51,7 @@ export default function ProductsRenderer({
   allProducts: string;
 }) {
   const [currPage, setCurrPage] = useState("1");
+  const { LoaderComponent, setLoading } = useLoader();
 
   const [lang, setLang] = useState<string>("en");
   const { fetchAndSetAR, handleCheckChangeAR, productsAR, setProductsAR } =
@@ -114,6 +116,8 @@ export default function ProductsRenderer({
   };
   return (
     <div className="dark:text-white">
+
+{LoaderComponent}
       <Header toogleLang={toogleLang} shops={shops} />
       <SearchProduct
         isAr={locale == "ar"}
@@ -156,6 +160,7 @@ export default function ProductsRenderer({
           currPageProdAR={productsAR}
           currPage={currPage}
           lang={lang}
+          setLoading={setLoading}
         />
       </>
     </div>
