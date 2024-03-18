@@ -6,59 +6,62 @@ import { useState } from "react";
 interface CategoryObject {
   name: string;
   path: string;
-} 
+}
 
 export default function useCategories({
   categories,
-    allProducts,
-     smartDevices,
-    electronics,
-    clothes,
-    accessories,
-    perfumes,
-    decor,
-    sportsSupplies,
-    stationary,
-    cosmeticProducts,
+  allProducts,
+  smartDevices,
+  electronics,
+  clothes,
+  accessories,
+  perfumes,
+  decor,
+  sportsSupplies,
+  stationary,
+  cosmeticProducts,
 }: {
   categories: string;
   allProducts: string;
-  smartDevices:string
-  electronics:string
-  clothes:string
-  accessories:string
-  perfumes:string
-  decor:string
-  sportsSupplies:string
-  stationary:string
-  cosmeticProducts:string
-
+  smartDevices: string;
+  electronics: string;
+  clothes: string;
+  accessories: string;
+  perfumes: string;
+  decor: string;
+  sportsSupplies: string;
+  stationary: string;
+  cosmeticProducts: string;
 }) {
+  const [currentCategory, setCurrentCategory] = useState("allProducts");
 
+  const changeCategoryHandler = (value: string) => {
+    setCurrentCategory(value);
+  };
+  let categoriesArray = [
+    { name: smartDevices, path: "smartDevices" },
+    { name: electronics, path: "electronics" },
+    { name: clothes, path: "clothes" },
+    { name: accessories, path: "accessories" },
 
-const [currentCategory ,setCurrentCategory]= useState("allProducts") 
+    { name: perfumes, path: "perfumes" },
 
-const changeCategoryHandler = (value:string)=>{
-  setCurrentCategory(value)
-}
-let categoriesArray = [ { name: smartDevices,path: "smartDevices"}, {name:electronics, path:"electronics" }, 
-{name:clothes , path:"clothes"},
- {name :accessories , path:"accessories"},
- 
- {name: perfumes , path:"perfumes"},
- 
- ,
-  {name: decor , path:"decor"}, 
- 
-  {name: stationary  , path:"stationary"},
-  {name:cosmeticProducts , path:"cosmeticProducts"},
- {name: sportsSupplies , path:"sportsSupplies"},
-  ]
-  return (
-    <>
+    ,
+    { name: decor, path: "decor" },
+
+    { name: stationary, path: "stationary" },
+    { name: cosmeticProducts, path: "cosmeticProducts" },
+    { name: sportsSupplies, path: "sportsSupplies" },
+  ];
+const CategoriesRendererComponent =(<>
       <div className="text-2xl my-3">{categories}</div>
       <div className="bg-white rounded-lg shadow px-2 py-2 flex items-center overflow-x-auto">
-        <div className="flex space-s-3 items-center dark:text-[#253439] hover:cursor-pointer " onClick={()=>{setCurrentCategory("allProducts")}}>
+        <div
+          className="flex space-s-3 items-center dark:text-[#253439] hover:cursor-pointer "
+          onClick={() => {
+            setCurrentCategory("allProducts");
+          }}
+        >
           {allProducts}
           <Separator
             className="py-3 w-[1px] bg-black mx-2"
@@ -66,25 +69,31 @@ let categoriesArray = [ { name: smartDevices,path: "smartDevices"}, {name:electr
           />
         </div>
         <div className="flex space-s-3">
-
-{categoriesArray.map((categoryObject:CategoryObject|undefined)=>{
-if(!categoryObject || !categoryObject.path || !categoryObject.name){
-return <></>
-}
-return (
-<div className="hover:cursor-pointer " onClick={()=>{changeCategoryHandler(categoryObject.path)}}>
-<div className="text-[#253439] dark:text-white">
-{categoryObject.name}
-  
-</div>
-
-</div>
-
-)
-
-})}
+          {categoriesArray.map((categoryObject: CategoryObject | undefined) => {
+            if (
+              !categoryObject ||
+              !categoryObject.path ||
+              !categoryObject.name
+            ) {
+              return <></>;
+            }
+            return (
+              <div
+                className="hover:cursor-pointer tab:text-[15px] "
+                onClick={() => {
+                  changeCategoryHandler(categoryObject.path);
+                }}
+              >
+                <div className="text-[#253439] dark:text-white whitespace-nowrap">
+                  {categoryObject.name}
+                </div>
+              </div>
+            );
+          })}
         </div>
-        </div>
-    </>
-  );
+      </div>
+    </>)
+
+
+return {currentCategory,CategoriesRendererComponent}
 }
