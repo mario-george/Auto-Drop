@@ -127,7 +127,7 @@ const PatchProduct = catchAsync(
 
       shippingIncludedChoice,
       shippingIncludedChoiceIndex,
-      productEditFormOrigin,
+      // productEditFormOrigin,
       variantsArr,
       options,
       images,
@@ -144,12 +144,12 @@ const PatchProduct = catchAsync(
     if (variantsArr) {
       product.variantsArr = variantsArr;
     }
-    if (productEditFormOrigin) {
+/*     if (productEditFormOrigin) {
       product.productEditFormOrigin = productEditFormOrigin;
     } else {
       product.productEditFormOrigin = false;
     }
-
+ */
     if (selectedTags && selectedTags.length > 0) {
       sallaTags = await tagsSallaHandler(sallaAccessToken, selectedTags);
     }
