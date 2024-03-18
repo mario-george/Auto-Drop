@@ -11,7 +11,6 @@ interface CategoryObject {
 export default function useCategories({
   categories,
     allProducts,
-    searchByProd,
      smartDevices,
     electronics,
     clothes,
@@ -24,7 +23,6 @@ export default function useCategories({
 }: {
   categories: string;
   allProducts: string;
-  searchByProd: string;
   smartDevices:string
   electronics:string
   clothes:string
