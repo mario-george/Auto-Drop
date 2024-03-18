@@ -43,12 +43,35 @@ export default function ProductsRenderer({
   shops,
   allProducts,
   searchByProd,
+   smartDevices,
+  electronics,
+  clothes,
+  accessories,
+  perfumes,
+  decor,
+  sportsSupplies,
+  stationary,
+  cosmeticProducts,
+
+ 
+  
 }: {
   locale: string;
   categories: string;
   shops: string;
   searchByProd: string;
   allProducts: string;
+  smartDevices:string
+  electronics:string
+  clothes:string
+  accessories:string
+  perfumes:string
+
+  decor:string
+  sportsSupplies:string
+  stationary:string
+  cosmeticProducts:string
+
 }) {
   const [currPage, setCurrPage] = useState("1");
   const { LoaderComponent, setLoading } = useLoader();
@@ -114,6 +137,21 @@ export default function ProductsRenderer({
     showShippingForProduct,
     showShippingHandler,
   };
+  let CategoriesProps = {
+    categories,
+    allProducts,
+    searchByProd,
+     smartDevices,
+    electronics,
+    clothes,
+    accessories,
+    perfumes,
+    decor,
+    sportsSupplies,
+    stationary,
+    cosmeticProducts,
+  
+  }
   return (
     <div className="dark:text-white">
 
@@ -126,7 +164,7 @@ export default function ProductsRenderer({
         value={""}
         className="flex justify-center"
       />
-      <Categories categories={categories} allProducts={allProducts} />
+      <Categories {...CategoriesProps} />
 
       {lang == "en" ? (
         <>
