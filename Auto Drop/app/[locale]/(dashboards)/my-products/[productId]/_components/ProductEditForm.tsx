@@ -166,7 +166,6 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   const formSubmmitedHandler = () => {
     buttonRef?.current?.click();
   };
-  console.log("LoaderComponent", LoaderComponent);
   const {
     optionsSelected,
     setOptionsSelected,
@@ -292,7 +291,6 @@ export default function ProductEditForm(props: ProductEditFormProps) {
             valueIndex: "0",
           };
         });
-      console.log("initialChoosenValues", initialChoosenValues);
       setOptionChoosenValues(initialChoosenValues);
 
       if (!product?.commissionPercentage) {
@@ -343,7 +341,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     const fetchCategories = async () => {
       try {
         const resp = await axiosInstance.get("/salla/categories");
-        console.log(resp.data);
+        // console.log(resp.data);
         if (resp.status < 300 && resp.status >= 200) {
           setCategoriesList(resp.data.data);
         }
@@ -356,7 +354,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     const fetchTags = async () => {
       try {
         const resp = await axiosInstance.get("/salla/tags");
-        console.log(resp.data);
+        // console.log(resp.data);
         if (resp.status < 300 && resp.status >= 200) {
           setTagsList(resp.data.data);
         }
@@ -371,11 +369,11 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   }, []);
   useEffect(() => {
     console.log("product", product);
-    console.log(
+/*     console.log(
       "product?.categoriesSalla && product?.categoriesSalla.length!==0",
       product?.categoriesSalla && product?.categoriesSalla.length !== 0
-    );
-    console.log("categoriesList", categoriesList);
+    ); */
+    // console.log("categoriesList", categoriesList);
     if (product?.categoriesSalla && product?.categoriesSalla.length !== 0) {
       let fetchedCat = categoriesList
         .filter((category: any) =>
@@ -398,10 +396,10 @@ export default function ProductEditForm(props: ProductEditFormProps) {
 
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    console.log(commissionVal);
-    console.log(
-      profitChoosenType == "percentage" || profitChoosenType == percentage
-    );
+    // console.log(commissionVal);
+    // console.log(
+    //   profitChoosenType == "percentage" || profitChoosenType == percentage
+    // );
     if (profitChoosenType == "percentage" || profitChoosenType == percentage) {
       setFinalPrice((finalPrice: any) => {
         return (
@@ -440,6 +438,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   });
 
   const onSubmitHandler = async (data: z.infer<typeof formSchema>) => {
+ 
     if (!sallaToken || sallaToken=="" ) {
       toast({
         variant: "destructive",
@@ -451,10 +450,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       return
     }
     setLoading(true);
-    console.log(data.SEOTitleText);
-    console.log(data);
-    console.log(data);
-    console.log(data);
+
     setIsLoading(true);
     try {
       uploadProductHandler(data);
@@ -565,7 +561,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     finalPriceText: editedPrice,
     profitText: profit,
     setVariantsDetails,
-    shippingTotalCost,
+    shippingTotalCost,productOptions
   };
   let SelectComponent = (
     <Select
@@ -625,12 +621,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     } */
     try {
       let profitChoosenTypeName = "number";
-      console.log("percentage", percentage);
-      console.log(
-        "profitChoosenType==percentage",
-        profitChoosenType == percentage
-      );
-      console.log("profitChoosenType", profitChoosenType);
+  
       let commissionPercentage = false;
       if (
         profitChoosenType == percentage ||
@@ -656,9 +647,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         )
         .map((category: CategorySalla) => category.id);
 
-      console.log("selectedTags", selectedTags);
-      console.log("checkboxesSelected", checkboxesSelected);
-      console.log("choosenShippingIndex", choosenShippingIndex);
+
 
       let data: any = {
         name: dataForm.prodName,
@@ -675,7 +664,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         checkboxesSelected,
         choosenShippingIndex,
         shippingIncludedChoice,
-        productEditFormOrigin: true,
+        // productEditFormOrigin: true,
         options: productOptions,
         variantsArr: variantsDetails,
         images: productImages,
