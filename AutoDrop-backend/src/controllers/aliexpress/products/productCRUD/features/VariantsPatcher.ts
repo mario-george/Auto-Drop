@@ -133,7 +133,7 @@ export default async function VariantsPatcher({
       errorArrayVariants.push({ result, index });
       console.log("A VARIANT IS UNDEFINED");
     }
-    console.log(result?.value.data);
+    console.log(result?.value?.data);
   }))
   console.log("errorArrayVariants", errorArrayVariants);
   return errorArrayVariants;
