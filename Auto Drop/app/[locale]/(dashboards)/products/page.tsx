@@ -8,16 +8,30 @@ import './_components/styles/styles.css'
 export default function Page() {
   const t = useTranslations("productsPage");
   const locale = useLocale();
+let ProductsRendererProps = {
+  allProducts:t("allProducts"),
+  smartDevices:t("smartDevices"),
+  electronics:t("electronics"),
+  clothes:t("clothes"),
+  accessories:t("accessories"),
+  perfumes:t("perfumes"),
+  categories:t("categories"),
+  searchByProd:t("searchByProd"),
+  shops:t("shops"),
+  decor:t("decor"),
+  sportsSupplies:t("sportsSupplies"),
+  stationary:t("stationary"),
+  cosmeticProducts:t("cosmeticProducts"),locale
+
+  
+  
+}
   return (
     <>
       <MotionWrapper locale={locale}>
         <div className="px-3 productsContainer">
           <ProductsRenderer
-            locale={locale}
-            categories={t("categories")}
-            allProducts={t("allProducts")}
-            searchByProd={t("searchByProd")}
-            shops={t("shops")}
+           {...ProductsRendererProps}
           />
         </div>
       </MotionWrapper>
