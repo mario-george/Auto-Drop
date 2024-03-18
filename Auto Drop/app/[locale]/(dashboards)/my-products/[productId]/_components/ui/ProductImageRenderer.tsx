@@ -19,7 +19,7 @@ useEffect(()=>{
   if(productImages.length!==initialImages.length){
   setInitialImages(productImages)
   }
-},[])
+},[productImages])
 let defaultImageIndex = 0;
 /*   if (productImages && productImages?.length > 0) {
     defaultImageIndex = productImages.findIndex((image: ProductImage) => {
