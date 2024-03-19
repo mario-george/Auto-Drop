@@ -78,7 +78,7 @@ export default function ProductsRenderer({
   const [currPage, setCurrPage] = useState("1");
   const { LoaderComponent, setLoading } = useLoader();
   const errorButtonRef = useRef<HTMLButtonElement>(null)
-const {ErrorComponent} = useErrorToast({title:"Error",description:"The image you provided has no results.",errorButtonRef})
+const {ErrorComponent} = useErrorToast({title:"Error",description:"The data you provided has no results.",errorButtonRef})
   const [lang, setLang] = useState<string>("en");
 let {SearchBarComponent,searchInfo,setSearchInfo} =useProductSearchBar({locale,searchByProd})
 
