@@ -27,6 +27,10 @@ export default function Page() {
         inventory={t("inv")}
         searchByProd={t("searchByProd")}
         unAvProd={t("unAvProd")}
+
+        noShipping={t("noShipping")}
+        unLinkedProd={t("unLinkedProd")}
+      
         price={t("price")}
         unUpProd={t("unUpProd")}
         locale={locale}
