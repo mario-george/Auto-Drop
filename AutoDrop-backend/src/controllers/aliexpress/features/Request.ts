@@ -61,12 +61,10 @@ export async function MakeRequestImage(
     aliToken.aliExpressAccessToken,
     aliToken.aliExpressRefreshToken,
   ]);
-  // const uint8Array = new Uint8Array(imageBytes);
-  // const base64String = btoa(String.fromCharCode(...uint8Array));
+
   const data = {
     ...values,
     app_key: ALI_APP_KEY,
-    // access_token: ALI_TOKEN,
     timestamp,
   };
   const dataReference = {
@@ -88,11 +86,9 @@ export async function MakeRequestImage(
   console.log("sign", sign);
   let data2 = {
     ...data,
-    // image_file_bytes: imageBytes,
     sign,
   };
-  // const base64String = btoa(String.fromCharCode(...imageBytes));
-  // data2.image_file_bytes = base64String;
+
   
   const formData = new FormData();
   for (const key in data) {
@@ -100,13 +96,10 @@ export async function MakeRequestImage(
   }
 
   formData.append("sign", sign);
-  // formData.append("image_file_bytes", imageBytes);
-  // formData.append('image_file_bytes', new Blob([imageBytes]), 'webp');
-  // let file = new File([imageBytes],"aa2.webp");
+
   let file = new File([imageBytes.buffer], imageBytes.originalname, { type: imageBytes.mimetype });
   formData.append('image_file_bytes', file);
   console.log("imageBytes", imageBytes);
-  // formData.append('image_file_bytes', imageBytes);
   return axios({
     url: ALI_BASE + "/" + values?.method,
     method: "post",
