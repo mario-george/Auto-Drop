@@ -25,6 +25,10 @@ interface myProductProps {
   inventory: string;
   searchByProd: string;
   unAvProd: string;
+
+  noShipping: string;
+  unLinkedProd: string;
+
   unUpProd: string;
   price: string;
   locale: string;
