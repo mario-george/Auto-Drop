@@ -298,6 +298,8 @@
     "searchByProd": "Search by product Link..",
     "price": "Price",
     "unAvProd": "Unavailable Products",
+    "unLinkedProd": "Unlinked Products",
+    "noShipping": "Unavailable Shipping",
     "apply": "Apply",
     "unUpProd": "Not uploaded Products",
     "aliExpress": "Ali Express",
