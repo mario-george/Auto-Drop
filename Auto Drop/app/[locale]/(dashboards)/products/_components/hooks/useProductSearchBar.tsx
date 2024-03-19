@@ -6,7 +6,7 @@ interface ProductSearchBarProps {
 }
 type SearchInfo = {
     type: "category" | "image" |"allProducts";
-    imageBytes: Uint8Array | null;
+    imageBytes: FormData | null;
     searchUrl: string;
     categoryName?: string;
   };
@@ -20,9 +20,10 @@ export default function useProductSearchBar({locale,searchByProd}:ProductSearchB
         fileInputRef.current.click();
 
     }
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+   /*  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if(!event?.target?.files || event?.target?.files?.length === 0) return;
         const file = event.target.files[0];
+        
         const reader = new FileReader();
       console.log("file",file)
         reader.onloadend = function () {
@@ -36,7 +37,29 @@ export default function useProductSearchBar({locale,searchByProd}:ProductSearchB
         }
       
         reader.readAsArrayBuffer(file);
-      };
+      }; */
+      const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if(!event?.target?.files || event?.target?.files?.length === 0) return;
+        const file = event.target.files[0];
+        
+        const reader = new FileReader();
+        console.log("file",file)
+        reader.onloadend = function () {
+            if (reader.result instanceof ArrayBuffer) {
+                const imageBytes = new Uint8Array(reader.result); // This is the image file in bytes
+                console.log("imageBytes",imageBytes)
+    
+                // Create a File object from imageBytes
+                const imageFile = new File([imageBytes], file.name, { type: file.type });
+                let formData = new FormData();
+                formData.append('file', imageFile);
+    
+                setSearchInfo({type:"image",imageBytes: formData,searchUrl:''})
+            }
+        }
+      
+        reader.readAsArrayBuffer(file);
+    };
       const triggerSearchByUrl = ()=>{
 
         if(  urlInputRef?.current?.value ){
