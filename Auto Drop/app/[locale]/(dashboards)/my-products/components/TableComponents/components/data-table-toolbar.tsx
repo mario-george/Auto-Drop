@@ -8,18 +8,22 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchProduct from "../../../../_components/shared/ui/SearchProduct";
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   searchByProd: string;
   unAvProd: string;
+  noShipping: string;
+  unLinkedProd: string;
   price: string;
   category: string;
   unUpProd: string;
   locale: string;
   setMyProducts: any;
   apply: string;
+  myProducts: any;
+  setColumnFilters:any
 }
 
 export function DataTableToolbar<TData>({
@@ -31,14 +35,44 @@ export function DataTableToolbar<TData>({
   unUpProd,
   locale,
   setMyProducts,
-  apply,
+  apply,unLinkedProd,noShipping,myProducts,setColumnFilters
 }: DataTableToolbarProps<TData>) {
-  const [checked, setChecked] = useState(false);
+  const [checkedUnAvailable, setCheckedUnAvailable] = useState(false);
+  const [checkedUnLinked, setCheckedUnLinked] = useState(false);
+  const [checkedNoShipping, setCheckedNoShipping] = useState(false);
   const [oldProducts, setOldProducts] = useState([]);
 
-  const isFiltered = table.getState().columnFilters.length > 0;
+ /*  const isFiltered = table.getState().columnFilters.length > 0;
+  useEffect(() => {
+    // Save the original state of the products when the component mounts
+    setOldProducts(myProducts);
+  }, []); */
+  
   let filterHandler = () => {
-    if (checked) {
+    let newProducts = [...myProducts]; // Assuming myProducts is your original data
+  
+    if (checkedUnAvailable) {
+      newProducts = newProducts.filter((prod: any) => prod.inventory !== 0);
+    }
+  
+    if (checkedUnLinked) {
+      newProducts = newProducts.filter((prod: any) => prod.salla_product_id !== null);
+    }
+  
+    if (checkedNoShipping) {
+      newProducts = newProducts.filter((prod: any) => prod.shippingAvailable !== false);
+    }
+  
+    // Assuming 'inventory', 'salla_product_id', and 'shippingAvailable' are the column ids
+    setColumnFilters({
+/*       inventory: checkedUnAvailable ? 0 : null,
+      salla_product_id: checkedUnLinked ? null : undefined,
+      shippingAvailable: checkedNoShipping ? false : undefined, */
+      // prodName:prodName.includes("") ? false :undefined
+    });
+  };
+/*   let filterHandler = () => {
+    if (checkedUnAvailable) {
       let alreadyFiltered = true;
       setMyProducts((prevProducts: any) => {
         prevProducts.forEach((prod: any) => {
@@ -60,7 +94,7 @@ export function DataTableToolbar<TData>({
         setMyProducts(oldProducts);
       }
     }
-  };
+  }; */
 
   let isAr = locale === "ar";
   return (
@@ -107,8 +141,24 @@ export function DataTableToolbar<TData>({
         <div className="flex items-center space-s-2 ">
           <div className="text-xs tab:text-lg ">{unAvProd}</div>
           <Checkbox
-            checked={checked}
-            onCheckedChange={() => setChecked(!checked)}
+            checked={checkedUnAvailable}
+            onCheckedChange={() => setCheckedUnAvailable(!checkedUnAvailable)}
+            classNameIndicator={`bg-black rounded-lg dark:fill-white dark:bg-white`}
+          />
+        </div>
+        <div className="flex items-center space-s-2 ">
+          <div className="text-xs tab:text-lg ">{unLinkedProd}</div>
+          <Checkbox
+            checked={checkedUnLinked}
+            onCheckedChange={() => setCheckedUnLinked(!checkedUnLinked)}
+            classNameIndicator={`bg-black rounded-lg dark:fill-white dark:bg-white`}
+          />
+        </div>
+        <div className="flex items-center space-s-2 ">
+          <div className="text-xs tab:text-lg ">{noShipping}</div>
+          <Checkbox
+            checked={checkedNoShipping}
+            onCheckedChange={() => setCheckedNoShipping(!checkedNoShipping)}
             classNameIndicator={`bg-black rounded-lg dark:fill-white dark:bg-white`}
           />
         </div>
