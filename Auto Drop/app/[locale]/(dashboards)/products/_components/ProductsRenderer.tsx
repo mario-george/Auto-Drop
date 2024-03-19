@@ -5,7 +5,7 @@ import CurrencyFormatter, {
   CurrencyFormatterShippingInfo,
 } from "./CurrencyFormatter";
 import renderRatingStars from "./RenderRatingStarts";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -35,6 +35,7 @@ import SearchProduct from "../../_components/shared/ui/SearchProduct";
 import useLoader from "@/components/loader/useLoader";
 import useCategories from "./useCategories";
 import useProductSearchBar from "./hooks/useProductSearchBar";
+import { useErrorToast } from "@/components/chakra-ui/useErrorToast";
 
 // pages / products  state
 
@@ -76,7 +77,8 @@ export default function ProductsRenderer({
 }) {
   const [currPage, setCurrPage] = useState("1");
   const { LoaderComponent, setLoading } = useLoader();
-
+  const errorButtonRef = useRef<HTMLButtonElement>(null)
+const {ErrorComponent} = useErrorToast({title:"Error",description:"The image you provided has no results.",errorButtonRef})
   const [lang, setLang] = useState<string>("en");
 let {SearchBarComponent,searchInfo,setSearchInfo} =useProductSearchBar({locale,searchByProd})
 
@@ -97,7 +99,7 @@ let {SearchBarComponent,searchInfo,setSearchInfo} =useProductSearchBar({locale,s
     fetchAndSetAR,
     lang,
     setProductsAR,
-    productsAR,searchInfo
+    productsAR,searchInfo,setSearchInfo,errorButtonRef
   });
 
   const dispatch = useDispatch();
@@ -174,7 +176,7 @@ console.log("searchInfo",searchInfo)
 
   return (
     <div className="dark:text-white">
-
+{ErrorComponent}
 {LoaderComponent}
       <Header toogleLang={toogleLang} shops={shops} />
  {SearchBarComponent}
