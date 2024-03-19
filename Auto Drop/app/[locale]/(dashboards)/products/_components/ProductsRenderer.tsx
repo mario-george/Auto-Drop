@@ -119,6 +119,8 @@ let {SearchBarComponent,searchInfo,setSearchInfo} =useProductSearchBar({locale,s
 let  {currentCategory,CategoriesRendererComponent} = useCategories(CategoriesProps)
   const pagesProducts = useSelector((state: RootState) => state.products.pages);
 useEffect(()=>{
+
+  if(!searchInfo || searchInfo.type == "allProducts"){return } 
 console.log("searchInfo",searchInfo)
   // unstable_batchedUpdates(() => {
     setProductsAR([]);
