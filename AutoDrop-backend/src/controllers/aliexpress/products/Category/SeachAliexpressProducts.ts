@@ -87,7 +87,6 @@ export const GetRecommendedProductsByURL = catchAsync(
         }
       );
       let resPage = response2;
-      // console.log(resPage)
       const products =
         resPage?.data.aliexpress_ds_recommend_feed_get_response?.result
           ?.products?.traffic_product_d_t_o;
@@ -110,15 +109,6 @@ export const GetRecommendedProductsByCategory = catchAsync(
   async (req: Request & any, res: Response, next: NextFunction) => {
     let { categoryName } = req.body;
 
-    /*   const stationaryIds = [21, 34, 1420];
-    const ElectronicsIds = [6, 44, 502];
-    const sportsSuppliesIds = [18, 34, 1501];
-    const AccessoriesIds = [44, 1501];
-    const SmartDevices = [44, 509];
-    const PerfumesIds = [66];
-    const cosmeticProductsIds = [66];
-    const ClothesIds = [3, 66, 1501];
-    const DecorIds = [15, 39, 1503]; */
     const categories: any = {
       stationary: [21, 34, 1420],
       electronics: [6, 44, 502],
@@ -132,7 +122,7 @@ export const GetRecommendedProductsByCategory = catchAsync(
     };
     const currentCategory = categories[categoryName];
 
-    console.log("currentCategory",currentCategory)
+    console.log("currentCategory", currentCategory);
     console.log(req.query);
     let user: any = await TokenUserExtractor(req);
     if (!user) return res.status(401).json({ message: "token is invalid" });
@@ -159,20 +149,13 @@ export const GetRecommendedProductsByCategory = catchAsync(
       let currFeedName =
         respData.data.aliexpress_ds_feedname_get_response?.resp_result.result
           .promos.promo[i].promo_name;
-      /* const randomPage = generateRandomNumber(
-        0,
-        respData.data.aliexpress_ds_feedname_get_response?.resp_result.result
-          .promos.promo.length - 1
-      ); */
+
       const randomCategoryIdIndex = generateRandomNumber(
         0,
         currentCategory.length - 1
       );
       const randomCategoryId = currentCategory[randomCategoryIdIndex];
-      /*    const randomFeedName =
-        respData.data.aliexpress_ds_feedname_get_response?.resp_result.result
-          .promos.promo[randomPage].promo_name; */
-      // console.log(randomFeedName);
+
       let response2 = await MakeRequest(
         {
           method: "aliexpress.ds.recommend.feed.get",
@@ -210,74 +193,56 @@ export const GetRecommendedProductsByCategory = catchAsync(
 
 export const GetRecommendedProductsByImage = catchAsync(
   async (req: Request & any, res: Response, next: NextFunction) => {
-    console.log("Uploaded file", req.file);
-
-    console.log(req.query);
     let user: any = await TokenUserExtractor(req);
     if (!user) return res.status(401).json({ message: "token is invalid" });
     let aliexpressToken = await AliExpressToken.findOne({ userId: user?._id });
     const { lang } = req.query;
 
     let formData = req.body;
-    console.log("formData",formData)
-    // console.log("imageBytes", imageBytes);
+    console.log("formData", formData);
     let result: any = [];
-    /*     let response = await MakeRequest(
+
+    let response2 = await MakeRequestImage(
       {
+        shpt_to: "SA",
+        target_currency: "SAR",
+        product_cnt: 20,
+        target_language: lang,
+        // sort: "SALE_PRICE_ASC",
         method: "aliexpress.ds.image.search",
         sign_method: "sha256",
-        shpt_to: "SA",
-        image_file_bytes: imageBytes,
       },
       {
         aliExpressAccessToken: aliexpressToken?.accessToken,
         aliExpressRefreshToken: aliexpressToken?.refreshToken,
-      }
+      },
+      req.file
     );
-    let respData = response; */
-    // const uint8Array = new Uint8Array(imageBytes);
-    // const base64String = btoa(String.fromCharCode(...uint8Array));
-    // const uint8Array = new Uint8Array(/* Your data here */);
-    // const blob = new Blob([uint8Array], { type: "application/octet-stream" });
-    // while (result.length < 20) {
-      /*  const randomPage = generateRandomNumber(
-          0,
-          respData.data.aliexpress_ds_feedname_get_response?.resp_result.result
-            .promos.promo.length - 1
-        );
-        const randomFeedName =
-          respData.data.aliexpress_ds_feedname_get_response?.resp_result.result
-            .promos.promo[randomPage].promo_name;
-        console.log(randomFeedName); */
-      let response2 = await MakeRequestImage(
-        {
-          shpt_to: "US",
-          target_currency: "SAR",
-          product_cnt: 20,
-          target_language: "EN",
-          // sort: "SALE_PRICE_ASC",
-          method: "aliexpress.ds.image.search",
-          sign_method: "sha256",
-        },
-        {
-          aliExpressAccessToken: aliexpressToken?.accessToken,
-          aliExpressRefreshToken: aliexpressToken?.refreshToken,
-        },
-        req.file
-      );
-      let resPage = response2;
+    let resPage = response2;
 
-      console.log("resPage", resPage);
-      console.log("resPage?.aliexpress_ds_image_search_response", resPage?.data?.aliexpress_ds_image_search_response);
-      console.log("resPage?.aliexpress_ds_image_search_response?.data", resPage?.data?.aliexpress_ds_image_search_response?.data);
-      console.log("resPage?.aliexpress_ds_image_search_response?.data?.products?.traffic_image_product_d_t_o", resPage?.data?.aliexpress_ds_image_search_response?.data?.products?.traffic_image_product_d_t_o);
-      // console.log("resPage?.aliexpress_ds_image_search_response?.data?.products?.traffic_image_product_d_t_o", resPage?.data?.aliexpress_ds_image_search_response?.data?.products);
-      const products = resPage?.data?.aliexpress_ds_image_search_response?.data?.products?.traffic_image_product_d_t_o;
-
-      if (products) {
-        result.push(...products);
-        console.log(result.length);
-      }
+    console.log("resPage", resPage);
+    console.log(
+      "resPage?.aliexpress_ds_image_search_response",
+      resPage?.data?.aliexpress_ds_image_search_response
+    );
+    console.log(
+      "resPage?.aliexpress_ds_image_search_response?.data",
+      resPage?.data?.aliexpress_ds_image_search_response?.data
+    );
+    console.log(
+      "resPage?.aliexpress_ds_image_search_response?.data?.products?.traffic_image_product_d_t_o",
+      resPage?.data?.aliexpress_ds_image_search_response?.data?.products
+        ?.traffic_image_product_d_t_o
+    );
+    const products =
+      resPage?.data?.aliexpress_ds_image_search_response?.data?.products
+        ?.traffic_image_product_d_t_o;
+    if (!products || !products.length)
+      throw new AppError("Products Not Found", 409);
+    if (products) {
+      result.push(...products);
+      console.log(result.length);
+    }
     // }
     console.log(result.length);
 
