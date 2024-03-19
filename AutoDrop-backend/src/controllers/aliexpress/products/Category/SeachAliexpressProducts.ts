@@ -5,6 +5,7 @@ import TokenUserExtractor from "../../../../utils/handlers/tokenUserExtractor";
 import AliExpressToken from "../../../../models/AliExpressTokenModel";
 import MakeRequest, { MakeRequestImage } from "../../features/Request";
 import { extname, basename } from "path";
+
 export async function GetProductId(url: string) {
   const { pathname }: URL = new URL(url);
   const filename = basename(pathname);
@@ -130,6 +131,8 @@ export const GetRecommendedProductsByCategory = catchAsync(
       decor: [15, 39, 1503],
     };
     const currentCategory = categories[categoryName];
+
+    console.log("currentCategory",currentCategory)
     console.log(req.query);
     let user: any = await TokenUserExtractor(req);
     if (!user) return res.status(401).json({ message: "token is invalid" });
@@ -207,13 +210,16 @@ export const GetRecommendedProductsByCategory = catchAsync(
 
 export const GetRecommendedProductsByImage = catchAsync(
   async (req: Request & any, res: Response, next: NextFunction) => {
+    console.log("Uploaded file", req.file);
+
     console.log(req.query);
     let user: any = await TokenUserExtractor(req);
     if (!user) return res.status(401).json({ message: "token is invalid" });
     let aliexpressToken = await AliExpressToken.findOne({ userId: user?._id });
     const { lang } = req.query;
 
-    let { imageBytes } = req.body;
+    let formData = req.body;
+    console.log("formData",formData)
     // console.log("imageBytes", imageBytes);
     let result: any = [];
     /*     let response = await MakeRequest(
@@ -231,9 +237,9 @@ export const GetRecommendedProductsByImage = catchAsync(
     let respData = response; */
     // const uint8Array = new Uint8Array(imageBytes);
     // const base64String = btoa(String.fromCharCode(...uint8Array));
-    const uint8Array = new Uint8Array(/* Your data here */);
-    const blob = new Blob([uint8Array], { type: "application/octet-stream" });
-    while (result.length < 20) {
+    // const uint8Array = new Uint8Array(/* Your data here */);
+    // const blob = new Blob([uint8Array], { type: "application/octet-stream" });
+    // while (result.length < 20) {
       /*  const randomPage = generateRandomNumber(
           0,
           respData.data.aliexpress_ds_feedname_get_response?.resp_result.result
@@ -245,11 +251,11 @@ export const GetRecommendedProductsByImage = catchAsync(
         console.log(randomFeedName); */
       let response2 = await MakeRequestImage(
         {
-          shpt_to: "SA",
+          shpt_to: "US",
           target_currency: "SAR",
-          product_cnt: 10,
+          product_cnt: 20,
           target_language: "EN",
-          sort: "SALE_PRICE_ASC",
+          // sort: "SALE_PRICE_ASC",
           method: "aliexpress.ds.image.search",
           sign_method: "sha256",
         },
@@ -257,18 +263,22 @@ export const GetRecommendedProductsByImage = catchAsync(
           aliExpressAccessToken: aliexpressToken?.accessToken,
           aliExpressRefreshToken: aliexpressToken?.refreshToken,
         },
-        imageBytes
+        req.file
       );
       let resPage = response2;
 
       console.log("resPage", resPage);
-      const products = resPage?.data?.products;
+      console.log("resPage?.aliexpress_ds_image_search_response", resPage?.data?.aliexpress_ds_image_search_response);
+      console.log("resPage?.aliexpress_ds_image_search_response?.data", resPage?.data?.aliexpress_ds_image_search_response?.data);
+      console.log("resPage?.aliexpress_ds_image_search_response?.data?.products?.traffic_image_product_d_t_o", resPage?.data?.aliexpress_ds_image_search_response?.data?.products?.traffic_image_product_d_t_o);
+      // console.log("resPage?.aliexpress_ds_image_search_response?.data?.products?.traffic_image_product_d_t_o", resPage?.data?.aliexpress_ds_image_search_response?.data?.products);
+      const products = resPage?.data?.aliexpress_ds_image_search_response?.data?.products?.traffic_image_product_d_t_o;
 
       if (products) {
         result.push(...products);
         console.log(result.length);
       }
-    }
+    // }
     console.log(result.length);
 
     if (!result.length) throw new AppError("Products Not Found", 409);
