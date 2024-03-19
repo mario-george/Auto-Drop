@@ -4,6 +4,7 @@ import timezone from "dayjs/plugin/timezone";
 import axios from "axios";
 import { GenerateValues, GenerateSign } from "./GenerateSignature";
 // import findSettingKey from "../settings";
+import qs from "qs";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -41,6 +42,73 @@ export default async function MakeRequest(
     data: {
       ...data,
       sign,
+    },
+  });
+}
+
+export async function MakeRequestImage(
+  values: any,
+  aliToken: any,
+  imageBytes: any
+): Promise<any> {
+  const timestamp = new Date(
+    dayjs().tz("Asia/Riyadh").format("YYYY-MM-DD HH:mm:ss")
+  ).getTime();
+
+  const [ALI_APP_KEY, ALI_BASE, ALI_TOKEN, ALI_REFRESH] = await Promise.all([
+    process.env.APP_KEY,
+    process.env.ALI_API_BASE,
+    aliToken.aliExpressAccessToken,
+    aliToken.aliExpressRefreshToken,
+  ]);
+  // const uint8Array = new Uint8Array(imageBytes);
+  // const base64String = btoa(String.fromCharCode(...uint8Array));
+  const data = {
+    ...values,
+    app_key: ALI_APP_KEY,
+    // access_token: ALI_TOKEN,
+    timestamp,
+  };
+  const dataReference = {
+    shpt_to: "SA",
+    target_currency: "SAR",
+    product_cnt: 10,
+    target_language: "EN",
+    sort: "SALE_PRICE_ASC",
+    method: "aliexpress.ds.image.search",
+    app_key: ALI_APP_KEY,
+    sign_method: "sha256",
+    timestamp: "1710788659736",
+  };
+  const sign = GenerateSign(GenerateValues(data));
+  console.log("sign", sign);
+  console.log("sign", sign);
+  console.log("sign", sign);
+  console.log("sign", sign);
+  console.log("sign", sign);
+  let data2 = {
+    ...data,
+    // image_file_bytes: imageBytes,
+    sign,
+  };
+  // const base64String = btoa(String.fromCharCode(...imageBytes));
+  // data2.image_file_bytes = base64String;
+  
+  const formData = new FormData();
+  for (const key in data) {
+    formData.append(key, data[key]);
+  }
+
+  formData.append("sign", sign);
+  // formData.append("image_file_bytes", imageBytes);
+  formData.append('image_file_bytes', new Blob([imageBytes]), 'image_file_bytes');
+  
+  return axios({
+    url: ALI_BASE + "/" + values?.method,
+    method: "post",
+    data: formData,
+    headers: {
+      "Content-Type": "multipart/form-data; charset=utf-8",
     },
   });
 }
