@@ -101,8 +101,12 @@ export async function MakeRequestImage(
 
   formData.append("sign", sign);
   // formData.append("image_file_bytes", imageBytes);
-  formData.append('image_file_bytes', new Blob([imageBytes]), 'image_file_bytes');
-  
+  // formData.append('image_file_bytes', new Blob([imageBytes]), 'webp');
+  // let file = new File([imageBytes],"aa2.webp");
+  let file = new File([imageBytes.buffer], imageBytes.originalname, { type: imageBytes.mimetype });
+  formData.append('image_file_bytes', file);
+  console.log("imageBytes", imageBytes);
+  // formData.append('image_file_bytes', imageBytes);
   return axios({
     url: ALI_BASE + "/" + values?.method,
     method: "post",
