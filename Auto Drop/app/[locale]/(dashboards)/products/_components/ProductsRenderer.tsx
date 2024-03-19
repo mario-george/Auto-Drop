@@ -33,7 +33,8 @@ import ProductsListEN from "./ui/ProductsListEN";
 import ProductsListAR from "./ui/ProductsListAR";
 import SearchProduct from "../../_components/shared/ui/SearchProduct";
 import useLoader from "@/components/loader/useLoader";
-import useCategories from "./Categories";
+import useCategories from "./useCategories";
+import useProductSearchBar from "./hooks/useProductSearchBar";
 
 // pages / products  state
 
@@ -77,6 +78,8 @@ export default function ProductsRenderer({
   const { LoaderComponent, setLoading } = useLoader();
 
   const [lang, setLang] = useState<string>("en");
+let {SearchBarComponent,searchInfo,setSearchInfo} =useProductSearchBar({locale,searchByProd})
+
   const { fetchAndSetAR, handleCheckChangeAR, productsAR, setProductsAR } =
     useProductsAR(lang);
   let {
@@ -94,7 +97,7 @@ export default function ProductsRenderer({
     fetchAndSetAR,
     lang,
     setProductsAR,
-    productsAR,
+    productsAR,searchInfo
   });
 
   const dispatch = useDispatch();
@@ -110,12 +113,27 @@ export default function ProductsRenderer({
     decor,
     sportsSupplies,
     stationary,
-    cosmeticProducts,
+    cosmeticProducts,setSearchInfo
   
   }
 let  {currentCategory,CategoriesRendererComponent} = useCategories(CategoriesProps)
   const pagesProducts = useSelector((state: RootState) => state.products.pages);
+useEffect(()=>{
+console.log("searchInfo",searchInfo)
+  // unstable_batchedUpdates(() => {
+    setProductsAR([]);
+    setProducts([]);
+  // });
+  dispatch(resetPagesProducts());
 
+  if (lang == "ar") {
+    fetchAndSetAR();
+  } else {
+    fetchAndSet2('change');
+  }
+  return;
+
+},[searchInfo,searchInfo.type,searchInfo.searchUrl,searchInfo.imageBytes])
   const toogleLang = async (language: string) => {
     setLang(language);
     unstable_batchedUpdates(() => {
@@ -157,13 +175,7 @@ let  {currentCategory,CategoriesRendererComponent} = useCategories(CategoriesPro
 
 {LoaderComponent}
       <Header toogleLang={toogleLang} shops={shops} />
-      <SearchProduct
-        isAr={locale == "ar"}
-        placeholder={searchByProd}
-        onChange={() => {}}
-        value={""}
-        className="flex justify-center"
-      />
+ {SearchBarComponent}
       {CategoriesRendererComponent}
 
       {lang == "en" ? (
