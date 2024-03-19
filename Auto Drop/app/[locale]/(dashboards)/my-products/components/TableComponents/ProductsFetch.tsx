@@ -26,7 +26,7 @@ export default function ProductsFetch(props: any) {
           return {
             ...product,
             prodName: product.name,
-            prodInfo: { name: product.name, image: product.images[0].original },
+            // prodInfo: { name: product.name, image: product.images[0].original },
             category:
               product.category_name || product.first_level_category_name,
             prodImage: product.images[0].original,
