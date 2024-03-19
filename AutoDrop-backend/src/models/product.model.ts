@@ -86,6 +86,7 @@ interface ProductSchema {
 shippingIncludedChoiceIndex?: number;
   // checkboxesSelected?: any;
   // productEditFormOrigin?: boolean;
+  shippingAvailable?:boolean
 }
 
 interface ProductDocument extends Document, ProductSchema {}
@@ -160,6 +161,7 @@ const options = {
   categoriesSalla: { type: Array, default: [] },
   sallaTags: { type: Array, default: [] },
   shippingIncludedChoice: { type: Boolean, default: false },
+  shippingAvailable: { type: Boolean, default: false },
   // checkboxesSelected: { type: Array, default: [] },
   shippingIncludedChoiceIndex: { type: Number, default: -1 },
   // productEditFormOrigin: { type: Boolean, default: false },
