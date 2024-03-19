@@ -37,6 +37,10 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   searchByProd: string;
   unAvProd: string;
+  noShipping: string;
+  unLinkedProd: string;
+
+  
   unUpProd: string;
   price: string;
   category: string;
@@ -54,7 +58,8 @@ export function DataTable<TData, TValue>({
   unAvProd,
   price,
   category,
-  unUpProd,
+  unUpProd,noShipping,
+  unLinkedProd,
   // columns,
   data,
   locale,
@@ -110,6 +115,7 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
+  console.log("columnFilters",columnFilters)
   return (
     <div className="space-y-4 min-w-full">
       <DataTableToolbar
@@ -119,9 +125,13 @@ export function DataTable<TData, TValue>({
         price={price}
         category={category}
         unUpProd={unUpProd}
+        noShipping={noShipping}
+        unLinkedProd={unLinkedProd}
         locale={locale}
         setMyProducts={setMyProducts}
         apply={apply}
+        myProducts={data}
+        setColumnFilters={setColumnFilters}
       />
       <div className="">
         <Table>
