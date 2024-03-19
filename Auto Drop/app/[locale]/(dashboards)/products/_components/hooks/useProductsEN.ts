@@ -10,7 +10,7 @@ export default function useProducts({
   lang,
   setProductsAR,
   productsAR,
-  searchInfo,
+  searchInfo,setSearchInfo,errorButtonRef
 }: any) {
   const [products, setProducts] = useState<any[]>([]);
 
@@ -38,32 +38,42 @@ export default function useProducts({
 
   const fetchProducts = useCallback(async () => {
     console.log("searchInfo", searchInfo);
-    if (searchInfo.type == "allProducts") {
-      const resp = await axiosInstance.post("/aliexpress/products?lang=en", {
-        page: 1,
-      });
+    
+    try{
 
-      return resp.data.result;
-    } else if (searchInfo.type == "category") {
-      const resp = await axiosInstance.post(
-        `/search/getRandomProductsCategory/?lang=en`,
-        {
-          categoryName: searchInfo.categoryName,
-        }
-      );
-
-      return resp.data.result;
-    } else if (searchInfo.type == "image") {
-      const resp = await axiosInstance.post(
-        "/search/getRandomProductsImage?lang=en",
-      
-        searchInfo.imageBytes,{headers:{
-          "Content-Type":"multipart/form-data"
-        }}
-        
-      );
-
-      return resp.data.result;
+      if (searchInfo.type == "allProducts" ||searchInfo.type == "fallback"  ) {
+        const resp = await axiosInstance.post("/aliexpress/products?lang=en", {
+          page: 1,
+        });
+  
+        return resp.data.result;
+      } else if (searchInfo.type == "category") {
+        const resp = await axiosInstance.post(
+          `/search/getRandomProductsCategory/?lang=en`,
+          {
+            categoryName: searchInfo.categoryName,
+          }
+        );
+  
+        return resp.data.result;
+      } else if (searchInfo.type == "image") {
+        const resp = await axiosInstance.post(
+          "/search/getRandomProductsImage?lang=en",
+  
+          searchInfo.imageBytes,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+  
+        return resp.data.result;
+      }
+    }catch(err:any){
+      console.error(err)
+      errorButtonRef?.current?.click()
+      setSearchInfo({searchUrl:'',type:"fallback",imageBytes:null})
     }
   }, [searchInfo]);
   useEffect(() => {
@@ -106,32 +116,40 @@ export default function useProducts({
       setShowShippingForProduct(Array(productsAR.length).fill(false));
     }
   }, [lang, productsAR.length, products.length]);
-  const fetchAndSet2 = useCallback(async (value?:any) => {
-    console.log("products2222", products);
-    if(value == 'change'){
-      // const remainingProducts = targetCount - productCount;
-      const newProducts = await fetchProducts();
-      // const additionalProducts = newProducts.slice(0, 20);
-      // productCount += additionalProducts.length;
+  const fetchAndSet2 = useCallback(
+    async (value?: any) => {
+      console.log("products2222", products);
+      if (value == "change") {
+        // const remainingProducts = targetCount - productCount;
+        const newProducts = await fetchProducts();
+        // const additionalProducts = newProducts.slice(0, 20);
+        // productCount += additionalProducts.length;
+if(!newProducts || newProducts?.length ==0){
+  return
+}
+        setProducts((oldProducts) => [...newProducts]);
 
-      setProducts((oldProducts) => [...newProducts]);
+        return;
+      }
+      console.log("products2222", products);
 
-return
-    }
-    console.log("products2222", products);
+      let productCount = products.length;
+      const targetCount = 20;
 
-    let productCount = products.length;
-    const targetCount = 20;
+      if (value == "change" || productCount < targetCount) {
+        const remainingProducts = targetCount - productCount;
+        const newProducts = await fetchProducts();
+        if(!newProducts || newProducts?.length ==0){
+          return
+        }
+        const additionalProducts = newProducts.slice(0, remainingProducts);
+        productCount += additionalProducts.length;
 
-    if (value=="change" || productCount < targetCount) {
-      const remainingProducts = targetCount - productCount;
-      const newProducts = await fetchProducts();
-      const additionalProducts = newProducts.slice(0, remainingProducts);
-      productCount += additionalProducts.length;
-
-      setProducts((oldProducts) => [...oldProducts, ...additionalProducts]);
-    }
-  }, [fetchProducts, products]);
+        setProducts((oldProducts) => [...oldProducts, ...additionalProducts]);
+      }
+    },
+    [fetchProducts, products]
+  );
 
   const handleCheckChange = (index: number) => {
     setProducts((products) =>
@@ -177,7 +195,7 @@ return
   useEffect(() => {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
-  
+
     let updateAllProductShipping = async function () {
       let prodSh;
       if (lang == "en") {
@@ -221,16 +239,20 @@ return
     };
     updateAllProductShipping();
     return () => {
-      source.cancel('Operation canceled by the user.');
+      source.cancel("Operation canceled by the user.");
     };
   }, [products.length, productsAR.length, lang]);
-  const shoppingCartHandler = async (product_id: string,cancelToken:any) => {
+  const shoppingCartHandler = async (product_id: string, cancelToken: any) => {
     try {
-      const resp = await axiosInstance.post("/aliexpress/getShippingDetails", {
-        product_id,
-      },{
-        cancelToken:cancelToken
-      });
+      const resp = await axiosInstance.post(
+        "/aliexpress/getShippingDetails",
+        {
+          product_id,
+        },
+        {
+          cancelToken: cancelToken,
+        }
+      );
       return resp.data.shipping;
     } catch (e: any) {
       console.log(e);
