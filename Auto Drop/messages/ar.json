@@ -306,6 +306,8 @@
     "price": "السعر",
     "profitType": "نوع الربح",
     "unAvProd": "منتجات غير متوفرة",
+    "unLinkedProd": " منتجات لم يتم ربطها",
+    "noShipping": " بدون شحن",
     "unUpProd": "منتجات لم ترفع بعد",
     "aliExpress": "علي اكسبرس",
     "percentage": "نسبة",
