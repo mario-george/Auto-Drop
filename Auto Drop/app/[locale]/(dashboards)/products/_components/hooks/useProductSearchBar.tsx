@@ -43,11 +43,9 @@ export default function useProductSearchBar({locale,searchByProd}:ProductSearchB
         const file = event.target.files[0];
         
         const reader = new FileReader();
-        console.log("file",file)
         reader.onloadend = function () {
             if (reader.result instanceof ArrayBuffer) {
                 const imageBytes = new Uint8Array(reader.result); // This is the image file in bytes
-                console.log("imageBytes",imageBytes)
     
                 // Create a File object from imageBytes
                 const imageFile = new File([imageBytes], file.name, { type: file.type });
