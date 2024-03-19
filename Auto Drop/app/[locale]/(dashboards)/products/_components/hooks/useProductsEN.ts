@@ -56,9 +56,11 @@ export default function useProducts({
     } else if (searchInfo.type == "image") {
       const resp = await axiosInstance.post(
         "/search/getRandomProductsImage?lang=en",
-        {
-          imageBytes: searchInfo.imageBytes,
-        }
+      
+        searchInfo.imageBytes,{headers:{
+          "Content-Type":"multipart/form-data"
+        }}
+        
       );
 
       return resp.data.result;
