@@ -118,7 +118,7 @@ export default function ProductsListAR({
                       <Image
                         src={
                           product.product_small_image_urls
-                            .productSmallImageUrl[0]
+                            .productSmallImageUrl[0]||  product.product_main_image_url
                         }
                         className="p-0 w-full min-h-[67.5%] mb-auto "
                         height={300}
