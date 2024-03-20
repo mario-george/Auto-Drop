@@ -312,7 +312,13 @@
     "prodName": "Product Name",
     "inv": "Inventory",
     "val": "Value....",
-    "next": "Next"
+    "next": "Next",
+    "allCategories":"All Categories",
+    "selectAll":"Select All",
+    "search":"Search"
+
+
+
   },
   "productsPage": {
     "allProducts": "All Products",
