@@ -33,6 +33,7 @@ interface myProductProps {
   price: string;
   locale: string;
   apply: string;
+  translationMessages :{ [key: string]: string }
 }
 export default async function TaskPage(props: myProductProps) {
   const getMyProductsData = async () => {
