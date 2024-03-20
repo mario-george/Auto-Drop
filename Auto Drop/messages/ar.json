@@ -311,7 +311,11 @@
     "unUpProd": "منتجات لم ترفع بعد",
     "aliExpress": "علي اكسبرس",
     "percentage": "نسبة",
-    "next": "التالي"
+    "next": "التالي",
+    "allCategories":"  كل الفئات ",
+    "selectAll":" اختر الكل",
+    "search":" بحث"
+
   },
   "productsPage": {
     "accessories": "اكسسوارات",
