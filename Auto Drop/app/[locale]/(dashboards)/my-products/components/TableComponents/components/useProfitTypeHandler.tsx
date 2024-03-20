@@ -14,18 +14,18 @@ import { useState } from "react";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import axiosInstance from "@/app/[locale]/(dashboards)/_components/shared/AxiosInstance";
-import { useToast } from "@/components/ui/use-toast";
+// import { useToast } from "@/components/ui/use-toast";
 import useLoader from "@/components/loader/useLoader";
 import { useDispatch } from "react-redux";
 import { setKeyValue } from "@/store/productsSlice";
 import { useLocale } from "next-intl";
 export default function useProfitTypeHandler(props: any) {
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const dispatch = useDispatch();
   /*   const reloadProducts = useSelector(
     (state: any) => state.products.reloadProducts
   ); */
-  let { profitType, percentage, number, upProducts, val } = props;
+  let { profitType, percentage, number, upProducts, val,errorButtonRefNoSelection,errorButtonRefNoToken,errorButtonRefSubmitError } = props;
   const productsState = useSelector((state: any) => state.products);
   const sallaToken = useSelector((state: any) => state.user.sallaToken);
 console.log("sallaToken",sallaToken)
@@ -48,21 +48,21 @@ return
     );
 
     if ( selectedProds.length == 0) {
-      toast({
+/*       toast({
         variant: "destructive",
         title: "No product was selected please try again.",
       });
-     
-
+      */
+      errorButtonRefNoSelection?.current?.click()
     
       return
     }
     if (!sallaToken || sallaToken=="" ) {
-      toast({
+/*       toast({
         variant: "destructive",
         title: "Please link your account with salla and try again.",
-      });
-     
+      }); */
+      errorButtonRefNoToken?.current?.click()
 
     
       return
@@ -134,10 +134,11 @@ return
       promisesSettled.forEach((promise: any) => {
         let { status, value } = promise;
         if (status === "rejected") {
-          toast({
+        /*   toast({
             variant: "destructive",
             title: "Error while linking product",
-          });
+          }); */
+          errorButtonRefSubmitError?.current?.click()
           console.log(promise);
           console.log(promise.reason);
         }
