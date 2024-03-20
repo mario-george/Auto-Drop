@@ -83,7 +83,7 @@ const {ErrorComponent} = useErrorToast({title:"Error",description:"The data you 
 let {SearchBarComponent,searchInfo,setSearchInfo} =useProductSearchBar({locale,searchByProd})
 
   const { fetchAndSetAR, handleCheckChangeAR, productsAR, setProductsAR } =
-    useProductsAR(lang);
+    useProductsAR({lang,searchInfo,setSearchInfo,errorButtonRef});
   let {
     products,
  
@@ -131,7 +131,7 @@ console.log("searchInfo",searchInfo)
   dispatch(resetPagesProducts());
 
   if (lang == "ar") {
-    fetchAndSetAR();
+    fetchAndSetAR('change');
   } else {
     fetchAndSet2('change');
   }
