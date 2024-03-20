@@ -10,7 +10,9 @@ export default function useProducts({
   lang,
   setProductsAR,
   productsAR,
-  searchInfo,setSearchInfo,errorButtonRef
+  searchInfo,
+  setSearchInfo,
+  errorButtonRef,
 }: any) {
   const [products, setProducts] = useState<any[]>([]);
 
@@ -38,14 +40,13 @@ export default function useProducts({
 
   const fetchProducts = useCallback(async () => {
     console.log("searchInfo", searchInfo);
-    
-    try{
 
-      if (searchInfo.type == "allProducts" ||searchInfo.type == "fallback"  ) {
+    try {
+      if (searchInfo.type == "allProducts" || searchInfo.type == "fallback") {
         const resp = await axiosInstance.post("/aliexpress/products?lang=en", {
           page: 1,
         });
-  
+
         return resp.data.result;
       } else if (searchInfo.type == "category") {
         const resp = await axiosInstance.post(
@@ -54,12 +55,12 @@ export default function useProducts({
             categoryName: searchInfo.categoryName,
           }
         );
-  
+
         return resp.data.result;
       } else if (searchInfo.type == "image") {
         const resp = await axiosInstance.post(
           "/search/getRandomProductsImage?lang=en",
-  
+
           searchInfo.imageBytes,
           {
             headers: {
@@ -67,13 +68,22 @@ export default function useProducts({
             },
           }
         );
-  
+
+        return resp.data.result;
+      } else if (searchInfo.type == "search") {
+        const resp = await axiosInstance.post(
+          `/search/getProductByUrl/?lang=en`,
+          {
+            url: searchInfo.searchUrl,
+          }
+        );
+
         return resp.data.result;
       }
-    }catch(err:any){
-      console.error(err)
-      errorButtonRef?.current?.click()
-      setSearchInfo({searchUrl:'',type:"fallback",imageBytes:null})
+    } catch (err: any) {
+      console.error(err);
+      errorButtonRef?.current?.click();
+      setSearchInfo({ searchUrl: "", type: "fallback", imageBytes: null });
     }
   }, [searchInfo]);
   useEffect(() => {
@@ -117,21 +127,17 @@ export default function useProducts({
     }
   }, [lang, productsAR.length, products.length]);
   const fetchAndSet2 = useCallback(
-    async (value?: any) => {
-      console.log("products2222", products);
+    async (value?: string) => {
       if (value == "change") {
-        // const remainingProducts = targetCount - productCount;
         const newProducts = await fetchProducts();
-        // const additionalProducts = newProducts.slice(0, 20);
-        // productCount += additionalProducts.length;
-if(!newProducts || newProducts?.length ==0){
-  return
-}
+
+        if (!newProducts || newProducts?.length == 0) {
+          return;
+        }
         setProducts((oldProducts) => [...newProducts]);
 
         return;
       }
-      console.log("products2222", products);
 
       let productCount = products.length;
       const targetCount = 20;
@@ -139,8 +145,8 @@ if(!newProducts || newProducts?.length ==0){
       if (value == "change" || productCount < targetCount) {
         const remainingProducts = targetCount - productCount;
         const newProducts = await fetchProducts();
-        if(!newProducts || newProducts?.length ==0){
-          return
+        if (!newProducts || newProducts?.length == 0) {
+          return;
         }
         const additionalProducts = newProducts.slice(0, remainingProducts);
         productCount += additionalProducts.length;
