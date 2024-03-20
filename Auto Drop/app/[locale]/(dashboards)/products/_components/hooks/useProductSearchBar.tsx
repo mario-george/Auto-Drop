@@ -5,7 +5,7 @@ interface ProductSearchBarProps {
     searchByProd:string
 }
 type SearchInfo = {
-    type: "category" | "image" |"allProducts";
+    type: "category" | "image" |"allProducts"|"search";
     imageBytes: FormData | null;
     searchUrl: string;
     categoryName?: string;
@@ -57,6 +57,8 @@ export default function useProductSearchBar({locale,searchByProd}:ProductSearchB
         }
       
         reader.readAsArrayBuffer(file);
+        event.target.value = '';
+
     };
       const triggerSearchByUrl = ()=>{
 
@@ -64,7 +66,7 @@ export default function useProductSearchBar({locale,searchByProd}:ProductSearchB
 
 
             let url = urlInputRef.current.value
-            setSearchInfo({searchUrl:url,imageBytes:null,type:"category"})
+            setSearchInfo({searchUrl:url,imageBytes:null,type:"search"})
         }
 
 
