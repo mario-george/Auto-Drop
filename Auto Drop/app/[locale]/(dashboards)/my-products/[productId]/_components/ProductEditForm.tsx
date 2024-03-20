@@ -140,19 +140,23 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   } = props;
 const errorButtonRefShipping :React.RefObject<HTMLButtonElement>= useRef(null)
   const {toast} = useToast()
-  const {ErrorComponent:ErrorComponentShipping} =useErrorToast({title:"Linking this product." ,description:"Shipping is not available for this product.",errorButtonRef:errorButtonRefShipping})
-const formRefsArray = ["prodName", "SEOTitleText", "SEODescription","discountPrice","description","commission"];
+  const {ErrorComponent:ErrorComponentShipping} =useErrorToast({title:"Error while linking this product." ,description:"Shipping is not available for this product.",errorButtonRef:errorButtonRefShipping})
+const formRefsArray = ["prodName", "SEOTitleText", "SEODescription","description","commission"];
 
 interface Accumlator {
-  [key: string]: React.RefObject<HTMLInputElement | ReactQuill>;
+  [key: string]: React.RefObject<HTMLInputElement> | React.RefObject<ReactQuill>;
 
 
 }
 const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string)=>{
+  if(currentValue =="description"){
+    accumlator[currentValue] = useRef<ReactQuill>(null)
+    return accumlator
+  }
   accumlator[currentValue] = useRef<HTMLInputElement>(null)
    return accumlator
 },{})
-
+  const [ discountPrice,setDiscountPrice]  =useState(product?.target_original_price)
   const [categoriesList, setCategoriesList] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [productImages, setProductImages] = useState([]);
@@ -266,14 +270,15 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
 
         formRefs.prodName.current.value = product?.name;
       }
-      if( formRefs.description.current){
+      if( formRefs.description?.current){
 
         formRefs.description.current.value = product?.description;
       }
-      if( formRefs.discountPrice.current){
+      setDiscountPrice(product?.target_original_price)
+     /*  if( formRefs.discountPrice.current){
 
-        formRefs.discountPrice.current.value = product?.target_original_price;
-      }
+        formRefs.discountPrice.current.value = CurrencyFormatter(product?.target_original_price);
+      } */
       let colorsOption = product?.options?.find(
         (option: any) =>
           option?.name?.includes("Color") || option?.name?.includes("color")
@@ -423,10 +428,7 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
 
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    // console.log(commissionVal);
-    // console.log(
-    //   profitChoosenType == "percentage" || profitChoosenType == percentage
-    // );
+ 
     if (profitChoosenType == "percentage" || profitChoosenType == percentage) {
       setFinalPrice((finalPrice: any) => {
         return (
@@ -541,7 +543,7 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
     inputClasses,
     showDiscountPrice,
     setShowDiscountPrice,
-    shippingTotalCost,discountPriceRef: formRefs.discountPrice
+    shippingTotalCost,setDiscountPrice,discountPrice
   };
 
   const ProductSEOInfoProps = {
@@ -689,7 +691,7 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
         vendor_commission: commissionVal,
         metadata_description: dataForm?.SEODescription,
         metadata_title: dataForm?.SEOTitleText,
-        description: descriptionField,
+        // description: formRefs.description.current.value,
         profitChoosenTypeName,
         commissionPercentage,
         showDiscountPrice,
@@ -700,10 +702,17 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
         choosenShippingIndex,
         shippingIncludedChoice,
         // productEditFormOrigin: true,
+        discountPrice,
         options: productOptions,
         variantsArr: variantsDetails,
         images: productImages,
       };
+      if(formRefs.description?.current){
+        data.description = formRefs.description.current.value
+      }
+  /*     if(formRefs.discountPrice.current){
+        data.discountPrice = formRefs.discountPrice.current.value
+      } */
       if (shippingWithoutOrInclude == "shippingIncluded") {
         data.shippingIncludedChoiceIndex = choosenShippingIndex;
       } else {
@@ -845,8 +854,9 @@ toast({variant:"destructive",description:"SallaToken Not Found."})
                 <div className="form-group">
                   <label className="form-label">Description</label>
                   <Editor
-                    value={descriptionField}
-                    onChange={(value) => setDescriptionField(value)}
+                    // value={descriptionField}
+                    // onChange={(value) => setDescriptionField(value)}
+                    //@ts-ignore
                     ref={formRefs.description}
                   />
                 </div>
