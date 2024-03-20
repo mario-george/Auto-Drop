@@ -9,6 +9,8 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useState } from "react";
+
+import {useSelector} from 'react-redux'
 import SearchProduct from "../../../../_components/shared/ui/SearchProduct";
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -37,19 +39,25 @@ export function DataTableToolbar<TData>({
   setMyProducts,
   apply,unLinkedProd,noShipping,myProducts,setColumnFilters
 }: DataTableToolbarProps<TData>) {
+
+  const reloadPage = useSelector((state:any)=>state.products.reloadPage)
   const [checkedUnAvailable, setCheckedUnAvailable] = useState(false);
   const [checkedUnLinked, setCheckedUnLinked] = useState(false);
   const [checkedNoShipping, setCheckedNoShipping] = useState(false);
   const [oldProducts, setOldProducts] = useState([]);
 
- /*  const isFiltered = table.getState().columnFilters.length > 0;
+//  / const isFiltered = table.getState().columnFilters.length > 0;
   useEffect(() => {
     // Save the original state of the products when the component mounts
-    setOldProducts(myProducts);
-  }, []); */
-  
+    setOldProducts([]);
+  }, [reloadPage]); 
+  useEffect(()=>{
+    if(myProducts&&myProducts.length>0&&oldProducts.length==0)
+      setOldProducts(myProducts)
+  },[myProducts])
   let filterHandler = () => {
-    let newProducts = [...myProducts]; // Assuming myProducts is your original data
+    console.log("oldProducts",oldProducts)
+    let newProducts = [...oldProducts]; 
   
     if (checkedUnAvailable) {
       newProducts = newProducts.filter((prod: any) => prod.inventory !== 0);
@@ -63,13 +71,7 @@ export function DataTableToolbar<TData>({
       newProducts = newProducts.filter((prod: any) => prod.shippingAvailable !== false);
     }
   
-    // Assuming 'inventory', 'salla_product_id', and 'shippingAvailable' are the column ids
-    setColumnFilters({
-/*       inventory: checkedUnAvailable ? 0 : null,
-      salla_product_id: checkedUnLinked ? null : undefined,
-      shippingAvailable: checkedNoShipping ? false : undefined, */
-      // prodName:prodName.includes("") ? false :undefined
-    });
+  setMyProducts(newProducts);
   };
 /*   let filterHandler = () => {
     if (checkedUnAvailable) {
