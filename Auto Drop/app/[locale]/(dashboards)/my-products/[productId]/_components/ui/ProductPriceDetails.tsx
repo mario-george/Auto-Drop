@@ -12,7 +12,7 @@ export default function ProductPriceDetails({
   inputClasses,
   showDiscountPrice,
   setShowDiscountPrice,
-  shippingTotalCost,
+  shippingTotalCost,discountPriceRef
 }: any) {
   const [checked, setChecked] = useState(false);
   return (
@@ -27,6 +27,15 @@ export default function ProductPriceDetails({
               setShowDiscountPrice(!showDiscountPrice);
             }}
           />{" "}
+
+            <Input
+          className={`shadow-sm text-sm md:text-base min-w-[60%] ${inputClasses} `}
+          ref={discountPriceRef}
+
+          // value={CurrencyFormatter(finalPrice + shippingTotalCost)}
+          // ref={discountPriceRef}
+        />
+
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4 my-4 min-w-full">
