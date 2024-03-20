@@ -66,7 +66,7 @@ const CategoriesRendererComponent =(<>
         >
           {allProducts}
           <Separator
-            className="py-3 w-[1px] bg-black mx-2"
+            className="py-3 w-[1px] bg-black mx-2 dark:bg-black"
             orientation="vertical"
           />
         </div>
@@ -86,7 +86,7 @@ const CategoriesRendererComponent =(<>
                   changeCategoryHandler(categoryObject.path);
                 }}
               >
-                <div className="text-[#253439] dark:text-white whitespace-nowrap">
+                <div className="text-[#253439] whitespace-nowrap dark:text-[#253439]">
                   {categoryObject.name}
                 </div>
               </div>
