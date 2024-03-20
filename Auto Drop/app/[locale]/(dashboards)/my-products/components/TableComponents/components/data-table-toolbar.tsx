@@ -47,7 +47,7 @@ export function DataTableToolbar<TData>({
   const [checkedUnLinked, setCheckedUnLinked] = useState(false);
   const [checkedNoShipping, setCheckedNoShipping] = useState(false);
   const [oldProducts, setOldProducts] = useState([]);
-const {selected :selectedCategories,MultiCategoriesSelectBox} = useMultiSelectCategories({translationMessages})
+const {selected :selectedCategories,MultiCategoriesSelectBox} = useMultiSelectCategories({translationMessages,category})
 //  / const isFiltered = table.getState().columnFilters.length > 0;
   useEffect(() => {
     // Save the original state of the products when the component mounts
@@ -167,7 +167,7 @@ const {selected :selectedCategories,MultiCategoriesSelectBox} = useMultiSelectCa
           />
         </div>
         <div className="flex items-center space-s-2 ">
-          <div className="text-xs tab:text-lg ">{noShipping}</div>
+          <div className="text-xs tab:text-lg ">{category}</div>
           {MultiCategoriesSelectBox}
         </div>
 
