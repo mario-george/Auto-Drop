@@ -4,7 +4,7 @@ import multer from "multer";
 const upload = multer();
 
 const searchRoutes = Router();
-searchRoutes.post("/getRandomProducts/",GetRecommendedProductsByURL)
+searchRoutes.post("/getProductByUrl/",GetRecommendedProductsByURL)
 searchRoutes.post("/getRandomProductsImage/", upload.single('file'), GetRecommendedProductsByImage);
 searchRoutes.post("/getRandomProductsCategory/",GetRecommendedProductsByCategory)
 
