@@ -546,7 +546,7 @@ export async function GetProductDetailsTest(
       target_original_price,
     });
     
-    const result = await getProductShippingServices(
+    const result:any = await getProductShippingServices(
       {
         sku_id: productInfo.sku_id,
         country_code: "SA",
@@ -646,8 +646,20 @@ if(!productInfo.description ){
     let { category_id, category_name } = req.body;
     // product.category_name = category_name;
     // product.category_id = category_id;
+
+
+
     //@ts-ignore
     product.shipping = result;
+    //@ts-ignore
+    if(result?.length==0){
+      product.shippingAvailable =false
+    }else if(result?.length>0){
+      product.shippingAvailable =true
+
+    }
+    console.log("shippingAvailable",result?.length==0) 
+    console.log("result",result) 
     
     const jsonProduct = product.toJSON();
    
