@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 
 import {useSelector} from 'react-redux'
 import SearchProduct from "../../../../_components/shared/ui/SearchProduct";
+
+import useMultiSelectCategories from './ui/useMultiSelectCategories'
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   searchByProd: string;
@@ -25,7 +27,7 @@ interface DataTableToolbarProps<TData> {
   setMyProducts: any;
   apply: string;
   myProducts: any;
-  setColumnFilters:any
+  translationMessages: { [key: string]: string };
 }
 
 export function DataTableToolbar<TData>({
@@ -37,7 +39,7 @@ export function DataTableToolbar<TData>({
   unUpProd,
   locale,
   setMyProducts,
-  apply,unLinkedProd,noShipping,myProducts,setColumnFilters
+  apply,unLinkedProd,noShipping,myProducts,translationMessages
 }: DataTableToolbarProps<TData>) {
 
   const reloadPage = useSelector((state:any)=>state.products.reloadPage)
@@ -45,7 +47,7 @@ export function DataTableToolbar<TData>({
   const [checkedUnLinked, setCheckedUnLinked] = useState(false);
   const [checkedNoShipping, setCheckedNoShipping] = useState(false);
   const [oldProducts, setOldProducts] = useState([]);
-
+const {selected :selectedCategories,MultiCategoriesSelectBox} = useMultiSelectCategories({translationMessages})
 //  / const isFiltered = table.getState().columnFilters.length > 0;
   useEffect(() => {
     // Save the original state of the products when the component mounts
@@ -164,6 +166,11 @@ export function DataTableToolbar<TData>({
             classNameIndicator={`bg-black rounded-lg dark:fill-white dark:bg-white`}
           />
         </div>
+        <div className="flex items-center space-s-2 ">
+          <div className="text-xs tab:text-lg ">{noShipping}</div>
+          {MultiCategoriesSelectBox}
+        </div>
+
         <Button
           className="bg-[#b29e84] hover:bg-[#b29e84]/90 h-[2rem] tab:h-fit dark:text-white"
           onClick={filterHandler}
