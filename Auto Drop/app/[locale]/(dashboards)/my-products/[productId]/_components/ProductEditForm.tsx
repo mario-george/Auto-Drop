@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 // import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Radio, RadioGroup } from "@chakra-ui/react";
 
+import ReactQuill from "react-quill";
 import {
   Form,
   FormControl,
@@ -50,6 +51,7 @@ import useProductShipping from "./ui/useProductShipping";
 import {useToast } from "@/components/ui/use-toast";
 
 import {useSelector} from 'react-redux'
+import { useErrorToast } from '../../../../../../components/chakra-ui/useErrorToast';
 interface ProductEditFormProps {
   prodNameTitle: string;
   prodNameTitlePlaceholder: string;
@@ -136,8 +138,21 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     withText,
     valueText,
   } = props;
-
+const errorButtonRefShipping :React.RefObject<HTMLButtonElement>= useRef(null)
   const {toast} = useToast()
+  const {ErrorComponent:ErrorComponentShipping} =useErrorToast({title:"Linking this product." ,description:"Shipping is not available for this product.",errorButtonRef:errorButtonRefShipping})
+const formRefsArray = ["prodName", "SEOTitleText", "SEODescription","discountPrice","description","commission"];
+
+interface Accumlator {
+  [key: string]: React.RefObject<HTMLInputElement | ReactQuill>;
+
+
+}
+const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string)=>{
+  accumlator[currentValue] = useRef<HTMLInputElement>(null)
+   return accumlator
+},{})
+
   const [categoriesList, setCategoriesList] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [productImages, setProductImages] = useState([]);
@@ -247,6 +262,18 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       setFormValues((prevV: any) => {
         return { ...prevV, ProductName: product?.name };
       });
+      if( formRefs.prodName.current){
+
+        formRefs.prodName.current.value = product?.name;
+      }
+      if( formRefs.description.current){
+
+        formRefs.description.current.value = product?.description;
+      }
+      if( formRefs.discountPrice.current){
+
+        formRefs.discountPrice.current.value = product?.target_original_price;
+      }
       let colorsOption = product?.options?.find(
         (option: any) =>
           option?.name?.includes("Color") || option?.name?.includes("color")
@@ -449,15 +476,21 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     
       return
     }
+    if(product?.shipping?.length ==0){
+      errorButtonRefShipping?.current?.click()
+      return
+    }
     setLoading(true);
 
-    setIsLoading(true);
+    // setIsLoading(true);
     try {
       uploadProductHandler(data);
     } catch (err: any) {
       setError(err.response.data.message);
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
+      setLoading(false);
+    
     }
   };
   const ProductOptionsProps = {
@@ -508,7 +541,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     inputClasses,
     showDiscountPrice,
     setShowDiscountPrice,
-    shippingTotalCost,
+    shippingTotalCost,discountPriceRef: formRefs.discountPrice
   };
 
   const ProductSEOInfoProps = {
@@ -619,6 +652,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     
       return
     } */
+
+
     try {
       let profitChoosenTypeName = "number";
   
@@ -703,6 +738,7 @@ toast({variant:"destructive",description:"SallaToken Not Found."})
 
   return (
     <>
+  {ErrorComponentShipping}
       {LoaderComponent}
       {ProductHeaderComponent}
       <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  dark:bg-[#2e464f] dark:text-white">
@@ -811,6 +847,7 @@ toast({variant:"destructive",description:"SallaToken Not Found."})
                   <Editor
                     value={descriptionField}
                     onChange={(value) => setDescriptionField(value)}
+                    ref={formRefs.description}
                   />
                 </div>
               </div>
