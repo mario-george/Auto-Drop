@@ -25,7 +25,7 @@ export default function useProfitTypeHandler(props: any) {
   /*   const reloadProducts = useSelector(
     (state: any) => state.products.reloadProducts
   ); */
-  let { profitType, percentage, number, upProducts, val,errorButtonRefNoSelection,errorButtonRefNoToken,errorButtonRefSubmitError } = props;
+  let { profitType, percentage, number, upProducts, val,errorButtonRefNoSelection,errorButtonRefNoToken,errorButtonRefSubmitError,successButtonRef } = props;
   const productsState = useSelector((state: any) => state.products);
   const sallaToken = useSelector((state: any) => state.user.sallaToken);
 console.log("sallaToken",sallaToken)
@@ -131,6 +131,7 @@ return
     try {
       let promisesSettled = await Promise.allSettled(promisesArr);
       console.log("promisesSettled", promisesSettled);
+      let success = true
       promisesSettled.forEach((promise: any) => {
         let { status, value } = promise;
         if (status === "rejected") {
@@ -138,11 +139,17 @@ return
             variant: "destructive",
             title: "Error while linking product",
           }); */
-          errorButtonRefSubmitError?.current?.click()
+          success=false
           console.log(promise);
           console.log(promise.reason);
         }
       });
+      if( success){ 
+        successButtonRef?.current?.click()
+      }else{
+        errorButtonRefSubmitError?.current?.click()
+
+      }
       dispatch(
         setKeyValue({
           key: "reloadProducts",
