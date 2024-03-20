@@ -545,6 +545,7 @@ export async function GetProductDetailsTest(
       target_sale_price,
       target_original_price,
     });
+    
     const result = await getProductShippingServices(
       {
         sku_id: productInfo.sku_id,
@@ -588,7 +589,10 @@ export async function GetProductDetailsTest(
       [price, main_price] = [main_price, price];
     }
     const { role, _id } = req.user;
-
+console.log("productInfo?.name",productInfo?.name)
+console.log("productInfo?.metadata_title",productInfo?.metadata_title)
+console.log("productInfo?.metadata_description",productInfo?.metadata_description)
+console.log("productInfo?.description.slice(0,12",productInfo?.description.slice(0,12))
     const product = new Product({
       name: name,
       ...body,
@@ -604,7 +608,7 @@ export async function GetProductDetailsTest(
       target_original_price,
       variantsArr:productInfo.variantsArr,
     });
-
+console.log("product?.name",product?.name)
 let metadataDescSliced =  productInfo.metadata_description
 if( productInfo?.metadata_description?.length > 70){
   metadataDescSliced = productInfo.metadata_description.slice(0,70)
@@ -656,7 +660,7 @@ if(!productInfo.description ){
       req
     ); */
     // 
-    return res.json({ product, shipping: result ,message:"success"});
+
   } catch (error) {
     console.log(error);
     next(error);
