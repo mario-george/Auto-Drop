@@ -5,8 +5,9 @@ import { MultiSelect } from "react-multi-select-component";
 import axiosInstance from '@/app/[locale]/(dashboards)/_components/shared/AxiosInstance';
 interface MultiSelectCategoriesProps {
   translationMessages:{[key:string]:string}
+  category:string
 }
-const useMultiSelectCategories = ({translationMessages}: MultiSelectCategoriesProps
+const useMultiSelectCategories = ({translationMessages,category}: MultiSelectCategoriesProps
 ) => {
 
 
@@ -33,16 +34,15 @@ const useMultiSelectCategories = ({translationMessages}: MultiSelectCategoriesPr
 let MultiCategoriesSelectBox = 
 
     <div>
-      <h1>Categories</h1>
       {/*<pre>{JSON.stringify(selected)}</pre>*/}
       <MultiSelect
         options={categoriesList}
         value={selected}
         onChange={setSelected}
         labelledBy={"Select"}
-        className="dark:!text-black"
+        className="dark:!text-black !text-sm !whitespace-nowrap"
         overrideStrings={{
-          "selectSomeItems": "Select...",
+          "selectSomeItems": translationMessages?.search +"....      ",
           "allItemsAreSelected": translationMessages?.allCategories,
           "selectAll": translationMessages?.selectAll,
           "search":translationMessages?.search,
