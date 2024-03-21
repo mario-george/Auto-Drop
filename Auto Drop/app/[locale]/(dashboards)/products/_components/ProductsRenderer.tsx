@@ -36,6 +36,7 @@ import useLoader from "@/components/loader/useLoader";
 import useCategories from "./useCategories";
 import useProductSearchBar from "./hooks/useProductSearchBar";
 import { useErrorToast } from "@/components/chakra-ui/useErrorToast";
+import { useSuccessToast } from "@/components/chakra-ui/useSuccessToast";
 
 // pages / products  state
 
@@ -78,7 +79,9 @@ export default function ProductsRenderer({
   const [currPage, setCurrPage] = useState("1");
   const { LoaderComponent, setLoading } = useLoader();
   const errorButtonRef = useRef<HTMLButtonElement>(null)
+  const successButtonRef = useRef<HTMLButtonElement>(null)
 const {ErrorComponent} = useErrorToast({title:"Error",description:"The data you provided has no results.",errorButtonRef})
+const {SuccessComponent} = useSuccessToast({title:"Success",description:"Products have been added successfully.",successButtonRef})
   const [lang, setLang] = useState<string>("en");
 let {SearchBarComponent,searchInfo,setSearchInfo} =useProductSearchBar({locale,searchByProd})
 
@@ -176,6 +179,7 @@ console.log("searchInfo",searchInfo)
 
   return (
     <div className="dark:text-white">
+      {SuccessComponent}
 {ErrorComponent}
 {LoaderComponent}
       <Header toogleLang={toogleLang} shops={shops} />
@@ -215,6 +219,7 @@ console.log("searchInfo",searchInfo)
           currPage={currPage}
           lang={lang}
           setLoading={setLoading}
+          successButtonRef={successButtonRef}
         />
       </>
     </div>
