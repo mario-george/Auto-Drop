@@ -4,9 +4,14 @@ import multer from "multer";
 const upload = multer();
 
 const searchRoutes = Router();
+
+// Aliexpress Routes
+
 searchRoutes.post("/getProductByUrl/",GetRecommendedProductsByURL)
 searchRoutes.post("/getRandomProductsImage/", upload.single('file'), GetRecommendedProductsByImage);
 searchRoutes.post("/getRandomProductsCategory/",GetRecommendedProductsByCategory)
+
+
 
 
 export default searchRoutes;
