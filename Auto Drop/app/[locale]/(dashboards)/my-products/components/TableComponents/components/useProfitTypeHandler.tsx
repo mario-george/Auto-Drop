@@ -19,13 +19,17 @@ import useLoader from "@/components/loader/useLoader";
 import { useDispatch } from "react-redux";
 import { setKeyValue } from "@/store/productsSlice";
 import { useLocale } from "next-intl";
+import useMultiSelectCategories from "./ui/useMultiSelectCategories";
 export default function useProfitTypeHandler(props: any) {
   // const { toast } = useToast();
   const dispatch = useDispatch();
   /*   const reloadProducts = useSelector(
     (state: any) => state.products.reloadProducts
   ); */
-  let { profitType, percentage, number, upProducts, val,errorButtonRefNoSelection,errorButtonRefNoToken,errorButtonRefSubmitError,successButtonRef } = props;
+
+  let { profitType, percentage, number, upProducts, val,errorButtonRefNoSelection,errorButtonRefNoToken,errorButtonRefSubmitError,successButtonRef ,translationMessages,category} = props;
+const {selected :selectedCategories,MultiCategoriesSelectBox} = useMultiSelectCategories({translationMessages,category})
+// console.log("selectedCategories",selectedCategories)
   const productsState = useSelector((state: any) => state.products);
   const sallaToken = useSelector((state: any) => state.user.sallaToken);
 console.log("sallaToken",sallaToken)
@@ -110,7 +114,7 @@ return
       }
       console.log("commissionVal", commissionVal);
       console.log("commissionPercentage", commissionPercentage);
-      let data = {
+      let data:any = {
         name: product.name,
         vendor_commission: commissionVal,
         metadata_description: product.metadata_description,
@@ -119,6 +123,10 @@ return
         commissionPercentage,
         showDiscountPrice: false,
       };
+
+      if(selectedCategories && selectedCategories?.length >1 ){
+        data.categoriesSalla = selectedCategories.map((category:{label:string,value:number})=>category.value)
+      }
       const res = axiosInstance.patch(
         `aliexpress/product/updateProduct/${product._id}`,
         data
@@ -172,8 +180,8 @@ return
       <div
         className={`grid grid-cols-2 justify- ${
           locale == "en"
-            ? `lap:grid-cols-3 lap:my-4 `
-            : `tab:grid-cols-3 tab:my-4`
+            ? `lap:grid-cols-4 lap:my-4 `
+            : `tab:grid-cols-4 tab:my-4`
         } gap-4    items-center my-2   dark:text-white`}
       >
         <span
@@ -216,6 +224,30 @@ return
               </SelectGroup>
             </SelectContent>
           </Select>
+        </div>
+
+        <span
+          className={`whitespace-nowrap text-sm mx-2  ${
+            locale == "en" ? `lap:hidden` : `tab:hidden`
+          }`}
+        >
+          {category}
+        </span>
+        <div
+          className={`flex ${
+            locale == "en"
+              ? `lap:flex-row lap:space-s-6 lap:space-y-0 `
+              : `tab:flex-row tab:space-s-6 tab:space-y-0`
+          } space-y-3  flex-col items-center`}
+        >
+          <span
+            className={`whitespace-nowrap text-sm mx-2 hidden ${
+              locale == "en" ? `lap:block` : "tab:block"
+            }`}
+          >
+            {category}
+          </span>
+          {MultiCategoriesSelectBox}
         </div>
         <div
           className={`flex items-center ${
