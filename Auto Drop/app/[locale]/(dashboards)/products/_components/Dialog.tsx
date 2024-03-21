@@ -22,7 +22,7 @@ export default function SubmitProducts({
   currPageProdEN,
   currPageProdAR,
   currPage,
-  locale,setLoading
+  locale,setLoading,successButtonRef
 }: any) {
   const router = useRouter();
   // const { LoaderComponent, setLoading } = useLoader();
@@ -78,6 +78,7 @@ export default function SubmitProducts({
     } catch (error) {
       console.error(error);
     }
+    successButtonRef?.current?.click()
     router.push(`/${locale || "en"}/my-products`);
 
     setLoading(false);
