@@ -19,11 +19,14 @@ const translationMessages = {
     profitType: t("profitType"),
     title: t("products"),
     number: t2("number"),
+    translationMessages,
+    category:t("category")
+
   };
   const locale = useLocale();
   return (
     <>
-      <Header {...HeaderProps} className="max-w-full" />
+      <Header {...HeaderProps} className="w-fit" />
       <TableRenderer
         productName={t("prodName")}
         sellPrice={t("sellPrice")}
