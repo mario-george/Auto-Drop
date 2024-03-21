@@ -10,6 +10,7 @@ import useLoaderProducts from "@/components/loader/useLoaderProducts";
 export default function ProductsFetch(props: any) {
   const { LoaderComponent } = useLoaderProducts();
   const [myProducts, setMyProducts] = useState([]);
+  const [allProdCategories, setAllProdCategories] = useState([]);
   const [loadProducts, setLoadProducts] = useState(false);
   const reloadProducts = useSelector(
     (state: any) => state.products.reloadProducts
@@ -20,13 +21,11 @@ export default function ProductsFetch(props: any) {
     const getMyProductsData = async () => {
       const data2 = await axiosInstance.get("/aliexpress/product/getProducts");
       console.log(data2.data.userProducts);
-      //   setMyProducts(JSON.parse(data2.data.userProducts.toString()));
       setMyProducts(
         data2.data.userProducts.map((product: any) => {
           return {
             ...product,
             prodName: product.name,
-            // prodInfo: { name: product.name, image: product.images[0].original },
             category:
               product.category_name || product.first_level_category_name,
             prodImage: product.images[0].original,
@@ -52,9 +51,22 @@ export default function ProductsFetch(props: any) {
 
     getMyProductsData();
   }, [loadProducts, reloadProducts, reloadPage]);
+  useEffect(() => {
+    const getAllProductsCategories = async () => {
+      const productsCategoriesResp = await axiosInstance.get(
+        "/salla/getProductsCategories"
+      );
 
+      console.log("productsCategoriesResp", productsCategoriesResp);
+      let productsCategories = productsCategoriesResp.data.data;
+      console.log("productsCategories", productsCategories);
+      setAllProdCategories(productsCategories);
+    };
+
+    getAllProductsCategories();
+  }, [loadProducts, reloadProducts, reloadPage]);
   if (!myProducts) {
-    return <div>Loading...</div>; // Replace with your loading state
+    return <div>Loading...</div>; 
   }
 
   return (
