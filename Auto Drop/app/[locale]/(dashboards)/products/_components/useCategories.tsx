@@ -81,6 +81,7 @@ const CategoriesRendererComponent =(<>
             }
             return (
               <div
+                key={categoryObject.path}
                 className="hover:cursor-pointer tab:text-[15px] "
                 onClick={() => {
                   changeCategoryHandler(categoryObject.path);
