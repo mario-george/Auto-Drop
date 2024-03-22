@@ -28,6 +28,7 @@ interface DataTableToolbarProps<TData> {
   apply: string;
   myProducts: any;
   translationMessages: { [key: string]: string };
+  allProdCategories:any[]
 }
 
 export function DataTableToolbar<TData>({
@@ -39,7 +40,7 @@ export function DataTableToolbar<TData>({
   unUpProd,
   locale,
   setMyProducts,
-  apply,unLinkedProd,noShipping,myProducts,translationMessages
+  apply,unLinkedProd,noShipping,myProducts,translationMessages,allProdCategories
 }: DataTableToolbarProps<TData>) {
 
   const reloadPage = useSelector((state:any)=>state.products.reloadPage)
@@ -72,7 +73,10 @@ const {selected :selectedCategories,MultiCategoriesSelectBox} = useMultiSelectCa
     if (checkedNoShipping) {
       newProducts = newProducts.filter((prod: any) => prod.shippingAvailable !== false);
     }
-  
+  if( allProdCategories?.length>0 && selectedCategories?.length>0){
+    newProducts = newProducts.filter((prod: any) => prod.shippingAvailable !== false);
+
+  }
   setMyProducts(newProducts);
   };
 /*   let filterHandler = () => {
