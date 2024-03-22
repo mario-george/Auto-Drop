@@ -7,11 +7,12 @@ import "./_components/home-page/stylesHomePage.css";
 export default function Home() {
   const t = useTranslations("clientHomePage");
   const locale = useLocale();
+
   return (
     <>
       <MotionWrapper locale={locale}>
         <div className="tab:p-4">
-          <HomePageRenderer t={t} locale={locale} />
+          <HomePageRenderer t={t} locale={locale}  />
         </div>
       </MotionWrapper>
     </>
