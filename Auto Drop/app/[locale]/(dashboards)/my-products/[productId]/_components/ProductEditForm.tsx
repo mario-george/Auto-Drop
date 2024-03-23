@@ -219,7 +219,7 @@ formRefs.commission = useRef<HTMLInputElement>(null);
   const {
     ProductShippingComponent,
     value: choosenShippingIndex,
-    shippingTotalCost,
+    shippingTotalCost,choosenCountryCode
   } = useProductShipping({ ...ProductShippingProps });
   let addToCartHandler = () => {};
   const ProductEditHeaderProps = {
@@ -291,7 +291,14 @@ formRefs.commission = useRef<HTMLInputElement>(null);
 
         formRefs.description.current.value = product?.description;
       }
-      setDiscountPrice(product?.target_original_price)
+
+      if(product?.discountPrice ==0 ){
+
+        setDiscountPrice(product?.target_original_price)
+      }else{
+        setDiscountPrice(product?.discountPrice)
+
+      }
 
    
       setDescriptionField(product?.description);
@@ -663,7 +670,6 @@ setProductShipping(product?.shipping)
         vendor_commission: commissionVal,
         metadata_description: dataForm?.SEODescription,
         metadata_title: dataForm?.SEOTitleText,
-        // description: formRefs.description.current.value,
         profitChoosenTypeName,
         commissionPercentage,
         showDiscountPrice,
@@ -673,11 +679,11 @@ setProductShipping(product?.shipping)
         checkboxesSelected,
         choosenShippingIndex,
         shippingIncludedChoice,
-        // productEditFormOrigin: true,
         discountPrice,
         options: productOptions,
         variantsArr: variantsDetails,
         images: productImages,
+        shipping:productShipping
       };
       if(formRefs.description?.current){
         data.description = formRefs.description.current.value
@@ -685,6 +691,10 @@ setProductShipping(product?.shipping)
   /*     if(formRefs.discountPrice.current){
         data.discountPrice = formRefs.discountPrice.current.value
       } */
+
+      if(choosenCountryCode){
+        data.country_code = choosenCountryCode
+      }
       if (shippingWithoutOrInclude == "shippingIncluded") {
         data.shippingIncludedChoiceIndex = choosenShippingIndex;
       } else {
