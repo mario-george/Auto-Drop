@@ -99,6 +99,8 @@ interface CategorySalla {
   name: string;
 }
 export default function ProductEditForm(props: ProductEditFormProps) {
+  const locale = useLocale();
+
   let {
     invalidProdName,
     invalidSEODescription,
@@ -197,7 +199,7 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
     shippingText: shipping,
     nameOfShippingComp,
     durationToDeliver,
-    shippingWithoutOrInclude,
+    shippingWithoutOrInclude,to,locale
   };
   const {
     ProductShippingComponent,
@@ -449,7 +451,6 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
     }
   }, [totalProfit, profitChoosenType, commissionVal]);
   let inputClasses = `bg-[#edf5f9] text-[#253439] rounded-lg shadow`;
-  const locale = useLocale();
   const formSchema = z.object({
     prodName: z.string().min(2, invalidProdName).max(300),
     SEOTitleText: z.string().min(2, invalidSEOTitle).max(70),
