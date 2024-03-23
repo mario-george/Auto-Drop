@@ -10,11 +10,12 @@ export default function ColsExtract(props: any) {
     category,
     platform,
     inventory,
-    setMyProducts,setLoadProducts,
+    setMyProducts,setLoadProducts,allProdCategories
   } = props;
   return (
     <DataTable
     setMyProducts={setMyProducts}
+    allProdCategories={allProdCategories}
     setLoadProducts={setLoadProducts}
     colData = {   {productName,
       sellPrice,
