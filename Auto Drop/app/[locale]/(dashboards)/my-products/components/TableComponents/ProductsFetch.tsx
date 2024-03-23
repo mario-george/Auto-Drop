@@ -52,12 +52,15 @@ let productsCategories = resp.value.data.data;
 // console.log("productsCategories", productsCategories);
 setAllProdCategories(productsCategories);
 }
-   dispatch(
-      setKeyValue({
-        key: "currentProductsList",
-        value: data2.data.userProducts,
-      })
-    );
+if(  fetchInfoResolved[0].status == "fulfilled"){
+console.log("fetchInfoResolved[0].value.data.userProducts",fetchInfoResolved[0].value.data.userProducts)
+  dispatch(
+     setKeyValue({
+       key: "currentProductsList",
+       value: fetchInfoResolved[0].value.data.userProducts,
+     })
+   );
+}
     dispatch(
       setKeyValue({
         key: "loadingProductTable",
