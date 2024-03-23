@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 import CurrencyFormatter from "../../../../products/_components/CurrencyFormatter";
-import { Radio, RadioGroup, Stack } from "@chakra-ui/react";
+import { Radio, RadioGroup, Stack, Spinner } from '@chakra-ui/react';
 import {
   Select,
   SelectContent,
@@ -10,43 +10,59 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import countries from 'i18n-iso-countries';
-import ar from 'i18n-iso-countries/langs/ar.json';
-import en from 'i18n-iso-countries/langs/en.json';
-import LocationSVG from './icons/LocationSVG';
-import axiosInstance  from '@/app/[locale]/(dashboards)/_components/shared/AxiosInstance';
-
+import countries from "i18n-iso-countries";
+import ar from "i18n-iso-countries/langs/ar.json";
+import en from "i18n-iso-countries/langs/en.json";
+import LocationSVG from "./icons/LocationSVG";
+import axiosInstance from "@/app/[locale]/(dashboards)/_components/shared/AxiosInstance";
 
 export default function useProductShipping({
   shipping,
   nameOfShippingComp,
   shippingText,
   durationToDeliver,
-  shippingWithoutOrInclude,to,locale
+  shippingWithoutOrInclude,
+  to,
+  locale,
+  product_id,setProductShipping
 }: any) {
   const [value, setValue] = useState("0");
-  const [choosenCountryCode ,setChoosenCountryCode] = useState("SA")
+  const [choosenCountryCode, setChoosenCountryCode] = useState("SA");
   const [shippingTotalCost, setShippingTotalCost] = useState(0);
-  if (locale === 'ar') {
+  const [fetchingShipping,setFetchingShipping] = useState(false);
+  if (locale === "ar") {
     countries.registerLocale(ar);
-  }else{
+  } else {
     countries.registerLocale(en);
-
   }
-const shippingMethodsHandler =async ()=>{
+  const shippingMethodsHandler = async (country_code: string) => {
+    setFetchingShipping(true)
+    try {
+      let data = {
+        product_id,
+        country_code,
+      };
 
-  try{
+      let res = await axiosInstance
+        .post("/shipping/country", data)
+        .catch((err) => console.error(err));
 
-    let res = await axiosInstance.get('/')
-
-    let fetchedShippingMethods = res?.data?.data
-    // setShipping(fetchedShippingMethods)
-  }catch(err){
-    console.error(err)
-  }
-}
+      let fetchedShippingMethods = res?.data?.shipping
+      console.log("fetchedShippingMethods",fetchedShippingMethods)
+      setProductShipping(fetchedShippingMethods)
+      return true
+    } catch (err) {
+      console.error(err);
+      return false
+    }finally{
+      setFetchingShipping(false)
+    
+    }
+  };
   const countryCodes = Object.keys(countries.getAlpha2Codes());
-  const countryNames = countryCodes.map(code => countries.getName(code, locale));
+  const countryNames = countryCodes.map((code) =>
+    countries.getName(code, locale)
+  );
   const countriesWithCodes = countryCodes.map((code, index) => ({
     name: countryNames[index],
     code: code,
@@ -55,7 +71,7 @@ const shippingMethodsHandler =async ()=>{
   useEffect(() => {
     if (shippingWithoutOrInclude == "shippingIncluded") {
       let price = shipping?.[+value]?.freight?.cent / 100;
-      if (price == 0||price ) {
+      if (price == 0 || price) {
         setShippingTotalCost(price);
       }
     } else {
@@ -67,57 +83,43 @@ const shippingMethodsHandler =async ()=>{
       {shipping?.length ? (
         <div className="space-y-4 min-w-full  ">
           <div>
-
             <div className="flex justify-between">
+              <p className="text-lg font-semibold text-content">
+                {shippingText}
+              </p>
 
-            <p className="text-lg font-semibold text-content">{shippingText}</p>
+              <div className="flex space-s-9  justify-between items-center">
+                <LocationSVG />
+                <p className="text-lg font-semibold text-content">{to}:</p>
+                <Select
+                  onValueChange={(country_code: string) => {
+                    setChoosenCountryCode(country_code);
+                    shippingMethodsHandler(country_code);
+                  }}
+                  defaultValue={choosenCountryCode}
+                >
+                  <SelectTrigger className="  bg-[#edf5f9] text-black text-right text-xs mm:text-sm ml:text-md tab:text-lg">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>{"location"}</SelectLabel>
 
-            <div className="flex space-s-9  justify-between items-center">
-
-
-            <LocationSVG/>
-            <p className="text-lg font-semibold text-content">{to}:
-            </p>
-            <Select
-            onValueChange={(value: string) => {
-              /* let valid = true;
-              selectedCategories?.forEach((val: string) => {
-                if (val == value) valid = false;
-              });
-              if (!valid) {
-                return;
-              }
-              console.log("change", value);
-              //@ts-ignore
-              setSelectedCategories((prevCategories: any) => {
-                if (!prevCategories) {
-                  return [value];
-                }
-                return [...prevCategories, value];
-              }); */
-            }}
-            defaultValue={choosenCountryCode}
-          >
-              <SelectTrigger className="  bg-[#edf5f9] text-black text-right text-xs mm:text-sm ml:text-md tab:text-lg">
-              <SelectValue  />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>{'location'}</SelectLabel>
-
-            {countriesWithCodes.map((country)=>{
-              return  <SelectItem
-              key={country.code}
-              value={ country.code}
-              className="z-[50] relative text-xs mm:text-sm ml:text-md tab:text-lg"
-            >
-              {country.name}
-            </SelectItem>
-            })}
-</SelectGroup>
-            </SelectContent>
-            </Select>
-            </div>
+                      {countriesWithCodes.map((country) => {
+                        return (
+                          <SelectItem
+                            key={country.code}
+                            value={country.code}
+                            className="z-[50] relative text-xs mm:text-sm ml:text-md tab:text-lg"
+                          >
+                            {country.name}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <RadioGroup
               defaultValue="0"
@@ -125,7 +127,9 @@ const shippingMethodsHandler =async ()=>{
               value={value}
               className="min-w-full  grid grid-cols-1 items-center justify-around gap-5 gap-y-5 py-4"
             >
-              {shipping?.map((option: any, index: number) => {
+
+              
+              {!fetchingShipping ? shipping?.map((option: any, index: number) => {
                 return (
                   <Radio value={index.toString()} key={index}>
                     <div
@@ -190,7 +194,7 @@ const shippingMethodsHandler =async ()=>{
                     </div>
                   </Radio>
                 );
-              })}
+              })   : <div className="flex justify-center items-center text-red-700"><Spinner/> </div>}
             </RadioGroup>
           </div>
         </div>
