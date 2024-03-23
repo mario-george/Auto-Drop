@@ -52,6 +52,10 @@ import {useToast } from "@/components/ui/use-toast";
 
 import {useSelector} from 'react-redux'
 import { useErrorToast } from '../../../../../../components/chakra-ui/useErrorToast';
+import { useSuccessToast } from '../../../../../../components/chakra-ui/useSuccessToast';
+
+
+import { Shipping } from "./types/shipping.interfaces";
 interface ProductEditFormProps {
   prodNameTitle: string;
   prodNameTitlePlaceholder: string;
@@ -143,25 +147,39 @@ export default function ProductEditForm(props: ProductEditFormProps) {
 const errorButtonRefShipping :React.RefObject<HTMLButtonElement>= useRef(null)
   const {toast} = useToast()
   const {ErrorComponent:ErrorComponentShipping} =useErrorToast({title:"Error while linking this product." ,description:"Shipping is not available for this product.",errorButtonRef:errorButtonRefShipping})
-const formRefsArray = ["prodName", "SEOTitleText", "SEODescription","description","commission"];
+  const updateProductRef = useRef<HTMLButtonElement>(null)
+  const {SuccessComponent:SuccessUpdateProductCompononet} =useSuccessToast({title:"Success." ,description:"Product has been updated successfully.",successButtonRef:updateProductRef})
+
+  const formRefsArray = ["prodName", "SEOTitleText", "SEODescription","description","commission"];
 
 interface Accumlator {
   [key: string]: React.RefObject<HTMLInputElement> | React.RefObject<ReactQuill>;
 
 
 }
-const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string)=>{
+/* const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string)=>{
   if(currentValue =="description"){
     accumlator[currentValue] = useRef<ReactQuill>(null)
     return accumlator
   }
   accumlator[currentValue] = useRef<HTMLInputElement>(null)
    return accumlator
-},{})
+},{}) */
+let formRefs :any = {}
+formRefs.prodName = useRef<HTMLInputElement>(null);
+formRefs.SEODescription = useRef<HTMLInputElement>(null);
+formRefs.SEOTitleText = useRef<HTMLInputElement>(null);
+formRefs.description = useRef<any>(null);
+formRefs.commission = useRef<HTMLInputElement>(null);
+
+
+
   const [ discountPrice,setDiscountPrice]  =useState(product?.target_original_price)
   const [categoriesList, setCategoriesList] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [productImages, setProductImages] = useState([]);
+  const [productShipping, setProductShipping] = useState([]);
+  
   const [currentlySelectedVariant, setCurrentlySelectedVariant] = useState({});
   const [optionChoosenValues, setOptionChoosenValues] = useState([]);
   const sallaToken = useSelector((state: any) => state.user.sallaToken);
@@ -173,9 +191,7 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
   const [formValues, setFormValues] = useState<any>({ ProductName: "" });
   const [metadataTitle, setMetadataTitle] = useState("");
   const [metadataDesc, setMetadataDesc] = useState("");
-  const [choosenColors, setChoosenColors] = useState<any>([]);
-  const [choosenMaterials, setChoosenMaterials] = useState<any>([]);
-  const [choosenSizes, setChoosenSizes] = useState<any>([]);
+
   const [selectedCategories, setSelectedCategories] = useState<any>([]);
   const [selectedTags, setSelectedTags] = useState<any>([]);
   const [profitChoosenType, setProfitChoosenType] = useState("percentage");
@@ -195,11 +211,10 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
     checkboxHandler,
   } = useOptionHook({ product: product });
   let ProductShippingProps = {
-    shipping: product?.shipping,
     shippingText: shipping,
     nameOfShippingComp,
     durationToDeliver,
-    shippingWithoutOrInclude,to,locale
+    shippingWithoutOrInclude,to,locale,product_id:product?.original_product_id ,setProductShipping,shipping:productShipping
   };
   const {
     ProductShippingComponent,
@@ -277,40 +292,12 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
         formRefs.description.current.value = product?.description;
       }
       setDiscountPrice(product?.target_original_price)
-     /*  if( formRefs.discountPrice.current){
 
-        formRefs.discountPrice.current.value = CurrencyFormatter(product?.target_original_price);
-      } */
-      let colorsOption = product?.options?.find(
-        (option: any) =>
-          option?.name?.includes("Color") || option?.name?.includes("color")
-      );
-
-      let materialsOption = product?.options?.find(
-        (option: any) =>
-          option?.name?.includes("Material") ||
-          option?.name?.includes("material")
-      );
-      let sizeOptions = product?.options?.find(
-        (option: any) =>
-          option?.name?.includes("Size") || option?.name?.includes("size")
-      );
+   
       setDescriptionField(product?.description);
-      setChoosenColors(
-        Array.from({ length: colorsOption?.values?.length }, (_, i) => {
-          return colorsOption?.values[i]?.selected || true;
-        })
-      );
-      setChoosenMaterials(
-        Array.from({ length: materialsOption?.values?.length }, (_, i) => {
-          return materialsOption?.values[i]?.selected || true;
-        })
-      );
-      setChoosenSizes(
-        Array.from({ length: sizeOptions?.values?.length }, (_, i) => {
-          return sizeOptions?.values[i]?.selected || true;
-        })
-      );
+   
+  
+     
       setShowDiscountPrice(product?.showDiscountPrice || false);
       setSelectedTags(
         product?.sallaTags.map((tag: { name: string; id: number }) => tag.name)
@@ -358,6 +345,7 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
       setCurrentlySelectedVariant(product?.variantsArr[0]);
       setProductOptions(product.options);
       setProductImages(product.images);
+setProductShipping(product?.shipping)
     }
   }, [product]);
   const [commissionVal, setCommissionVal] = useState(
@@ -379,6 +367,7 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
         if (resp.status < 300 && resp.status >= 200) {
           setCategoriesList(resp.data.data);
         }
+        console.log("resp.data.data",resp.data.data)
       } catch (err: any) {
         console.log(err?.response.data);
         console.log(err?.response.status);
@@ -498,12 +487,6 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
   };
   const ProductOptionsProps = {
     options: productOptions,
-    choosenSizes,
-    choosenColors,
-    setChoosenColors,
-    setChoosenSizes,
-    setChoosenMaterials,
-    choosenMaterials,
     optionsSelected,
     setOptionsSelected,
     optionCheckHandler,
@@ -644,18 +627,6 @@ const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string
     );
   }
   let uploadProductHandler = async (dataForm: any) => {
-/*     console.log("sallaToken",sallaToken)
-    if (!sallaToken || sallaToken=="" ) {
-      toast({
-        variant: "destructive",
-        title: "Please link your account with salla and try again.",
-      });
-     
-
-    
-      return
-    } */
-
 
     try {
       let profitChoosenTypeName = "number";
@@ -731,6 +702,7 @@ toast({variant:"destructive",description:"SallaToken Not Found."})
 
       if (res.status >= 200 && res.status < 300) {
         console.log("Product updated");
+        updateProductRef?.current?.click()
       } else {
         console.log("error");
       }
@@ -748,6 +720,7 @@ toast({variant:"destructive",description:"SallaToken Not Found."})
 
   return (
     <>
+    {SuccessUpdateProductCompononet}
   {ErrorComponentShipping}
       {LoaderComponent}
       {ProductHeaderComponent}
