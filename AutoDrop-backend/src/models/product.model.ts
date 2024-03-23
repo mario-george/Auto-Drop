@@ -72,12 +72,14 @@ interface ProductSchema {
   // category_id?: number;
   // category_name?: string;
   first_level_category_name?: string;
+  country_code?: string;
   second_level_category_name?: string;
   target_sale_price?: string | number;
   target_original_price?: string | number;
   variantsArr?: any;
   commissionPercentage?: boolean;
   showDiscountPrice?: boolean;
+  discountPrice?: number;
   categoriesSalla?: number[];
 
   sallaTags?: { name: string; id: number }[];
@@ -158,12 +160,14 @@ const options = {
   variantsArr: { type: Array, default: [] },
   commissionPercentage: { type: Boolean, default: true },
   showDiscountPrice: { type: Boolean, default: false },
+  discountPrice: { type: Number, default:0 },
   categoriesSalla: { type: Array, default: [] },
   sallaTags: { type: Array, default: [] },
   shippingIncludedChoice: { type: Boolean, default: false },
   shippingAvailable: { type: Boolean, default: false },
   // checkboxesSelected: { type: Array, default: [] },
   shippingIncludedChoiceIndex: { type: Number, default: -1 },
+  country_code: { type: String, default: "SA" },
   // productEditFormOrigin: { type: Boolean, default: false },
 };
 
