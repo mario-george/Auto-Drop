@@ -3,8 +3,81 @@ import catchAsync from "../../../../utils/catchAsync";
 import { Product, ProductDocument, ProductSchema } from "../../../../models/product.model";
 import axios from "axios";
 import SallaToken from "../../../../models/SallaTokenModel";
+import { Types } from "mongoose";
+interface ProductDocumentParameter extends ProductDocument {
+  _id: Types.ObjectId; // Make _id required
+  // ... other properties ...
+}
+const handleProductProperties = async(product:ProductDocumentParameter & {},reqBody:any)=>{
+  let {
+    name,
+    description,
+    commissionPercentage,
+    showDiscountPrice,
+    vendor_commission,
+    productQuantity,
+    metadata_description,
+    metadata_title,
+    categoriesSalla,
+    require_shipping,
+    selectedTags,
 
-const handleProductProperties = async(product:ProductDocument,reqBody:any)=>{
+    shippingIncludedChoice,
+    shippingIncludedChoiceIndex,
+    variantsArr,
+    options,
+    images,discountPrice,shipping,country_code,
+    ...body
+  } = reqBody;
+    if (options) {
+      product.options = options;
+    }
+    if (images) {
+      product.images = images;
+    }
+    if (shipping) {
+      product.shipping = shipping;
+    }
+    if (country_code) {
+      product.country_code = country_code;
+    }
+    if (discountPrice!==undefined) {
+      product.discountPrice = discountPrice;
+    }
+    if (variantsArr) {
+      product.variantsArr = variantsArr;
+
+      let totalQ = 0
+      variantsArr.forEach((variant:any)=>{
+        totalQ+=variant.sku_available_quantity
+      })
+      product.quantity= totalQ
+    }
+
+
+    if (shippingIncludedChoice && shippingIncludedChoiceIndex) {
+      product.shippingIncludedChoice = shippingIncludedChoice;
+      product.shippingIncludedChoiceIndex = shippingIncludedChoiceIndex;
+    }
+
+    product.metadata_description = metadata_description;
+    product.description = description;
+    product.metadata_title = metadata_title;
+    product.name = name;
+    product.commissionPercentage = commissionPercentage;
+    if (showDiscountPrice) {
+      product.showDiscountPrice = showDiscountPrice;
+    }
+    product.vendor_commission = vendor_commission;
+    product.commissionPercentage = commissionPercentage;
+    if (categoriesSalla) {
+      product.categoriesSalla = categoriesSalla;
+    }
+
+    if (require_shipping) {
+      product.require_shipping = require_shipping;
+    }
+return product
 
 }
 const tagsSallaHandler = async (
@@ -63,7 +136,7 @@ const PatchProduct = catchAsync(
       console.log("No product found");
       return res.status(404).json({ message: "Product Not Found." });
     }
-
+    product = await handleProductProperties(product,req.body)
     let {
       name,
       description,
@@ -85,7 +158,7 @@ const PatchProduct = catchAsync(
       ...body
     } = req.body;
     let sallaTags;
-    if (options) {
+/*     if (options) {
       product.options = options;
     }
     if (images) {
@@ -109,18 +182,18 @@ const PatchProduct = catchAsync(
       })
       product.quantity= totalQ
     }
-
+ */
     if (selectedTags && selectedTags.length > 0) {
       sallaTags = await tagsSallaHandler(sallaAccessToken, selectedTags);
     }
 
-
+/* 
     if (shippingIncludedChoice && shippingIncludedChoiceIndex) {
       product.shippingIncludedChoice = shippingIncludedChoice;
       product.shippingIncludedChoiceIndex = shippingIncludedChoiceIndex;
-    }
+    } */
 
-    console.log("reached Patch 2 ");
+    // console.log("reached Patch 2 ");
 
     if (sallaTags && sallaTags.length > 0) {
       product.sallaTags = sallaTags;
@@ -144,7 +217,7 @@ const PatchProduct = catchAsync(
       product.salla_product_id = undefined;
     }
 
-    product.metadata_description = metadata_description;
+/*     product.metadata_description = metadata_description;
     product.description = description;
     product.metadata_title = metadata_title;
     product.name = name;
@@ -160,7 +233,7 @@ const PatchProduct = catchAsync(
 
     if (require_shipping) {
       product.require_shipping = require_shipping;
-    }
+    } */
     await product.save();
 
     const opt2 = {
