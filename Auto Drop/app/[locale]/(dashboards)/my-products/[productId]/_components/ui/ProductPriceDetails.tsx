@@ -37,8 +37,8 @@ export default function ProductPriceDetails({
           className={`shadow-sm text-sm md:text-base min-w-[60%] lap:col-span-3 ${inputClasses} `}
           // ref={discountPriceRef}
 
-          onChange={(val:string) => {
-            setDiscountPrice(val);
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setDiscountPrice(+event.target.value);
           }}
           value={CurrencyFormatter(discountPrice)}
         />
