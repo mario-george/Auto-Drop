@@ -123,11 +123,9 @@ const PatchProduct = catchAsync(
       categoriesSalla,
       require_shipping,
       selectedTags,
-      checkboxesSelected,
 
       shippingIncludedChoice,
       shippingIncludedChoiceIndex,
-      // productEditFormOrigin,
       variantsArr,
       options,
       images,discountPrice,shipping,country_code,
@@ -158,37 +156,17 @@ const PatchProduct = catchAsync(
       })
       product.quantity= totalQ
     }
-/*     if (productEditFormOrigin) {
-      product.productEditFormOrigin = productEditFormOrigin;
-    } else {
-      product.productEditFormOrigin = false;
-    }
- */
+
     if (selectedTags && selectedTags.length > 0) {
       sallaTags = await tagsSallaHandler(sallaAccessToken, selectedTags);
     }
-    let containsFalse = false;
-    if (checkboxesSelected) {
-      for (let i = 0; i < checkboxesSelected.length; i++) {
-        if (checkboxesSelected[i].includes(false)) {
-          containsFalse = true;
-          break;
-        }
-      }
-    }
+
 
     if (shippingIncludedChoice && shippingIncludedChoiceIndex) {
       product.shippingIncludedChoice = shippingIncludedChoice;
       product.shippingIncludedChoiceIndex = shippingIncludedChoiceIndex;
     }
-    if (containsFalse) {
-      //remove unchecked variants
-      /*    let { variantsArr } = product;
-      let newVariantsArr = variantsCheckHandler(
-        variantsArr,
-        checkboxesSelected
-      ); */
-    }
+
     console.log("reached Patch 2 ");
 
     if (sallaTags && sallaTags.length > 0) {
@@ -231,8 +209,7 @@ const PatchProduct = catchAsync(
       product.require_shipping = require_shipping;
     }
     await product.save();
-    /* console.log("product?.vendor_commission", product?.vendor_commission);
-    console.log("product?.commissionPercentage", product?.commissionPercentage); */
+
     const opt2 = {
       method: "POST",
       headers: {
