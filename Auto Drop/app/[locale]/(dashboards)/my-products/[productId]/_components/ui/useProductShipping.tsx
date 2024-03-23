@@ -80,7 +80,7 @@ export default function useProductShipping({
   }, [shippingWithoutOrInclude, value, shipping]);
   let ProductShippingComponent = (
     <>
-      {shipping?.length ? (
+     
         <div className="space-y-4 min-w-full  ">
           <div>
             <div className="flex justify-between">
@@ -198,12 +198,11 @@ export default function useProductShipping({
             </RadioGroup>
           </div>
         </div>
-      ) : (
-        <div className="flex justify-center items-center text-red-700">
+      
+      {shipping?.length == 0 &&      <div className="flex justify-center items-center text-red-700">
           Product Shipping Not Avaliable
-        </div>
-      )}
+        </div>}
     </>
   );
-  return { ProductShippingComponent, value, shippingTotalCost };
+  return { ProductShippingComponent, value, shippingTotalCost ,choosenCountryCode};
 }
