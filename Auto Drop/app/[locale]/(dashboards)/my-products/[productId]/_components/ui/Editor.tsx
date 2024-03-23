@@ -27,4 +27,5 @@ const Editor = React.forwardRef<ReactQuill,EditorProps>(({
     </div>
   );
 })
+Editor.displayName = 'Editor';
 export default Editor;
