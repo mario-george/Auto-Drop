@@ -124,8 +124,10 @@ return
         showDiscountPrice: false,
       };
 
-      if(selectedCategories && selectedCategories?.length >1 ){
-        data.categoriesSalla = selectedCategories.map((category:{label:string,value:number})=>category.value)
+      if(selectedCategories && selectedCategories?.length >0 ){
+        let selectedCategoriesIds =  selectedCategories.map((category:{label:string,value:number})=>category.value)
+        console.log("selectedCategoriesIds",selectedCategoriesIds)
+        data.categoriesSalla = selectedCategoriesIds
       }
       const res = axiosInstance.patch(
         `aliexpress/product/updateProduct/${product._id}`,
