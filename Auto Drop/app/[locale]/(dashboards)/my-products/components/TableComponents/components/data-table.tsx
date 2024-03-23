@@ -50,7 +50,7 @@ interface DataTableProps<TData, TValue> {
   setLoadProducts: any;
   colData?: any;
   translationMessages:{[key:string]:string}
-  
+  allProdCategories:number[][]
 }
 
 export function DataTable<TData, TValue>({
@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
   setMyProducts,
   apply,
   setLoadProducts,
-  colData,translationMessages
+  colData,translationMessages,allProdCategories
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -132,6 +132,7 @@ export function DataTable<TData, TValue>({
         apply={apply}
         myProducts={data}
         translationMessages={translationMessages}
+        allProdCategories={allProdCategories}
       />
       <div className="">
         <Table>
