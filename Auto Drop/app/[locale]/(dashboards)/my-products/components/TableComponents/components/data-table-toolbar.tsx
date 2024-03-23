@@ -87,7 +87,7 @@ let {selected :selectedCategories,MultiCategoriesSelectBox} = useMultiSelectCate
       currProd.forEach((cat:number)=>{
         console.log("cat",cat)
         if( selectedCategories?.includes(cat)){
-          console.log("MATCHEEED")
+          // console.log("MATCHEEED")
           matchCategory=true
         }
  
