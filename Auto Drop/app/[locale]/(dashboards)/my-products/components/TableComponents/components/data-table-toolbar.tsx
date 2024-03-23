@@ -44,11 +44,11 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
 
   const reloadPage = useSelector((state:any)=>state.products.reloadPage)
-  const [checkedUnAvailable, setCheckedUnAvailable] = useState(false);
-  const [checkedUnLinked, setCheckedUnLinked] = useState(false);
-  const [checkedNoShipping, setCheckedNoShipping] = useState(false);
+  const [checkedUnAvailable, setCheckedUnAvailable] = useState(true);
+  const [checkedUnLinked, setCheckedUnLinked] = useState(true);
+  const [checkedNoShipping, setCheckedNoShipping] = useState(true);
   const [oldProducts, setOldProducts] = useState([]);
-const {selected :selectedCategories,MultiCategoriesSelectBox} = useMultiSelectCategories({translationMessages,category})
+let {selected :selectedCategories,MultiCategoriesSelectBox} = useMultiSelectCategories({translationMessages,category}) as any
 //  / const isFiltered = table.getState().columnFilters.length > 0;
   useEffect(() => {
     // Save the original state of the products when the component mounts
@@ -62,19 +62,39 @@ const {selected :selectedCategories,MultiCategoriesSelectBox} = useMultiSelectCa
     console.log("oldProducts",oldProducts)
     let newProducts = [...oldProducts]; 
   
-    if (checkedUnAvailable) {
+    if (!checkedUnAvailable) {
       newProducts = newProducts.filter((prod: any) => prod.inventory !== 0);
     }
   
-    if (checkedUnLinked) {
+    if (!checkedUnLinked) {
       newProducts = newProducts.filter((prod: any) => prod.salla_product_id !== null);
     }
   
-    if (checkedNoShipping) {
+    if (!checkedNoShipping) {
       newProducts = newProducts.filter((prod: any) => prod.shippingAvailable !== false);
     }
+    console.log("allProdCategories",allProdCategories)
+    selectedCategories = selectedCategories.map((cat:any)=>cat.value)
+    console.log("selectedCategories",selectedCategories)
   if( allProdCategories?.length>0 && selectedCategories?.length>0){
-    newProducts = newProducts.filter((prod: any) => prod.shippingAvailable !== false);
+    newProducts = newProducts.filter((prod: any,index:number) =>{
+      
+      let currProd = allProdCategories[index].categoriesSalla
+      let matchCategory = false
+      if(currProd?.length==0){
+        return false
+      }
+      currProd.forEach((cat:number)=>{
+        console.log("cat",cat)
+        if( selectedCategories?.includes(cat)){
+          console.log("MATCHEEED")
+          matchCategory=true
+        }
+ 
+      })
+      return matchCategory
+
+    });
 
   }
   setMyProducts(newProducts);
