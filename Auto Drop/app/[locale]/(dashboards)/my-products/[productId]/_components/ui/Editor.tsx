@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 interface EditorProps {
-  value: string | undefined;
-  onChange: (
+  value?: string | undefined;
+  onChange?: (
     value: string | undefined,
     delta: any,
     source: any,
