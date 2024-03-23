@@ -130,7 +130,7 @@ const PatchProduct = catchAsync(
       // productEditFormOrigin,
       variantsArr,
       options,
-      images,
+      images,discountPrice,shipping,country_code,
       ...body
     } = req.body;
     let sallaTags;
@@ -140,9 +140,23 @@ const PatchProduct = catchAsync(
     if (images) {
       product.images = images;
     }
-
+    if (shipping) {
+      product.shipping = shipping;
+    }
+    if (country_code) {
+      product.country_code = country_code;
+    }
+    if (discountPrice!==undefined) {
+      product.discountPrice = discountPrice;
+    }
     if (variantsArr) {
       product.variantsArr = variantsArr;
+
+      let totalQ = 0
+      variantsArr.forEach((variant:any)=>{
+        totalQ+=variant.sku_available_quantity
+      })
+      product.quantity= totalQ
     }
 /*     if (productEditFormOrigin) {
       product.productEditFormOrigin = productEditFormOrigin;
