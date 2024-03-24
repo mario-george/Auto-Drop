@@ -31,6 +31,7 @@ import { DataTableToolbar } from "./data-table-toolbar";
 import Cols from "./columns";
 import { useDispatch } from "react-redux";
 import { setKeyValue } from "@/store/productsSlice";
+import { useSelector } from "react-redux";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -68,6 +69,7 @@ export function DataTable<TData, TValue>({
   setLoadProducts,
   colData,translationMessages,allProdCategories
 }: DataTableProps<TData, TValue>) {
+  const resetRowSelection = useSelector((state: any) => state.products.resetRowSelection)
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -83,6 +85,9 @@ export function DataTable<TData, TValue>({
       setKeyValue({ key: "currentSelectedProducts", value: rowSelection })
     );
   }, [rowSelection]);
+  React.useEffect(() => {
+  setRowSelection({});
+  }, [resetRowSelection]);
   let columns = Cols({
     productName,
     sellPrice,
