@@ -403,5 +403,13 @@
     "myCards": "بطاقاتي",
     "addCard": "إضافة بطاقة",
     "chargeWallet": " شحن المحفظة"
+  },"ordersPage":{
+    "orders":"Orders",
+    "sender":"Sender",
+    "orderNumber":"Order Number",
+    "orderStatus":"Order Status",
+    "reqSource":"Request Source",
+    "date":"Date",
+    "amount":"Amount"
   }
 }
