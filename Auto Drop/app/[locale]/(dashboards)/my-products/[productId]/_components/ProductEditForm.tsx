@@ -465,11 +465,12 @@ setProductShipping(product?.shipping)
   const onSubmitHandler = async (data: z.infer<typeof formSchema>) => {
  
     if (!sallaToken || sallaToken=="" ) {
-      toast({
+  /*     toast({
         variant: "destructive",
         title: "Please link your account with salla and try again.",
-      });
-     
+      }); */
+      toast({status:"error",title:"Error",description:"Please Link your account with salla and try again.",          duration: 9000,
+      isClosable: true,})
 
     
       return
@@ -711,8 +712,9 @@ setProductShipping(product?.shipping)
 const res = await resPromise
 if(res?.data?.message=="SallaToken Not Found."){
 // toast({variant:"destructive",description:"SallaToken Not Found."})
-toast({status:"error",title:"Error",description:"SallaToken Not Found."})
-  return 
+toast({status:"error",title:"Error",description:"Please Link your account with salla and try again.",          duration: 9000,
+isClosable: true,})  
+return 
   }
       if (res.status >= 200 && res.status < 300) {
         console.log("Product updated");
@@ -722,7 +724,9 @@ toast({status:"error",title:"Error",description:"SallaToken Not Found."})
       }
     } catch (e: any) {
       if(e?.response?.data?.message=="SallaToken Not Found."){
-        toast({variant:"destructive",description:"Please Link your account with salla and try again."})
+        // toast({variant:"destructive",description:"Please Link your account with salla and try again."})
+toast({status:"error",title:"Error",description:"Please Link your account with salla and try again.",          duration: 9000,
+isClosable: true,})
           
           }
         
