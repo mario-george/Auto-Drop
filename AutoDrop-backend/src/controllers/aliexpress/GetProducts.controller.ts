@@ -295,7 +295,7 @@ async function GetProductOptions(SKUs: object[]) {
         values,
       };
     })
-    // .filter((e) => e.name !== "Ships From")
+    .filter((e) => e.name !== "Ships From")
   );
 
   return { price, quantities, options };
@@ -361,7 +361,7 @@ export async function GetDetails({
 
           const { ae_item_sku_info_d_t_o: SKUs }: any =
             ae_item_sku_info_dtos || {};
-          const variantsArr = SKUs.map((variant: any) => {
+          let variantsArr = SKUs.map((variant: any) => {
             let obj: any = {};
             let {
               offer_sale_price,
@@ -399,7 +399,46 @@ export async function GetDetails({
               totalQuantityVariants += quantity;
             }
           });
-
+          if (
+            variantsArr?.[0]?.relativeOptions?.some(
+              (option: any) => option.sku_property_name === "Ships From"
+            )
+          ) {
+            // remove 'ships from' variants
+            let variantsIdsToKeep: number[] = [];
+            let variantsIdentifiers: string[] = [];
+            variantsArr.forEach((variant: any, index: number) => {
+              let { relativeOptions } = variant;
+              relativeOptions = relativeOptions.filter(
+                (element: any, index: number) =>
+                  element.sku_property_name !== "Ships From"
+              );
+    
+              let variantIdentifier = relativeOptions
+                .map(
+                  (element: any, index: number) =>
+                    `${element.sku_property_id}:${element.property_value_id}`
+                )
+                .join("-");
+              if (!variantsIdentifiers.includes(variantIdentifier)) {
+                variantsIdentifiers.push(variantIdentifier);
+                variantsIdsToKeep.push(index);
+              }
+            });
+            console.log("variantsIdsToKeep", variantsIdsToKeep);
+            console.log("variantsIdsToKeep.length", variantsIdsToKeep.length);
+            const newVariantsWithoutShipsFrom = variantsArr.filter((variant:any,index:number)=>{
+           return variantsIdsToKeep.includes(index)
+            }).map((variant:any)=>{
+    let {relativeOptions} = variant
+    relativeOptions = relativeOptions.filter((rO:any)=>{
+      return rO.sku_property_name !=="Ships From"
+    })
+    return {...variant,relativeOptions}
+            })
+            console.log("newVariantsWithoutShipsFrom",newVariantsWithoutShipsFrom)
+            variantsArr = newVariantsWithoutShipsFrom
+          }
           const [{ price, options }, images] = await Promise.all([
             GetProductOptions(SKUs || []),
             GetProductImages(ae_multimedia_info_dto?.image_urls),
