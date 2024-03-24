@@ -13,6 +13,7 @@ type InitialStateType = {
   reloadPage: boolean;
   reloadProducts: boolean;
   loadingProductTable: boolean;
+  resetRowSelection: boolean;
 };
 interface SetKeyValueActionPayload {
   key:
@@ -22,7 +23,8 @@ interface SetKeyValueActionPayload {
     | "reloadPage"
     | "reloadProducts"
     | "allowButtonAction"
-    | "loadingProductTable";
+    | "loadingProductTable"
+    | "resetRowSelection"
   value: any;
 }
 // Define a slice for the products
@@ -36,7 +38,7 @@ const productsSlice = createSlice({
     reloadPage: false,
     reloadProducts: false,
     allowButtonAction: true,
-    loadingProductTable: false,
+    loadingProductTable: false,resetRowSelection:false
   } as InitialStateType,
   reducers: {
     setPageProducts: (state, action) => {
