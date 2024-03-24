@@ -36,6 +36,8 @@ export default function ProductsListEN({
               productsShippingInfo[i] &&
               productsShippingInfo[i][0].loading === "pending" &&
               showShippingForProduct?.[i];
+              console.log("productsShippingInfo?.[i] ",productsShippingInfo?.[i])
+              console.log("newShippingInfoPending",newShippingInfoPending)
             return (
               <Card
                 className="relative flex flex-col !p-0 my-3 shadow-md rounded-lg justify-between overflow-hidden dark:bg-[#2e464f]"
