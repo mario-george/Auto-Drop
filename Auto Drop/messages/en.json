@@ -409,7 +409,7 @@
     "sender":"المرسل",
     "orderNumber":"رقم الطلب",
     "orderStatus":"حالة الطلب",
-    "reqSource":"مصدر الطلب",
+    "orderSource":"مصدر الطلب",
     "date":"التاريخ",
     "amount":"المبلغ"
 
