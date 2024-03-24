@@ -36,11 +36,16 @@ export default function ProductPriceDetails({
             <Input
           className={`shadow-sm text-sm md:text-base min-w-[60%] lap:col-span-3 ${inputClasses} `}
           // ref={discountPriceRef}
+// type="number"
 
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setDiscountPrice(+event.target.value);
+            console.log("event.target.value", event.target.value);
+            let onlyNumber = event.target.value.replace(/[^0-9.]/g,"");       
+             console.log("onlyNumber", onlyNumber)
+            setDiscountPrice(+onlyNumber);
           }}
-          value={CurrencyFormatter(discountPrice)}
+          // value={CurrencyFormatter(discountPrice)}
+          value={"SAR "+discountPrice}
         />
 
         </div>
@@ -52,7 +57,7 @@ export default function ProductPriceDetails({
           className={`shadow-sm text-sm md:text-base min-w-[60%] ${inputClasses} `}
           value={CurrencyFormatter(finalPrice + shippingTotalCost)}
         />
-        <Input
+        <Input  
           className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
           value={CurrencyFormatter(totalProfit)}
         />
