@@ -132,7 +132,7 @@ console.error(err)
       <div
         className={` tableContainer dark:bg-[#2e464f] dark:text-white flex flex-1 justify-center ${
           myProducts.length > 0 && `!mx-auto`
-        }`}
+        } lap:min-w-full `}
       >
         <ColsExtract
           {...props}
