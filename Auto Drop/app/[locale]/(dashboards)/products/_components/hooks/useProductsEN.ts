@@ -32,7 +32,7 @@ export default function useProducts({
         profitAfterDiscount: "",
         duration: "",
         activated: false,
-        loading: false,
+        loading: 'pending',
       },
     ]),
   ]);
@@ -201,7 +201,7 @@ export default function useProducts({
   useEffect(() => {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
-
+if((products.length ===0 && lang=="en" )||(productsAR.length ===0 && lang=="ar")) return
     let updateAllProductShipping = async function () {
       let prodSh;
       if (lang == "en") {
@@ -215,7 +215,14 @@ export default function useProducts({
       }
 
       let prodShPromises = await Promise.allSettled(prodSh);
-      console.log(prodShPromises);
+      let reset = true
+      prodShPromises.forEach  ((promise:any)=>{
+        if(promise.value.length>0){
+          reset=false
+        }
+      })
+      if(reset ) return
+      console.log("prodShPromises" ,prodShPromises);
       setProductsShippingInfo(
         prodShPromises.map((result: any, index: number) => {
           if (result.status === "rejected") {
