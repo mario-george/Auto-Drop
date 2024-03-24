@@ -9,7 +9,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 // import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Radio, RadioGroup } from "@chakra-ui/react";
+import { Radio, RadioGroup, useToast } from "@chakra-ui/react";
 
 import ReactQuill from "react-quill";
 import {
@@ -48,7 +48,6 @@ import useLoader from "@/components/loader/useLoader";
 import CurrencyFormatter from "../../../products/_components/CurrencyFormatter";
 import useOptionHook from "./hooks/useOptionHook";
 import useProductShipping from "./ui/useProductShipping";
-import {useToast } from "@/components/ui/use-toast";
 
 import {useSelector} from 'react-redux'
 import { useErrorToast } from '../../../../../../components/chakra-ui/useErrorToast';
@@ -145,7 +144,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     valueText,
   } = props;
 const errorButtonRefShipping :React.RefObject<HTMLButtonElement>= useRef(null)
-  const {toast} = useToast()
+  const toast = useToast()
   const {ErrorComponent:ErrorComponentShipping} =useErrorToast({title:"Error while linking this product." ,description:"Shipping is not available for this product.",errorButtonRef:errorButtonRefShipping})
   const updateProductRef = useRef<HTMLButtonElement>(null)
   const {SuccessComponent:SuccessUpdateProductCompononet} =useSuccessToast({title:"Success." ,description:"Product has been updated successfully.",successButtonRef:updateProductRef})
@@ -700,19 +699,24 @@ setProductShipping(product?.shipping)
       } else {
         data.shippingIncludedChoiceIndex = -1;
       }
-      const res = await axiosInstance.patch(
+      const resPromise = axiosInstance.patch(
         `aliexpress/product/updateProduct/${product._id}`,
         data
       );
-
+      toast.promise(resPromise, {
+        success: { title: `Success`, description: `${product?.name} has been added successfully` },
+        error: { title: 'Fail', description: 'Something went wrong while updating product' },
+        loading: { title: 'Updating Product', description: 'Please wait' ,position:"bottom-right"},
+      }) 
+const res = await resPromise
 if(res?.data?.message=="SallaToken Not Found."){
-toast({variant:"destructive",description:"SallaToken Not Found."})
+// toast({variant:"destructive",description:"SallaToken Not Found."})
+toast({status:"error",title:"Error",description:"SallaToken Not Found."})
   return 
   }
-
       if (res.status >= 200 && res.status < 300) {
         console.log("Product updated");
-        updateProductRef?.current?.click()
+        // updateProductRef?.current?.click()
       } else {
         console.log("error");
       }
