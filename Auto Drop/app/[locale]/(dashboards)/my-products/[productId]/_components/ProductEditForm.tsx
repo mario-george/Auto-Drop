@@ -9,7 +9,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 // import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Radio, RadioGroup, useToast } from "@chakra-ui/react";
+import { Radio, RadioGroup, Spinner, useToast } from "@chakra-ui/react";
 
 import ReactQuill from "react-quill";
 import {
@@ -49,10 +49,9 @@ import CurrencyFormatter from "../../../products/_components/CurrencyFormatter";
 import useOptionHook from "./hooks/useOptionHook";
 import useProductShipping from "./ui/useProductShipping";
 
-import {useSelector} from 'react-redux'
-import { useErrorToast } from '../../../../../../components/chakra-ui/useErrorToast';
-import { useSuccessToast } from '../../../../../../components/chakra-ui/useSuccessToast';
-
+import { useSelector } from "react-redux";
+import { useErrorToast } from "../../../../../../components/chakra-ui/useErrorToast";
+import { useSuccessToast } from "../../../../../../components/chakra-ui/useSuccessToast";
 
 import { Shipping } from "./types/shipping.interfaces";
 interface ProductEditFormProps {
@@ -143,20 +142,35 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     withText,
     valueText,
   } = props;
-const errorButtonRefShipping :React.RefObject<HTMLButtonElement>= useRef(null)
-  const toast = useToast()
-  const {ErrorComponent:ErrorComponentShipping} =useErrorToast({title:"Error while linking this product." ,description:"Shipping is not available for this product.",errorButtonRef:errorButtonRefShipping})
-  const updateProductRef = useRef<HTMLButtonElement>(null)
-  const {SuccessComponent:SuccessUpdateProductCompononet} =useSuccessToast({title:"Success." ,description:"Product has been updated successfully.",successButtonRef:updateProductRef})
+  const errorButtonRefShipping: React.RefObject<HTMLButtonElement> =
+    useRef(null);
+  const toast = useToast();
+  const { ErrorComponent: ErrorComponentShipping } = useErrorToast({
+    title: "Error while linking this product.",
+    description: "Shipping is not available for this product.",
+    errorButtonRef: errorButtonRefShipping,
+  });
+  const updateProductRef = useRef<HTMLButtonElement>(null);
+  const { SuccessComponent: SuccessUpdateProductCompononet } = useSuccessToast({
+    title: "Success.",
+    description: "Product has been updated successfully.",
+    successButtonRef: updateProductRef,
+  });
 
-  const formRefsArray = ["prodName", "SEOTitleText", "SEODescription","description","commission"];
+  const formRefsArray = [
+    "prodName",
+    "SEOTitleText",
+    "SEODescription",
+    "description",
+    "commission",
+  ];
 
-interface Accumlator {
-  [key: string]: React.RefObject<HTMLInputElement> | React.RefObject<ReactQuill>;
-
-
-}
-/* const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string)=>{
+  interface Accumlator {
+    [key: string]:
+      | React.RefObject<HTMLInputElement>
+      | React.RefObject<ReactQuill>;
+  }
+  /* const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string)=>{
   if(currentValue =="description"){
     accumlator[currentValue] = useRef<ReactQuill>(null)
     return accumlator
@@ -164,21 +178,21 @@ interface Accumlator {
   accumlator[currentValue] = useRef<HTMLInputElement>(null)
    return accumlator
 },{}) */
-let formRefs :any = {}
-formRefs.prodName = useRef<HTMLInputElement>(null);
-formRefs.SEODescription = useRef<HTMLInputElement>(null);
-formRefs.SEOTitleText = useRef<HTMLInputElement>(null);
-formRefs.description = useRef<any>(null);
-formRefs.commission = useRef<HTMLInputElement>(null);
+  let formRefs: any = {};
+  formRefs.prodName = useRef<HTMLInputElement>(null);
+  formRefs.SEODescription = useRef<HTMLInputElement>(null);
+  formRefs.SEOTitleText = useRef<HTMLInputElement>(null);
+  formRefs.description = useRef<any>(null);
+  formRefs.commission = useRef<HTMLInputElement>(null);
 
-
-
-  const [ discountPrice,setDiscountPrice]  =useState(product?.target_original_price)
+  const [discountPrice, setDiscountPrice] = useState(
+    product?.target_original_price
+  );
   const [categoriesList, setCategoriesList] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [productImages, setProductImages] = useState([]);
   const [productShipping, setProductShipping] = useState([]);
-  
+
   const [currentlySelectedVariant, setCurrentlySelectedVariant] = useState({});
   const [optionChoosenValues, setOptionChoosenValues] = useState([]);
   const sallaToken = useSelector((state: any) => state.user.sallaToken);
@@ -213,12 +227,18 @@ formRefs.commission = useRef<HTMLInputElement>(null);
     shippingText: shipping,
     nameOfShippingComp,
     durationToDeliver,
-    shippingWithoutOrInclude,to,locale,product_id:product?.original_product_id ,setProductShipping,shipping:productShipping
+    shippingWithoutOrInclude,
+    to,
+    locale,
+    product_id: product?.original_product_id,
+    setProductShipping,
+    shipping: productShipping,
   };
   const {
     ProductShippingComponent,
     value: choosenShippingIndex,
-    shippingTotalCost,choosenCountryCode
+    shippingTotalCost,
+    choosenCountryCode,
   } = useProductShipping({ ...ProductShippingProps });
   let addToCartHandler = () => {};
   const ProductEditHeaderProps = {
@@ -282,28 +302,21 @@ formRefs.commission = useRef<HTMLInputElement>(null);
       setFormValues((prevV: any) => {
         return { ...prevV, ProductName: product?.name };
       });
-      if( formRefs.prodName.current){
-
+      if (formRefs.prodName.current) {
         formRefs.prodName.current.value = product?.name;
       }
-      if( formRefs.description?.current){
-
+      if (formRefs.description?.current) {
         formRefs.description.current.value = product?.description;
       }
 
-      if(product?.discountPrice ==0 ){
-
-        setDiscountPrice(product?.target_original_price)
-      }else{
-        setDiscountPrice(product?.discountPrice)
-
+      if (product?.discountPrice == 0) {
+        setDiscountPrice(product?.target_original_price);
+      } else {
+        setDiscountPrice(product?.discountPrice);
       }
 
-   
       setDescriptionField(product?.description);
-   
-  
-     
+
       setShowDiscountPrice(product?.showDiscountPrice || false);
       setSelectedTags(
         product?.sallaTags.map((tag: { name: string; id: number }) => tag.name)
@@ -347,11 +360,52 @@ formRefs.commission = useRef<HTMLInputElement>(null);
           require_shipping,
         };
       });
+
+      // filter variants and remove ships from relativeOptions
+  /*     if (
+        updatedVariantsArr?.[0]?.relativeOptions?.some(
+          (option: any) => option.sku_property_name === "Ships From"
+        )
+      ) {
+        // remove ships from variants
+        let variantsIdsToKeep: number[] = [];
+        let variantsIdentifiers: string[] = [];
+        updatedVariantsArr.forEach((variant: any, index: number) => {
+          let { relativeOptions } = variant;
+          relativeOptions = relativeOptions.filter(
+            (element: any, index: number) =>
+              element.sku_property_name !== "Ships From"
+          );
+
+          let variantIdentifier = relativeOptions
+            .map(
+              (element: any, index: number) =>
+                `${element.sku_property_id}:${element.property_value_id}`
+            )
+            .join("-");
+          if (!variantsIdentifiers.includes(variantIdentifier)) {
+            variantsIdentifiers.push(variantIdentifier);
+            variantsIdsToKeep.push(index);
+          }
+        });
+        console.log("variantsIdsToKeep", variantsIdsToKeep);
+        console.log("variantsIdsToKeep.length", variantsIdsToKeep.length);
+        const newVariantsWithoutShipsFrom = updatedVariantsArr.filter((variant:any,index:number)=>{
+       return variantsIdsToKeep.includes(index)
+        }).map((variant:any)=>{
+let {relativeOptions} = variant
+relativeOptions = relativeOptions.filter((rO:any)=>{
+  return rO.sku_property_name !=="Ships From"
+})
+return {...variant,relativeOptions}
+        })
+        console.log("newVariantsWithoutShipsFrom",newVariantsWithoutShipsFrom)
+      } */
       setVariantsDetails(updatedVariantsArr);
       setCurrentlySelectedVariant(product?.variantsArr[0]);
       setProductOptions(product.options);
       setProductImages(product.images);
-setProductShipping(product?.shipping)
+      setProductShipping(product?.shipping);
     }
   }, [product]);
   const [commissionVal, setCommissionVal] = useState(
@@ -373,7 +427,7 @@ setProductShipping(product?.shipping)
         if (resp.status < 300 && resp.status >= 200) {
           setCategoriesList(resp.data.data);
         }
-        console.log("resp.data.data",resp.data.data)
+        console.log("resp.data.data", resp.data.data);
       } catch (err: any) {
         console.log(err?.response.data);
         console.log(err?.response.status);
@@ -398,7 +452,7 @@ setProductShipping(product?.shipping)
   }, []);
   useEffect(() => {
     console.log("product", product);
-/*     console.log(
+    /*     console.log(
       "product?.categoriesSalla && product?.categoriesSalla.length!==0",
       product?.categoriesSalla && product?.categoriesSalla.length !== 0
     ); */
@@ -425,7 +479,6 @@ setProductShipping(product?.shipping)
 
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
- 
     if (profitChoosenType == "percentage" || profitChoosenType == percentage) {
       setFinalPrice((finalPrice: any) => {
         return (
@@ -463,21 +516,24 @@ setProductShipping(product?.shipping)
   });
 
   const onSubmitHandler = async (data: z.infer<typeof formSchema>) => {
- 
-    if (!sallaToken || sallaToken=="" ) {
-  /*     toast({
+    if (!sallaToken || sallaToken == "") {
+      /*     toast({
         variant: "destructive",
         title: "Please link your account with salla and try again.",
       }); */
-      toast({status:"error",title:"Error",description:"Please Link your account with salla and try again.",          duration: 9000,
-      isClosable: true,})
+      toast({
+        status: "error",
+        title: "Error",
+        description: "Please Link your account with salla and try again.",
+        duration: 9000,
+        isClosable: true,
+      });
 
-    
-      return
+      return;
     }
-    if(product?.shipping?.length ==0){
-      errorButtonRefShipping?.current?.click()
-      return
+    if (productShipping?.length == 0) {
+      errorButtonRefShipping?.current?.click();
+      return;
     }
     setLoading(true);
 
@@ -489,7 +545,6 @@ setProductShipping(product?.shipping)
     } finally {
       // setIsLoading(false);
       setLoading(false);
-    
     }
   };
   const ProductOptionsProps = {
@@ -508,7 +563,12 @@ setProductShipping(product?.shipping)
     ...ProductOptionsProps,
   });
   if (!product) {
-    return <div className="dark:text-white">Fetching Product...</div>;
+    return (
+      <div className="flex space-s-3 items-center text-green-500">
+        <Spinner />
+        <div className="dark:text-white">Fetching Product...</div>
+      </div>
+    );
   }
   console.log(product);
   const productInfoProps = {
@@ -534,7 +594,9 @@ setProductShipping(product?.shipping)
     inputClasses,
     showDiscountPrice,
     setShowDiscountPrice,
-    shippingTotalCost,setDiscountPrice,discountPrice
+    shippingTotalCost,
+    setDiscountPrice,
+    discountPrice,
   };
 
   const ProductSEOInfoProps = {
@@ -587,7 +649,8 @@ setProductShipping(product?.shipping)
     finalPriceText: editedPrice,
     profitText: profit,
     setVariantsDetails,
-    shippingTotalCost,productOptions
+    shippingTotalCost,
+    productOptions,
   };
   let SelectComponent = (
     <Select
@@ -634,10 +697,9 @@ setProductShipping(product?.shipping)
     );
   }
   let uploadProductHandler = async (dataForm: any) => {
-
     try {
       let profitChoosenTypeName = "number";
-  
+
       let commissionPercentage = false;
       if (
         profitChoosenType == percentage ||
@@ -663,8 +725,6 @@ setProductShipping(product?.shipping)
         )
         .map((category: CategorySalla) => category.id);
 
-
-
       let data: any = {
         name: dataForm.prodName,
         vendor_commission: commissionVal,
@@ -683,17 +743,17 @@ setProductShipping(product?.shipping)
         options: productOptions,
         variantsArr: variantsDetails,
         images: productImages,
-        shipping:productShipping
+        shipping: productShipping,
       };
-      if(formRefs.description?.current){
-        data.description = formRefs.description.current.value
+      if (formRefs.description?.current) {
+        data.description = formRefs.description.current.value;
       }
-  /*     if(formRefs.discountPrice.current){
+      /*     if(formRefs.discountPrice.current){
         data.discountPrice = formRefs.discountPrice.current.value
       } */
 
-      if(choosenCountryCode){
-        data.country_code = choosenCountryCode
+      if (choosenCountryCode) {
+        data.country_code = choosenCountryCode;
       }
       if (shippingWithoutOrInclude == "shippingIncluded") {
         data.shippingIncludedChoiceIndex = choosenShippingIndex;
@@ -705,17 +765,32 @@ setProductShipping(product?.shipping)
         data
       );
       toast.promise(resPromise, {
-        success: { title: `Success`, description: `${product?.name} has been added successfully` },
-        error: { title: 'Fail', description: 'Something went wrong while updating product' },
-        loading: { title: 'Updating Product', description: 'Please wait' ,position:"bottom-right"},
-      }) 
-const res = await resPromise
-if(res?.data?.message=="SallaToken Not Found."){
-// toast({variant:"destructive",description:"SallaToken Not Found."})
-toast({status:"error",title:"Error",description:"Please Link your account with salla and try again.",          duration: 9000,
-isClosable: true,})  
-return 
-  }
+        success: {
+          title: `Success`,
+          description: `${product?.name} has been added successfully`,
+        },
+        error: {
+          title: "Fail",
+          description: "Something went wrong while updating product",
+        },
+        loading: {
+          title: "Updating Product",
+          description: "Please wait",
+          position: "bottom-right",
+        },
+      });
+      const res = await resPromise;
+      if (res?.data?.message == "SallaToken Not Found.") {
+        // toast({variant:"destructive",description:"SallaToken Not Found."})
+        toast({
+          status: "error",
+          title: "Error",
+          description: "Please Link your account with salla and try again.",
+          duration: 9000,
+          isClosable: true,
+        });
+        return;
+      }
       if (res.status >= 200 && res.status < 300) {
         console.log("Product updated");
         // updateProductRef?.current?.click()
@@ -723,13 +798,17 @@ return
         console.log("error");
       }
     } catch (e: any) {
-      if(e?.response?.data?.message=="SallaToken Not Found."){
+      if (e?.response?.data?.message == "SallaToken Not Found.") {
         // toast({variant:"destructive",description:"Please Link your account with salla and try again."})
-toast({status:"error",title:"Error",description:"Please Link your account with salla and try again.",          duration: 9000,
-isClosable: true,})
-          
-          }
-        
+        toast({
+          status: "error",
+          title: "Error",
+          description: "Please Link your account with salla and try again.",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+
       console.error(e);
     } finally {
       setLoading(false);
@@ -738,8 +817,8 @@ isClosable: true,})
 
   return (
     <>
-    {SuccessUpdateProductCompononet}
-  {ErrorComponentShipping}
+      {SuccessUpdateProductCompononet}
+      {ErrorComponentShipping}
       {LoaderComponent}
       {ProductHeaderComponent}
       <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  dark:bg-[#2e464f] dark:text-white">
