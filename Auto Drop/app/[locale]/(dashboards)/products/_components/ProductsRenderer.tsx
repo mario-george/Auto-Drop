@@ -37,6 +37,7 @@ import useCategories from "./useCategories";
 import useProductSearchBar from "./hooks/useProductSearchBar";
 import { useErrorToast } from "@/components/chakra-ui/useErrorToast";
 import { useSuccessToast } from "@/components/chakra-ui/useSuccessToast";
+import { useToast } from "@chakra-ui/react";
 
 // pages / products  state
 
@@ -78,6 +79,7 @@ export default function ProductsRenderer({
 }) {
   const [currPage, setCurrPage] = useState("1");
   const { LoaderComponent, setLoading } = useLoader();
+  let toast = useToast()
   const errorButtonRef = useRef<HTMLButtonElement>(null)
   const successButtonRef = useRef<HTMLButtonElement>(null)
 const {ErrorComponent} = useErrorToast({title:"Error",description:"The data you provided has no results.",errorButtonRef})
@@ -220,6 +222,7 @@ console.log("searchInfo",searchInfo)
           lang={lang}
           setLoading={setLoading}
           successButtonRef={successButtonRef}
+          toast={toast}
         />
       </>
     </div>
