@@ -33,7 +33,7 @@ const {selected :selectedCategories,MultiCategoriesSelectBox} = useMultiSelectCa
   const productsState = useSelector((state: any) => state.products);
   const sallaToken = useSelector((state: any) => state.user.sallaToken);
 console.log("sallaToken",sallaToken)
-  let { allowButtonAction } = productsState;
+  let { allowButtonAction ,resetRowSelection} = productsState;
   console.log("allowButtonAction", allowButtonAction);
   let { currentProductsList, currentSelectedProducts } = productsState;
   const [profitChoosenType, setProfitChoosenType] = useState("percentage");
@@ -174,6 +174,8 @@ return
       );
     } catch (err: any) {
       console.log(err);
+    }finally{
+      dispatch(setKeyValue({value:!resetRowSelection,key:"resetRowSelection"}) )
     }
     // setLoading(false);
   };
