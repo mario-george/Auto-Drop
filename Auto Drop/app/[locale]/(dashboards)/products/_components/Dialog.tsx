@@ -22,7 +22,7 @@ export default function SubmitProducts({
   currPageProdEN,
   currPageProdAR,
   currPage,
-  locale,setLoading,successButtonRef
+  locale,setLoading,successButtonRef,toast
 }: any) {
   const router = useRouter();
   // const { LoaderComponent, setLoading } = useLoader();
@@ -57,6 +57,44 @@ export default function SubmitProducts({
     });
   });
     try {
+toast.promise(promises[0], {
+        success: { title: `Success`, description: `${toBeSentProductsArr?.length} Products has been added successfully` },
+        error: { title: 'Fail', description: 'Something went wrong while adding products' },
+        loading: { title: 'Adding Products', description: 'Please wait' ,position:"bottom-right"},
+      }) 
+     /* 
+      toast.promise(
+  promises[0],
+  {
+    loading: (data:any) => {
+      toast({
+        title: 'Loading',
+        description: 'Promise pending',
+        status: 'loading',
+        position: 'bottom-right'
+      });
+      return 'Promise resolved';
+    },
+    success: (data:any) => {
+      toast({
+        title: 'Success',
+        description: 'Promise resolved',
+        status: 'success',
+        position: 'bottom-right'
+      });
+      return 'Promise resolved';
+    },
+    error: (err:any) => {
+      toast({
+        title: 'Error',
+        description: 'Promise rejected',
+        status: 'error',
+        position: 'bottom-right'
+      });
+      return 'Promise rejected';
+    },
+  }
+); */
       const productsDetails = await Promise.allSettled(promises);
       const promises2 = productsDetails.map(
         (result: any, index: number): any => {
@@ -78,7 +116,7 @@ export default function SubmitProducts({
     } catch (error) {
       console.error(error);
     }
-    successButtonRef?.current?.click()
+    // successButtonRef?.current?.click()
     router.push(`/${locale || "en"}/my-products`);
 
     setLoading(false);
