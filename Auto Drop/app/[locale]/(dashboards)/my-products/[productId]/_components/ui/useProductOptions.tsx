@@ -131,7 +131,7 @@ let {property_id, name} = elementFound;
                           <ImageChakra
                             src={el.sku_image}
                             fallbackSrc="https://clarionhealthcare.com/wp-content/uploads/2020/12/default-fallback-image.png"
-                            className="rounded-lg bg-red-500 "
+                            className="rounded-lg lap:min-w-[100px] lap:min-h-[100px] "
                             htmlWidth="100"
                             htmlHeight="100"
                           />
@@ -145,13 +145,14 @@ let {property_id, name} = elementFound;
                 <div className="overflow-hidden w-full h-full">
 
 
-                <div className={` bg-[#2e464f] w-fit h-fit shadow rounded-full shadow-black  ${optImage ? `absolute  left-8 top-1` :`absolute -top-6 -left-6 `}`}>
+                <div className={` bg-[#2e464f bg-transparent w-fit h-fit rounded-full   ${optImage ? `absolute  left-8 top-1` :`absolute -top-6 -left-6 `}`}>
                 <svg
                         width="24"
                         height="24"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
+                        
                       >
                         <circle
                           cx="11.6133"
@@ -159,13 +160,15 @@ let {property_id, name} = elementFound;
                           r="10"
                           fill="#2E464F"
                           stroke="white"
-                        />
+                          className=""
+                          />
                         <line
                           x1="7.4863"
                           y1="8.85141"
                           x2="15.4336"
                           y2="15.481"
                           stroke="white"
+                          className=""
                         />
                         <line
                           x1="14.3659"
