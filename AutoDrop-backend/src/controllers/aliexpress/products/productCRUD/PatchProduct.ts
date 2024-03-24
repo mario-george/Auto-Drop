@@ -49,7 +49,7 @@ const handleProductProperties = async(product:ProductDocumentParameter & {},reqB
 
       let totalQ = 0
       variantsArr.forEach((variant:any)=>{
-        totalQ+=variant.sku_available_quantity
+        totalQ+=Number(variant.sku_available_stock)
       })
       product.quantity= totalQ
     }
@@ -136,7 +136,7 @@ const PatchProduct = catchAsync(
       console.log("No product found");
       return res.status(404).json({ message: "Product Not Found." });
     }
-    product = await handleProductProperties(product,req.body)
+    // product = await handleProductProperties(product,req.body)
     let {
       name,
       description,
@@ -158,7 +158,8 @@ const PatchProduct = catchAsync(
       ...body
     } = req.body;
     let sallaTags;
-/*     if (options) {
+    // product = await handleProductProperties(product,req.body)
+    if (options) {
       product.options = options;
     }
     if (images) {
@@ -178,20 +179,20 @@ const PatchProduct = catchAsync(
 
       let totalQ = 0
       variantsArr.forEach((variant:any)=>{
-        totalQ+=variant.sku_available_quantity
+        totalQ+=Number(variant.sku_available_stock)
       })
       product.quantity= totalQ
     }
- */
+
     if (selectedTags && selectedTags.length > 0) {
       sallaTags = await tagsSallaHandler(sallaAccessToken, selectedTags);
     }
 
-/* 
+
     if (shippingIncludedChoice && shippingIncludedChoiceIndex) {
       product.shippingIncludedChoice = shippingIncludedChoice;
       product.shippingIncludedChoiceIndex = shippingIncludedChoiceIndex;
-    } */
+    } 
 
     // console.log("reached Patch 2 ");
 
@@ -217,7 +218,7 @@ const PatchProduct = catchAsync(
       product.salla_product_id = undefined;
     }
 
-/*     product.metadata_description = metadata_description;
+    product.metadata_description = metadata_description;
     product.description = description;
     product.metadata_title = metadata_title;
     product.name = name;
@@ -233,9 +234,17 @@ const PatchProduct = catchAsync(
 
     if (require_shipping) {
       product.require_shipping = require_shipping;
-    } */
-    await product.save();
+    }
+    console.log("before save")
+    try{
+      await product.save();
 
+    }catch(err){
+      console.error(err)
+    }
+    console.log("after save")
+
+    
     const opt2 = {
       method: "POST",
       headers: {
