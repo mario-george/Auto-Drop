@@ -88,9 +88,14 @@ export default function useProductShipping({
                 {shippingText}
               </p>
 
-              <div className="flex space-s-9  justify-between items-center">
-                <LocationSVG />
+              <div className="flex space-s-3  justify-between items-center">
+
+                <div className="flex space-s-1">
                 <p className="text-lg font-semibold text-content">{to}:</p>
+                <LocationSVG />
+
+
+                </div>
                 <Select
                   onValueChange={(country_code: string) => {
                     setChoosenCountryCode(country_code);
