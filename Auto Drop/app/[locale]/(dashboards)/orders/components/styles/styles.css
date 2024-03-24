@@ -1,0 +1,3 @@
+.tableContainer {
+  @apply text-xs tab:text-lg max-w-[245px] rounded-lg mm:max-w-[290px]  ml:max-w-[335px]   tab:max-w-[680px]    md:space-y-8 md:p-8 max-h-[100%] md:flex bg-white overflow-y-auto lap:max-w-[750px] lap:justify-center  k4:max-w-[2200px];
+}
