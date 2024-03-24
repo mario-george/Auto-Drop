@@ -15,87 +15,9 @@ export async function getUserProducts(
     console.log( req.user._id )
     console.log( typeof req.user._id )
     // const userProducts = await Product.find({ merchant: req.user._id });
-    const userProducts = await Product.find({ merchant: req.user._id }).select('_id name price quantity first_level_category_name salla_product_id').slice('images', 1);
+    const userProducts = await Product.find({ merchant: req.user._id }).select('_id name price quantity first_level_category_name salla_product_id shippingAvailable').slice('images', 1);
     return res.json({ userProducts, success: true });
-    let {
-      merchant,
-      vendor_commission,
-      main_price,
-      metadata_title,
-      metadata_description,
-      name,
-      price,
-      ...body
-    } = pick(req.body, [
-      "name",
-      "description",
-      "vendor_commission",
-      "main_price",
-      "price",
-      "quantity",
-      "sku",
-      "images",
-      "options",
-      "metadata_title",
-      "metadata_description",
-      "product_type",
-      "original_product_id",
-      "merchant",
-    ]) satisfies Partial<ProductSchema>;
-    if (price < main_price) {
-      [price, main_price] = [main_price, price];
-    }
 
-    const product = new Product({
-      name: name,
-      ...body,
-      price,
-      vendor_commission,
-      main_price,
-      merchant: role === "client" ? _id : merchant,
-      sku_id: req.body.sku_id,
-      vat: req.body?.vat && true,
-    });
-
-    const vendor_price = parseFloat(
-      ((main_price * vendor_commission) / 100).toFixed(2)
-    );
-
-    product.vendor_price = vendor_price;
-    product.vendor_commission = vendor_commission;
-    product.metadata_title = metadata_title;
-    product.metadata_description = metadata_description;
-
-    const options = body?.options?.map((option: any) => {
-      const values = option.values;
-      return {
-        ...option,
-        values: values?.map((value: any) => {
-          const valuePrice = value.original_price;
-          const vendorOptionPrice = parseFloat(
-            (valuePrice + (valuePrice * vendor_commission) / 100).toFixed(2)
-          );
-
-          return {
-            ...value,
-            original_price: valuePrice,
-            price: vendorOptionPrice,
-          };
-        }),
-      };
-    });
-
-    product.options = options;
-
-    const jsonProduct = product.toJSON();
-    const valuesStock = new Array().concat(
-      //@ts-ignore
-      ...jsonProduct.options?.map((option: any) => option.values)
-    );
-    if (valuesStock.length > 100)
-      throw new AppError("Values count should be smaller than 100", 400);
-    await product.save();
-    res.status(201).json({ product, success: true });
   } catch (error: AxiosError | any) {
     const isAxiosError = error instanceof AxiosError;
     const values = error?.response?.data;

@@ -5,12 +5,11 @@ import CurrencyFormatter, {
   CurrencyFormatterShippingInfo,
 } from "./CurrencyFormatter";
 import renderRatingStars from "./RenderRatingStarts";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store";
 import { useRouter, useSearchParams } from "next/navigation";
 import Header from "./Header";
-import Categories from "./Categories";
 import Searchbar from "../../_components/Products/Searchbar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
@@ -33,6 +32,12 @@ import useProductsEN from "./hooks/useProductsEN";
 import ProductsListEN from "./ui/ProductsListEN";
 import ProductsListAR from "./ui/ProductsListAR";
 import SearchProduct from "../../_components/shared/ui/SearchProduct";
+import useLoader from "@/components/loader/useLoader";
+import useCategories from "./useCategories";
+import useProductSearchBar from "./hooks/useProductSearchBar";
+import { useErrorToast } from "@/components/chakra-ui/useErrorToast";
+import { useSuccessToast } from "@/components/chakra-ui/useSuccessToast";
+import { useToast } from "@chakra-ui/react";
 
 // pages / products  state
 
@@ -42,18 +47,48 @@ export default function ProductsRenderer({
   shops,
   allProducts,
   searchByProd,
+   smartDevices,
+  electronics,
+  clothes,
+  accessories,
+  perfumes,
+  decor,
+  sportsSupplies,
+  stationary,
+  cosmeticProducts,
+
+ 
+  
 }: {
   locale: string;
   categories: string;
   shops: string;
   searchByProd: string;
   allProducts: string;
+  smartDevices:string
+  electronics:string
+  clothes:string
+  accessories:string
+  perfumes:string
+
+  decor:string
+  sportsSupplies:string
+  stationary:string
+  cosmeticProducts:string
+
 }) {
   const [currPage, setCurrPage] = useState("1");
-
+  const { LoaderComponent, setLoading } = useLoader();
+  let toast = useToast()
+  const errorButtonRef = useRef<HTMLButtonElement>(null)
+  const successButtonRef = useRef<HTMLButtonElement>(null)
+const {ErrorComponent} = useErrorToast({title:"Error",description:"The data you provided has no results.",errorButtonRef})
+const {SuccessComponent} = useSuccessToast({title:"Success",description:"Products have been added successfully.",successButtonRef})
   const [lang, setLang] = useState<string>("en");
+let {SearchBarComponent,searchInfo,setSearchInfo} =useProductSearchBar({locale,searchByProd})
+
   const { fetchAndSetAR, handleCheckChangeAR, productsAR, setProductsAR } =
-    useProductsAR(lang);
+    useProductsAR({lang,searchInfo,setSearchInfo,errorButtonRef});
   let {
     products,
  
@@ -69,14 +104,45 @@ export default function ProductsRenderer({
     fetchAndSetAR,
     lang,
     setProductsAR,
-    productsAR,
+    productsAR,searchInfo,setSearchInfo,errorButtonRef
   });
 
   const dispatch = useDispatch();
-
-
+  let CategoriesProps = {
+    categories,
+    allProducts,
+    searchByProd,
+     smartDevices,
+    electronics,
+    clothes,
+    accessories,
+    perfumes,
+    decor,
+    sportsSupplies,
+    stationary,
+    cosmeticProducts,setSearchInfo
+  
+  }
+let  {currentCategory,CategoriesRendererComponent} = useCategories(CategoriesProps)
   const pagesProducts = useSelector((state: RootState) => state.products.pages);
+useEffect(()=>{
 
+  if(!searchInfo || searchInfo.type == "allProducts"){return } 
+console.log("searchInfo",searchInfo)
+  // unstable_batchedUpdates(() => {
+    setProductsAR([]);
+    setProducts([]);
+  // });
+  dispatch(resetPagesProducts());
+
+  if (lang == "ar") {
+    fetchAndSetAR('change');
+  } else {
+    fetchAndSet2('change');
+  }
+  return;
+
+},[searchInfo,searchInfo.type,searchInfo.searchUrl,searchInfo.imageBytes])
   const toogleLang = async (language: string) => {
     setLang(language);
     unstable_batchedUpdates(() => {
@@ -112,17 +178,15 @@ export default function ProductsRenderer({
     showShippingForProduct,
     showShippingHandler,
   };
+
   return (
     <div className="dark:text-white">
+      {SuccessComponent}
+{ErrorComponent}
+{LoaderComponent}
       <Header toogleLang={toogleLang} shops={shops} />
-      <SearchProduct
-        isAr={locale == "ar"}
-        placeholder={searchByProd}
-        onChange={() => {}}
-        value={""}
-        className="flex justify-center"
-      />
-      <Categories categories={categories} allProducts={allProducts} />
+ {SearchBarComponent}
+      {CategoriesRendererComponent}
 
       {lang == "en" ? (
         <>
@@ -156,6 +220,9 @@ export default function ProductsRenderer({
           currPageProdAR={productsAR}
           currPage={currPage}
           lang={lang}
+          setLoading={setLoading}
+          successButtonRef={successButtonRef}
+          toast={toast}
         />
       </>
     </div>

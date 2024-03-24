@@ -20,8 +20,6 @@ export default function ProductsListEN({
   showShippingForProduct,
   showShippingHandler,
 }: any) {
-  console.log("showShippingForProduct", showShippingForProduct);
-  console.log("productsShippingInfo", productsShippingInfo);
   return (
     <>
       {" "}
@@ -38,6 +36,8 @@ export default function ProductsListEN({
               productsShippingInfo[i] &&
               productsShippingInfo[i][0].loading === "pending" &&
               showShippingForProduct?.[i];
+              console.log("productsShippingInfo?.[i] ",productsShippingInfo?.[i])
+              console.log("newShippingInfoPending",newShippingInfoPending)
             return (
               <Card
                 className="relative flex flex-col !p-0 my-3 shadow-md rounded-lg justify-between overflow-hidden dark:bg-[#2e464f]"
@@ -119,8 +119,8 @@ export default function ProductsListEN({
                     <div className="tab:max-h-[19rem] overflow-hidden">
                       <Image
                         src={
-                          product.product_small_image_urls
-                            .productSmallImageUrl[0]
+                          product.product_small_image_urls?.productSmallImageUrl?.[0] ||  product.product_main_image_url
+                            
                         }
                         className="p-0 w-full min-h-[67.5%] mb-auto   "
                         height={300}

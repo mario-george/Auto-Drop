@@ -9,7 +9,26 @@ export default function SettingsPage() {
   const t3 = useTranslations("signupForm");
 
   const locale = useLocale();
-
+  let translation = {
+    "generalSettings":t("generalSettings"),
+    "productSettings":t("productSettings"),
+    "syncProductPrices":t("syncProductPrices"),
+    "syncProductQuantities":t("syncProductQuantities"),
+    "productPricingSettings":t("productPricingSettings"),
+    "consolidatePricing":t("consolidatePricing"),
+    "viewOriginal":t("viewOriginal"),
+    "withoutShipping":t("withoutShipping"),
+    "includedShipping":t("includedShipping"),
+    "shippingSettings":t("shippingSettings"),
+    "shippingType":t("shippingType"),
+    "shippedW":t("shippedW"),
+    "pricesVAT":t("pricesVAT"),
+    "autoPay":t("autoPay"),
+    "delAndPack":t("delAndPack"),
+    "paiementWhenRecieving":t("paiementWhenRecieving"),
+    "save":t("save"),
+    "orderSettings":t("orderSettings"),
+  }
   return (
     <>
       <Settings
@@ -32,6 +51,7 @@ export default function SettingsPage() {
         confirmPasswordPlaceholder={t3("confirmPasswordPlaceholder")}
         country={t("country")}
         passwordNotMatch={t3("passwordNotMatch")}
+        translation={translation}
       />{" "}
     </>
   );

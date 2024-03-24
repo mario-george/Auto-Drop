@@ -195,7 +195,6 @@ async function GetProductOptions(SKUs: object[]) {
     concatValues: any[] = [],
     collectOptions: any[] = [],
     collectValues: any[] = [];
-
   collectValues = SKUs.map((sku: any) => {
     return sku?.ae_sku_property_dtos?.ae_sku_property_d_t_o?.map((ev: any) => {
       const {
@@ -225,11 +224,9 @@ async function GetProductOptions(SKUs: object[]) {
       };
     });
   });
-
   concatValues = await Promise.all(new Array().concat(...collectValues));
   collectOptions = uniq(map(concatValues, "sku_property_name"));
   let sku_image_1;
-
   options = await Promise.all(
     collectOptions.map((option: string, index: number) => {
       const uniqValues = uniqBy(
@@ -240,7 +237,9 @@ async function GetProductOptions(SKUs: object[]) {
             property_value_definition_name:
               e?.property_value_definition_name || e?.sku_property_value,
           })),
-        "sku_property_value"
+        "property_value_id"
+        // sku_property_value
+        // old property used for filtering
       );
 
       // console.log(uniqValues)
@@ -315,7 +314,6 @@ async function GetProductImages(URLs: string) {
   return images;
 }
 
-//
 export async function GetDetails({
   product_id,
   tokenInfo,
@@ -438,7 +436,7 @@ export async function GetDetails({
             shipping: { name: "default", price: 0 },
             sku_id: SKUs[0].sku_id,
             vat: false,
-            category_id: ae_item_base_info_dto.category_id,
+            // category_id: ae_item_base_info_dto.category_id,
             first_level_category_name,
             second_level_category_name,
             target_sale_price: targetSalePrice,
@@ -547,7 +545,8 @@ export async function GetProductDetailsTest(
       target_sale_price,
       target_original_price,
     });
-    const result = await getProductShippingServices(
+    
+    const result:any = await getProductShippingServices(
       {
         sku_id: productInfo.sku_id,
         country_code: "SA",
@@ -590,7 +589,10 @@ export async function GetProductDetailsTest(
       [price, main_price] = [main_price, price];
     }
     const { role, _id } = req.user;
-
+console.log("productInfo?.name",productInfo?.name)
+console.log("productInfo?.metadata_title",productInfo?.metadata_title)
+console.log("productInfo?.metadata_description",productInfo?.metadata_description)
+console.log("productInfo?.description.slice(0,12",productInfo?.description.slice(0,12))
     const product = new Product({
       name: name,
       ...body,
@@ -606,10 +608,19 @@ export async function GetProductDetailsTest(
       target_original_price,
       variantsArr:productInfo.variantsArr,
     });
+console.log("product?.name",product?.name)
+let metadataDescSliced =  productInfo.metadata_description
+if( productInfo?.metadata_description?.length > 70){
+  metadataDescSliced = productInfo.metadata_description.slice(0,70)
 
+}
+console.log("productInfo.description",productInfo.description.slice(0,20))
+if(!productInfo.description ){
 
+  console.log("NO DESCRIPTION")
+}
     product.metadata_title = productInfo.metadata_title;
-    product.metadata_description = productInfo.metadata_description;
+    product.metadata_description =metadataDescSliced;
     product.description = productInfo.description;
 
     const options = body?.options?.map((option: any) => {
@@ -633,10 +644,22 @@ export async function GetProductDetailsTest(
 
     product.options = options;
     let { category_id, category_name } = req.body;
-    product.category_name = category_name;
-    product.category_id = category_id;
+    // product.category_name = category_name;
+    // product.category_id = category_id;
+
+
+
     //@ts-ignore
     product.shipping = result;
+    //@ts-ignore
+    if(result?.length==0){
+      product.shippingAvailable =false
+    }else if(result?.length>0){
+      product.shippingAvailable =true
+
+    }
+    console.log("shippingAvailable",result?.length==0) 
+    console.log("result",result) 
     
     const jsonProduct = product.toJSON();
    
@@ -649,7 +672,7 @@ export async function GetProductDetailsTest(
       req
     ); */
     // 
-    return res.json({ product, shipping: result ,message:"success"});
+
   } catch (error) {
     console.log(error);
     next(error);

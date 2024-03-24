@@ -262,7 +262,27 @@
     "email": "Email",
     "phone": "Phone Number",
     "country": "Country",
-    "backToSettings": "Back to settings"
+    "backToSettings": "Back to settings",
+    "syncProductQuantities": "Sync product quantities",
+    "syncProductPrices": "Sync product prices",
+    "productPricingSettings": "Product pricing settings",
+    "productSettings": "Product Settings",
+    "consolidatePricing": "Consolidate pricing for product options at the highest price",
+    "generalSettings": " General Settings",
+    "viewOriginal": "View original product price:",
+    "withoutShipping": "Without shipping",
+    "includedShipping": "Includes shipping",
+    "shippingSettings": "Shipping settings",
+    "shippingType": "Shipping Type",
+    "shippedW": "Shipped with packaging",
+    "paiementWhenRecieving": "Paiement when recieving",
+    "delAndPack": "Delivery and packaging",
+    "pricesVAT": "Prices do not include VAT",
+    "orderSettings": "Order Settings",
+    "autoPay": "Automatic payment from wallet",
+    "save": "Save",
+    "sa":"Saudi riyals"
+
   },
   "linkAccount": {
     "availablePlatforms": "Available Platforms",
@@ -298,6 +318,8 @@
     "searchByProd": "Search by product Link..",
     "price": "Price",
     "unAvProd": "Unavailable Products",
+    "unLinkedProd": "Unlinked Products",
+    "noShipping": "Unavailable Shipping",
     "apply": "Apply",
     "unUpProd": "Not uploaded Products",
     "aliExpress": "Ali Express",
@@ -310,7 +332,10 @@
     "prodName": "Product Name",
     "inv": "Inventory",
     "val": "Value....",
-    "next": "Next"
+    "next": "Next",
+    "allCategories": "All Categories",
+    "selectAll": "Select All",
+    "search": "Search"
   },
   "productsPage": {
     "allProducts": "All Products",
@@ -357,7 +382,7 @@
     "tag": "Tags",
     "value": "Value",
     "with": "With",
-    "to": "To:",
+    "to": "To",
 
     "price": "Price",
     "currentPiece": "Current Piece",
@@ -372,8 +397,7 @@
     "color": "Color",
     "offerPrice": "Offer Price Before discount",
     "addOfferPrice": "Add Discount Price",
-    "productOptionsDetails":"Details of options for the product"
-
+    "productOptionsDetails": "Details of options for the product"
   },
   "walletPage": {
     "wallet": "Wallet",

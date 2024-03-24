@@ -1,59 +1,85 @@
 import { NextFunction, Request, Response } from "express";
 import catchAsync from "../../../../utils/catchAsync";
-import { Product } from "../../../../models/product.model";
+import { Product, ProductDocument, ProductSchema } from "../../../../models/product.model";
 import axios from "axios";
 import SallaToken from "../../../../models/SallaTokenModel";
+import { Types } from "mongoose";
+interface ProductDocumentParameter extends ProductDocument {
+  _id: Types.ObjectId; // Make _id required
+  // ... other properties ...
+}
+const handleProductProperties = async(product:ProductDocumentParameter & {},reqBody:any)=>{
+  let {
+    name,
+    description,
+    commissionPercentage,
+    showDiscountPrice,
+    vendor_commission,
+    productQuantity,
+    metadata_description,
+    metadata_title,
+    categoriesSalla,
+    require_shipping,
+    selectedTags,
 
-const variantsCheckHandler = (
-  variants: any,
-  checkboxes: boolean[][],
-  options: any
-) => {
-  let propertyIds = variants[0].relativeOptions.map(
-    (variant: any) => variant.property_value_id
-  );
-  if (checkboxes.length !== options.length) {
-    throw new Error("options is not equal to checkboxes");
-  }
-  let newC = checkboxes.map((checkboxOption: any, optionIndex: number) => {
-    let namesToBeDeleted = Array(options.length).fill([]);
-    // get names to be deleted
-    // namesToBeDeleted = [ {}  ]
-    checkboxOption.forEach((checkbox: boolean, checkboxIndex: number) => {
-      if (checkbox === false) {
-        namesToBeDeleted[optionIndex].push(
-          options[optionIndex].values[checkboxIndex].name
-        );
-        return;
-      } else {
-        return;
-      }
-    });
+    shippingIncludedChoice,
+    shippingIncludedChoiceIndex,
+    variantsArr,
+    options,
+    images,discountPrice,shipping,country_code,
+    ...body
+  } = reqBody;
+    if (options) {
+      product.options = options;
+    }
+    if (images) {
+      product.images = images;
+    }
+    if (shipping) {
+      product.shipping = shipping;
+    }
+    if (country_code) {
+      product.country_code = country_code;
+    }
+    if (discountPrice!==undefined) {
+      product.discountPrice = discountPrice;
+    }
+    if (variantsArr) {
+      product.variantsArr = variantsArr;
 
-    let newO = options[optionIndex].values.map();
-  });
-  let newOptionsArr = options.filter((option: any, optionIndex: number) => {
-    let newValues = option.values.filter((value: any, valueIndex: number) => {
-      return checkboxes[optionIndex][valueIndex];
-    });
-    option.values = newValues;
-    return newValues.length > 0;
-  });
-  let newVariantsArr2 = variants.map(
-    (variant: any, variantIndex: number) => {}
-  );
+      let totalQ = 0
+      variantsArr.forEach((variant:any)=>{
+        totalQ+=Number(variant.sku_available_stock)
+      })
+      product.quantity= totalQ
+    }
 
-  let newVariantsArr = variants.map((variant: any, index: number) => {
-    let newVariant = { ...variant };
-    newVariant.values = variant.values.map((value: any, valueIndex: number) => {
-      let newValue = { ...value };
-      newValue.available = checkboxes[index][valueIndex];
-      return newValue;
-    });
-    return newVariant;
-  });
-};
 
+    if (shippingIncludedChoice && shippingIncludedChoiceIndex) {
+      product.shippingIncludedChoice = shippingIncludedChoice;
+      product.shippingIncludedChoiceIndex = shippingIncludedChoiceIndex;
+    }
+
+    product.metadata_description = metadata_description;
+    product.description = description;
+    product.metadata_title = metadata_title;
+    product.name = name;
+    product.commissionPercentage = commissionPercentage;
+    if (showDiscountPrice) {
+      product.showDiscountPrice = showDiscountPrice;
+    }
+    product.vendor_commission = vendor_commission;
+    product.commissionPercentage = commissionPercentage;
+    if (categoriesSalla) {
+      product.categoriesSalla = categoriesSalla;
+    }
+
+    if (require_shipping) {
+      product.require_shipping = require_shipping;
+    }
+return product
+
+}
 const tagsSallaHandler = async (
   sallaAccessToken: string,
   selectedTags: string[]
@@ -110,7 +136,7 @@ const PatchProduct = catchAsync(
       console.log("No product found");
       return res.status(404).json({ message: "Product Not Found." });
     }
-
+    // product = await handleProductProperties(product,req.body)
     let {
       name,
       description,
@@ -123,59 +149,52 @@ const PatchProduct = catchAsync(
       categoriesSalla,
       require_shipping,
       selectedTags,
-      checkboxesSelected,
 
       shippingIncludedChoice,
       shippingIncludedChoiceIndex,
-      productEditFormOrigin,
       variantsArr,
       options,
-      images,
+      images,discountPrice,shipping,country_code,
       ...body
     } = req.body;
     let sallaTags;
+    // product = await handleProductProperties(product,req.body)
     if (options) {
       product.options = options;
     }
     if (images) {
       product.images = images;
     }
-
+    if (shipping) {
+      product.shipping = shipping;
+    }
+    if (country_code) {
+      product.country_code = country_code;
+    }
+    if (discountPrice!==undefined) {
+      product.discountPrice = discountPrice;
+    }
     if (variantsArr) {
       product.variantsArr = variantsArr;
-    }
-    if (productEditFormOrigin) {
-      product.productEditFormOrigin = productEditFormOrigin;
-    } else {
-      product.productEditFormOrigin = false;
+
+      let totalQ = 0
+      variantsArr.forEach((variant:any)=>{
+        totalQ+=Number(variant.sku_available_stock)
+      })
+      product.quantity= totalQ
     }
 
     if (selectedTags && selectedTags.length > 0) {
       sallaTags = await tagsSallaHandler(sallaAccessToken, selectedTags);
     }
-    let containsFalse = false;
-    if (checkboxesSelected) {
-      for (let i = 0; i < checkboxesSelected.length; i++) {
-        if (checkboxesSelected[i].includes(false)) {
-          containsFalse = true;
-          break;
-        }
-      }
-    }
+
 
     if (shippingIncludedChoice && shippingIncludedChoiceIndex) {
       product.shippingIncludedChoice = shippingIncludedChoice;
       product.shippingIncludedChoiceIndex = shippingIncludedChoiceIndex;
-    }
-    if (containsFalse) {
-      //remove unchecked variants
-      /*    let { variantsArr } = product;
-      let newVariantsArr = variantsCheckHandler(
-        variantsArr,
-        checkboxesSelected
-      ); */
-    }
-    console.log("reached Patch 2 ");
+    } 
+
+    // console.log("reached Patch 2 ");
 
     if (sallaTags && sallaTags.length > 0) {
       product.sallaTags = sallaTags;
@@ -216,9 +235,16 @@ const PatchProduct = catchAsync(
     if (require_shipping) {
       product.require_shipping = require_shipping;
     }
-    await product.save();
-    /* console.log("product?.vendor_commission", product?.vendor_commission);
-    console.log("product?.commissionPercentage", product?.commissionPercentage); */
+    console.log("before save")
+    try{
+      await product.save();
+
+    }catch(err){
+      console.error(err)
+    }
+    console.log("after save")
+
+    
     const opt2 = {
       method: "POST",
       headers: {

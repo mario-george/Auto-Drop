@@ -12,6 +12,8 @@ import Image from "next/image";
 import { AnimatePresence } from "framer-motion";
 import AccountDetails from "./AccountDetails";
 import SettingsPassword from "./SettingsPassword";
+import { cn } from '../../../../../lib/utils';
+import GeneralSettings from "./GeneralSettings";
 interface SettingsProps {
   settings: string;
   currentPassword: string;
@@ -32,6 +34,7 @@ interface SettingsProps {
   passwordPlaceholder: string;
   confirmPasswordPlaceholder: string;
   passwordNotMatch?:string
+  translation:{[key:string]:string}
 }
 
 export default function Settings(props: SettingsProps) {
@@ -46,9 +49,29 @@ export default function Settings(props: SettingsProps) {
     newPassword,
     currentPassword,
     confirmPassword,
-    saveChanges,
+    saveChanges,translation
   } = props;
   const isAr = locale === "ar";
+let activeButton = "bg-[#253439] hover:bg-[#253439] dark:text-white dark:bg-[#253439] "
+let unActiveButton = "bg-[#f0f3f4] text-[#253439] hover:bg-[#f0f3f4] dark:bg-white dark:text-[#2E464F]"
+  let { generalSettings,
+  productSettings,
+  syncProductPrices,
+  syncProductQuantities,
+  productPricingSettings,
+  consolidatePricing,
+  viewOriginal,
+  withoutShipping,
+  includedShipping,
+  shippingSettings,
+  shippingType,
+  shippedW,
+  pricesVAT,
+  autoPay,
+  delAndPack,
+  paiementWhenRecieving,
+  save,
+  orderSettings,} =translation
   return (
     <MotionWrapper locale={locale}>
       <div
@@ -86,7 +109,7 @@ export default function Settings(props: SettingsProps) {
         <div className={` tab:px-6 py-2 my-12 tab:mx-3`}>
           <div className="flex space-s-6 tab:space-s-0 flex-wrap tab:max-w-[60%] lap:max-w-[50%] tab:mb-4">
             <Button
-              className="w-full ms:max-w-[60%] ms:mx-auto tab:mx-auto tab:max-w-[150px] bg-[#f0f3f4] rounded-lg text-[#253439] my-2 sm:my-0 hover:bg-[#f0f3f4] dark:bg-white dark:text-[#2E464F]"
+              className={cn("w-full ms:max-w-[60%] ms:mx-auto tab:mx-auto tab:max-w-[150px] rounded-lg my-2 sm:my-0",currWindow=="ChangePassword"?activeButton:unActiveButton)}
               onClick={() => {
                 setCurrWindow("ChangePassword");
               }}
@@ -94,12 +117,20 @@ export default function Settings(props: SettingsProps) {
               {changePassword}
             </Button>
             <Button
-              className="w-full ms:max-w-[60%] ms:!mx-auto tab:!mx-auto tab:max-w-[150px] bg-[#253439] rounded-lg my-2 sm:my-0 hover:bg-[#253439] dark:text-white dark:bg-[#253439]"
+              className={cn("w-full ms:max-w-[60%] ms:!mx-auto tab:!mx-auto tab:max-w-[150px] rounded-lg my-2 sm:my-0",currWindow=="AccountInfo"?activeButton:unActiveButton)}
               onClick={() => {
                 setCurrWindow("AccountInfo");
               }}
             >
               {changeAccountDetails}
+            </Button>
+            <Button
+              className={cn("w-full ms:max-w-[60%] ms:!mx-auto tab:!mx-auto tab:max-w-[150px] rounded-lg my-2 sm:my-0 ",currWindow=="GeneralSettings"?activeButton:unActiveButton)}
+              onClick={() => {
+                setCurrWindow("GeneralSettings");
+              }}
+            >
+              {generalSettings}
             </Button>
           </div>
           <AnimatePresence>
@@ -107,11 +138,13 @@ export default function Settings(props: SettingsProps) {
               <>
                 <AccountDetails {...props} />
               </>
-            ) : (
+            ) : currWindow == "ChangePassword" ? (
               <>
                 <SettingsPassword {...props} />
               </>
-            )}
+            ) : <>
+                <GeneralSettings {...props} />
+            </>}
           </AnimatePresence>
         </div>
       </div>

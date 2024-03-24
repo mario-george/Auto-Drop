@@ -21,8 +21,67 @@ import {
 } from "./CRUD";
 import { RefreshTokenHandler } from "../../../salla/RefreshAccessToken";
 import { ProductSallaChecker } from "./features/AlreadyLinkedProduct";
+import VariantsPatcher from "./features/VariantsPatcher";
 
 export const updateVariantFinalOption2 = async (
+  product: ProductDocument,
+  token: string,
+  tokenData: any
+) => {
+  const data = await getProductVariants(product.salla_product_id, 1, token);
+  console.log(data?.pagination?.totalPages);
+
+  let { totalPages, perPage, currentPage } = data?.pagination;
+  let beginIndex = 0;
+  if (currentPage == 1) {
+    beginIndex = 0;
+  } else {
+    beginIndex = currentPage * perPage;
+  }
+  const errorArray = await VariantsPatcher({
+    product,
+    totalPages,
+    beginIndex,
+    perPage,
+    token,
+    variantsResponse: data,
+    currentPage,
+  });
+  console.log("errorArray", errorArray);
+  console.log("totalPages", totalPages);
+  if (totalPages == 1) {
+    return;
+  }
+
+  // let { totalPages, perPage, currentPage } = data?.pagination;
+  let currentIndex = perPage;
+  beginIndex = perPage;
+
+  for (let i = 2; i <= totalPages; i++) {
+    console.log("MULTIPLE PAGES", i);
+
+    const dataPage2 = await getProductVariants(
+      product.salla_product_id,
+      i,
+      token
+    );
+    currentPage = dataPage2.pagination.currentPage;
+    const errorArray = await VariantsPatcher({
+      product,
+      totalPages,
+      beginIndex,
+      perPage,
+      token,
+      variantsResponse: dataPage2,
+      currentPage,
+    });
+    console.log("errorArray", errorArray);
+  }
+  return;
+ 
+};
+
+export const updateVariantFinalOptionOld = async (
   product: ProductDocument,
   token: string,
   tokenData: any
@@ -150,7 +209,6 @@ let errorArrayVariants :any= []
     return;
   
 };
-
 function getRandomInt(min: any, max: any) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -211,13 +269,10 @@ export async function LinkProductSalla2(
     }
     if (
       //@ts-ignore
-      product?.shipping?.length!=0&&
+      product?.shipping?.length != 0 &&
       product.shippingIncludedChoice &&
       product.shippingIncludedChoiceIndex !== -1
     ) {
-
-
-    
       console.log(
         "product.shippingIncludedChoice",
         product.shippingIncludedChoice
@@ -253,8 +308,7 @@ export async function LinkProductSalla2(
       bodyDataSalla.tags = prodTags;
       console.log("prodTags", prodTags);
     }
-  
-   
+
     //@ts-ignore
     if (product?.options?.[0]?.name) {
       bodyDataSalla.options = product.options;

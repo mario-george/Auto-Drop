@@ -3,10 +3,15 @@ import React from "react";
 import Header from "./components/TableComponents/components/Header";
 import TableRenderer from "./components/TableComponents/TableRenderer";
 import "./components/styles/styles.css";
-export default function Page() {
+export default function MyProducts() {
   const t = useTranslations("myProducts");
   const t2 = useTranslations("myProductsEdit");
+const translationMessages = {
+  "allCategories":t("allCategories"),
+  "selectAll":t("selectAll"),
+  "search":t("search")
 
+}
   let HeaderProps = {
     upProducts: t("upProducts"),
     val: t("val"),
@@ -14,11 +19,14 @@ export default function Page() {
     profitType: t("profitType"),
     title: t("products"),
     number: t2("number"),
+    translationMessages,
+    category:t("category")
+
   };
   const locale = useLocale();
   return (
     <>
-      <Header {...HeaderProps} className="max-w-full" />
+      <Header {...HeaderProps} className="w-fit" />
       <TableRenderer
         productName={t("prodName")}
         sellPrice={t("sellPrice")}
@@ -27,6 +35,10 @@ export default function Page() {
         inventory={t("inv")}
         searchByProd={t("searchByProd")}
         unAvProd={t("unAvProd")}
+        translationMessages={translationMessages}
+        noShipping={t("noShipping")}
+        unLinkedProd={t("unLinkedProd")}
+      
         price={t("price")}
         unUpProd={t("unUpProd")}
         locale={locale}

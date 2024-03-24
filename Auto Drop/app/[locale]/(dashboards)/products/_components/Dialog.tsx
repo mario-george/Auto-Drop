@@ -22,10 +22,10 @@ export default function SubmitProducts({
   currPageProdEN,
   currPageProdAR,
   currPage,
-  locale,
+  locale,setLoading,successButtonRef,toast
 }: any) {
   const router = useRouter();
-  const { LoaderComponent, setLoading } = useLoader();
+  // const { LoaderComponent, setLoading } = useLoader();
 
   let submitHandler = async () => {
     setLoading(true);
@@ -57,6 +57,44 @@ export default function SubmitProducts({
     });
   });
     try {
+toast.promise(promises[0], {
+        success: { title: `Success`, description: `${toBeSentProductsArr?.length} Products has been added successfully` },
+        error: { title: 'Fail', description: 'Something went wrong while adding products' },
+        loading: { title: 'Adding Products', description: 'Please wait' ,position:"bottom-right"},
+      }) 
+     /* 
+      toast.promise(
+  promises[0],
+  {
+    loading: (data:any) => {
+      toast({
+        title: 'Loading',
+        description: 'Promise pending',
+        status: 'loading',
+        position: 'bottom-right'
+      });
+      return 'Promise resolved';
+    },
+    success: (data:any) => {
+      toast({
+        title: 'Success',
+        description: 'Promise resolved',
+        status: 'success',
+        position: 'bottom-right'
+      });
+      return 'Promise resolved';
+    },
+    error: (err:any) => {
+      toast({
+        title: 'Error',
+        description: 'Promise rejected',
+        status: 'error',
+        position: 'bottom-right'
+      });
+      return 'Promise rejected';
+    },
+  }
+); */
       const productsDetails = await Promise.allSettled(promises);
       const promises2 = productsDetails.map(
         (result: any, index: number): any => {
@@ -78,6 +116,7 @@ export default function SubmitProducts({
     } catch (error) {
       console.error(error);
     }
+    // successButtonRef?.current?.click()
     router.push(`/${locale || "en"}/my-products`);
 
     setLoading(false);
@@ -110,16 +149,16 @@ export default function SubmitProducts({
   };
   return (
     <>
-      {LoaderComponent}
+        {/* {LoaderComponent} */}
       <Dialog
         toBeSentProductsArr={toBeSentProductsArr}
         submitHandler={submitHandler}
-      >
+        >
         <Button
           className="fixed bottom-12 !bg-blue-300 rounded-full min-w-[3rem] min-h-[3rem] shadow z-[20]"
           onClick={submitProductsHandler}
           disabled={toBeSentProductsArr.length === 0}
-        >
+          >
           <FaPlus className="text-black" />
         </Button>
       </Dialog>

@@ -31,12 +31,17 @@ import { DataTableToolbar } from "./data-table-toolbar";
 import Cols from "./columns";
 import { useDispatch } from "react-redux";
 import { setKeyValue } from "@/store/productsSlice";
+import { useSelector } from "react-redux";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchByProd: string;
   unAvProd: string;
+  noShipping: string;
+  unLinkedProd: string;
+
+  
   unUpProd: string;
   price: string;
   category: string;
@@ -45,8 +50,8 @@ interface DataTableProps<TData, TValue> {
   apply: string;
   setLoadProducts: any;
   colData?: any;
-
-  
+  translationMessages:{[key:string]:string}
+  allProdCategories:number[][]
 }
 
 export function DataTable<TData, TValue>({
@@ -54,15 +59,17 @@ export function DataTable<TData, TValue>({
   unAvProd,
   price,
   category,
-  unUpProd,
+  unUpProd,noShipping,
+  unLinkedProd,
   // columns,
   data,
   locale,
   setMyProducts,
   apply,
   setLoadProducts,
-  colData
+  colData,translationMessages,allProdCategories
 }: DataTableProps<TData, TValue>) {
+  const resetRowSelection = useSelector((state: any) => state.products.resetRowSelection)
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -78,6 +85,9 @@ export function DataTable<TData, TValue>({
       setKeyValue({ key: "currentSelectedProducts", value: rowSelection })
     );
   }, [rowSelection]);
+  React.useEffect(() => {
+  setRowSelection({});
+  }, [resetRowSelection]);
   let columns = Cols({
     productName,
     sellPrice,
@@ -110,6 +120,7 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
+  console.log("columnFilters",columnFilters)
   return (
     <div className="space-y-4 min-w-full">
       <DataTableToolbar
@@ -119,9 +130,14 @@ export function DataTable<TData, TValue>({
         price={price}
         category={category}
         unUpProd={unUpProd}
+        noShipping={noShipping}
+        unLinkedProd={unLinkedProd}
         locale={locale}
         setMyProducts={setMyProducts}
         apply={apply}
+        myProducts={data}
+        translationMessages={translationMessages}
+        allProdCategories={allProdCategories}
       />
       <div className="">
         <Table>

@@ -48,7 +48,7 @@ export default function ProductDetails({
   setCurrentlySelectedVariant,
   currentlySelectedVariant,
   setVariantsDetails,
-  shippingTotalCost,
+  shippingTotalCost,productOptions
 }: any) {
   // console.log("shippingChoosenValue", shippingChoosenValue);
   // const [value, setValue] = React.useState(shippingChoosenValue);
@@ -166,7 +166,12 @@ export default function ProductDetails({
     shippingVariantTotalCost = 0;
   }
 
-  return (
+if(!productOptions || productOptions?.length==0|| !productOptions?.[0]?.name){
+
+      return <></>;
+    
+  }
+    return (
     <div className={`text-xs tab:text-sm`}>
       <span>{productOptionsDetails}</span>
       <div className="border rounded-lg p-2 tab:p-5 my-2">
@@ -180,11 +185,9 @@ export default function ProductDetails({
           <Separator />
         </div>
         <div className="grid grid-cols-1 tab:grid-cols-3  tab:gap-4   my-4 min-w-full gap-2 tab:gap-6 items-center ">
-<div className="">
-
-          <span className="">{originalPrice}:</span>
-</div>
-
+          <div className="">
+            <span className="">{originalPrice}:</span>
+          </div>
           <Input
             className={`shadow-sm text-sm md:text-base tab:col-span-2 bg-[#edf5f9] ${inputClasses} `}
             value={CurrencyFormatter(price)}
@@ -249,7 +252,7 @@ export default function ProductDetails({
           </div>
           <div className="col-span-full my-2">
             <Separator />
-          </div> 
+          </div>
           <div className="grid tab:grid-cols-6 min-w-full tab:col-span-3 gap-3 items-center">
             <span className="">{finalPriceText}</span>
             <div className="col-span-2">
@@ -266,8 +269,7 @@ export default function ProductDetails({
                 className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
                 value={CurrencyFormatter(finalTargetPrice - price)}
               />
-              <span className="absolute inset-y-0 right-0 pr-2 flex items-center text-gray-500">
-              </span>
+              <span className="absolute inset-y-0 right-0 pr-2 flex items-center text-gray-500"></span>
             </div>
           </div>
         </div>

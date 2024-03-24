@@ -69,23 +69,26 @@ interface ProductSchema {
   shipping: ShippingAttributes;
   sku_id: string;
   vat: any;
-  category_id?: number;
-  category_name?: string;
+  // category_id?: number;
+  // category_name?: string;
   first_level_category_name?: string;
+  country_code?: string;
   second_level_category_name?: string;
   target_sale_price?: string | number;
   target_original_price?: string | number;
   variantsArr?: any;
   commissionPercentage?: boolean;
   showDiscountPrice?: boolean;
+  discountPrice?: number;
   categoriesSalla?: number[];
 
   sallaTags?: { name: string; id: number }[];
 
   shippingIncludedChoice?: boolean;
 shippingIncludedChoiceIndex?: number;
-  checkboxesSelected?: any;
-  productEditFormOrigin?: boolean;
+  // checkboxesSelected?: any;
+  // productEditFormOrigin?: boolean;
+  shippingAvailable?:boolean
 }
 
 interface ProductDocument extends Document, ProductSchema {}
@@ -148,8 +151,8 @@ const options = {
     type: Boolean,
     default: false,
   },
-  category_id: { type: Number, default: null },
-  category_name: { type: String, default: null },
+  // category_id: { type: Number, default: null },
+  // category_name: { type: String, default: null },
   target_original_price: { type: Number, default: null },
   target_sale_price: { type: Number, default: null },
   first_level_category_name: { type: String, default: null },
@@ -157,12 +160,15 @@ const options = {
   variantsArr: { type: Array, default: [] },
   commissionPercentage: { type: Boolean, default: true },
   showDiscountPrice: { type: Boolean, default: false },
+  discountPrice: { type: Number, default:0 },
   categoriesSalla: { type: Array, default: [] },
   sallaTags: { type: Array, default: [] },
   shippingIncludedChoice: { type: Boolean, default: false },
-  checkboxesSelected: { type: Array, default: [] },
+  shippingAvailable: { type: Boolean, default: false },
+  // checkboxesSelected: { type: Array, default: [] },
   shippingIncludedChoiceIndex: { type: Number, default: -1 },
-  productEditFormOrigin: { type: Boolean, default: false },
+  country_code: { type: String, default: "SA" },
+  // productEditFormOrigin: { type: Boolean, default: false },
 };
 
 const schema = new Schema<ProductSchema>(options, { timestamps: true });

@@ -15,7 +15,6 @@ import Image from "next/image";
 export default function renderRatingStars(rating: any) {
   const filledStars = Math.floor(rating / 20); // Each star represents 20% of the rating
   const remainingPercentage = rating % 20; // Remaining percentage to determine if a half star is needed
-
   const stars: ReactElement[] = [];
 
   for (let i = 1; i <= 5; i++) {

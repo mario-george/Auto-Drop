@@ -110,7 +110,7 @@ let {property_id, name} = elementFound;
                     return tempValues;
                   });
                 }}
-                className="grid grid-cols-1 ml:grid-cols-2 tab:grid-cols-3 gap-2 tab:gap-4 p-1 tab:p-3 col-span-full "
+                className="grid grid-cols-2 ml:grid-cols-3 tab:grid-cols-4 gap-2 tab:gap-4 p-1 tab:p-3 col-span-full "
               >
                 {" "}
                 {opt?.values?.map((el: any, index: number) => {
@@ -138,16 +138,21 @@ let {property_id, name} = elementFound;
                           <ImageChakra
                             src={el.sku_image}
                             fallbackSrc="https://clarionhealthcare.com/wp-content/uploads/2020/12/default-fallback-image.png"
-                            className="rounded-lg "
-                            htmlWidth="250"
-                            htmlHeight="500"
+                            className="rounded-lg bg-red-500 "
+                            htmlWidth="100"
+                            htmlHeight="100"
                           />
                         )}
                         <p className="text-center mt-auto">{el?.name}</p>
                       </Radio>
              
              <DeleteOptionDialog deleteOptionHandler={removeOptionHandler} element={el} optIndex={optIndex} index={index} messageHeader="Do you want to delete this option" messageDescription={`you won't be able to retrieve this option again (${el.name}).`}>
-                <div className={` ${optImage ? `absolute -top-2 left-0` :`absolute -top-6 -left-6`}`}>
+                
+                
+                <div className="overflow-hidden w-full h-full">
+
+
+                <div className={` bg-[#2e464f] w-fit h-fit shadow rounded-full shadow-black  ${optImage ? `absolute  left-8 top-1` :`absolute -top-6 -left-6 `}`}>
                 <svg
                         width="24"
                         height="24"
@@ -177,6 +182,7 @@ let {property_id, name} = elementFound;
                           stroke="white"
                         />
                       </svg>
+                </div>
                 </div>
              </DeleteOptionDialog>
 

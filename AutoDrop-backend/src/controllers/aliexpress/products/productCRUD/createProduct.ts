@@ -134,9 +134,9 @@ export async function CreateAndSaveProduct(
     });
 
     product.options = options;
-    let { category_id, category_name } = req.body;
-    product.category_name = category_name;
-    product.category_id = category_id;
+    // let { category_id, category_name } = req.body;
+    // product.category_name = category_names;
+    // product.category_id = category_id;
     const jsonProduct = product.toJSON();
     /*     const valuesStock = new Array().concat(
       //@ts-ignore

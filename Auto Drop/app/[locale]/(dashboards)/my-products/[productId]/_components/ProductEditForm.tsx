@@ -9,8 +9,9 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 // import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Radio, RadioGroup } from "@chakra-ui/react";
+import { Radio, RadioGroup, useToast } from "@chakra-ui/react";
 
+import ReactQuill from "react-quill";
 import {
   Form,
   FormControl,
@@ -47,9 +48,13 @@ import useLoader from "@/components/loader/useLoader";
 import CurrencyFormatter from "../../../products/_components/CurrencyFormatter";
 import useOptionHook from "./hooks/useOptionHook";
 import useProductShipping from "./ui/useProductShipping";
-import {useToast } from "@/components/ui/use-toast";
 
 import {useSelector} from 'react-redux'
+import { useErrorToast } from '../../../../../../components/chakra-ui/useErrorToast';
+import { useSuccessToast } from '../../../../../../components/chakra-ui/useSuccessToast';
+
+
+import { Shipping } from "./types/shipping.interfaces";
 interface ProductEditFormProps {
   prodNameTitle: string;
   prodNameTitlePlaceholder: string;
@@ -97,6 +102,8 @@ interface CategorySalla {
   name: string;
 }
 export default function ProductEditForm(props: ProductEditFormProps) {
+  const locale = useLocale();
+
   let {
     invalidProdName,
     invalidSEODescription,
@@ -136,11 +143,42 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     withText,
     valueText,
   } = props;
+const errorButtonRefShipping :React.RefObject<HTMLButtonElement>= useRef(null)
+  const toast = useToast()
+  const {ErrorComponent:ErrorComponentShipping} =useErrorToast({title:"Error while linking this product." ,description:"Shipping is not available for this product.",errorButtonRef:errorButtonRefShipping})
+  const updateProductRef = useRef<HTMLButtonElement>(null)
+  const {SuccessComponent:SuccessUpdateProductCompononet} =useSuccessToast({title:"Success." ,description:"Product has been updated successfully.",successButtonRef:updateProductRef})
 
-  const {toast} = useToast()
+  const formRefsArray = ["prodName", "SEOTitleText", "SEODescription","description","commission"];
+
+interface Accumlator {
+  [key: string]: React.RefObject<HTMLInputElement> | React.RefObject<ReactQuill>;
+
+
+}
+/* const formRefs = formRefsArray.reduce((accumlator:Accumlator,currentValue:string)=>{
+  if(currentValue =="description"){
+    accumlator[currentValue] = useRef<ReactQuill>(null)
+    return accumlator
+  }
+  accumlator[currentValue] = useRef<HTMLInputElement>(null)
+   return accumlator
+},{}) */
+let formRefs :any = {}
+formRefs.prodName = useRef<HTMLInputElement>(null);
+formRefs.SEODescription = useRef<HTMLInputElement>(null);
+formRefs.SEOTitleText = useRef<HTMLInputElement>(null);
+formRefs.description = useRef<any>(null);
+formRefs.commission = useRef<HTMLInputElement>(null);
+
+
+
+  const [ discountPrice,setDiscountPrice]  =useState(product?.target_original_price)
   const [categoriesList, setCategoriesList] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
   const [productImages, setProductImages] = useState([]);
+  const [productShipping, setProductShipping] = useState([]);
+  
   const [currentlySelectedVariant, setCurrentlySelectedVariant] = useState({});
   const [optionChoosenValues, setOptionChoosenValues] = useState([]);
   const sallaToken = useSelector((state: any) => state.user.sallaToken);
@@ -152,9 +190,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   const [formValues, setFormValues] = useState<any>({ ProductName: "" });
   const [metadataTitle, setMetadataTitle] = useState("");
   const [metadataDesc, setMetadataDesc] = useState("");
-  const [choosenColors, setChoosenColors] = useState<any>([]);
-  const [choosenMaterials, setChoosenMaterials] = useState<any>([]);
-  const [choosenSizes, setChoosenSizes] = useState<any>([]);
+
   const [selectedCategories, setSelectedCategories] = useState<any>([]);
   const [selectedTags, setSelectedTags] = useState<any>([]);
   const [profitChoosenType, setProfitChoosenType] = useState("percentage");
@@ -166,7 +202,6 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   const formSubmmitedHandler = () => {
     buttonRef?.current?.click();
   };
-  console.log("LoaderComponent", LoaderComponent);
   const {
     optionsSelected,
     setOptionsSelected,
@@ -175,16 +210,15 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     checkboxHandler,
   } = useOptionHook({ product: product });
   let ProductShippingProps = {
-    shipping: product?.shipping,
     shippingText: shipping,
     nameOfShippingComp,
     durationToDeliver,
-    shippingWithoutOrInclude,
+    shippingWithoutOrInclude,to,locale,product_id:product?.original_product_id ,setProductShipping,shipping:productShipping
   };
   const {
     ProductShippingComponent,
     value: choosenShippingIndex,
-    shippingTotalCost,
+    shippingTotalCost,choosenCountryCode
   } = useProductShipping({ ...ProductShippingProps });
   let addToCartHandler = () => {};
   const ProductEditHeaderProps = {
@@ -248,36 +282,28 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       setFormValues((prevV: any) => {
         return { ...prevV, ProductName: product?.name };
       });
-      let colorsOption = product?.options?.find(
-        (option: any) =>
-          option?.name?.includes("Color") || option?.name?.includes("color")
-      );
+      if( formRefs.prodName.current){
 
-      let materialsOption = product?.options?.find(
-        (option: any) =>
-          option?.name?.includes("Material") ||
-          option?.name?.includes("material")
-      );
-      let sizeOptions = product?.options?.find(
-        (option: any) =>
-          option?.name?.includes("Size") || option?.name?.includes("size")
-      );
+        formRefs.prodName.current.value = product?.name;
+      }
+      if( formRefs.description?.current){
+
+        formRefs.description.current.value = product?.description;
+      }
+
+      if(product?.discountPrice ==0 ){
+
+        setDiscountPrice(product?.target_original_price)
+      }else{
+        setDiscountPrice(product?.discountPrice)
+
+      }
+
+   
       setDescriptionField(product?.description);
-      setChoosenColors(
-        Array.from({ length: colorsOption?.values?.length }, (_, i) => {
-          return colorsOption?.values[i]?.selected || true;
-        })
-      );
-      setChoosenMaterials(
-        Array.from({ length: materialsOption?.values?.length }, (_, i) => {
-          return materialsOption?.values[i]?.selected || true;
-        })
-      );
-      setChoosenSizes(
-        Array.from({ length: sizeOptions?.values?.length }, (_, i) => {
-          return sizeOptions?.values[i]?.selected || true;
-        })
-      );
+   
+  
+     
       setShowDiscountPrice(product?.showDiscountPrice || false);
       setSelectedTags(
         product?.sallaTags.map((tag: { name: string; id: number }) => tag.name)
@@ -292,7 +318,6 @@ export default function ProductEditForm(props: ProductEditFormProps) {
             valueIndex: "0",
           };
         });
-      console.log("initialChoosenValues", initialChoosenValues);
       setOptionChoosenValues(initialChoosenValues);
 
       if (!product?.commissionPercentage) {
@@ -326,6 +351,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       setCurrentlySelectedVariant(product?.variantsArr[0]);
       setProductOptions(product.options);
       setProductImages(product.images);
+setProductShipping(product?.shipping)
     }
   }, [product]);
   const [commissionVal, setCommissionVal] = useState(
@@ -343,10 +369,11 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     const fetchCategories = async () => {
       try {
         const resp = await axiosInstance.get("/salla/categories");
-        console.log(resp.data);
+        // console.log(resp.data);
         if (resp.status < 300 && resp.status >= 200) {
           setCategoriesList(resp.data.data);
         }
+        console.log("resp.data.data",resp.data.data)
       } catch (err: any) {
         console.log(err?.response.data);
         console.log(err?.response.status);
@@ -356,7 +383,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     const fetchTags = async () => {
       try {
         const resp = await axiosInstance.get("/salla/tags");
-        console.log(resp.data);
+        // console.log(resp.data);
         if (resp.status < 300 && resp.status >= 200) {
           setTagsList(resp.data.data);
         }
@@ -371,11 +398,11 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   }, []);
   useEffect(() => {
     console.log("product", product);
-    console.log(
+/*     console.log(
       "product?.categoriesSalla && product?.categoriesSalla.length!==0",
       product?.categoriesSalla && product?.categoriesSalla.length !== 0
-    );
-    console.log("categoriesList", categoriesList);
+    ); */
+    // console.log("categoriesList", categoriesList);
     if (product?.categoriesSalla && product?.categoriesSalla.length !== 0) {
       let fetchedCat = categoriesList
         .filter((category: any) =>
@@ -398,10 +425,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
 
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    console.log(commissionVal);
-    console.log(
-      profitChoosenType == "percentage" || profitChoosenType == percentage
-    );
+ 
     if (profitChoosenType == "percentage" || profitChoosenType == percentage) {
       setFinalPrice((finalPrice: any) => {
         return (
@@ -422,7 +446,6 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     }
   }, [totalProfit, profitChoosenType, commissionVal]);
   let inputClasses = `bg-[#edf5f9] text-[#253439] rounded-lg shadow`;
-  const locale = useLocale();
   const formSchema = z.object({
     prodName: z.string().min(2, invalidProdName).max(300),
     SEOTitleText: z.string().min(2, invalidSEOTitle).max(70),
@@ -440,38 +463,37 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   });
 
   const onSubmitHandler = async (data: z.infer<typeof formSchema>) => {
+ 
     if (!sallaToken || sallaToken=="" ) {
-      toast({
+  /*     toast({
         variant: "destructive",
         title: "Please link your account with salla and try again.",
-      });
-     
+      }); */
+      toast({status:"error",title:"Error",description:"Please Link your account with salla and try again.",          duration: 9000,
+      isClosable: true,})
 
     
       return
     }
+    if(product?.shipping?.length ==0){
+      errorButtonRefShipping?.current?.click()
+      return
+    }
     setLoading(true);
-    console.log(data.SEOTitleText);
-    console.log(data);
-    console.log(data);
-    console.log(data);
-    setIsLoading(true);
+
+    // setIsLoading(true);
     try {
       uploadProductHandler(data);
     } catch (err: any) {
       setError(err.response.data.message);
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
+      setLoading(false);
+    
     }
   };
   const ProductOptionsProps = {
     options: productOptions,
-    choosenSizes,
-    choosenColors,
-    setChoosenColors,
-    setChoosenSizes,
-    setChoosenMaterials,
-    choosenMaterials,
     optionsSelected,
     setOptionsSelected,
     optionCheckHandler,
@@ -512,7 +534,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     inputClasses,
     showDiscountPrice,
     setShowDiscountPrice,
-    shippingTotalCost,
+    shippingTotalCost,setDiscountPrice,discountPrice
   };
 
   const ProductSEOInfoProps = {
@@ -565,7 +587,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     finalPriceText: editedPrice,
     profitText: profit,
     setVariantsDetails,
-    shippingTotalCost,
+    shippingTotalCost,productOptions
   };
   let SelectComponent = (
     <Select
@@ -612,25 +634,10 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     );
   }
   let uploadProductHandler = async (dataForm: any) => {
-/*     console.log("sallaToken",sallaToken)
-    if (!sallaToken || sallaToken=="" ) {
-      toast({
-        variant: "destructive",
-        title: "Please link your account with salla and try again.",
-      });
-     
 
-    
-      return
-    } */
     try {
       let profitChoosenTypeName = "number";
-      console.log("percentage", percentage);
-      console.log(
-        "profitChoosenType==percentage",
-        profitChoosenType == percentage
-      );
-      console.log("profitChoosenType", profitChoosenType);
+  
       let commissionPercentage = false;
       if (
         profitChoosenType == percentage ||
@@ -656,16 +663,13 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         )
         .map((category: CategorySalla) => category.id);
 
-      console.log("selectedTags", selectedTags);
-      console.log("checkboxesSelected", checkboxesSelected);
-      console.log("choosenShippingIndex", choosenShippingIndex);
+
 
       let data: any = {
         name: dataForm.prodName,
         vendor_commission: commissionVal,
         metadata_description: dataForm?.SEODescription,
         metadata_title: dataForm?.SEOTitleText,
-        description: descriptionField,
         profitChoosenTypeName,
         commissionPercentage,
         showDiscountPrice,
@@ -675,34 +679,54 @@ export default function ProductEditForm(props: ProductEditFormProps) {
         checkboxesSelected,
         choosenShippingIndex,
         shippingIncludedChoice,
-        productEditFormOrigin: true,
+        discountPrice,
         options: productOptions,
         variantsArr: variantsDetails,
         images: productImages,
+        shipping:productShipping
       };
+      if(formRefs.description?.current){
+        data.description = formRefs.description.current.value
+      }
+  /*     if(formRefs.discountPrice.current){
+        data.discountPrice = formRefs.discountPrice.current.value
+      } */
+
+      if(choosenCountryCode){
+        data.country_code = choosenCountryCode
+      }
       if (shippingWithoutOrInclude == "shippingIncluded") {
         data.shippingIncludedChoiceIndex = choosenShippingIndex;
       } else {
         data.shippingIncludedChoiceIndex = -1;
       }
-      const res = await axiosInstance.patch(
+      const resPromise = axiosInstance.patch(
         `aliexpress/product/updateProduct/${product._id}`,
         data
       );
-
+      toast.promise(resPromise, {
+        success: { title: `Success`, description: `${product?.name} has been added successfully` },
+        error: { title: 'Fail', description: 'Something went wrong while updating product' },
+        loading: { title: 'Updating Product', description: 'Please wait' ,position:"bottom-right"},
+      }) 
+const res = await resPromise
 if(res?.data?.message=="SallaToken Not Found."){
-toast({variant:"destructive",description:"SallaToken Not Found."})
-  return 
+// toast({variant:"destructive",description:"SallaToken Not Found."})
+toast({status:"error",title:"Error",description:"Please Link your account with salla and try again.",          duration: 9000,
+isClosable: true,})  
+return 
   }
-
       if (res.status >= 200 && res.status < 300) {
         console.log("Product updated");
+        // updateProductRef?.current?.click()
       } else {
         console.log("error");
       }
     } catch (e: any) {
       if(e?.response?.data?.message=="SallaToken Not Found."){
-        toast({variant:"destructive",description:"Please Link your account with salla and try again."})
+        // toast({variant:"destructive",description:"Please Link your account with salla and try again."})
+toast({status:"error",title:"Error",description:"Please Link your account with salla and try again.",          duration: 9000,
+isClosable: true,})
           
           }
         
@@ -714,6 +738,8 @@ toast({variant:"destructive",description:"SallaToken Not Found."})
 
   return (
     <>
+    {SuccessUpdateProductCompononet}
+  {ErrorComponentShipping}
       {LoaderComponent}
       {ProductHeaderComponent}
       <div className="bg-white rounded-lg shadow container tab:p-6 lap:flex min-w-full justify-between  dark:bg-[#2e464f] dark:text-white">
@@ -820,8 +846,10 @@ toast({variant:"destructive",description:"SallaToken Not Found."})
                 <div className="form-group">
                   <label className="form-label">Description</label>
                   <Editor
-                    value={descriptionField}
-                    onChange={(value) => setDescriptionField(value)}
+                    // value={descriptionField}
+                    // onChange={(value) => setDescriptionField(value)}
+                    //@ts-ignore
+                    ref={formRefs.description}
                   />
                 </div>
               </div>

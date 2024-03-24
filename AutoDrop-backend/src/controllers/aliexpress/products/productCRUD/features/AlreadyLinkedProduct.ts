@@ -76,7 +76,8 @@ export const ProductSallaChecker: any = async (
       err?.response?.data?.error?.fields?.visibility_condition_option;
     let visibility_condition_value =
       err?.response?.data?.error?.fields?.visibility_condition_value;
-
+console.log("sallaCreateProductErrorData", err?.response?.data)
+console.log("sallaCreateProductError", err?.response?.data?.error)
     if (options1valeus0name) {
       console.log("options1valeus0name", options1valeus0name);
     }

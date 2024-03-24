@@ -8,18 +8,27 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import {useSelector} from 'react-redux'
 import SearchProduct from "../../../../_components/shared/ui/SearchProduct";
+
+import useMultiSelectCategories from './ui/useMultiSelectCategories'
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   searchByProd: string;
   unAvProd: string;
+  noShipping: string;
+  unLinkedProd: string;
   price: string;
   category: string;
   unUpProd: string;
   locale: string;
   setMyProducts: any;
   apply: string;
+  myProducts: any;
+  translationMessages: { [key: string]: string };
+  allProdCategories:any[]
 }
 
 export function DataTableToolbar<TData>({
@@ -31,14 +40,67 @@ export function DataTableToolbar<TData>({
   unUpProd,
   locale,
   setMyProducts,
-  apply,
+  apply,unLinkedProd,noShipping,myProducts,translationMessages,allProdCategories
 }: DataTableToolbarProps<TData>) {
-  const [checked, setChecked] = useState(false);
-  const [oldProducts, setOldProducts] = useState([]);
 
-  const isFiltered = table.getState().columnFilters.length > 0;
+  const reloadPage = useSelector((state:any)=>state.products.reloadPage)
+  const [checkedUnAvailable, setCheckedUnAvailable] = useState(true);
+  const [checkedUnLinked, setCheckedUnLinked] = useState(true);
+  const [checkedNoShipping, setCheckedNoShipping] = useState(true);
+  const [oldProducts, setOldProducts] = useState([]);
+let {selected :selectedCategories,MultiCategoriesSelectBox} = useMultiSelectCategories({translationMessages,category}) as any
+//  / const isFiltered = table.getState().columnFilters.length > 0;
+  useEffect(() => {
+    // Save the original state of the products when the component mounts
+    setOldProducts([]);
+  }, [reloadPage]); 
+  useEffect(()=>{
+    if(myProducts&&myProducts.length>0&&oldProducts.length==0)
+      setOldProducts(myProducts)
+  },[myProducts])
   let filterHandler = () => {
-    if (checked) {
+    console.log("oldProducts",oldProducts)
+    let newProducts = [...oldProducts]; 
+  
+    if (!checkedUnAvailable) {
+      newProducts = newProducts.filter((prod: any) => prod.inventory !== 0);
+    }
+  
+    if (!checkedUnLinked) {
+      newProducts = newProducts.filter((prod: any) => prod.salla_product_id !== null);
+    }
+  
+    if (!checkedNoShipping) {
+      newProducts = newProducts.filter((prod: any) => prod.shippingAvailable !== false);
+    }
+    console.log("allProdCategories",allProdCategories)
+    selectedCategories = selectedCategories.map((cat:any)=>cat.value)
+    console.log("selectedCategories",selectedCategories)
+  if( allProdCategories?.length>0 && selectedCategories?.length>0){
+    newProducts = newProducts.filter((prod: any,index:number) =>{
+      
+      let currProd = allProdCategories[index].categoriesSalla
+      let matchCategory = false
+      if(currProd?.length==0){
+        return false
+      }
+      currProd.forEach((cat:number)=>{
+        console.log("cat",cat)
+        if( selectedCategories?.includes(cat)){
+          // console.log("MATCHEEED")
+          matchCategory=true
+        }
+ 
+      })
+      return matchCategory
+
+    });
+
+  }
+  setMyProducts(newProducts);
+  };
+/*   let filterHandler = () => {
+    if (checkedUnAvailable) {
       let alreadyFiltered = true;
       setMyProducts((prevProducts: any) => {
         prevProducts.forEach((prod: any) => {
@@ -60,7 +122,7 @@ export function DataTableToolbar<TData>({
         setMyProducts(oldProducts);
       }
     }
-  };
+  }; */
 
   let isAr = locale === "ar";
   return (
@@ -107,11 +169,32 @@ export function DataTableToolbar<TData>({
         <div className="flex items-center space-s-2 ">
           <div className="text-xs tab:text-lg ">{unAvProd}</div>
           <Checkbox
-            checked={checked}
-            onCheckedChange={() => setChecked(!checked)}
+            checked={checkedUnAvailable}
+            onCheckedChange={() => setCheckedUnAvailable(!checkedUnAvailable)}
             classNameIndicator={`bg-black rounded-lg dark:fill-white dark:bg-white`}
           />
         </div>
+        <div className="flex items-center space-s-2 ">
+          <div className="text-xs tab:text-lg ">{unLinkedProd}</div>
+          <Checkbox
+            checked={checkedUnLinked}
+            onCheckedChange={() => setCheckedUnLinked(!checkedUnLinked)}
+            classNameIndicator={`bg-black rounded-lg dark:fill-white dark:bg-white`}
+          />
+        </div>
+        <div className="flex items-center space-s-2 ">
+          <div className="text-xs tab:text-lg ">{noShipping}</div>
+          <Checkbox
+            checked={checkedNoShipping}
+            onCheckedChange={() => setCheckedNoShipping(!checkedNoShipping)}
+            classNameIndicator={`bg-black rounded-lg dark:fill-white dark:bg-white`}
+          />
+        </div>
+        <div className="flex items-center space-s-2 ">
+          <div className="text-xs tab:text-lg ">{category}</div>
+          {MultiCategoriesSelectBox}
+        </div>
+
         <Button
           className="bg-[#b29e84] hover:bg-[#b29e84]/90 h-[2rem] tab:h-fit dark:text-white"
           onClick={filterHandler}

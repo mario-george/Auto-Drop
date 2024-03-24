@@ -261,7 +261,28 @@
     "email": "البريد الالكتروني",
     "phone": "رقم الهاتف",
     "country": "الدولة",
-    "backToSettings": "الرجوع إلى الإعدادت"
+    "backToSettings": "الرجوع إلى الإعدادت",
+
+    "generalSettings":"الإعدادات العامة",
+    "productSettings" : "إعدادات المنتجات",
+    "syncProductPrices":"مزامنة أسعار المنتجات",
+    "syncProductQuantities":"مزامنة كميات المنتجات",
+    "productPricingSettings":"إعدادات أسعار المنتجات",
+    "consolidatePricing":"توحيد الأسعار لخيارات المنتجات على أعلى سعر",
+    "viewOriginal":"عرض سعر المنتج الأصلي:",
+    "withoutShipping":"بدون الشحن",
+    "includedShipping":"شامل اشحن",
+    "shippingSettings":"إعدادات الشحن",
+    "shippingType":"نوع الشحن:",
+    "shippedW":"شحن مع تغليف",
+    "pricesVAT":"الأسعار لا تشمل ضريبة القيمة المضافة",
+    "autoPay":"الدفع التلقائي من المحفظة",
+    "delAndPack":"التوصيل والتغليف",
+    "paiementWhenRecieving":"الدفع عند الاستلام",
+    "save":"حفظ",
+    "orderSettings":"إعدادات الطلبات" ,
+    "sa":"ريال سعودي"
+ 
   },
   "linkAccount": {
     "availablePlatforms": "المنصات المتاحة",
@@ -306,10 +327,16 @@
     "price": "السعر",
     "profitType": "نوع الربح",
     "unAvProd": "منتجات غير متوفرة",
+    "unLinkedProd": " منتجات لم يتم ربطها",
+    "noShipping": " بدون شحن",
     "unUpProd": "منتجات لم ترفع بعد",
     "aliExpress": "علي اكسبرس",
     "percentage": "نسبة",
-    "next": "التالي"
+    "next": "التالي",
+    "allCategories":"  كل الفئات ",
+    "selectAll":" اختر الكل",
+    "search":" بحث"
+
   },
   "productsPage": {
     "accessories": "اكسسوارات",
