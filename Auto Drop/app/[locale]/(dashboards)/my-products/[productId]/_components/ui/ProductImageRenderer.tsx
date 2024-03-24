@@ -32,21 +32,24 @@ let defaultImageIndex = 0;
       return image.default;
     });
   }
-  const handleImageDefaultChange = (newIndexString: string) => {
+  console.log("productImages", productImages);
+  const handleImageDefaultChange : (val:string)=>void = (newIndexString: string) => {
     let newIndex = Number(newIndexString);
+
+    let firstImageInitial = initialImages[newIndex];
     setProductImages((prevImages: ProductImage[]) => {
       let tempImages = [...prevImages];
-      let firstImage = tempImages[newIndex];
+      // let firstImage = tempImages[newIndex];
       tempImages = tempImages
         .map((image: ProductImage) => {
           return { ...image, default: false };
         })
         .filter((image: ProductImage, index: number) => {
-          return index !== newIndex;
+          return image.original !== firstImageInitial.original && image.alt !== firstImageInitial.alt;
         });
 
-      firstImage.default = true;
-      return [firstImage, ...tempImages];
+        firstImageInitial.default = true;
+      return [firstImageInitial, ...tempImages];
     });
 
     setInitialImages((prevImages: ProductImage[]) => {
@@ -59,6 +62,7 @@ let defaultImageIndex = 0;
       tempImages[+newIndexString].default = true  
 return tempImages
     })
+    return
   };
 
   // console.log("product.images", product.images);
