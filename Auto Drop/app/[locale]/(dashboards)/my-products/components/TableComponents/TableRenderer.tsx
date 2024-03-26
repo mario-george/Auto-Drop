@@ -35,7 +35,7 @@ interface myProductProps {
   apply: string;
   translationMessages :{ [key: string]: string }
 }
-export default async function TaskPage(props: myProductProps) {
+export default async function MyProductsTable(props: myProductProps) {
   const getMyProductsData = async () => {
     const data2 = await axiosInstance.get("/aliexpress/product/getProducts");
     return JSON.parse(data2.toString());
