@@ -232,13 +232,13 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     locale,
     product_id: product?.original_product_id,
     setProductShipping,
-    shipping: productShipping,
+    shipping: productShipping,country_code:product?.country_code
   };
   const {
     ProductShippingComponent,
     value: choosenShippingIndex,
     shippingTotalCost,
-    choosenCountryCode,
+    choosenCountryCode,setChoosenCountryCode
   } = useProductShipping({ ...ProductShippingProps });
   let addToCartHandler = () => {};
   const ProductEditHeaderProps = {
@@ -405,6 +405,7 @@ return {...variant,relativeOptions}
       setCurrentlySelectedVariant(product?.variantsArr[0]);
       setProductOptions(product.options);
       setProductImages(product.images);
+      setChoosenCountryCode(product?.country_code)
       setProductShipping(product?.shipping);
     }
   }, [product]);
@@ -596,7 +597,7 @@ return {...variant,relativeOptions}
     setShowDiscountPrice,
     shippingTotalCost,
     setDiscountPrice,
-    discountPrice,
+    discountPrice,shippingWithoutOrInclude,choosenShippingIndex,shipping:productShipping
   };
 
   const ProductSEOInfoProps = {
