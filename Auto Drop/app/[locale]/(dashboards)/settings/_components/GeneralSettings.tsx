@@ -1,33 +1,31 @@
-import Image from "next/image";
 import { useSelector } from "react-redux";
 import MotionWrapper from "../../_components/shared/MotionWrapper";
 import { RootState } from "@/store";
-import { Input } from "@/components/ui/input";
 import "./settings.css";
 import { Switch } from "@chakra-ui/react";
 import { Radio, RadioGroup } from "@chakra-ui/react";
-
+import {useState} from 'react'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {Separator} from '@/components/ui/separator'
 interface GeneralSettingsProps {
-/*   settings: string;
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-  saveChanges: string;
-  changePassword: string;
-  changeAccountDetails: string;
-  merchantID: string;
-  name: string;
-  marketName: string;
-  marketLink: string;
-  email: string;
-  phone: string;
-  country: string;*/
   locale?: string; 
   translation: { [key: string]: string };
 }
 
 export default function GeneralSettings(props: GeneralSettingsProps) {
-  const user = useSelector((state: RootState) => state.user);
+  const [settingsVals,setSettingsVals] = useState({
+    syncProdPrices:false,
+    syncProdQuantities:false,
+    walletAutoPay:false,
+  })
  
   const {
     locale,
@@ -48,18 +46,18 @@ export default function GeneralSettings(props: GeneralSettingsProps) {
     shippingSettings,
     shippingType,
     shippedW,
-    pricesVAT,
+  pricesVAT,
     autoPay,
     delAndPack,
     paiementWhenRecieving,
     save,
-    orderSettings,} =translation
+    orderSettings,sa} =translation
   return (
     <>
       <MotionWrapper locale={locale}>
         <div className="ms:text-sm flex flex-col space-y-3 tab:space-y-6 mt-3">
           <div className="flex justify-center tab:justify-end  max-w-[90%] tab:max-w-[60%] "></div>
-          <div>{productSettings}</div>
+          <div className="boldHeader"> {productSettings}</div>
 
           <div className="formFieldWrapper   ">
             <Switch />
@@ -69,7 +67,7 @@ export default function GeneralSettings(props: GeneralSettingsProps) {
             <Switch />
             <div>{syncProductQuantities}</div>
           </div>
-          <div>{productPricingSettings}</div>
+          <div className="boldHeader">{productPricingSettings}</div>
           <div className="formFieldWrapper   ">
             <Switch />
             <div>{consolidatePricing}</div>
@@ -110,11 +108,67 @@ export default function GeneralSettings(props: GeneralSettingsProps) {
                   </RadioGroup>
           </div>
           
-          <div>{shippingSettings}</div>
+          <div className="boldHeader">{shippingSettings}</div>
 
-          <div>{orderSettings}</div>
+          <div className="flex flex-col space-y-3 tab:max-w-[30%]">
+          <div>
+{shippingType}
+            </div>
+<Select
+      onValueChange={(value: any) => {
+        // setProfitChoosenType(value);
+      }}
+      value={shippedW}
+    >
+      <SelectTrigger className="bg-[#edf5f9] dark:text-black">
+        <SelectValue
+          className=" dark:text-[#253439]"
+          placeholder={shippedW}
+        />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectItem value={shippedW}>{shippedW}</SelectItem>
+          {/* <SelectItem value="percentage">{'percentage'}</SelectItem> */}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+          </div>
+
+<Separator/>
+    <div className="flex flex-col space-y-2">
+
+
+    <div className="">{shippedW}</div>
+<Separator/>
+<div className="flex justify-between tab:max-w-[25%]">
+
+    <div className="">{paiementWhenRecieving}</div>
+    <div className="text-[#C1121F]">
+  5{sa}
+</div>
+    </div>
+       
+    <Separator/>
+    <div className="flex justify-between tab:max-w-[25%]">
+
+    <div className="">{delAndPack}</div>
+
+    <div className="text-[#C1121F]">
+  10{' '+sa}
+</div>
+       
+    </div>
+    <Separator/>
+
+    </div>
+
+<div className="text-[#C1121F]">
+  {pricesVAT}
+</div>
+          <div className="boldHeader">{orderSettings}</div>
           <div className="formFieldWrapper   ">
-            <Switch className="" colorScheme=""/>
+            <Switch className=""/>
             <div>{autoPay}</div>
           </div>
 
