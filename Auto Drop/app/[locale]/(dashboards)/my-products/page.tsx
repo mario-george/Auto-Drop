@@ -26,6 +26,8 @@ const translationMessages = {
   const locale = useLocale();
   return (
     <>
+  <div className="px-3">
+
       <Header {...HeaderProps} className="w-fit" />
       <TableRenderer
         productName={t("prodName")}
@@ -44,6 +46,7 @@ const translationMessages = {
         locale={locale}
         apply={t("apply")}
       />
+      </div>
     </>
   );
 }
