@@ -28,7 +28,7 @@ export default function useProductShipping({
   setProductShipping,country_code
 }: any) {
   const [value, setValue] = useState("0");
-  const [choosenCountryCode, setChoosenCountryCode] = useState();
+  const [choosenCountryCode, setChoosenCountryCode] = useState<string>();
   const [shippingTotalCost, setShippingTotalCost] = useState(0);
   const [fetchingShipping, setFetchingShipping] = useState(false);
   useEffect(()=>{
