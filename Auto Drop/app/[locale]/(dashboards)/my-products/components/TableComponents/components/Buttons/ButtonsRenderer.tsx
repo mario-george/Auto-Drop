@@ -174,7 +174,7 @@ const {toast} = useToast()
         />
       </div>
 
-      <div className={buttonClassS}>
+{/*       <div className={buttonClassS}>
         <Image
           src={`/client/my-products/store.svg`}
           alt={`store`}
@@ -182,7 +182,7 @@ const {toast} = useToast()
           height={24}
           className="mx-auto my-auto  mt-[15%] tab:mt-[22.5%]"
         />
-      </div>
+      </div> */}
     </div>
   );
 }
