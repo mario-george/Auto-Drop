@@ -223,7 +223,9 @@ const PatchProduct = catchAsync(
     product.metadata_title = metadata_title;
     product.name = name;
     product.commissionPercentage = commissionPercentage;
-    if (showDiscountPrice) {
+
+    
+    if (typeof showDiscountPrice == "boolean") {
       product.showDiscountPrice = showDiscountPrice;
     }
     product.vendor_commission = vendor_commission;
