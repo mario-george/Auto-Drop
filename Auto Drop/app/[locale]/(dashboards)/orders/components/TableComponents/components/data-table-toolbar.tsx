@@ -26,10 +26,10 @@ interface DataTableToolbarProps<TData> {
   apply: string;
   myProducts: any;
   allProdCategories:any[] */
-  table: Table<TData>;
+  table?: Table<TData>;
   locale: string;
   translationMessages: { [key: string]: string };
-  order: any[];
+  orders: any[];
 }
 
 export function DataTableToolbar<TData>({
