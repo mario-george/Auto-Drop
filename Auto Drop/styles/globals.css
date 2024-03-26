@@ -156,3 +156,8 @@ wallet page sttyles
 .productsOriginalPriceText{
   @apply text-xs text-[#c2464f] dark:text-red-500 line-through tab:text-[10px] ml:text-[10px] lap:text-[12px]
 }
+
+
+.boldHeader{
+  @apply text-xs tab:text-sm lap:text-lg font-bold
+}
