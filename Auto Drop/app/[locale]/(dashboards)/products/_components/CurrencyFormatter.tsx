@@ -6,7 +6,7 @@ export default function CurrencyFormatter(
     style: "currency",
     currency: "SAR",
     currencyDisplay: "code",
-    currencySign: "accounting",
+    currencySign: "standard",
     ...options,
   } satisfies Intl.NumberFormatOptions;
 
