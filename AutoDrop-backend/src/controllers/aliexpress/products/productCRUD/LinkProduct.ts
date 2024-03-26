@@ -319,6 +319,9 @@ export async function LinkProductSalla2(
 
     if (product?.showDiscountPrice) {
       let originalPrice = parseFloat(product.variantsArr[0].sku_price);
+      if(product?.discountPrice &&product?.discountPrice >0 && typeof Number(product?.discountPrice)=="number"){
+        originalPrice=Number(product?.discountPrice)
+      }
       bodyDataSalla.price = originalPrice;
       bodyDataSalla.sale_price = totalPrice;
     }
