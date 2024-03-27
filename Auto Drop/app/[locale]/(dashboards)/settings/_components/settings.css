@@ -18,3 +18,12 @@
 .changePwLabel {
   @apply text-sm md:text-base bg-[#f0f3f4] rounded-lg text-[#253439] min-w-full;
 }
+.generalSettingsField{
+  @apply flex items-center justify-between tab:flex-row  max-w-[90%] space-s-3 tab:max-w-[35%] lap:max-w-[25%] lapl:max-w-[25%];
+
+}
+
+.generalSettingsLargeField{
+  @apply flex tab:items-center tab:justify-between flex-col tab:flex-row space-y-3 tab:space-y-0  max-w-[90%] tab:space-s-3 tab:max-w-[25%] lap:max-w-[25%] lapl:max-w-[25%];
+
+}
