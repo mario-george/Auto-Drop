@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import DialogUnLinkProduct from "./DialogUnLinkProduct";
 import useLoader from "@/components/loader/useLoader";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
