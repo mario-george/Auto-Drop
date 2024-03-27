@@ -1,9 +1,15 @@
 
 import User, { IUser } from '../src/models/user.model';
 import Setting from '../src/models/Setting.model';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config({ path: ".env" });
 
-async function addSettingToExistingUsers() {
+async function addSettingToExistingUsers():Promise<string> {
   // Get all users
+  console.log("DB_URL",process.env.DB_URL)
+  await mongoose.connect(process.env.DB_URL!);
+
   let users = await User.find();
 users = users.filter((user:IUser)=>!user.setting)
   for (const user of users) {
@@ -15,7 +21,12 @@ users = users.filter((user:IUser)=>!user.setting)
     user.setting = setting._id;
     await user.save();
   }
+let result = Promise.resolve('Success')
+  // return result;
+  await mongoose.connection.close();
+
+  return result
 }
 
 // Run the function
-addSettingToExistingUsers().catch(console.error);
+addSettingToExistingUsers().then(()=>{console.log("Success")}).catch(console.error);
