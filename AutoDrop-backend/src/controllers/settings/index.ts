@@ -7,10 +7,16 @@ export const getUserSettings = catchAsync(
       throw new Error("User settings not found");
     }
     const setting = await Setting.findById(req.user.setting);
-
-    return res.json({
-      status: "success",
-      data: setting,
+    if(setting){
+      let {_id,__v,...settingWithoutIdAndVersion} = setting.toObject()
+      return res.json({
+        status: "success",
+        data: settingWithoutIdAndVersion,
+      });
+    }
+    return res.status(400).json({
+      status: "fail",
+      message: "Failed to get settings",
     });
   }
 );
@@ -20,13 +26,23 @@ export const updateUserSettings = catchAsync(
             throw new Error("User settings not found");
           }
         const setting = await Setting.findByIdAndUpdate(req.user.setting, req.body, {
-        new: true,
+      new: true,
         });
-    
-        return res.json({
-        status: "success",
-        data: setting,
-        });
+        if(setting){
+
+          const { _id, __v, ...settingWithoutIdAndVersion } = setting.toObject();
+
+          return res.json({
+          status: "success",
+          data: settingWithoutIdAndVersion,
+          });
+        }else{
+          return res.status(400).json({
+            status: "failed",
+            message: "Failed to update settings",
+            });
+        }
+
     }
  
 )
