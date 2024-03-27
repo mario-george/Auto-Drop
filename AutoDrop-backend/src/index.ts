@@ -20,6 +20,7 @@ import productsRoutes from "./routes/products.routes";
 import sallaRoutes from "./routes/salla.routes";
 import searchRoutes from "./routes/search.routes";
 import shippingRoutes from "./routes/shipping.routes";
+import settingRoute from "./routes/settings.route";
 const app = express();
 
 //Parse json bodies
@@ -79,6 +80,7 @@ app.use("/api/v1/aliexpress", productsRoutes);
 app.use("/api/v1/search", searchRoutes);
 app.use("/api/v1/salla", sallaRoutes);
 app.use("/api/v1/shipping", shippingRoutes);
+app.use("/api/v1/settings", settingRoute  );
 
 // Handle requests from wrong urls
 app.all("*", (req, res, next) => {
