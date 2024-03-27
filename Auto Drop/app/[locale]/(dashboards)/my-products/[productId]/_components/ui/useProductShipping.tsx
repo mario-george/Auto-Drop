@@ -25,12 +25,26 @@ export default function useProductShipping({
   to,
   locale,
   product_id,
-  setProductShipping,
+  setProductShipping,country_code
 }: any) {
   const [value, setValue] = useState("0");
-  const [choosenCountryCode, setChoosenCountryCode] = useState("SA");
+  const [choosenCountryCode, setChoosenCountryCode] = useState<string>();
   const [shippingTotalCost, setShippingTotalCost] = useState(0);
   const [fetchingShipping, setFetchingShipping] = useState(false);
+  useEffect(()=>{
+// console.log("choosenCountryCode")
+    if(!choosenCountryCode){
+
+      setChoosenCountryCode(choosenCountryCode)
+    }
+  },[choosenCountryCode])
+/* 
+  useEffect(()=>{
+    if(!choosenCountryCode){
+      setChoosenCountryCode(country_code)
+      
+    }
+  },[country_code,setChoosenCountryCode]) */
   if (locale === "ar") {
     countries.registerLocale(ar);
   } else {
@@ -96,6 +110,7 @@ export default function useProductShipping({
                   shippingMethodsHandler(country_code);
                 }}
                 defaultValue={choosenCountryCode}
+                value = {choosenCountryCode}
               >
                 <SelectTrigger className="  bg-[#edf5f9] text-black text-right text-xs mm:text-sm ml:text-md tab:text-lg">
                   <SelectValue />
@@ -213,6 +228,6 @@ export default function useProductShipping({
     ProductShippingComponent,
     value,
     shippingTotalCost,
-    choosenCountryCode,
+    choosenCountryCode,setChoosenCountryCode
   };
 }

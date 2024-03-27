@@ -1,6 +1,6 @@
 import { hash, compare } from "bcrypt";
 import mongoose, { Document, ObjectId } from "mongoose";
-interface IUser extends Document {
+export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
@@ -16,6 +16,7 @@ interface IUser extends Document {
   OTP: string;
   code: string;
   comparePassword: (pw: string) => Promise<boolean>;
+  setting:mongoose.Schema.Types.ObjectId
 }
 const userModel = new mongoose.Schema(
   {
@@ -51,6 +52,7 @@ const userModel = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    setting:{type:mongoose.Schema.Types.ObjectId,ref:"Setting"}
   },
   { timestamps: true }
 );

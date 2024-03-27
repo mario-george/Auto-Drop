@@ -404,12 +404,13 @@
     "addCard": "إضافة بطاقة",
     "chargeWallet": " شحن المحفظة"
   },"ordersPage":{
-    "orders":"Orders",
-    "sender":"Sender",
-    "orderNumber":"Order Number",
-    "orderStatus":"Order Status",
-    "orderSource":"Order Source",
-    "date":"Date",
-    "amount":"Amount"
+    "orders":"الطلبات",
+    "sender":"المرسل",
+    "orderNumber":"رقم الطلب",
+    "orderStatus":"حالة الطلب",
+    "orderSource":"مصدر الطلب",
+    "date":"التاريخ",
+    "amount":"المبلغ"
+
   }
 }

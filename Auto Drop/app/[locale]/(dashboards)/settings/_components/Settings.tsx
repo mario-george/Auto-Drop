@@ -13,7 +13,7 @@ import { AnimatePresence } from "framer-motion";
 import AccountDetails from "./AccountDetails";
 import SettingsPassword from "./SettingsPassword";
 import { cn } from '../../../../../lib/utils';
-import GeneralSettings from "./GeneralSettings";
+import useGeneralSettings from "./useGeneralSettings";
 interface SettingsProps {
   settings: string;
   currentPassword: string;
@@ -55,23 +55,8 @@ export default function Settings(props: SettingsProps) {
 let activeButton = "bg-[#253439] hover:bg-[#253439] dark:text-white dark:bg-[#253439] "
 let unActiveButton = "bg-[#f0f3f4] text-[#253439] hover:bg-[#f0f3f4] dark:bg-white dark:text-[#2E464F]"
   let { generalSettings,
-  productSettings,
-  syncProductPrices,
-  syncProductQuantities,
-  productPricingSettings,
-  consolidatePricing,
-  viewOriginal,
-  withoutShipping,
-  includedShipping,
-  shippingSettings,
-  shippingType,
-  shippedW,
-  pricesVAT,
-  autoPay,
-  delAndPack,
-  paiementWhenRecieving,
-  save,
-  orderSettings,} =translation
+ } =translation
+  const {GeneralSettingsComponent,settingsVals,SaveGeneralSettingsButton} = useGeneralSettings({...props,currWindow})
   return (
     <MotionWrapper locale={locale}>
       <div
@@ -143,11 +128,12 @@ let unActiveButton = "bg-[#f0f3f4] text-[#253439] hover:bg-[#f0f3f4] dark:bg-whi
                 <SettingsPassword {...props} />
               </>
             ) : <>
-                <GeneralSettings {...props} />
+              {GeneralSettingsComponent}
             </>}
           </AnimatePresence>
         </div>
       </div>
+      {SaveGeneralSettingsButton}
     </MotionWrapper>
   );
 }

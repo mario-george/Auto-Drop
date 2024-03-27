@@ -12,7 +12,7 @@ export default function ProductPriceDetails({
   inputClasses,
   showDiscountPrice,
   setShowDiscountPrice,
-  shippingTotalCost,setDiscountPrice,discountPrice
+  shippingTotalCost,setDiscountPrice,discountPrice,shippingWithoutOrInclude,choosenShippingIndex,shipping
 }: any) {
   const [checked, setChecked] = useState(false);
   return (
@@ -45,7 +45,7 @@ export default function ProductPriceDetails({
             setDiscountPrice(+onlyNumber);
           }}
           // value={CurrencyFormatter(discountPrice)}
-          value={"SAR "+discountPrice}
+          value={"SAR "+(discountPrice ?? 0)}
         />
 
         </div>
@@ -59,7 +59,7 @@ export default function ProductPriceDetails({
         />
         <Input  
           className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
-          value={CurrencyFormatter(totalProfit)}
+          value={shippingWithoutOrInclude === "withoutShipping" ? CurrencyFormatter(totalProfit  - (shipping?.[choosenShippingIndex]?.freight?.cent/100) ?? 0) :CurrencyFormatter(totalProfit)  }
         />
       </div>
     </div>

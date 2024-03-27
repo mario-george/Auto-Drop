@@ -28,6 +28,7 @@ export default function SettingsPage() {
     "paiementWhenRecieving":t("paiementWhenRecieving"),
     "save":t("save"),
     "orderSettings":t("orderSettings"),
+    "sa":t("sa"),
   }
   return (
     <>

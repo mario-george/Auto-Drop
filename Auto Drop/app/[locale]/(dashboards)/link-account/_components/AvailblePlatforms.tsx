@@ -8,6 +8,7 @@ import { FaUnlink } from "react-icons/fa";
 import { userActions } from "@/store/user-slice";
 import { useDispatch } from "react-redux";
 import { cn } from "@/lib/utils";
+import useAlertDialog from "@/components/chakra-ui/useAlertDialog";
 export default function AvailablePlatforms({
   soon,
   linkButton,
@@ -35,6 +36,7 @@ export default function AvailablePlatforms({
 }) {
   const dispatch = useDispatch();
   const sallaToken = useSelector((state: RootState) => state.user.sallaToken);
+
   const aliExpressToken = useSelector(
     (state: RootState) => state.user.aliExpressToken
   );
@@ -72,7 +74,15 @@ export default function AvailablePlatforms({
     } catch (error) {
       console.error("Error:", error);
     }
+    return
   };
+  const  { openModelHandler, AlertDialogComponent } = useAlertDialog({
+    title:"Are you sure you want to unlink account?",
+    deleteButtonText:"Unlink",
+    deleteSubmitHandler:deleteTokenHandler
+
+
+  })
   const authHandler = async (link: string) => {
     const url = process.env.NEXT_PUBLIC_BACK_URL + link;
     window.location.href = url;
@@ -83,6 +93,7 @@ export default function AvailablePlatforms({
   };
   return (
     <>
+    {AlertDialogComponent}
       <motion.div initial="hidden" animate="visible" variants={variants}>
         <div
           className={`relative flex flex-wrap  tab:max-w-full  w-full tab:space-s-8 tab:mx-0 tab:space-y-0  tab:flex-row justify-center ${className}`}
@@ -123,7 +134,8 @@ export default function AvailablePlatforms({
                         (card.alt == "aliexpress" && aliExpressToken)) && (
                         <div
                           onClick={() => {
-                            deleteTokenHandler(card.alt);
+                            openModelHandler(card.alt);
+                            // deleteTokenHandler(card.alt);
                           }}
                           /* className={`absolute  ${
                             isAr
