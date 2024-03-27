@@ -13,7 +13,7 @@ import { AnimatePresence } from "framer-motion";
 import AccountDetails from "./AccountDetails";
 import SettingsPassword from "./SettingsPassword";
 import { cn } from '../../../../../lib/utils';
-import GeneralSettings from "./GeneralSettings";
+import useGeneralSettings from "./useGeneralSettings";
 interface SettingsProps {
   settings: string;
   currentPassword: string;
@@ -72,6 +72,7 @@ let unActiveButton = "bg-[#f0f3f4] text-[#253439] hover:bg-[#f0f3f4] dark:bg-whi
   paiementWhenRecieving,
   save,
   orderSettings,} =translation
+  const {GeneralSettingsComponent,settingsVals} = useGeneralSettings({...props})
   return (
     <MotionWrapper locale={locale}>
       <div
@@ -143,7 +144,7 @@ let unActiveButton = "bg-[#f0f3f4] text-[#253439] hover:bg-[#f0f3f4] dark:bg-whi
                 <SettingsPassword {...props} />
               </>
             ) : <>
-                <GeneralSettings {...props} />
+              {GeneralSettingsComponent}
             </>}
           </AnimatePresence>
         </div>
