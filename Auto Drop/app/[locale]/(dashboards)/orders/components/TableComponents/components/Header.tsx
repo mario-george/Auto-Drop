@@ -1,30 +1,13 @@
 "use client";
-// import { useErrorToast } from "@/components/chakra-ui/useErrorToast";
-// import useProfitTypeHandler from "./useProfitTypeHandler";
-// import { useRef } from "react";
-// import { useSuccessToast } from "@/components/chakra-ui/useSuccessToast";
+
 export default function Header({
   translationMessages,
   className,
-/*   upProducts,
-  val,
-  percentage,
-  profitType,
-  number,
-  title,
 
-  category, */
 }: {
-/*   upProducts: string;
-  val: string;
-  number: string;
-  percentage: string;
-  profitType: string;
-  title: string;
-  */
+
   className?: string;
   translationMessages: {[key:string]:string};
-  // category?: string;
 }) {
 /*   const errorButtonRefNoSelection = useRef<HTMLButtonElement>(null);
   const errorButtonRefNoToken = useRef<HTMLButtonElement>(null);
