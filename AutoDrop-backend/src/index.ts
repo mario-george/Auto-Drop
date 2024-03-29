@@ -86,6 +86,7 @@ app.use("/api/v1/settings", settingRoute  );
 app.post("/webhooks/subscribe", async (req, res,next) => {
   const requestHMAC = req.header("x-salla-signature");
   // const secret = await findSettingKey("SALLA_WEBHOOK_TOKEN");
+  console.log("WEBHOOK REQUEST")
   const secret = process.env.WEBHOOK_SECRET as string;
   const computedHMAC =createHmac("sha256", secret)
     .update(JSON.stringify(req.body))
