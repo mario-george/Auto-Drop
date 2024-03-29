@@ -134,5 +134,30 @@ export default class WebHookEvents {
     }
   }
 
- 
+  async RemoveApp(body: any, res: Response, next: NextFunction) {
+    try {
+      const { merchant } = pick(body, ["merchant"]);
+      const user = await User.findOne({ merchantId: merchant });
+      if (!user) throw new AppError("User Not Found", 404);
+      await Subscription.deleteMany({ user: user.id });
+      res.sendStatus(200);
+      // User.findOneAndDelete(
+      //   {
+      //     merchantId: merchant,
+      //   },
+      //   {},
+      //   function (err: any, result: any) {
+      //     if (err) {
+      //       console.log(err);
+      //       return;
+      //     }
+
+      //     console.log("uninstall app: ", result);
+      //   }
+      // );
+    } catch (error) {
+      next(error);
+    }
+  }
+
 }
