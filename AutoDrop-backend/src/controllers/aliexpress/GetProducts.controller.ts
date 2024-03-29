@@ -295,7 +295,10 @@ async function GetProductOptions(SKUs: object[]) {
         values,
       };
     })
-    .filter((e) => e.name !== "Ships From")
+    .filter((e) => {
+      
+    return (e.name !== "Ships From"&&e.name!="السفن من")
+    })
   );
 
   return { price, quantities, options };
@@ -401,7 +404,7 @@ export async function GetDetails({
           });
           if (
             variantsArr?.[0]?.relativeOptions?.some(
-              (option: any) => option.sku_property_name === "Ships From"
+              (option: any) => (option.sku_property_name === "Ships From" || option.sku_property_name=="السفن من")
             )
           ) {
             // remove 'ships from' variants
@@ -411,7 +414,7 @@ export async function GetDetails({
               let { relativeOptions } = variant;
               relativeOptions = relativeOptions.filter(
                 (element: any, index: number) =>
-                  element.sku_property_name !== "Ships From"
+                  element.sku_property_name !== "Ships From" && element.sku_property_name !== "السفن من"
               );
     
               let variantIdentifier = relativeOptions
@@ -432,7 +435,7 @@ export async function GetDetails({
             }).map((variant:any)=>{
     let {relativeOptions} = variant
     relativeOptions = relativeOptions.filter((rO:any)=>{
-      return rO.sku_property_name !=="Ships From"
+      return rO.sku_property_name !=="Ships From" && rO.sku_property_name !=="السفن من"
     })
     return {...variant,relativeOptions}
             })
