@@ -536,6 +536,35 @@ return {...variant,relativeOptions}
       errorButtonRefShipping?.current?.click();
       return;
     }
+    console.log("productOptions?.[0]?.name",productOptions?.[0]?.name)
+    //@ts-ignore
+    if(productOptions?.[0]?.name !== undefined){
+      
+          let valueNumber = 0
+          let count = 1 
+
+      productOptions?.forEach((option:any)=>{
+        let {values} = option
+        if(values?.length == 0){
+          return
+        }
+        count = count * values?.length
+      })
+      if(count!==1 ){
+        valueNumber=count
+      }
+      console.log("valueNumber",valueNumber)
+      if(valueNumber >100){
+        toast({
+          status: "error",
+          title: "Error",
+          description: "Maximum number of variants in Salla is 100 please delete some options and try again.",
+          duration: 9000,
+          isClosable: true,
+        });
+        return
+      }
+    }
     setLoading(true);
 
     // setIsLoading(true);
