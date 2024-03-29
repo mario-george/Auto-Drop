@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface ISetting extends Document{
+export interface ISetting extends Document{
 syncProdPrices :boolean
 syncProdQuantities :boolean
 originalPriceShipping :"shippingIncluded" | "withoutShipping"
