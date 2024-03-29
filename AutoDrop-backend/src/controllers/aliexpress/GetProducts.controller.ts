@@ -323,11 +323,11 @@ export async function GetDetails({
   target_original_price,
 }: {
   product_id: string;
-  tokenInfo: any;
-  first_level_category_name: string;
-  second_level_category_name: string;
-  target_sale_price: string;
-  target_original_price: string;
+  tokenInfo?: any;
+  first_level_category_name?: string;
+  second_level_category_name?: string;
+  target_sale_price?: string;
+  target_original_price?: string;
 }): Promise<any> {
   return new Promise((resolve, reject) => {
     MakeRequest(
@@ -501,7 +501,7 @@ export async function GetProductId(url: string) {
 
   return product_id;
 }
-export async function GetProductDetails(
+/* export async function GetProductDetails(
   req: Request,
   res: Response,
   next: NextFunction
@@ -522,8 +522,7 @@ export async function GetProductDetails(
       aliExpressRefreshToken: aliexpressToken?.refreshToken,
     };
     const product_id = await GetProductId(url);
-    /*     if (userType === "vendor")
-      await CheckSubscription(user_id, "products_limit"); */
+
 
     const product = await GetDetails({
       product_id,
@@ -543,14 +542,13 @@ export async function GetProductDetails(
       },
       tokenInfo
     );
-    /*  console.log(result);
-    console.log(product); */
+
     return res.json({ product, shipping: result });
   } catch (error) {
     console.log(error);
     next(error);
   }
-}
+} */
 
 export async function GetProductDetailsTest(
   req: Request&any,
