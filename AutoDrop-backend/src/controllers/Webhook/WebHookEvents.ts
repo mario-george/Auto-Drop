@@ -160,4 +160,171 @@ export default class WebHookEvents {
     }
   }
 
+  GetUserInfo(token: string): Promise<any> {
+    return SallaRequest({ url: "oauth2/user/info", method: "get", token });
+  }
+
+  async DeleteSelectedProduct(body: any, res: Response, next: NextFunction) {
+    try {
+      const { id } = pick(body.data, ["id"]);
+      await Product.findOneAndDelete({
+        salla_product_id: id,
+      }).then(() => res.sendStatus(200));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async DeleteSelectedOrder(body: any, res: Response, next: NextFunction) {
+    try {
+      const { id } = pick(body.data, ["id"]);
+      await Order.findOneAndDelete(
+        {
+          order_id: id,
+        },
+        {}
+        /*         ,
+        function (err: any, result: any) {
+          if (err) console.log(err);
+        } */
+      );
+      res.sendStatus(200);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async CreateNewOrder(body: any, res: Response, next: NextFunction) {
+    try {
+      let total: number = 0,
+        sub_total: number = 0,
+        commission: number = 0,
+        meta: any = {};
+      const { data: orderData } = pick(body, ["data"]);
+      const data = pick(orderData, [
+        "payment_method",
+        "id",
+        "order_id",
+        "reference_id",
+        "items",
+        "shipping",
+        "customer",
+        "status",
+      ]);
+      // console.log(data.items[0])
+      const orderExisted = await Order.findOne({ order_id: data.id }).exec();
+
+      if (orderExisted) return res.sendStatus(409);
+
+      const itemIds = map(data.items, "product.id");
+
+      const products: any[] | null = await Product.find({
+        salla_product_id: {
+          $in: itemIds,
+        },
+      })
+        .select(
+          "name salla_product_id price main_price vendor_commission vendor_price merchant sku options"
+        )
+        .exec();
+
+      if (!(products as any[])?.length) return res.sendStatus(409);
+
+      const findProductIds = map(products, "salla_product_id");
+      const filterItems = data.items?.filter((obj: any) => {
+        return findProductIds.includes(obj?.product?.id?.toString());
+      });
+
+      const mapItems = await Promise.all(
+        filterItems.map((item: any, i: number) => {
+          const productId = item?.product?.id;
+          const product = products.find(
+            (ev: ProductDocument) => ev.salla_product_id == productId
+          );
+          const jsonProduct = product.toJSON();
+          const options = item.options?.map((option: any, idx: number) => {
+            const productOption = jsonProduct.options[idx]?.values;
+            const variant = productOption.find(
+              (pd: any) => pd.salla_value_id == option.value.id
+            );
+            const value = {
+              price: {
+                amount: variant.original_price || product.main_price,
+              },
+            };
+
+            const result = {
+              ...option,
+              value: Object.assign({}, option?.value || {}, value),
+            };
+
+            return result;
+          });
+
+          sub_total += options[0]?.value.price.amount || product.main_price;
+          meta[productId] = {
+            vendor_commission: product?.vendor_commission,
+            vendor_price: product?.vendor_price,
+          };
+          return {
+            sku: item?.sku,
+            quantity: item?.quantity,
+            thumbnail: item?.product?.thumbnail,
+            product: {
+              ...product,
+            },
+            options,
+          };
+        })
+      );
+      // commission = Math.ceil((+sub_total * +(APP_COMMISSION as string)) / 100);
+      // total = +sub_total + commission;
+      total = +sub_total;
+      const merchant = products?.[0]?.merchant;
+
+      const subscription: SubscriptionDocument | null = await CheckSubscription(
+        merchant,
+        "orders_limit"
+      );
+
+      if (subscription && subscription.orders_limit)
+        subscription.orders_limit = subscription.orders_limit - 1;
+
+      const order = new Order({
+        ...data,
+        amounts: {
+          total: {
+            amount: total,
+          },
+          // app_commission: {
+          //   amount: commission,
+          //   percentage: parseInt(APP_COMMISSION as string, 10) || 0,
+          // },
+        },
+        meta,
+        merchant,
+        order_id: data.id,
+        items: mapItems,
+        status: "created",
+        status_track: [],
+      });
+
+      const status_track = UpdateOrderTracking("created", order);
+      order.status_track = status_track;
+
+      await Promise.all([
+        subscription?.save(),
+        /*    order.save(function (err, result) {
+          if (err) return console.log(err);
+        }), */
+        order.save(),
+      ]);
+
+      return res.status(200).send("order stored");
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
 }
