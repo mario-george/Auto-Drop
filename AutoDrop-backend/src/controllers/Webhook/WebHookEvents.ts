@@ -327,4 +327,15 @@ export default class WebHookEvents {
     }
   }
 
+  async UpdateOrderStatus(body: any, res: Response, next: NextFunction) {
+    try {
+      const { id } = pick(body.data, ["id"]);
+      const order = await Order.findOne({ order_id: id }).exec();
+
+      if (!order) return console.log("selected order is invalid!");
+
+      next();
+    } catch (error) {}
+  }
+
 }
