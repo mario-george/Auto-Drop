@@ -21,6 +21,8 @@ import sallaRoutes from "./routes/salla.routes";
 import searchRoutes from "./routes/search.routes";
 import shippingRoutes from "./routes/shipping.routes";
 import settingRoute from "./routes/settings.route";
+import { createHmac } from 'crypto';
+import WebHookHandler from "./controllers/Webhook/WebHookHandler";
 const app = express();
 
 //Parse json bodies
@@ -81,7 +83,23 @@ app.use("/api/v1/search", searchRoutes);
 app.use("/api/v1/salla", sallaRoutes);
 app.use("/api/v1/shipping", shippingRoutes);
 app.use("/api/v1/settings", settingRoute  );
+app.post("/webhooks/subscribe", async (req, res,next) => {
+  const requestHMAC = req.header("x-salla-signature");
+  // const secret = await findSettingKey("SALLA_WEBHOOK_TOKEN");
+  const secret = process.env.WEBHOOK_SECRET as string;
+  const computedHMAC =createHmac("sha256", secret)
+    .update(JSON.stringify(req.body))
+    .digest("hex");
+  const signatureMatches = requestHMAC === computedHMAC;
 
+  if (!signatureMatches) {
+    res.sendStatus(401);
+  }
+
+  WebHookHandler(req,res,next);
+
+  res.sendStatus(200);
+});
 // Handle requests from wrong urls
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
