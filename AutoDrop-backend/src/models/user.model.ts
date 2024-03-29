@@ -1,6 +1,7 @@
 import { hash, compare } from "bcrypt";
-import mongoose, { Document, ObjectId } from "mongoose";
-export interface IUser extends Document {
+import mongoose, { Document, ObjectId, PaginateModel } from "mongoose";
+import mongoosePaginateV2 from 'mongoose-paginate-v2' 
+export interface IUserSchema extends Document {
   name: string;
   email: string;
   password: string;
@@ -17,6 +18,9 @@ export interface IUser extends Document {
   code: string;
   comparePassword: (pw: string) => Promise<boolean>;
   setting:mongoose.Schema.Types.ObjectId
+  tokens:any
+}
+export interface IUserDocument extends Document ,IUserSchema{
 }
 const userModel = new mongoose.Schema(
   {
@@ -51,6 +55,9 @@ const userModel = new mongoose.Schema(
     active: {
       type: Boolean,
       default: false,
+    },    tokens: {
+      type: Array,
+      default: [],
     },
     setting:{type:mongoose.Schema.Types.ObjectId,ref:"Setting"}
   },
@@ -71,6 +78,8 @@ userModel.methods.comparePassword = async function (
 ): Promise<boolean> {
   return await compare(password, this.password);
 };
-const User = mongoose.model<IUser>("User", userModel);
+
+userModel.plugin(mongoosePaginateV2)
+const User = mongoose.model<IUserSchema,PaginateModel<IUserDocument>>("User", userModel);
 
 export default User;

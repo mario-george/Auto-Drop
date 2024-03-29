@@ -24,6 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Philosopher } from "next/font/google";
+import axiosInstance from "@/app/[locale]/(dashboards)/_components/shared/AxiosInstance";
 
 export default function LoginForm({
   classes,
@@ -86,7 +87,8 @@ export default function LoginForm({
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      const response = await fetch(
+      const response = await axiosInstance.post("/auth/signin", data);
+    /*   const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}auth/signin`,
         {
           method: "POST",
@@ -96,9 +98,10 @@ export default function LoginForm({
             Accept: "application/json",
           },
         }
-      );
-      const responseData = await response.json();
-      if (response.ok) {
+      ); */
+      const responseData = response.data
+      
+      if (response.status >=200 && response.status < 300) {
         dispatch(
           userActions.login({
             token: responseData.data.accessToken,

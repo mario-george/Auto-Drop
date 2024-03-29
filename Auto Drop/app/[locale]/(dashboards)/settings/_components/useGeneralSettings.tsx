@@ -129,7 +129,7 @@ export default function useGeneralSettings(props: GeneralSettingsProps) {
     <>
       {currWindow == "GeneralSettings" ? (
         <Button
-          className="ms:max-w-[50%] ms:my-4  tab:max-w-[12rem] bg-[#253439] rounded-lg  hover:bg-[#253439] tab:mx-auto dark:bg-white dark:text-[#2E464F] "
+          className="ms:max-w-[50%] ms:my-4  tab:max-w-[12rem] lap:!w-[12rem] bg-[#B29E84] flex justify-center rounded-lg  hover:bg-[#253439] tab:mx-auto dark:bg-white dark:text-[#2E464F] "
           onClick={saveSettingsHandler}
         >
           {save}
