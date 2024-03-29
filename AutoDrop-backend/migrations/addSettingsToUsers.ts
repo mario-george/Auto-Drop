@@ -1,5 +1,5 @@
 
-import User, { IUser } from '../src/models/user.model';
+import User, { IUserSchema } from '../src/models/user.model';
 import Setting from '../src/models/Setting.model';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
@@ -11,7 +11,7 @@ async function addSettingToExistingUsers():Promise<string> {
   await mongoose.connect(process.env.DB_URL!);
 
   let users = await User.find();
-users = users.filter((user:IUser)=>!user.setting)
+users = users.filter((user:IUserSchema)=>!user.setting)
   for (const user of users) {
     // Create a new setting document for each user
     const setting = new Setting();
