@@ -57,5 +57,82 @@ export default class WebHookEvents {
     }
   }
 
-  
+  async AuthorizeEvent(body: any, res: Response, next: NextFunction) {
+    try {
+      let password: string, hashed: string, token: string | undefined;
+      const { merchant, data } = pick(body, ["merchant", "data"]);
+
+      const account = await User.findOne({
+        merchantId: merchant,
+        tokens: {
+          $eq: null,
+        },
+      }).exec();
+
+      if (!account) return res.sendStatus(404);
+
+      const { data: info } = await this.GetUserInfo(data.access_token);
+
+      const { data: userInfo } = info;
+
+      password = GenerateRandom(16);
+      hashed = HashPassword(password);
+
+      token = GenerateToken({
+        merchant,
+        token: JSON.stringify(data),
+      });
+      let checkEmail = async function (result: any) {
+        function isValidEmail(email: string) {
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          if (emailRegex.test(email)) {
+            return email;
+          } else return false;
+        }
+
+        const clientEmail = isValidEmail(userInfo.email);
+        if (clientEmail) {
+          // send email to new partner with email and new password
+          const options = generateOptions<NewAccountKeys>(
+            clientEmail,
+            // "frontdev0219@gmail.com",
+            // process.env.EMAIL_USERNAME,
+            messages["new-account"],
+            {
+              "{{_EMAIL_}}": clientEmail,
+              "{{_NAME_}}": userInfo?.name,
+              "{{_PASSWORD_}}": password,
+            }
+          );
+          await SendEmail(options);
+        }
+      };
+      let userDoc = User.findOneAndUpdate(
+        {
+          merchantId: merchant,
+          tokens: {
+            $eq: null,
+          },
+        },
+        {
+          password: hashed,
+          name: userInfo?.name,
+          email: userInfo?.email,
+          mobile: userInfo?.mobile,
+          userInfo: JSON.stringify(userInfo?.merchant),
+          avatar: userInfo?.merchant?.avatar,
+          website: userInfo?.merchant?.domain,
+          tokens: JSON.stringify(data),
+        },
+        { new: true }
+      );
+      checkEmail(userDoc);
+      res.sendStatus(200);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
+ 
 }
