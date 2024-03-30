@@ -99,7 +99,7 @@ app.post("/webhooks/subscribe", async (req, res,next) => {
 
   WebHookHandler(req,res,next);
 
-  res.sendStatus(200);
+  // res.sendStatus(200);
 });
 // Handle requests from wrong urls
 app.all("*", (req, res, next) => {
