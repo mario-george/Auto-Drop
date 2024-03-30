@@ -22,6 +22,7 @@ import {
 import { RefreshTokenHandler } from "../../../salla/RefreshAccessToken";
 import { ProductSallaChecker } from "./features/AlreadyLinkedProduct";
 import VariantsPatcher from "./features/VariantsPatcher";
+import fs from 'fs';
 
 export const updateVariantFinalOption2 = async (
   product: ProductDocument,
@@ -379,14 +380,15 @@ export async function LinkProductSalla2(
 
     const { data: productResult } = await axios.request(opt);
     console.log(createdeProduct.data.id);
+fs.appendFile("productResult.json",JSON.stringify({productResult},null,2),(err)=>{
+  console.error(err)
+})
 
     if (
-      Array.isArray(product?.options) &&
-      //@ts-ignore
-      product?.options?.[0]?.values?.[0] &&
-      //@ts-ignore
-      product?.options?.[0]?.values?.[0]?.length > 0
+      !noOptionsInProduct
     ) {
+      // fs.appendFile("info.json","executed if statement",(err)=>{console.error(err)})
+      console.log("executed if statement")
       product.options = await Promise.all(
         jsonProduct?.options?.map(async (option: OptionType, index: number) => {
           let obj: OptionType = option;
@@ -428,6 +430,31 @@ export async function LinkProductSalla2(
       );
 
       product.options = finalOptions;
+let sallaValuesIds =  finalOptions.map((option: any) => {
+  let {salla_option_id,values} = option;
+  values = values.map((value: any) => {
+    let {sku,salla_value_id} = value;
+    return {sku,salla_value_id}
+  })
+  return{values,salla_option_id}
+})
+      // update variants with salla_value_id
+const variantsArr =   jsonProduct?.variantsArr?.map((variant: any) => {
+  let {sku_code} = variant
+let sku_code_split = sku_code.split(";")
+let sallaValues = []
+for(let i =0 ; i<sallaValuesIds.length;i++){
+  let salla_value_id = sallaValuesIds[i].values.find((value: any) => sku_code_split.includes(value.sku) )?.salla_value_id
+   sallaValues.push(salla_value_id)
+}
+  return {...variant , sallaValues}
+});
+
+
+      // 
+      product.variantsArr = variantsArr
+      // fs.appendFile("info.json",JSON.stringify({finalOptions},null,2),(err)=>{console.error(err)})
+      // fs.appendFile("variantsArr.json",JSON.stringify({variantsArr},null,2),(err)=>{console.error(err)})
     }
     product.salla_product_id = productResult.data?.id;
     await product.save();
