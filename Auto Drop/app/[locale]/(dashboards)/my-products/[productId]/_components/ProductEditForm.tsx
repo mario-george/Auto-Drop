@@ -536,7 +536,6 @@ return {...variant,relativeOptions}
       errorButtonRefShipping?.current?.click();
       return;
     }
-    console.log("productOptions?.[0]?.name",productOptions?.[0]?.name)
     //@ts-ignore
     if(productOptions?.[0]?.name !== undefined){
       
