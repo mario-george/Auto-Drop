@@ -15,7 +15,7 @@ export async function getUserProducts(
     console.log( req.user._id )
     console.log( typeof req.user._id )
     // const userProducts = await Product.find({ merchant: req.user._id });
-    const userProducts = await Product.find({ merchant: req.user._id }).select('_id name price quantity first_level_category_name salla_product_id shippingAvailable').slice('images', 1);
+    const userProducts = await Product.find({ merchant: req.user._id }).select('_id name price quantity first_level_category_name salla_product_id shippingAvailable productValuesNumber').slice('images', 1);
     return res.json({ userProducts, success: true });
 
   } catch (error: AxiosError | any) {

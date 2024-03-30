@@ -281,7 +281,7 @@ export default class WebHookEvents {
       // total = +sub_total + commission;
       total = +sub_total;
       const merchant = products?.[0]?.merchant;
-
+/* 
       const subscription: SubscriptionDocument | null = await CheckSubscription(
         merchant,
         "orders_limit"
@@ -289,7 +289,7 @@ export default class WebHookEvents {
 
       if (subscription && subscription.orders_limit)
         subscription.orders_limit = subscription.orders_limit - 1;
-
+ */
       const order = new Order({
         ...data,
         amounts: {
@@ -308,12 +308,12 @@ export default class WebHookEvents {
         status: "created",
         status_track: [],
       });
-
+console.log("order",order)
       const status_track = UpdateOrderTracking("created", order);
       order.status_track = status_track;
 
       await Promise.all([
-        subscription?.save(),
+        // subscription?.save(),
         /*    order.save(function (err, result) {
           if (err) return console.log(err);
         }), */

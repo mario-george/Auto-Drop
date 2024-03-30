@@ -85,10 +85,11 @@ interface ProductSchema {
   sallaTags?: { name: string; id: number }[];
 
   shippingIncludedChoice?: boolean;
-shippingIncludedChoiceIndex?: number;
+  shippingIncludedChoiceIndex?: number;
   // checkboxesSelected?: any;
   // productEditFormOrigin?: boolean;
-  shippingAvailable?:boolean
+  shippingAvailable?: boolean;
+  productValuesNumber?: number;
 }
 
 interface ProductDocument extends Document, ProductSchema {}
@@ -151,6 +152,7 @@ const options = {
     type: Boolean,
     default: false,
   },
+  productValuesNumber: { type: Number, default: 0 },
   // category_id: { type: Number, default: null },
   // category_name: { type: String, default: null },
   target_original_price: { type: Number, default: null },
@@ -160,7 +162,7 @@ const options = {
   variantsArr: { type: Array, default: [] },
   commissionPercentage: { type: Boolean, default: true },
   showDiscountPrice: { type: Boolean, default: false },
-  discountPrice: { type: Number, default:0 },
+  discountPrice: { type: Number, default: 0 },
   categoriesSalla: { type: Array, default: [] },
   sallaTags: { type: Array, default: [] },
   shippingIncludedChoice: { type: Boolean, default: false },
@@ -171,9 +173,36 @@ const options = {
   // productEditFormOrigin: { type: Boolean, default: false },
 };
 
-const schema = new Schema<ProductSchema>(options, { timestamps: true });
+const schema = new Schema<ProductSchema>(options, {
+  timestamps: true,
+  toObject: { virtuals: true },
+});
 schema.index({ "$**": "text" });
-// schema.plugin(mongoosePaginate);
+schema.plugin(mongoosePaginate);
+
+schema.pre("save", function (next) {
+  if (this.isModified("options")) {
+    let options: any = this.options;
+
+    if (Array.isArray(options) && !options?.[0]?.name) {
+      this.productValuesNumber = 0;
+    }
+    let count = 1;
+    if (Array.isArray(options) && options.length > 0) {
+   
+   
+      options?.forEach((option: any) => {
+        count *= option.values.length;
+      });
+      if (count >= 1) {
+        this.productValuesNumber = count;
+      } else {
+        this.productValuesNumber = 0;
+      }
+    }
+  }
+  next();
+});
 
 const Product = model<ProductSchema, PaginateModel<ProductDocument>>(
   "Product",
