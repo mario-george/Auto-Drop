@@ -380,7 +380,7 @@ export async function LinkProductSalla2(
 
     const { data: productResult } = await axios.request(opt);
     console.log(createdeProduct.data.id);
-fs.appendFile("productResult.json",JSON.stringify({productResult},null,2),(err)=>{
+fs.writeFile("productResult.json",JSON.stringify({productResult},null,2),(err)=>{
   console.error(err)
 })
 

@@ -153,7 +153,7 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
       cell: ({ row }) => {
         console.log(rowSelection)
         //@ts-ignore
-        let { _id: id, salla_product_id } = row.original;
+        let { _id: id, salla_product_id ,productValuesNumber} = row.original;
         return (
           <div>
             <ButtonsRenderer
@@ -161,6 +161,7 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
               id={id}
               salla_product_id={salla_product_id}
               setLoadProducts={setLoadProducts}
+              productValuesNumber={productValuesNumber} 
             />
           </div>
         );
