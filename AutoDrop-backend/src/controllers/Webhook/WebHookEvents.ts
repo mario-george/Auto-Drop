@@ -276,6 +276,8 @@ export default class WebHookEvents {
           if (choosenVariant) {
 
             let {offer_sale_price,commission,profitTypeValue} = choosenVariant;
+            offer_sale_price = Number(offer_sale_price);
+
             let originalPriceVariant = offer_sale_price;
             let displayedPrice= 0
             if(commission==0){
@@ -296,7 +298,7 @@ export default class WebHookEvents {
                 amount: displayedPrice || product.main_price,
               },
             };
-            choosenVariant = Object.assign({}, choosenVariant, OrderValue);
+            choosenVariant = Object.assign({}, choosenVariant, OrderValue,originalPriceVariant);
             let itemQuantity = item.quantity
             let displayedTotalPrice = itemQuantity *displayedPrice
             totalPrice += displayedTotalPrice
