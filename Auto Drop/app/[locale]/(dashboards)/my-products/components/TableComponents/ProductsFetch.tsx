@@ -49,11 +49,9 @@ setMyProducts(
 );
 }else{
 let productsCategories = resp.value.data.data;
-// console.log("productsCategories", productsCategories);
 setAllProdCategories(productsCategories);
 }
 if(  fetchInfoResolved[0].status == "fulfilled"){
-console.log("fetchInfoResolved[0].value.data.userProducts",fetchInfoResolved[0].value.data.userProducts)
   dispatch(
      setKeyValue({
        key: "currentProductsList",
@@ -73,39 +71,7 @@ console.log("fetchInfoResolved[0].value.data.userProducts",fetchInfoResolved[0].
 console.error(err)
 }
     }
-    // const getMyProductsData = async () => {
-    /*   const data2 = await axiosInstance.get("/aliexpress/product/getProducts");
-      console.log(data2.data.userProducts);
-      setMyProducts(
-        data2.data.userProducts.map((product: any) => {
-          return {
-            ...product,
-            prodName: product.name,
-            category:
-              product.category_name || product.first_level_category_name,
-            prodImage: product.images[0].original,
-            sellPrice: product.price,
-            inventory: product.quantity,
-            platform: props.locale == "ar" ? "علي اكسبرس" : "Aliexpress",
-          };
-        })
-      );
-      dispatch(
-        setKeyValue({
-          key: "currentProductsList",
-          value: data2.data.userProducts,
-        })
-      );
-      dispatch(
-        setKeyValue({
-          key: "loadingProductTable",
-          value: false,
-        })
-      ); */
-    // };
-
-    // getMyProductsData();
-    // getMyProductsData()
+   
     getProductsInfo()
   }, [loadProducts, reloadProducts, reloadPage]);
 /*   useEffect(() => {

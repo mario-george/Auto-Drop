@@ -158,7 +158,7 @@ orderStatus={row.getValue("orderStatus")}
       id: "actions",
       cell: ({ row }) => {
         //@ts-ignore
-        let { _id: id, salla_product_id } = row.original;
+        let { _id: id, order_id } = row.original;
         return (
           <div>
             <ButtonsRenderer
@@ -166,6 +166,7 @@ orderStatus={row.getValue("orderStatus")}
               id={id}
               // salla_product_id={salla_product_id}
               // setLoadProducts={setLoadProducts}
+              order_id={order_id}
             />
           </div>
         );

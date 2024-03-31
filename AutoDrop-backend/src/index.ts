@@ -23,6 +23,7 @@ import shippingRoutes from "./routes/shipping.routes";
 import settingRoute from "./routes/settings.route";
 import { createHmac } from 'crypto';
 import WebHookHandler from "./controllers/Webhook/WebHookHandler";
+import orderRoutes from './routes/order.routes';
 const app = express();
 
 //Parse json bodies
@@ -83,6 +84,7 @@ app.use("/api/v1/search", searchRoutes);
 app.use("/api/v1/salla", sallaRoutes);
 app.use("/api/v1/shipping", shippingRoutes);
 app.use("/api/v1/settings", settingRoute  );
+app.use("/api/v1/orders", orderRoutes  );
 app.post("/webhooks/subscribe", async (req, res,next) => {
   const requestHMAC = req.header("x-salla-signature");
   // const secret = await findSettingKey("SALLA_WEBHOOK_TOKEN");

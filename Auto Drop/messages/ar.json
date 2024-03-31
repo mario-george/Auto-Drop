@@ -412,5 +412,49 @@
     "date":"التاريخ",
     "amount":"المبلغ"
 
+  },"orderDetailsPage":{
+    "orderDetails":"تفاصيل الطلب",
+    "orderNumber":" رقم الطلب",
+    "quantity":"الكمية",
+    "sku":"رقم التخزين",
+    "color":"اللون",
+    "comments":"ملاحظات",
+    "displayedPrice":"السعر المعروض",
+    "city":"المدينة",
+    "originalPrice":"السعر الأصلي",
+    "deliveryDetails":"تفاصيل التوصيل للزبون",
+    "paymentProcess":"عملية الدفع",
+    "edit":"تعديل",
+    
+    "sendOrder":"إرسال الطلب",
+    "save":"حفظ",
+    "payNow":"ادفع الان",
+    "phone":"الهاتف",
+    "secondName":"الاسم الثاني",
+    "country":"الدولة",
+    "region":"المنطقة",
+    "firstName":"الاسم الأول",
+    "postalCode":"الرمز البريدي",
+    "paymentFromWallet":"الدفع من المحفظة",
+    "platOrderNumber":"رقم الطلب بالمنصة",
+    "cod":"الدفع عند الاستلام",
+    "email":"الايميل",
+    "district":"الحي",
+    "shipping":"الشحن",
+    "total":"المجموع الإجمالي",
+    "cartoon":"كرتون",
+    "shippingType":"نوع الشحن",
+    "shippedWPack":"شحن مع تغليف"  ,
+    "packagingBag":"كيس تغليف",
+    "placeALogo":"وضع شعار",
+    "supplierShipping":"اختيار طريقة الشحن من المورد",
+    "withLogo":"مع شعار"  ,
+    "attachALogo":"إرفاق شعار"  ,
+    "attachAnInvoice":"إرفاق فاتورة",
+    "street":"الشارع"
+   
+
+},"ordersPagev2":{
+    "orderStatus":"حالة الطلب"
   }
 }

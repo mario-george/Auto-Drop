@@ -281,8 +281,7 @@
     "orderSettings": "Order Settings",
     "autoPay": "Automatic payment from wallet",
     "save": "Save",
-    "sa":"Saudi riyals"
-
+    "sa": "Saudi riyals"
   },
   "linkAccount": {
     "availablePlatforms": "Available Platforms",
@@ -404,13 +403,58 @@
     "myCards": "My Cards",
     "addCard": "Add Card",
     "chargeWallet": "Charge Wallet"
-  },"ordersPage":{
-    "orders":"Orders",
-    "sender":"Sender",
-    "orderNumber":"Order Number",
-    "orderStatus":"Order Status",
-    "orderSource":"Order Source",
-    "date":"Date",
-    "amount":"Amount"
+  },
+  "ordersPage": {
+    "orders": "Orders",
+    "sender": "Sender",
+    "orderNumber": "Order Number",
+    "orderStatus": "Order Status",
+    "orderSource": "Order Source",
+    "date": "Date",
+    "amount": "Amount"
+  },
+  "orderDetailsPage": {
+    "quantity": "Quantity",
+    "deliveryDetails": "Delivery details to the customer",
+    "edit": "Edit",
+    "sendOrder": "Send Order",
+    "orderDetails": "Order Details",
+    "originalPrice": "Original Price",
+    "size": "Size",
+    "sku": "SKU",
+    "color": "Color",
+    "comments": "Comments",
+    "displayedPrice": "Displayed Price",
+    "save": "Save",
+    "paymentProcess": "Payment Process",
+    "orderNumber": "Order Number",
+    "firstName": "First Name",
+    "secondName": "Second Name",
+    "phone": "Phone",
+    "region": "Region",
+    "postalCode": "Postal Code",
+    "street": "Street",
+    "district": "District",
+    "city": "City",
+    "country": "Country",
+    "email": "Email",
+    "platOrderNumber": "Platform Order Number",
+    "payNow": "Pay Now",
+    "paymentFromWallet": "Payment from the wallet balance",
+    "cod": "Cash on delivery",
+    "total": "Total",
+    "shipping": "Shipping",
+    "attachAnInvoice": "Attach an invoice",
+    "placeALogo": "Place a logo",
+    "shippingType": "Shipping Type",
+    "shippedWPack": "Shipped with packaging",
+    "attachALogo": "Attach a logo",
+    "withLogo": "With Logo",
+    "packagingBag": "Packaging bag",
+    "cartoon": "Cartoon",
+    "supplierShipping": "Choose a shipping method from the supplier"
+  },"ordersPagev2":{
+    "orderStatus":"Order Status"
+
   }
 }
