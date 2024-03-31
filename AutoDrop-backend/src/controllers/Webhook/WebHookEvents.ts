@@ -234,14 +234,76 @@ export default class WebHookEvents {
       const filterItems = data.items?.filter((obj: any) => {
         return findProductIds.includes(obj?.product?.id?.toString());
       });
-
+  /*     const orderItemsSallaValueIds = filterItems.map(
+        (item: any, index: number) => {
+          let options = item.options.map((option: any, optIndex: number) => {
+            let id = option.value.id;
+            return id;
+          });
+          return options;
+        }
+      ); */
+      let totalPrice = 0
       const mapItems = await Promise.all(
         filterItems.map((item: any, i: number) => {
           const productId = item?.product?.id;
-          const product = products.find(
+          const product: any = products.find(
             (ev: ProductDocument) => ev.salla_product_id == productId
           );
           const jsonProduct = product.toJSON();
+
+
+          //
+          let optionsIds = item.options?.map(
+            (option: any, optIndex: number) => {
+              let id = option.value.id;
+              return id;
+            }
+          );
+          let { variantsArr } = product;
+          let choosenVariant = variantsArr?.find((variant: any) => {
+            let valid = true;
+            optionsIds.forEach((id: number) => {
+              if (!variant.sallaValues.includes(id)) {
+                valid = false;
+              }
+            });
+            return valid;
+          });
+          if (choosenVariant) {
+
+            let {offer_sale_price,commission,profitTypeValue} = choosenVariant;
+            let originalPriceVariant = offer_sale_price;
+            let displayedPrice= 0
+            if(commission==0){
+              // get the commission from the product itself
+              commission = product.vendor_commission;
+
+            }
+            if(profitTypeValue==="percentage")
+            {
+              displayedPrice = offer_sale_price + (offer_sale_price * commission / 100);
+            }else{
+              displayedPrice = offer_sale_price + commission;
+            }
+
+
+            const OrderValue = {
+              price: {
+                amount: displayedPrice || product.main_price,
+              },
+            };
+            choosenVariant = Object.assign({}, choosenVariant, OrderValue);
+            let itemQuantity = item.quantity
+            let displayedTotalPrice = itemQuantity *displayedPrice
+            totalPrice += displayedTotalPrice
+      /*       const result = {
+              ...item.options[0],
+              value: Object.assign({}, item.options[0]?.value || {}, value),
+            };
+            item.options[0] = result; */
+          }
+          //
           const options = item.options?.map((option: any, idx: number) => {
             const productOption = jsonProduct.options[idx]?.values;
             const variant = productOption.find(
@@ -274,6 +336,7 @@ export default class WebHookEvents {
               ...product,
             },
             options,
+            choosenVariant
           };
         })
       );
@@ -281,7 +344,7 @@ export default class WebHookEvents {
       // total = +sub_total + commission;
       total = +sub_total;
       const merchant = products?.[0]?.merchant;
-/* 
+      /* 
       const subscription: SubscriptionDocument | null = await CheckSubscription(
         merchant,
         "orders_limit"
@@ -306,9 +369,9 @@ export default class WebHookEvents {
         order_id: data.id,
         items: mapItems,
         status: "created",
-        status_track: [],
+        status_track: [],totalPrice
       });
-console.log("order",order)
+      console.log("order", order);
       const status_track = UpdateOrderTracking("created", order);
       order.status_track = status_track;
 
