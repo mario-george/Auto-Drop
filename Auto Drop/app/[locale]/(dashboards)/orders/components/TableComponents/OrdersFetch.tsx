@@ -6,15 +6,68 @@ import { setKeyValue } from "@/store/productsSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import useLoaderProducts from "@/components/loader/useLoaderProducts";
-
+type Orders = string|any[]
 export default function OrdersFetch(props: any) {
   // const { LoaderComponent } = useLoaderProducts();
-  let {orders} = props
-  // const [myProducts, setMyProducts] = useState([]);
+  // let {orders} = props
+  const [myOrders, setMyOrders] = useState<Orders>([]);
+  let dateExtractor=(dateStr:string)=>{
+    const date = new Date(dateStr);
 
+
+    const options: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    };
+    const formattedDate = date.toLocaleString('en-US', options);
+
+const day = date.getDate();
+/* let suffix = 'th';
+if (day % 10 === 1 && day !== 11) {
+  suffix = 'st';
+} else if (day % 10 === 2 && day !== 12) {
+  suffix = 'nd';
+} else if (day % 10 === 3 && day !== 13) {
+  suffix = 'rd';
+}
+ */
+// const formattedDateWithSuffix = formattedDate.replace(/\d+$/, match => match +suffix);
+return formattedDate
+  }
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const res = await axiosInstance.get("/orders/getOrder");
+      let { data, status } = res;
+      if (status >= 200 && status < 300) {
+        if (data.data.length == 0) {
+          setMyOrders("none");
+        } else {
+          let orders = data.data.map((order:any)=>{
+            let{updatedAt,order_id} = order
+            return {
+              amount: order.amounts.total.amount.toFixed(2),
+              date: dateExtractor(updatedAt),
+              orderStatus: order.orderStatus,
+              orderNumber: order_id,
+              orderItems: order.orderItems,
+              orderAddress: order.orderAddress,
+            };
+          
+          })
+          setMyOrders(orders);
+        }
+      } else {
+        setMyOrders("fail");
+        console.log("fail");
+      }
+      console.log(res);
+    };
+    fetchOrders();
+  }, []);
   // const [allProdCategories, setAllProdCategories] = useState([]);
   // const [loadProducts, setLoadProducts] = useState(false);
- /*  const reloadProducts = useSelector(
+  /*  const reloadProducts = useSelector(
     (state: any) => state.products.reloadProducts
   );
   const reloadPage = useSelector((state: any) => state.products.reloadPage);
@@ -51,7 +104,6 @@ setMyProducts(
 );
 }else{
 let productsCategories = resp.value.data.data;
-// console.log("productsCategories", productsCategories);
 setAllProdCategories(productsCategories);
 }
 if(  fetchInfoResolved[0].status == "fulfilled"){
@@ -78,7 +130,7 @@ console.error(err)
     getProductsInfo()
   }, [loadProducts, reloadProducts, reloadPage]); */
 
-/*   if (!myProducts) {
+  /*   if (!myProducts) {
     return <div>Loading...</div>; 
   } */
 
@@ -87,12 +139,12 @@ console.error(err)
       {/* {LoaderComponent}{" "} */}
       <div
         className={` tableContainer dark:bg-[#2e464f] dark:text-white flex flex-1 justify-center ${
-          orders.length > 0 && `!mx-auto`
+          myOrders.length > 0 && `!mx-auto`
         } lap:min-w-full `}
       >
         <ColsExtract
           {...props}
-          orders={orders}
+          orders={myOrders}
           // setMyProducts={setMyProducts}
           // setLoadProducts={setLoadProducts}
           // allProdCategories={allProdCategories}
