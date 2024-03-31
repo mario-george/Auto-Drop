@@ -224,7 +224,7 @@ export default class WebHookEvents {
         },
       })
         .select(
-          "name salla_product_id price main_price vendor_commission vendor_price merchant sku options"
+          "name salla_product_id price main_price vendor_commission vendor_price merchant sku options variantsArr"
         )
         .exec();
 
@@ -260,6 +260,7 @@ export default class WebHookEvents {
               return id;
             }
           );
+          console.log("optionsIds",optionsIds)
           let { variantsArr } = product;
           let choosenVariant = variantsArr?.find((variant: any) => {
             let valid = true;
@@ -270,6 +271,8 @@ export default class WebHookEvents {
             });
             return valid;
           });
+          console.log("choosenVariant",choosenVariant)
+
           if (choosenVariant) {
 
             let {offer_sale_price,commission,profitTypeValue} = choosenVariant;
