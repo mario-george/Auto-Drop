@@ -59,6 +59,7 @@ interface OrderSchema {
   shippingFee:any;
   paid:any;
   totalPrice:number
+  customerName:string|null
 }
 
 interface OrderDocument extends Document, OrderSchema {}
@@ -95,11 +96,21 @@ const options = {
   tracking_order_id: { type: Schema.Types.Mixed, default: null },
   shippingFee:{type:Number,default:0},
   paid:{type:Boolean,default:false},
-  totalPrice:{type:Number,default:0}
+  totalPrice:{type:Number,default:0},
+  customerName:{type:String,default:null}
 };
 
 const schema = new Schema<OrderSchema>(options, { timestamps: true });
 schema.index({ "$**": "text" });
+schema.pre("save", function (next) {
+  if (this.isModified("customer")) {
+    let customer: any = this.customer;
+    let { first_name, last_name } = customer;
+this.customerName = `${first_name} ${last_name}`;
+    
+  }
+  next();
+});
 const Order = model<OrderSchema, PaginateModel<OrderDocument>>(
   "Order",
   schema,
