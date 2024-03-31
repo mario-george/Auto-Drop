@@ -58,6 +58,7 @@ interface OrderSchema {
   status_track: SchemaDefinitionProperty<StatusTrack[]>;
   shippingFee:any;
   paid:any;
+  totalPrice:number
 }
 
 interface OrderDocument extends Document, OrderSchema {}
@@ -93,7 +94,8 @@ const options = {
   notes: { type: String, default: null, trim: true },
   tracking_order_id: { type: Schema.Types.Mixed, default: null },
   shippingFee:{type:Number,default:0},
-  paid:{type:Boolean,default:false}
+  paid:{type:Boolean,default:false},
+  totalPrice:{type:Number,default:0}
 };
 
 const schema = new Schema<OrderSchema>(options, { timestamps: true });
