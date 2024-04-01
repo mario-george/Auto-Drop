@@ -451,7 +451,8 @@
     "withLogo":"مع شعار"  ,
     "attachALogo":"إرفاق شعار"  ,
     "attachAnInvoice":"إرفاق فاتورة",
-    "street":"الشارع"
+    "street":"الشارع",
+    "size": "حجم"
    
 
 },"ordersPagev2":{

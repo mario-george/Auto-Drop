@@ -201,7 +201,7 @@ schema.pre("save", function (next) {
       }
     }
   }
-  if (this.isModified("shipping")) {
+  if (Array.isArray(this.shipping) &&this.shipping.length>0) {
     let [shipping, included, shipIndex] = [
       this.shipping,
       this.shippingIncludedChoice,
@@ -225,6 +225,8 @@ schema.pre("save", function (next) {
         this.shippingFee = fee;
       }
     }
+  }else{
+    this.shippingFee = 0;
   }
   next();
 });
