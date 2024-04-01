@@ -11,6 +11,9 @@ export default function OrdersFetch(props: any) {
   // const { LoaderComponent } = useLoaderProducts();
   // let {orders} = props
   const [myOrders, setMyOrders] = useState<Orders>([]);
+  const [noOrders, setNoOrders] = useState<boolean>(false);
+
+
   let dateExtractor = (dateStr: string) => {
     const date = new Date(dateStr);
 
@@ -38,9 +41,11 @@ if (day % 10 === 1 && day !== 11) {
     const fetchOrders = async () => {
       const res = await axiosInstance.get("/orders/getOrder");
       let { data, status } = res;
+      console.log("ordersssssss",data)
       if (status >= 200 && status < 300) {
         if (data.data.length == 0) {
-          setMyOrders("none");
+          setMyOrders([]);
+          setNoOrders(true);
         } else {
           let orders = data.data.map((order: any) => {
             let { updatedAt, order_id, paid, payment_method,customerName :sender} = order;
@@ -50,6 +55,7 @@ if (day % 10 === 1 && day !== 11) {
             } else if (payment_method) {
             }
             return {
+              ...order,
               amount: order.amounts.total.amount.toFixed(2),
               date: dateExtractor(updatedAt),
               orderStatus,
@@ -152,6 +158,7 @@ console.error(err)
           // setMyProducts={setMyProducts}
           // setLoadProducts={setLoadProducts}
           // allProdCategories={allProdCategories}
+          noOrders={noOrders}
         />
       </div>
     </>

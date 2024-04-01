@@ -27,7 +27,7 @@ const calcShippingFee = (shipping:any,shipIndex:number)=>{
 
     fee/=100
   }
-  return fee
+  return -fee
   
 
 }
@@ -58,7 +58,7 @@ export default function ProductDetails({
   setCurrentlySelectedVariant,
   currentlySelectedVariant,
   setVariantsDetails,
-  shippingTotalCost,productOptions,shippingWithoutOrInclude,shipping,shippingChoosenIndex
+  shippingTotalCost,productOptions,shippingWithoutOrInclude,shipping,choosenShippingIndex
 }: any) {
   // console.log("shippingChoosenValue", shippingChoosenValue);
   // const [value, setValue] = React.useState(shippingChoosenValue);
@@ -171,8 +171,14 @@ export default function ProductDetails({
     finalTargetPrice = price + commission;
   }
   let shippingVariantTotalCost = 0;
-  if (shippingWithoutOrInclude == "shippingIncluded" || shippingWithoutOrInclude == "withoutShipping") {
+  let shippingWithoutShippingCost = 0;
+  if (shippingWithoutOrInclude == "shippingIncluded") {
     shippingVariantTotalCost = shippingTotalCost;
+  }else{
+    shippingWithoutShippingCost = calcShippingFee(shipping,choosenShippingIndex)
+     console.log(shippingWithoutShippingCost,"shippingWithoutShippingCost")
+     console.log(shipping,"shipping")
+     console.log(choosenShippingIndex,"choosenShippingIndex")
   }
 if(!productOptions || productOptions?.length==0|| !productOptions?.[0]?.name){
 
@@ -282,7 +288,7 @@ if(!productOptions || productOptions?.length==0|| !productOptions?.[0]?.name){
             <div className="relative  min-w-full col-span-2">
               <Input
                 className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
-                value={shippingWithoutOrInclude === "withoutShipping" ? CurrencyFormatter(totalProfit  + shippingVariantTotalCost):CurrencyFormatter(totalProfit) }
+                value={shippingWithoutOrInclude === "withoutShipping" ? CurrencyFormatter(totalProfit  + shippingWithoutShippingCost):CurrencyFormatter(totalProfit) }
 // shippingWithoutOrInclude === "withoutShipping" ? CurrencyFormatter(totalProfit  - shippingVariantTotalCost:CurrencyFormatter(totalProfit) 
 />
               <span className="absolute inset-y-0 right-0 pr-2 flex items-center text-gray-500"></span>

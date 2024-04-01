@@ -12,11 +12,16 @@ export default function ColsExtract(props: any) {
     inventory,
     setMyProducts,setLoadProducts,allProdCategories
   } = props;
+  let emptyProducts = false
+  if(myProducts=="empty"){
+    emptyProducts = true
+  }
   return (
     <DataTable
     setMyProducts={setMyProducts}
     allProdCategories={allProdCategories}
     setLoadProducts={setLoadProducts}
+    emptyProducts={emptyProducts}
     colData = {   {productName,
       sellPrice,
       category,

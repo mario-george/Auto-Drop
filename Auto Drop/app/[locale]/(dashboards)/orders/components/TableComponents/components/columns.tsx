@@ -159,6 +159,8 @@ orderStatus={row.getValue("orderStatus")}
       cell: ({ row }) => {
         //@ts-ignore
         let { _id: id, order_id } = row.original;
+        console.log("ROW",row.original)
+        console.log("_IDD",id)
         return (
           <div>
             <ButtonsRenderer

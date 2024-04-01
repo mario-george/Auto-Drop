@@ -3,9 +3,14 @@ import axios from "axios";
 import { createAccessToken } from "../src/utils/authHelperFunction";
 import User from "../src/models/user.model";
 import fs from "fs";
-
+import dotenv from 'dotenv';
+import mongoose from "mongoose";
+dotenv.config({ path: ".env" });
 async function UnLinkAllUsersProducts() {
-  const pageSize = 100;
+  await mongoose.connect(process.env.DB_URL!);
+  console.log('db',process.env.DB_URL)
+
+  const pageSize = 200;
   let page = 1;
   let products;
 
@@ -20,20 +25,22 @@ async function UnLinkAllUsersProducts() {
       if (!user) {
         return;
       }
-      let token = createAccessToken(user.id);
+      console.log(`Deleting product ${product._id} for user ${user.id}`)
+      let token = await createAccessToken(user.id);
+      console.log("token", token)
       let options = {
-        url: `/product/deleteProduct/${product._id}`,
-        baseUrl: "http://localhost:10000/api/v1",
+        url: `http://localhost:10000/api/v1/aliexpress/product/deleteProduct/${product._id}`,
+        // baseUrl: "http://localhost:10000/api/v1/aliexpress",
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
         },
       };
-      let res = await axios.request(options);
+      let res = await axios.request(options).catch((error) => console.error(error));      
       fs.appendFile(
         "deleteAllProducts.txt",
-        `Product ${product._id} deleted with status ${res.status}\n`,
+        `Product ${product._id} deleted with status ${res?.status}\n`,
         (err) => {
           if (err) {
             console.error(err);
@@ -43,10 +50,12 @@ async function UnLinkAllUsersProducts() {
     }
 
     // Wait for 5 minutes
-    await new Promise(resolve => setTimeout(resolve, 5 * 60 * 1000));
+    await new Promise(resolve => setTimeout(resolve, 2 * 60 * 1000));
 
     page++;
   } while (products.length === pageSize);
+
+  await mongoose.connection.close()
 }
 
 UnLinkAllUsersProducts()

@@ -40,8 +40,6 @@ interface DataTableProps<TData, TValue> {
   unAvProd: string;
   noShipping: string;
   unLinkedProd: string;
-
-  
   unUpProd: string;
   price: string;
   category: string;
@@ -50,8 +48,11 @@ interface DataTableProps<TData, TValue> {
   apply: string;
   setLoadProducts: any;
   colData?: any;
-  translationMessages:{[key:string]:string}
-  allProdCategories:number[][]
+  translationMessages: { [key: string]: string };
+  allProdCategories: number[][];
+  emptyProducts: boolean;
+
+  noProducts: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -59,7 +60,8 @@ export function DataTable<TData, TValue>({
   unAvProd,
   price,
   category,
-  unUpProd,noShipping,
+  unUpProd,
+  noShipping,
   unLinkedProd,
   // columns,
   data,
@@ -67,9 +69,15 @@ export function DataTable<TData, TValue>({
   setMyProducts,
   apply,
   setLoadProducts,
-  colData,translationMessages,allProdCategories
+  colData,
+  translationMessages,
+  allProdCategories,
+  emptyProducts,
+  noProducts,
 }: DataTableProps<TData, TValue>) {
-  const resetRowSelection = useSelector((state: any) => state.products.resetRowSelection)
+  const resetRowSelection = useSelector(
+    (state: any) => state.products.resetRowSelection
+  );
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -86,7 +94,7 @@ export function DataTable<TData, TValue>({
     );
   }, [rowSelection]);
   React.useEffect(() => {
-  setRowSelection({});
+    setRowSelection({});
   }, [resetRowSelection]);
   let columns = Cols({
     productName,
@@ -120,7 +128,9 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
-  console.log("columnFilters",columnFilters)
+  console.log("columnFilters", columnFilters);
+  console.log("emptyProducts", emptyProducts);
+  console.log("data", data);
   return (
     <div className="space-y-4 min-w-full">
       <DataTableToolbar
@@ -176,6 +186,15 @@ export function DataTable<TData, TValue>({
                   ))}
                 </TableRow>
               ))
+            ) : noProducts ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No Products Found
+                </TableCell>
+              </TableRow>
             ) : (
               <TableRow>
                 <TableCell

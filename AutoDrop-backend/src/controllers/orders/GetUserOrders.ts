@@ -1,10 +1,10 @@
 import catchAsync from '../../utils/catchAsync';
 import { Request,Response,NextFunction } from 'express';
 import AppError from '../../utils/appError';
-import {Order} from '../../models/Order.model';
+import {Order, OrderDocument} from '../../models/Order.model';
 const GetUserOrders = catchAsync(async (req:Request&any, res:Response,next:NextFunction) => {
+
     let merchant = req.user._id.toString()
-    console.log("req.user",req.user)
     if(!merchant){
         return next(new AppError('You are not authorized to perform this action', 403))
     }
@@ -22,5 +22,22 @@ const GetUserOrders = catchAsync(async (req:Request&any, res:Response,next:NextF
         data: userOrders
     })
 })
+const GetUserOrderDetails = catchAsync(async (req:Request&any, res:Response,next:NextFunction) => {
+    let merchant = req.user._id.toString()
+    let {order_id} = req.body
+    console.log('order_id',order_id)
+    console.log('req.body',req.body)
+    let userOrderDetails :OrderDocument|null= await Order.findOne({order_id})
 
-export  {GetUserOrders}
+    if(!userOrderDetails) return next(new AppError('Order not found', 404))
+if(merchant !== userOrderDetails.merchant){
+    return next(new AppError('You are not authorized to perform this action', 403))
+}
+ 
+    return res.status(200).json({
+        status: 'success',
+        data: userOrderDetails
+    })
+})
+
+export  {GetUserOrders,GetUserOrderDetails}

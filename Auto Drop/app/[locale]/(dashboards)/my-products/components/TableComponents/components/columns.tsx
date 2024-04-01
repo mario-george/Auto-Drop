@@ -63,7 +63,7 @@ export default function Cols(props: ColProps): ColumnDef<myProduct>[] {
         return (
           <div className="flex justify-center space-s-1 items-center">
             <span className="">
-              {(row.getValue("prodName") as any).substring(0, 35)}...
+              {(row.getValue("prodName") as any)?.substring(0, 35)}...
             </span>
             <span>
               <Image

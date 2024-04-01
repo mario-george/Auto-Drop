@@ -16,7 +16,7 @@ export default function useOrderDetails({ orderId }: OrderDetailsProps) {
   useEffect(() => {
     const orderFetchHandler = async () => {
       if (orderId) {
-        const res = await axiosInstance.get("/order/" + orderId);
+        const res = await axiosInstance.post("/orders/getOrderDetails" , {order_id:orderId});
         let { data } = res;
         setOrderData(data);
         if (res.status >= 200 && res.status < 300) {
