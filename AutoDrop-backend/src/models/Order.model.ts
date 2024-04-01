@@ -6,7 +6,7 @@ import {
   Types,
   SchemaDefinitionProperty,
 } from "mongoose";
-
+import mongoosePaginate from 'mongoose-paginate-v2';
 interface ImageType {
   original: string;
   thumbnail: string;
@@ -110,6 +110,7 @@ schema.pre("save", function (next) {
   }
   next();
 });
+schema.plugin(mongoosePaginate);
 const Order = model<OrderSchema, PaginateModel<OrderDocument>>(
   "Order",
   schema,
