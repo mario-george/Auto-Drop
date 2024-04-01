@@ -40,8 +40,6 @@ interface DataTableProps<TData, TValue> {
   unAvProd: string;
   noShipping: string;
   unLinkedProd: string;
-
-  
   unUpProd: string;
   price: string;
   category: string;
@@ -52,6 +50,7 @@ interface DataTableProps<TData, TValue> {
   colData?: any;
   translationMessages:{[key:string]:string}
   allProdCategories:number[][]
+  emptyProducts:boolean
 }
 
 export function DataTable<TData, TValue>({
@@ -67,7 +66,7 @@ export function DataTable<TData, TValue>({
   setMyProducts,
   apply,
   setLoadProducts,
-  colData,translationMessages,allProdCategories
+  colData,translationMessages,allProdCategories,emptyProducts
 }: DataTableProps<TData, TValue>) {
   const resetRowSelection = useSelector((state: any) => state.products.resetRowSelection)
   const [rowSelection, setRowSelection] = React.useState({});
@@ -176,7 +175,14 @@ export function DataTable<TData, TValue>({
                   ))}
                 </TableRow>
               ))
-            ) : (
+            ) :emptyProducts?      <TableRow>
+            <TableCell
+              // colSpan={columns.length}
+              className="h-24 text-center"
+            >
+           No Products Found
+            </TableCell>
+          </TableRow>: (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
