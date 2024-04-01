@@ -679,7 +679,7 @@ return {...variant,relativeOptions}
     profitText: profit,
     setVariantsDetails,
     shippingTotalCost,
-    productOptions,shippingWithoutOrInclude
+    productOptions,shippingWithoutOrInclude,shipping:productShipping,choosenShippingIndex
   };
   let SelectComponent = (
     <Select

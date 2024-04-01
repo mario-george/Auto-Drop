@@ -88,10 +88,7 @@ export default function useProductShipping({
       if (price == 0 || price) {
         setShippingTotalCost(price);
       }
-    } else if ( shippingWithoutOrInclude == "withoutShipping" ){
-      setShippingTotalCost(-price);
-
-     }else {
+    } else {
       setShippingTotalCost(0);
     }
   }, [shippingWithoutOrInclude, value, shipping]);
