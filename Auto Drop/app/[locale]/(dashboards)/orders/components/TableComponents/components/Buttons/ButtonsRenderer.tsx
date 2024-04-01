@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { setKeyValue } from "@/store/productsSlice";
 import {useToast } from "@/components/ui/use-toast";
 export default function ButtonsRenderer({
-  id,
+  id,order_id
 /*   setMyProducts,
   salla_product_id,
   setLoadProducts, */
@@ -30,7 +30,10 @@ const {toast} = useToast()
     "rounded-full bg-[#253439] w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem] hover:cursor-pointer  px-2 py-2 tab:px-0 tab:py-0 hover:bg-[#253439]/90";
   let buttonClassS =
     "rounded-full bg-[#f79042] w-[2rem] h-[2rem] tab:w-[3rem] tab:h-[3rem] hover:cursor-pointer  px-2 py-2 tab:px-0 tab:py-0 hover:bg-[#f79042]/90 ";
+  let EditOrderHandler = ()=>{
+    router.push(`orders/orderDetails?orderId=${order_id}`)
   
+  }
 /*     let linkProductHandler = async () => {
     if (!sallaToken || sallaToken=="" ) {
       toast({
@@ -164,7 +167,7 @@ const {toast} = useToast()
  */}
  
       <div className={buttonClassE}
-      //  onClick={EditProductHandler}
+       onClick={EditOrderHandler}
        >
         <Image
           src={`/client/my-products/edit.svg`}

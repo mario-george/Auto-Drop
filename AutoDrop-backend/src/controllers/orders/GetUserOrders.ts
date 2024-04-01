@@ -25,6 +25,8 @@ const GetUserOrders = catchAsync(async (req:Request&any, res:Response,next:NextF
 const GetUserOrderDetails = catchAsync(async (req:Request&any, res:Response,next:NextFunction) => {
     let merchant = req.user._id.toString()
     let {order_id} = req.body
+    console.log('order_id',order_id)
+    console.log('req.body',req.body)
     let userOrderDetails :OrderDocument|null= await Order.findOne({order_id})
 
     if(!userOrderDetails) return next(new AppError('Order not found', 404))

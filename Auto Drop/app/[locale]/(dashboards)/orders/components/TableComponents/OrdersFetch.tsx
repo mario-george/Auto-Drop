@@ -41,6 +41,7 @@ if (day % 10 === 1 && day !== 11) {
     const fetchOrders = async () => {
       const res = await axiosInstance.get("/orders/getOrder");
       let { data, status } = res;
+      console.log("ordersssssss",data)
       if (status >= 200 && status < 300) {
         if (data.data.length == 0) {
           setMyOrders([]);
@@ -54,6 +55,7 @@ if (day % 10 === 1 && day !== 11) {
             } else if (payment_method) {
             }
             return {
+              ...order,
               amount: order.amounts.total.amount.toFixed(2),
               date: dateExtractor(updatedAt),
               orderStatus,

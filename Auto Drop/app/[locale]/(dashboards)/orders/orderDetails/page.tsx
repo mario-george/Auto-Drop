@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import OrderFetch from './_components/OrderDetailsFetch';
+import OrderDetailsFetch from './_components/OrderDetailsFetch';
 
 export default function OrderDetails(){
     const locale = useLocale()
@@ -46,10 +46,10 @@ export default function OrderDetails(){
         "supplierShipping":t("supplierShipping")
 
     }
-let OrderFetchProps ={translationMessages}
+let OrderDetailsFetchProps ={translationMessages}
     return(
         <div>
-            <OrderFetch {...OrderFetchProps }/>
+            <OrderDetailsFetch {...OrderDetailsFetchProps }/>
             <h1>Order Details</h1>
         </div>
     )
