@@ -212,16 +212,16 @@ schema.pre("save", function (next) {
       this.shippingFee = 0;
     } else if (
       typeof shipIndex == "number" &&
-      shipIndex >= 0 &&
-      Array.isArray(shipping) &&
+      shipIndex >= 0 && Array.isArray(shipping) &&
       shipping?.length > 0
     ) {
-      let fee: any = shipping?.[shipIndex]?.freight?.cent || 0;
-      if (fee !== 0) {
-        fee /= 100;
-      }
+      let fee:any = (shipping?.[shipIndex]?.freight?.cent || 0) ;
+      if(fee !==0){
 
-      if (fee !== undefined && typeof fee == "number" && fee !== 0) {
+        fee/=100
+      }
+      
+            if (fee !== undefined && typeof fee == "number" && fee!==0) {
         this.shippingFee = fee;
       }
     }
