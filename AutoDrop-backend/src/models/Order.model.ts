@@ -106,7 +106,7 @@ schema.pre("save", function (next) {
   if (this.isModified("customer")) {
     let { first_name = '', last_name = '' } = this.customer;
     this.customerName = `${first_name} ${last_name}`;
-    console.log("this.customerName",this.customerName);
+    console.log("this.customer",this.customer);
   }
   next();
 });
