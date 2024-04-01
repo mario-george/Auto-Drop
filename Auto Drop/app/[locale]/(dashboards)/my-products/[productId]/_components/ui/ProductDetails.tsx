@@ -20,7 +20,17 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/select"; 
+const calcShippingFee = (shipping:any,shipIndex:number)=>{
+  let fee:any = (shipping?.[shipIndex]?.freight?.cent || 0) ;
+  if(fee !==0){
+
+    fee/=100
+  }
+  return fee
+  
+
+}
 export default function ProductDetails({
   productOptionsDetails,
   availableQuantity,
@@ -48,10 +58,11 @@ export default function ProductDetails({
   setCurrentlySelectedVariant,
   currentlySelectedVariant,
   setVariantsDetails,
-  shippingTotalCost,productOptions
+  shippingTotalCost,productOptions,shippingWithoutOrInclude,shipping,shippingChoosenIndex
 }: any) {
   // console.log("shippingChoosenValue", shippingChoosenValue);
   // const [value, setValue] = React.useState(shippingChoosenValue);
+  
   console.log("optionChoosenValues", optionChoosenValues);
   console.log("currentlySelectedVariant", currentlySelectedVariant);
   let {
@@ -160,17 +171,21 @@ export default function ProductDetails({
     finalTargetPrice = price + commission;
   }
   let shippingVariantTotalCost = 0;
-  if (shippingChoice == "shippingIncluded") {
+  if (shippingWithoutOrInclude == "shippingIncluded" || shippingWithoutOrInclude == "withoutShipping") {
     shippingVariantTotalCost = shippingTotalCost;
-  } else {
-    shippingVariantTotalCost = 0;
   }
-
 if(!productOptions || productOptions?.length==0|| !productOptions?.[0]?.name){
 
       return <></>;
     
   }
+  let totalProfit = finalTargetPrice - price
+  console.log("totalProfit",totalProfit)
+  console.log("shippingVariantTotalCost",shippingVariantTotalCost)
+  console.log("totalProfit - shippingVariantTotalCost",totalProfit+ shippingVariantTotalCost)
+  console.log("typeof shippingVariantTotalCost",typeof shippingVariantTotalCost)
+  console.log("shippingWithoutOrInclude",shippingWithoutOrInclude)
+  console.log(shippingWithoutOrInclude === "withoutShipping" ? CurrencyFormatter(totalProfit  + shippingVariantTotalCost):CurrencyFormatter(totalProfit) )
     return (
     <div className={`text-xs tab:text-sm`}>
       <span>{productOptionsDetails}</span>
@@ -192,7 +207,7 @@ if(!productOptions || productOptions?.length==0|| !productOptions?.[0]?.name){
             className={`shadow-sm text-sm md:text-base tab:col-span-2 bg-[#edf5f9] ${inputClasses} `}
             value={CurrencyFormatter(price)}
           />{" "}
-          <div className="col-span-full grid tab:grid-cols-6 min-w-full gap-2  items-center">
+{/*           <div className="col-span-full grid tab:grid-cols-6 min-w-full gap-2  items-center">
             <span className="col-span-1">{withText}:</span>
             <RadioGroup
               value={shippingChoice}
@@ -221,7 +236,7 @@ if(!productOptions || productOptions?.length==0|| !productOptions?.[0]?.name){
                 </label>
               </div>
             </RadioGroup>
-          </div>
+          </div> */}
           <div className="grid tab:grid-cols-6 min-w-full tab:col-span-3 gap-3 items-center ">
             <span className="">{profitType}</span>
             <div className="col-span-2">{SelectComponent}</div>
@@ -267,8 +282,9 @@ if(!productOptions || productOptions?.length==0|| !productOptions?.[0]?.name){
             <div className="relative  min-w-full col-span-2">
               <Input
                 className={`shadow-sm text-sm md:text-base min-w-[60%] !text-[#008767] ${inputClasses} `}
-                value={CurrencyFormatter(finalTargetPrice - price)}
-              />
+                value={shippingWithoutOrInclude === "withoutShipping" ? CurrencyFormatter(totalProfit  + shippingVariantTotalCost):CurrencyFormatter(totalProfit) }
+// shippingWithoutOrInclude === "withoutShipping" ? CurrencyFormatter(totalProfit  - shippingVariantTotalCost:CurrencyFormatter(totalProfit) 
+/>
               <span className="absolute inset-y-0 right-0 pr-2 flex items-center text-gray-500"></span>
             </div>
           </div>

@@ -224,7 +224,7 @@ export default class WebHookEvents {
         },
       })
         .select(
-          "name salla_product_id price main_price vendor_commission vendor_price merchant sku options variantsArr"
+          "name salla_product_id price main_price vendor_commission vendor_price merchant sku options variantsArr shipping shippingIncludedChoice shippingFee"
         )
         .exec();
 
@@ -234,7 +234,7 @@ export default class WebHookEvents {
       const filterItems = data.items?.filter((obj: any) => {
         return findProductIds.includes(obj?.product?.id?.toString());
       });
-  /*     const orderItemsSallaValueIds = filterItems.map(
+      /*     const orderItemsSallaValueIds = filterItems.map(
         (item: any, index: number) => {
           let options = item.options.map((option: any, optIndex: number) => {
             let id = option.value.id;
@@ -243,7 +243,7 @@ export default class WebHookEvents {
           return options;
         }
       ); */
-      let totalPrice = 0
+      let totalPrice = 0;
       const mapItems = await Promise.all(
         filterItems.map((item: any, i: number) => {
           const productId = item?.product?.id;
@@ -252,7 +252,6 @@ export default class WebHookEvents {
           );
           const jsonProduct = product.toJSON();
 
-
           //
           let optionsIds = item.options?.map(
             (option: any, optIndex: number) => {
@@ -260,7 +259,7 @@ export default class WebHookEvents {
               return id;
             }
           );
-          console.log("optionsIds",optionsIds)
+          console.log("optionsIds", optionsIds);
           let { variantsArr } = product;
           let choosenVariant = variantsArr?.find((variant: any) => {
             let valid = true;
@@ -271,38 +270,49 @@ export default class WebHookEvents {
             });
             return valid;
           });
-          console.log("choosenVariant",choosenVariant)
+          console.log("choosenVariant", choosenVariant);
 
           if (choosenVariant) {
-
-            let {offer_sale_price,commission,profitTypeValue} = choosenVariant;
+            let { offer_sale_price, commission, profitTypeValue } =
+              choosenVariant;
             offer_sale_price = Number(offer_sale_price);
 
             let originalPriceVariant = offer_sale_price;
-            let displayedPrice= 0
-            if(commission==0){
+            let displayedPrice = 0;
+            if (commission == 0) {
               // get the commission from the product itself
               commission = product.vendor_commission;
-
             }
-            if(profitTypeValue==="percentage")
-            {
-              displayedPrice = offer_sale_price + (offer_sale_price * commission / 100);
-            }else{
+            if (profitTypeValue === "percentage") {
+              displayedPrice =
+                offer_sale_price + (offer_sale_price * commission) / 100;
+            } else {
               displayedPrice = offer_sale_price + commission;
             }
-
+            if (product?.shippingIncludedChoice) {
+              let { shippingIncludedChoiceIndex, shipping } = product;
+              let shippingFee =
+                shipping?.[shippingIncludedChoiceIndex]?.frieght?.cent / 100;
+              if (shippingFee) {
+                displayedPrice += product.shippingFee;
+              }
+            }
 
             const OrderValue = {
               price: {
                 amount: displayedPrice || product.main_price,
               },
             };
-            choosenVariant = Object.assign({}, choosenVariant, OrderValue,originalPriceVariant);
-            let itemQuantity = item.quantity
-            let displayedTotalPrice = itemQuantity *displayedPrice
-            totalPrice += displayedTotalPrice
-      /*       const result = {
+            choosenVariant = Object.assign(
+              {},
+              choosenVariant,
+              OrderValue,
+              originalPriceVariant
+            );
+            let itemQuantity = item.quantity;
+            let displayedTotalPrice = itemQuantity * displayedPrice;
+            totalPrice += displayedTotalPrice;
+            /*       const result = {
               ...item.options[0],
               value: Object.assign({}, item.options[0]?.value || {}, value),
             };
@@ -341,7 +351,7 @@ export default class WebHookEvents {
               ...product,
             },
             options,
-            choosenVariant
+            choosenVariant,
           };
         })
       );
@@ -374,7 +384,8 @@ export default class WebHookEvents {
         order_id: data.id,
         items: mapItems,
         status: "created",
-        status_track: [],totalPrice
+        status_track: [],
+        totalPrice,
       });
       console.log("order", order);
       const status_track = UpdateOrderTracking("created", order);

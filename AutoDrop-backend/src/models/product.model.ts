@@ -66,7 +66,7 @@ interface ProductSchema {
   salla_product_id: number | string | undefined;
   merchant: SchemaDefinitionProperty<Types.ObjectId>;
   require_shipping: boolean;
-  shipping: ShippingAttributes;
+  shipping: ShippingAttributes | ShippingAttributes[];
   sku_id: string;
   vat: any;
   // category_id?: number;
@@ -90,6 +90,7 @@ interface ProductSchema {
   // productEditFormOrigin?: boolean;
   shippingAvailable?: boolean;
   productValuesNumber?: number;
+  shippingFee?: number;
 }
 
 interface ProductDocument extends Document, ProductSchema {}
@@ -171,6 +172,7 @@ const options = {
   shippingIncludedChoiceIndex: { type: Number, default: -1 },
   country_code: { type: String, default: "SA" },
   // productEditFormOrigin: { type: Boolean, default: false },
+  shippingFee: { type: Number, default: 0 },
 };
 
 const schema = new Schema<ProductSchema>(options, {
@@ -189,8 +191,6 @@ schema.pre("save", function (next) {
     }
     let count = 1;
     if (Array.isArray(options) && options.length > 0) {
-   
-   
       options?.forEach((option: any) => {
         count *= option.values.length;
       });
@@ -198,6 +198,31 @@ schema.pre("save", function (next) {
         this.productValuesNumber = count;
       } else {
         this.productValuesNumber = 0;
+      }
+    }
+  }
+  if (this.isModified("shipping")) {
+    let [shipping, included, shipIndex] = [
+      this.shipping,
+      this.shippingIncludedChoice,
+      this.shippingIncludedChoiceIndex,
+    ];
+
+    if (!included) {
+      this.shippingFee = 0;
+    } else if (
+      typeof shipIndex == "number" &&
+      shipIndex >= 0 &&
+      Array.isArray(shipping) &&
+      shipping?.length > 0
+    ) {
+      let fee: any = shipping?.[shipIndex]?.freight?.cent || 0;
+      if (fee !== 0) {
+        fee /= 100;
+      }
+
+      if (fee !== undefined && typeof fee == "number" && fee !== 0) {
+        this.shippingFee = fee;
       }
     }
   }

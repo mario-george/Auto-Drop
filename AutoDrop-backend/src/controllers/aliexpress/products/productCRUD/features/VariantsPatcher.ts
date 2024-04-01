@@ -134,8 +134,9 @@ export default async function VariantsPatcher({
 
     if (
       //@ts-ignore
-      shipping?.length != 0 &&
-      shippingChoice == "shippingIncluded"
+  /*     shipping?.length != 0 &&
+      shippingChoice == "shippingIncluded" */
+      product.shippingIncludedChoice
     ) {
       let shippingIncludedChoiceIndex = 0;
       if (product?.shippingIncludedChoice) {
