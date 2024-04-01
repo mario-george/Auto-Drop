@@ -142,6 +142,8 @@ export default function ProductEditForm(props: ProductEditFormProps) {
     withText,
     valueText,
   } = props;
+  let sale_price = Number(product?.variantsArr?.[0]?.offer_sale_price)
+let sku_price = Number(product?.variantsArr?.[0]?.sku_price)
   const errorButtonRefShipping: React.RefObject<HTMLButtonElement> =
     useRef(null);
   const toast = useToast();
@@ -186,7 +188,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
   formRefs.commission = useRef<HTMLInputElement>(null);
 
   const [discountPrice, setDiscountPrice] = useState(
-    product?.target_original_price
+    sku_price
   );
   const [categoriesList, setCategoriesList] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
@@ -310,7 +312,7 @@ export default function ProductEditForm(props: ProductEditFormProps) {
       }
 
       if (product?.discountPrice == 0) {
-        setDiscountPrice(product?.target_original_price);
+        setDiscountPrice(sku_price);
       } else {
         setDiscountPrice(product?.discountPrice);
       }
@@ -414,11 +416,11 @@ return {...variant,relativeOptions}
   );
 
   const [totalProfit, setTotalProfit] = useState(
-    (product?.vendor_commission || 0) * product?.target_sale_price
+    (product?.vendor_commission || 0) * sale_price
   );
   const [finalPrice, setFinalPrice] = useState(
-    (product?.vendor_commission || 0) * product?.target_sale_price +
-      product?.target_sale_price
+    (product?.vendor_commission || 0) * sale_price +
+      sale_price
   );
   useEffect(() => {
     const fetchCategories = async () => {
@@ -483,16 +485,16 @@ return {...variant,relativeOptions}
     if (profitChoosenType == "percentage" || profitChoosenType == percentage) {
       setFinalPrice((finalPrice: any) => {
         return (
-          (commissionVal / 100) * product?.target_sale_price +
-          product?.target_sale_price
+          (commissionVal / 100) * sale_price +
+          sale_price
         );
       });
       setTotalProfit((prevTotalProfit: any) => {
-        return (commissionVal / 100) * product?.target_sale_price;
+        return (commissionVal / 100) * sale_price;
       });
     } else {
       setFinalPrice((finalPrice: any) => {
-        return commissionVal + product?.target_sale_price;
+        return commissionVal + sale_price;
       });
       setTotalProfit((prevTotalProfit: any) => {
         return commissionVal;
@@ -660,7 +662,7 @@ return {...variant,relativeOptions}
     currentPiece,
     availableQuantity,
     productQuantity: product?.quantity,
-    tagetSalePrice: product?.target_sale_price,
+    tagetSalePrice: sale_price,
     inputClasses,
     shippingIncluded,
     withoutShipping,
@@ -880,7 +882,7 @@ return {...variant,relativeOptions}
                   <span className="tab:col-span-2">{originalPrice}</span>
                   <Input
                     className={`shadow-sm text-sm md:text-base bg-[#edf5f9] ${inputClasses} `}
-                    value={CurrencyFormatter(product?.target_sale_price)}
+                    value={CurrencyFormatter(sale_price)}
                   />{" "}
                   <RadioGroup
                     // defaultValue="shippingIncluded"
