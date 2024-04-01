@@ -224,7 +224,7 @@ export default class WebHookEvents {
         },
       })
         .select(
-          "name salla_product_id price main_price vendor_commission vendor_price merchant sku options variantsArr"
+          "name salla_product_id price main_price vendor_commission vendor_price merchant sku options variantsArr shipping shippingIncludedChoice shippingFee"
         )
         .exec();
 

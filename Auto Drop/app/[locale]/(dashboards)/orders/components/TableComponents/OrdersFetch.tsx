@@ -6,24 +6,23 @@ import { setKeyValue } from "@/store/productsSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import useLoaderProducts from "@/components/loader/useLoaderProducts";
-type Orders = string|any[]
+type Orders = string | any[];
 export default function OrdersFetch(props: any) {
   // const { LoaderComponent } = useLoaderProducts();
   // let {orders} = props
   const [myOrders, setMyOrders] = useState<Orders>([]);
-  let dateExtractor=(dateStr:string)=>{
+  let dateExtractor = (dateStr: string) => {
     const date = new Date(dateStr);
 
-
-    const options: Intl.DateTimeFormatOptions = { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     };
-    const formattedDate = date.toLocaleString('en-US', options);
+    const formattedDate = date.toLocaleString("en-US", options);
 
-const day = date.getDate();
-/* let suffix = 'th';
+    const day = date.getDate();
+    /* let suffix = 'th';
 if (day % 10 === 1 && day !== 11) {
   suffix = 'st';
 } else if (day % 10 === 2 && day !== 12) {
@@ -32,9 +31,9 @@ if (day % 10 === 1 && day !== 11) {
   suffix = 'rd';
 }
  */
-// const formattedDateWithSuffix = formattedDate.replace(/\d+$/, match => match +suffix);
-return formattedDate
-  }
+    // const formattedDateWithSuffix = formattedDate.replace(/\d+$/, match => match +suffix);
+    return formattedDate;
+  };
   useEffect(() => {
     const fetchOrders = async () => {
       const res = await axiosInstance.get("/orders/getOrder");
@@ -43,18 +42,23 @@ return formattedDate
         if (data.data.length == 0) {
           setMyOrders("none");
         } else {
-          let orders = data.data.map((order:any)=>{
-            let{updatedAt,order_id} = order
+          let orders = data.data.map((order: any) => {
+            let { updatedAt, order_id, paid, payment_method,customerName :sender} = order;
+            let orderStatus="Pending";
+            if (paid) {
+              orderStatus="Completed";
+            } else if (payment_method) {
+            }
             return {
               amount: order.amounts.total.amount.toFixed(2),
               date: dateExtractor(updatedAt),
-              orderStatus: order.orderStatus,
+              orderStatus,
               orderNumber: order_id,
               orderItems: order.orderItems,
               orderAddress: order.orderAddress,
+              sender
             };
-          
-          })
+          });
           setMyOrders(orders);
         }
       } else {

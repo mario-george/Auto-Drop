@@ -83,12 +83,15 @@ export default function useProductShipping({
   }));
 
   useEffect(() => {
+    let price = shipping?.[+value]?.freight?.cent / 100;
     if (shippingWithoutOrInclude == "shippingIncluded") {
-      let price = shipping?.[+value]?.freight?.cent / 100;
       if (price == 0 || price) {
         setShippingTotalCost(price);
       }
-    } else {
+    } else if ( shippingWithoutOrInclude == "withoutShipping" ){
+      setShippingTotalCost(-price);
+
+     }else {
       setShippingTotalCost(0);
     }
   }, [shippingWithoutOrInclude, value, shipping]);
