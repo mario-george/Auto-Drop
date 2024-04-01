@@ -11,6 +11,9 @@ export default function OrdersFetch(props: any) {
   // const { LoaderComponent } = useLoaderProducts();
   // let {orders} = props
   const [myOrders, setMyOrders] = useState<Orders>([]);
+  const [noOrders, setNoOrders] = useState<boolean>(false);
+
+
   let dateExtractor = (dateStr: string) => {
     const date = new Date(dateStr);
 
@@ -40,7 +43,8 @@ if (day % 10 === 1 && day !== 11) {
       let { data, status } = res;
       if (status >= 200 && status < 300) {
         if (data.data.length == 0) {
-          setMyOrders("none");
+          setMyOrders([]);
+          setNoOrders(true);
         } else {
           let orders = data.data.map((order: any) => {
             let { updatedAt, order_id, paid, payment_method,customerName :sender} = order;
@@ -152,6 +156,7 @@ console.error(err)
           // setMyProducts={setMyProducts}
           // setLoadProducts={setLoadProducts}
           // allProdCategories={allProdCategories}
+          noOrders={noOrders}
         />
       </div>
     </>

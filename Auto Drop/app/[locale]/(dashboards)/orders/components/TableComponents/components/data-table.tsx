@@ -52,6 +52,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   translationMessages:{[key:string]:string}
   locale: string;
+  noOrders:boolean
 }
 
 export function DataTable<TData, TValue>({
@@ -68,7 +69,7 @@ export function DataTable<TData, TValue>({
   // apply,
   // setLoadProducts,
   // colData,
-  translationMessages,
+  translationMessages,noOrders
   // allProdCategories
 }: DataTableProps<TData, TValue>) {
   // const resetRowSelection = useSelector((state: any) => state.products.resetRowSelection)
@@ -171,7 +172,16 @@ translationMessages
                   ))}
                 </TableRow>
               ))
-            ) : (
+            ) : noOrders ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No Orders Found
+                </TableCell>
+              </TableRow>
+            ) :  (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}

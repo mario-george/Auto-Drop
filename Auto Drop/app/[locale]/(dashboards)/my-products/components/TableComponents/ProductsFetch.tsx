@@ -9,7 +9,8 @@ import useLoaderProducts from "@/components/loader/useLoaderProducts";
 
 export default function ProductsFetch(props: any) {
   const { LoaderComponent } = useLoaderProducts();
-  const [myProducts, setMyProducts] = useState<any[]|string>([]);
+  const [myProducts, setMyProducts] = useState([]);
+  const [noProducts, setNoProducts] = useState<boolean>(false);
   const [allProdCategories, setAllProdCategories] = useState([]);
   const [loadProducts, setLoadProducts] = useState(false);
   const reloadProducts = useSelector(
@@ -36,8 +37,12 @@ export default function ProductsFetch(props: any) {
           }
           if (i == 0) {
             let products = resp.value.data.userProducts;
+          console.log("PRODUCTS", products);
+
             if (products && products.length == 0) {
-              setMyProducts("empty");
+              setMyProducts([]);
+              console.log("empty")
+              setNoProducts(true)
             } else {
               setMyProducts(
                 products.map((product: any) => {
@@ -114,6 +119,7 @@ export default function ProductsFetch(props: any) {
           setMyProducts={setMyProducts}
           setLoadProducts={setLoadProducts}
           allProdCategories={allProdCategories}
+          noProducts={noProducts}
         />
       </div>
     </>
