@@ -323,7 +323,7 @@ export async function GetDetails({
   first_level_category_name,
   second_level_category_name,
   target_sale_price,
-  target_original_price,
+  target_original_price,lang
 }: {
   product_id: string;
   tokenInfo?: any;
@@ -331,6 +331,7 @@ export async function GetDetails({
   second_level_category_name?: string;
   target_sale_price?: string;
   target_original_price?: string;
+  lang:"AR"|"EN"
 }): Promise<any> {
   return new Promise((resolve, reject) => {
     MakeRequest(
@@ -338,7 +339,7 @@ export async function GetDetails({
         ship_to_country: "SA",
         product_id: product_id,
         target_currency: "SAR",
-        target_language: "AR",
+        target_language: lang,
         method: "aliexpress.ds.product.get",
         sign_method: "sha256",
       },
@@ -564,7 +565,7 @@ export async function GetProductDetailsTest(
       first_level_category_name,
       second_level_category_name,
       target_sale_price,
-      target_original_price,
+      target_original_price,lang
     } = req.body;
     let user: any = await TokenUserExtractor(req);
     if (!user) return res.status(401).json({ message: "token is invalid" });
@@ -583,7 +584,7 @@ export async function GetProductDetailsTest(
       first_level_category_name,
       second_level_category_name,
       target_sale_price,
-      target_original_price,
+      target_original_price,lang
     });
     
     const result:any = await getProductShippingServices(
@@ -640,7 +641,7 @@ console.log("productInfo?.description.slice(0,12",productInfo?.description.slice
       vendor_commission:0,
       main_price,
       merchant: role === "client" ? _id : merchant,
-      sku_id: req.body.sku_id,
+      sku_id: productInfo.sku_id,
       vat: req.body?.vat && true,
       first_level_category_name,
       second_level_category_name,
