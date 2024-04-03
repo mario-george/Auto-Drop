@@ -29,7 +29,13 @@ interface OrderDetailsShippingProps {
   locale: string;
   withInvoice :string
 }
-
+export const sectionHeader = (title: string) => {
+  return (
+    <div className="text-xs dark:text-lg dark:text-white text-[#2e464f]">
+      {title}
+    </div>
+  );
+};
 export default function useOrderDetailsShipping({
   shippingText,
   shippingType,
@@ -62,13 +68,7 @@ const [selectedLogoType, setSelectedLogoType] = useState<
     isAr: locale === "ar",
     title: shippingText,
   };
-  const sectionHeader = (title: string) => {
-    return (
-      <div className="text-xs dark:text-lg dark:text-white text-[#2e464f]">
-        {title}
-      </div>
-    );
-  };
+
   let AttachButton = (title: string, handler: () => void) => {
     return (
       <div className="flex items-center space-s-3 bg-[#edf5f9] p-2 rounded-md lap:max-w-[50%]">
