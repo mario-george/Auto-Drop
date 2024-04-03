@@ -56,12 +56,46 @@ export const getNewProductShippingServices = async (
     };
     MakeRequest(data, tokenInfo).then(({ data }) => {
       const error = data.error_response;
-      const result =
+      let result =
         data?.aliexpress_ds_freight_query_response?.result?.delivery_options?.delivery_option_d_t_o;
       console.log("NEW SHIPPING RESULT", result);
       console.log("NEW SHIPPING DATA", data);
+      let modifiedRes = result?.map((shipping: any) => {
+        let {
+          free_shipping,
+          shipping_fee_cent,
+          company: shipping_method,
+          max_delivery_days,
+          min_delivery_days,delivery_date_desc
+        } = shipping;
+        let cent;
+        let days;
+        if (max_delivery_days == min_delivery_days) {
+          days = `${max_delivery_days} days`;
+        } else {
+          days = `${min_delivery_days}-${max_delivery_days} days`;
+        }
+
+        if(delivery_date_desc){
+          days = `${delivery_date_desc} ` + days
+        }
+        if (free_shipping) {
+          cent = 0;
+        } else {
+          cent = Number(shipping_fee_cent) * 100;
+        }
+        return {
+          // ...shipping,
+          freight: {
+            cent,
+          },
+
+          estimated_delivery_time: days,
+          shipping_method,
+        };
+      });
       if (error) return reject(new AppError("UnprocessableEntity", 400));
-      return resolve(result);
+      return resolve(modifiedRes);
     });
   });
 };
