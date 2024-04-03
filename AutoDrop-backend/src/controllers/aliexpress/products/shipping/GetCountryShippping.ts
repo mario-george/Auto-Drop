@@ -3,6 +3,7 @@ import TokenUserExtractor from "../../../../utils/handlers/tokenUserExtractor";
 import AliExpressToken from "../../../../models/AliExpressTokenModel";
 import { GetSKUId } from "./GetProductsShipping";
 import { getProductShippingServices } from "../../features/shipping";
+import { getNewProductShippingServices } from '../../features/shipping/index';
 
 export async function GetProductShippingDetailsByID(
     req: Request,
@@ -60,7 +61,7 @@ export async function GetShippingProductIdCountryCode(
       aliExpressAccessToken: aliexpressToken?.accessToken,
       aliExpressRefreshToken: aliexpressToken?.refreshToken,
     };
-
+   
     /*     if (userType === "vendor")
         await CheckSubscription(user_id, "products_limit"); */
 
@@ -75,7 +76,26 @@ export async function GetShippingProductIdCountryCode(
       },
       tokenInfo
     );
+    let queryDeliveryReq = {
+      quantity: 1,
+      shipToCountry: "SA",
+      productId: product_id,
+      language: "en_US",
+      source: "CN",
+      locale: "en_US",
+      selectedSkuId: skuid,
+      currency: "SAR",
+    };
+    try{
+
+      let NewShippingResult = await getNewProductShippingServices(
+        queryDeliveryReq,
+        tokenInfo
+      );
+    }catch(err:any){
+      console.error(err)
     
+    }
     // console.log("result",result);
     if (!result) {
       result = [];
