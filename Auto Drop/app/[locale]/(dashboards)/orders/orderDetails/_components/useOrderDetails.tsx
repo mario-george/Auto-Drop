@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axiosInstance from "../../../_components/shared/AxiosInstance";
-import OrderedProduct, { OrderDetailsHeader } from "./ui/OrderedProduct";
+import OrderedProduct, { OrderDetailsHeader, SendOrderButton } from "./ui/OrderedProduct";
 
 interface OrderDetailsProps {
   orderId: string | number;
@@ -21,8 +21,9 @@ export default function useOrderDetails({
     displayedPrice: displayedPriceText,
     originalPrice: originalPriceText,
     sku: skuText,
-    quantity: quantityText,orderNumber:orderNumberText
+    quantity: quantityText,orderNumber:orderNumberText,sendOrder:sendOrderText
   } = translationMessages;
+  let isAr = locale == "ar";
   let ProductDetails = <></>;
   useEffect(() => {
     const orderFetchHandler = async () => {
@@ -38,6 +39,9 @@ export default function useOrderDetails({
           console.log("Error");
           setOrderData("fail");
         }
+      }else{
+        setOrderData("fail");
+
       }
     };
     orderFetchHandler();
@@ -50,7 +54,7 @@ export default function useOrderDetails({
     ProductDetails = (
       <>
       <OrderDetailsHeader  {...OrderDetailsHeaderProps}/>
-        <div className="container p-3">
+        <div className="p-3">
           {items.map((item: any) => {
             let {
               sku,
@@ -87,8 +91,13 @@ export default function useOrderDetails({
               quantityText,
               quantity,options
             };
-            return <OrderedProduct {...OrderedProductProps} />;
+            return <>
+            
+            <OrderedProduct {...OrderedProductProps} />
+            </>
+            
           })}
+          <SendOrderButton isAr={isAr} sendOrderText={sendOrderText}/>
         </div>
       </>
     );
