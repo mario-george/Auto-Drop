@@ -134,7 +134,7 @@ export default function ProductsListAR({
                           <div
                             className={` text-[#253439] text-xs dark:text-white`}
                           >
-                            {product.product_title.substring(0, 25)}
+                            {product?.product_title?.substring(0, 25)}
                             ...
                           </div>
                           <div>
