@@ -6,6 +6,7 @@ import useState from "react";
 import useOrderDetails from "./useOrderDetails";
 import useOrderRenderer from "./useOrderRenderer";
 import useOrderDetailsShipping from "./ui/useOrderDetailsShipping";
+import useOrderDetailsNotes from "./ui/useOrderDetailsNotes";
 interface OrderFetchProps {
   translationMessages: { [key: string]: string };
   locale:string
@@ -14,11 +15,8 @@ export default function OrderFetch({ translationMessages,locale }: OrderFetchPro
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId") as string;
   const { orderData ,ProductDetails} = useOrderDetails({ orderId ,translationMessages,locale});
-  const { OrderDataComponent } = useOrderRenderer({
-    orderData,
-    translationMessages,
-  });
-let {   shipping:shippingText,
+
+  let {   shipping:shippingText,
   shippingType,
   withLogo,
   attachALogo,
@@ -29,8 +27,12 @@ let {   shipping:shippingText,
   placeALogo,
   supplierShipping,
   estimatedDuration,
-  shippingCompanyName, price,withInvoice} = translationMessages
-let OrderShippingProps = {
+  shippingCompanyName, price,withInvoice,comments:commentsText} = translationMessages
+  const { OrderDataComponent } = useOrderRenderer({
+    orderData,
+    translationMessages,locale,commentsText
+  });
+  let OrderShippingProps = {
   shippingText,
   shippingType,
   withLogo,
@@ -48,10 +50,14 @@ let OrderShippingProps = {
   const {OrderShipping} = useOrderDetailsShipping({...OrderShippingProps}) 
   return (
     <>
-      OrderFetch
+
+    <div className="pageContainer">
+      
+      
       {ProductDetails}
       {OrderShipping}
       {OrderDataComponent}
+    </div>
     </>
   );
 }
