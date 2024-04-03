@@ -57,7 +57,7 @@ export const getNewProductShippingServices = async (
     MakeRequest(data, tokenInfo).then(({ data }) => {
       const error = data.error_response;
       const result =
-        data?.aliexpress_ds_freight_query_response?.result?.delivery_options;
+        data?.aliexpress_ds_freight_query_response?.result?.delivery_options?.delivery_option_d_t_o;
       console.log("NEW SHIPPING RESULT", result);
       console.log("NEW SHIPPING DATA", data);
       if (error) return reject(new AppError("UnprocessableEntity", 400));
