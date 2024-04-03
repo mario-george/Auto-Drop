@@ -161,3 +161,10 @@ wallet page sttyles
 .boldHeader{
   @apply text-xs tab:text-sm lap:text-lg font-bold
 }
+.pageContainer {
+  @apply flex flex-col tab:flex-1 text-xs tab:text-lg max-w-[245px] rounded-lg mm:max-w-[290px]  ml:max-w-[335px]   tab:max-w-[680px] lap:max-w-none    md:space-y-8 md:p-8 max-h-[100%] lap:justify-center  k4:max-w-[2200px];
+}
+
+.twoPartSection{
+  @apply flex flex-col space-y-3 tab:space-y-0 tab:flex-row tab:justify-between
+}
