@@ -26,12 +26,17 @@ address:string;
 addressText:string;
 postalCode:string;
 postalCodeText:string;
+region:string
+regionText:string
 editCustomerHandler:()=>void
 editText:string
 deliveryDetails:string
 }
 
-
+interface GridItem{
+    title:string
+    value:string
+}
 export default function useOrderCustomer(props:OrderCustomerProps){
 
 let {firstNameText,
@@ -53,8 +58,21 @@ let {firstNameText,
     postalCode,
     postalCodeText,
     editCustomerHandler,
-    editText,deliveryDetails}=props
+    editText,deliveryDetails,region,regionText
 
+}=props
+let gridItems= [{title:firstNameText,value:firstName},
+    {title:secondNameText,value:secondName},
+    {title:emailText,value:email},
+    {title:phoneText,value:phone},
+    {title:countryText,value:country},
+    {title:regionText,value:region},
+    {title:cityText,value:city},
+    {title:postalCodeText,value:postalCode},
+    {title:districtText,value:district},
+    {title:addressText,value:address},
+
+]
 let EditButton = <>
 <Button onClick={editCustomerHandler} className="flex space-s-3 !bg-[#B29E84] text-white">
     <p>
@@ -70,7 +88,20 @@ let OrderCustomer= <>
 <HeaderTwoPartSection isAr={locale=="ar"} title={deliveryDetails} secondElement={EditButton}/>
 <RoundedCardWrapper>
     <div className="grid grid-cols-1 tab:grid-cols-2 gap-1 tab:gap-3">
+    {gridItems.map((gridEl:GridItem)=>{
+        let {title,value} = gridEl
+return <>
+<div className="flex space-s-3">
+    <p className="font-bold text-xs tab:text-sm">
+{title}
+    </p>
+    <p className="text-xs tab:text-sm">
+{value}
+    </p>
+    </div> 
 
+</>
+})}
     </div>
 </RoundedCardWrapper>
 </>
