@@ -3,7 +3,7 @@ import AppError from "../../utils/appError";
 import MakeRequest from "./features/Request";
 import TokenUserExtractor from "../../utils/handlers/tokenUserExtractor";
 import AliExpressToken from "../../models/AliExpressTokenModel";
-import { getProductShippingServices } from "./features/shipping";
+import { getNewProductShippingServices, getProductShippingServices } from "./features/shipping";
 import { basename, extname } from "path";
 import { pick, map, uniqBy, filter, uniq } from "lodash";
 import slugify from "slugify";
@@ -586,19 +586,56 @@ export async function GetProductDetailsTest(
       target_sale_price,
       target_original_price,lang
     });
+    let result:any
     
-    const result:any = await getProductShippingServices(
-      {
-        sku_id: productInfo.sku_id,
-        country_code: "SA",
-        product_id,
-        product_num: "1",
-        price_currency: "SAR",
-      },
-      tokenInfo
-    );
+    try{
+      
+      result = await getProductShippingServices(
+        {
+          sku_id: productInfo.sku_id,
+          country_code: "SA",
+          product_id,
+          product_num: "1",
+          price_currency: "SAR",
+        },
+        tokenInfo
+      );
+    }catch(err:any){
+      console.error(err)
+    }
 
-    
+    //NEW SHIpping
+    let queryDeliveryReq = {
+      quantity: 1,
+      shipToCountry: "SA",
+      productId: +product_id,
+      language: "en_US",
+      // source: "CN",
+      source: "",
+      locale: "en_US",
+      selectedSkuId: productInfo.sku_id,
+      currency: "SAR",
+    };
+    let newShipping = false;
+    let NewShippingResult: any;
+    try {
+      NewShippingResult = await getNewProductShippingServices(
+        queryDeliveryReq,
+        tokenInfo
+      );
+      if (NewShippingResult?.length > 0) {
+        newShipping = true;
+      }
+    } catch (err: any) {
+      console.error(err);
+    }
+
+    if(newShipping){
+      console.log("newShipping is returned")
+
+result = NewShippingResult
+    }
+    //NEW SHIPPING
     // 
 
     let {
