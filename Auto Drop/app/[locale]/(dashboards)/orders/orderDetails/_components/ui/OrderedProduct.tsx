@@ -5,6 +5,7 @@ import CurrencyFormatter from "../../../../products/_components/CurrencyFormatte
 import { Button } from "@chakra-ui/react";
 import HeaderText from "../../../../wallet/_components/HeaderText";
 import VectorSVG from "../images/VectorSVG";
+import SendOrderSVG from "../images/SendOrderSVG";
 
 interface OrderedProductProps {
   image: string;
@@ -39,6 +40,7 @@ export default function OrderedProduct(props: OrderedProductProps) {
     quantity,
     options,
   } = props;
+  
   prodName = prodName.slice(0, 50).split(" ");
 
   prodName = prodName.slice(0, prodName.length - 1).join(" ");
@@ -55,7 +57,7 @@ export default function OrderedProduct(props: OrderedProductProps) {
             className="rounded-xl"
           />
           <div className="flex flex-col space-y-3 w-full ">
-            <div className="flex justify-between">
+            <div className="twoPartSection">
               <p>{prodName}</p>
 
               <div className="flex space-s-2">
@@ -64,7 +66,7 @@ export default function OrderedProduct(props: OrderedProductProps) {
               </div>
             </div>
             <Separator />
-            <div className="flex justify-between">
+            <div className="twoPartSection">
               <div className="flex space-s-2">
                 <p>{originalPriceText}:</p>
                 <p>{CurrencyFormatter(originalPrice)}</p>
@@ -76,7 +78,7 @@ export default function OrderedProduct(props: OrderedProductProps) {
               </div>
             </div>
             <Separator />
-            <div className="flex justify-between">
+            <div className="twoPartSection">
               <div className="flex space-s-5">
                 {options.map(
                   (option: { optionName: string; valueName: string }) => {
@@ -107,13 +109,13 @@ export function OrderDetailsHeader(props: OrderDetailsHeaderProps) {
   let isAr = locale === "ar";
   return (
     <>
-      <div className="flex flex-col mm:flex-row space-y-2 mm:space-y-0 mm:justify-between items-center">
+      <div className="flex flex-col tab:flex-row space-y-2 tab:space-y-0 tab:justify-between items-center !text-xs tab:!text-sm">
         <HeaderText title={orderDetails} isAr={isAr} />
-        <div className="flex space-s-6">
+        <div className="flex space-s-6 ">
           <div className="bg-white shadow rounded-xl px-4 py-2">
             <VectorSVG />
           </div>
-          <div className="bg-white shadow rounded-xl flex space-s-4 px-4 py-2">
+          <div className="bg-white shadow rounded-xl flex space-s-4 px-4 py-2 items-center">
             <div>{orderNumberText}</div>
             <div>#{order_id}</div>
           </div>
@@ -123,11 +125,19 @@ export function OrderDetailsHeader(props: OrderDetailsHeaderProps) {
   );
 }
 
-export function SendOrderButton(props: { sendOrderText: string }) {
-  let { sendOrderText } = props;
+export function SendOrderButton(props: { sendOrderText: string,isAr:boolean }) {
+  let { sendOrderText ,isAr} = props;
   return (
-    <div className="my-3">
-      <Button>{sendOrderText}</Button>
+    <div className="my-3 flex justify-center">
+      <Button className="flex space-s-2 !bg-[#253439] !text-white">
+       <p>
+
+        {sendOrderText}
+       </p>
+       <p>
+       <SendOrderSVG isAr={isAr || false}/>
+        </p> 
+        </Button>
     </div>
   );
 }
