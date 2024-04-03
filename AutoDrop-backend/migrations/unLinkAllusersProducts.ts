@@ -1,3 +1,6 @@
+// npx ts-node migrantions/file.ts
+// to run ts node without compiling to js or (tsc)
+
 import { Product } from "../src/models/product.model";
 import axios from "axios";
 import { createAccessToken } from "../src/utils/authHelperFunction";
