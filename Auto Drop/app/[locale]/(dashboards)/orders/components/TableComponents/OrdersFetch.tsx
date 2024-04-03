@@ -48,7 +48,8 @@ if (day % 10 === 1 && day !== 11) {
           setNoOrders(true);
         } else {
           let orders = data.data.map((order: any) => {
-            let { updatedAt, order_id, paid, payment_method,customerName :sender} = order;
+            let { updatedAt, order_id, paid, payment_method,customerName :sender,customer} = order;
+            let senderName = `${ customer.first_name} ${customer.last_name}`
             let orderStatus="Pending";
             if (paid) {
               orderStatus="Completed";
@@ -56,13 +57,14 @@ if (day % 10 === 1 && day !== 11) {
             }
             return {
               ...order,
-              amount: order.amounts.total.amount.toFixed(2),
+              amount: order.totalPrice.toFixed(2),
               date: dateExtractor(updatedAt),
               orderStatus,
               orderNumber: order_id,
               orderItems: order.orderItems,
               orderAddress: order.orderAddress,
-              sender
+              sender:senderName
+              // sender
             };
           });
           setMyOrders(orders);
