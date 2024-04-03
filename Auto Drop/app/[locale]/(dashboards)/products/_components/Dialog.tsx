@@ -53,7 +53,7 @@ export default function SubmitProducts({
       first_level_category_name,
       second_level_category_name,
       target_sale_price,
-      target_original_price,
+      target_original_price,lang
     });
   });
     try {
