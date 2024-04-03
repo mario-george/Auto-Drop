@@ -3,7 +3,7 @@ import TokenUserExtractor from "../../../../utils/handlers/tokenUserExtractor";
 import AliExpressToken from "../../../../models/AliExpressTokenModel";
 import MakeRequest from "../../features/Request";
 import AppError from "../../../../utils/appError";
-import { getProductShippingServices } from "../../features/shipping";
+import { getNewProductShippingServices, getProductShippingServices } from "../../features/shipping";
 export async function GetSKUId({
   product_id,
   tokenInfo,
@@ -116,6 +116,7 @@ export async function GetProductShippingDetailsByID(
         await CheckSubscription(user_id, "products_limit"); */
 
     const skuid = await GetSKUId({ product_id, tokenInfo });
+   
     let result = await getProductShippingServices(
       {
         sku_id: skuid,
@@ -126,7 +127,26 @@ export async function GetProductShippingDetailsByID(
       },
       tokenInfo
     );
+    let queryDeliveryReq = {
+      quantity: 1,
+      shipToCountry: "SA",
+      productId: product_id,
+      language: "en_US",
+      source: "CN",
+      locale: "en_US",
+      selectedSkuId: skuid,
+      currency: "SAR",
+    };
+    try{
+
+      let NewShippingResult = await getNewProductShippingServices(
+        queryDeliveryReq,
+        tokenInfo
+      );
+    }catch(err:any){
+      console.error(err)
     
+    }
     // console.log("result",result);
     if (!result) {
       result = [];
