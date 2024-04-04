@@ -46,10 +46,9 @@ export default function useOrderDetailsPayment({
   ];
   let OrderPayment = (
     <>
-      {sectionHeader(paymentProcess)}
       <HeaderText isAr={locale == "ar"} title={paymentProcess} />
       <RoundedCardWrapper>
-        <div className="flex flex-col my-3 gap-y-3">
+        <div className="flex flex-col my-3 gap-y-3 px-3">
           <div className="flex justify-between">
             <p>{total}</p>
             <p>{CurrencyFormatter(totalPrice)}</p>
