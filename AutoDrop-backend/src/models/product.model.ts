@@ -57,7 +57,7 @@ interface ProductSchema {
   vendor_price: number;
   quantity: number;
   sku: string;
-  images: SchemaDefinitionProperty<ImageType[] | null>;
+  images: SchemaDefinitionProperty<ImageType[] | null> | ImageType[];
   options: SchemaDefinitionProperty<OptionType[] | null>;
   metadata_title: string;
   metadata_description: string;
@@ -91,6 +91,7 @@ interface ProductSchema {
   shippingAvailable?: boolean;
   productValuesNumber?: number;
   shippingFee?: number;
+  defaultImage?:string
 }
 
 interface ProductDocument extends Document, ProductSchema {}
@@ -173,6 +174,7 @@ const options = {
   country_code: { type: String, default: "SA" },
   // productEditFormOrigin: { type: Boolean, default: false },
   shippingFee: { type: Number, default: 0 },
+  defaultImage: { type:String, default: null ,select:false},
 };
 
 const schema = new Schema<ProductSchema>(options, {
@@ -227,6 +229,15 @@ schema.pre("save", function (next) {
     }
   } else {
     this.shippingFee = 0;
+  }
+
+  if(this.isModified("images")){
+if(Array.isArray(this.images) && this.images.length > 0){
+
+  const image = this.images[0] as ImageType;
+  this.defaultImage = image.original;
+
+}
   }
   next();
 });
