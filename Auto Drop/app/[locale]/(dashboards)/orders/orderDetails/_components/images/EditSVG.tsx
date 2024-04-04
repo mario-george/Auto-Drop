@@ -8,6 +8,7 @@ function EditSVG() {
       height="43"
       fill="none"
       viewBox="0 0 43 43"
+      className="w-[24px] h-[24px]"
     >
       <path
         stroke="#fff"
