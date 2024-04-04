@@ -1,4 +1,4 @@
 .shippingSection{
-    @apply flex flex-col space-y-3 my-3 max-w-[40%]
+    @apply flex flex-col space-y-3 my-3 tab:max-w-[40%]
 
 }
