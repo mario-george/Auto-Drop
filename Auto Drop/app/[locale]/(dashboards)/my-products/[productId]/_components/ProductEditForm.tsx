@@ -588,7 +588,7 @@ return {...variant,relativeOptions}
     setOptionChoosenValues,
     optionChoosenValues,
     setProductOptions,
-    setVariantsDetails,
+    setVariantsDetails,setProductImages
   };
   const { ProductOptionsComponent } = useProductOptions({
     ...ProductOptionsProps,
