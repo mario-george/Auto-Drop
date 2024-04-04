@@ -8,9 +8,9 @@ import EditSVG from '../images/EditSVG';
 import RoundedCardWrapper from '@/app/[locale]/(dashboards)/_components/shared/ui/RoundedCardWrapper';
 interface OrderCustomerProps{
 firstNameText:string;
-secondNameText:string;
+lastNameText:string;
 firstName:string;
-secondName:string;
+lastName:string;
 emailText:string;
 email:string;
 locale:string
@@ -34,15 +34,15 @@ deliveryDetails:string
 }
 
 interface GridItem{
-    title:string
-    value:string
+    title:string|undefined
+    value:string|undefined
 }
-export default function useOrderCustomer(props:OrderCustomerProps){
+export default function useOrderCustomer(props:Partial<OrderCustomerProps>){
 
 let {firstNameText,
-    secondNameText,
+    lastNameText,
     firstName,
-    secondName,
+    lastName,
     emailText,
     email,
     locale,    phoneText,
@@ -62,7 +62,7 @@ let {firstNameText,
 
 }=props
 let gridItems= [{title:firstNameText,value:firstName},
-    {title:secondNameText,value:secondName},
+    {title:lastNameText,value:lastName},
     {title:emailText,value:email},
     {title:phoneText,value:phone},
     {title:countryText,value:country},
@@ -74,7 +74,7 @@ let gridItems= [{title:firstNameText,value:firstName},
 
 ]
 let EditButton = <>
-<Button onClick={editCustomerHandler} className="flex space-s-3 !bg-[#B29E84] text-white">
+<Button onClick={editCustomerHandler} className="flex space-s-3 !bg-[#B29E84] !text-white">
     <p>
     {editText}
 
@@ -84,14 +84,20 @@ let EditButton = <>
     </p>
     </Button>
 </>
+
+let skyIndex = [2,3,6,7]
 let OrderCustomer= <>
-<HeaderTwoPartSection isAr={locale=="ar"} title={deliveryDetails} secondElement={EditButton}/>
+<HeaderTwoPartSection isAr={locale=="ar"} title={deliveryDetails as string} secondElement={EditButton}/>
 <RoundedCardWrapper>
-    <div className="grid grid-cols-1 tab:grid-cols-2 gap-1 tab:gap-3">
-    {gridItems.map((gridEl:GridItem)=>{
+    <div className="grid grid-cols-1 tab:grid-cols-2 gap-1 tab:gap-3 py-3">
+    {gridItems.map((gridEl:GridItem,index:number)=>{
         let {title,value} = gridEl
+        if(!title) title=''
+        if(!value) value=''
+
+console.log(skyIndex.includes(2))
 return <>
-<div className="flex space-s-3">
+<div className={`flex space-s-3 px-3 ${skyIndex.includes(index) && `  bg-[#F4F6F7]`}`}>
     <p className="font-bold text-xs tab:text-sm">
 {title}
     </p>
