@@ -45,7 +45,7 @@ let defaultImageIndex = 0;
           return { ...image, default: false };
         })
         .filter((image: ProductImage, index: number) => {
-          return image.original !== firstImageInitial.original && image.alt !== firstImageInitial.alt;
+          return image.original !== firstImageInitial.original ;
         });
 
         firstImageInitial.default = true;
