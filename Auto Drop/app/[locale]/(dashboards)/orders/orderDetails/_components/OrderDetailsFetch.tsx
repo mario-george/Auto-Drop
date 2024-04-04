@@ -5,7 +5,6 @@ import axiosInstance from "@/app/[locale]/(dashboards)/_components/shared/AxiosI
 import useState from "react";
 import useOrderDetails from "./useOrderDetails";
 import useOrderRenderer from "./useOrderRenderer";
-import useOrderDetailsShipping from "./ui/useOrderDetailsShipping";
 import useOrderDetailsNotes from "./ui/useOrderDetailsNotes";
 interface OrderFetchProps {
   translationMessages: { [key: string]: string };
@@ -30,24 +29,9 @@ export default function OrderFetch({ translationMessages,locale }: OrderFetchPro
   shippingCompanyName, price,withInvoice,comments:commentsText} = translationMessages
   const { OrderDataComponent } = useOrderRenderer({
     orderData,
-    translationMessages,locale,commentsText
+    translationMessages,locale
   });
-  let OrderShippingProps = {
-  shippingText,
-  shippingType,
-  withLogo,
-  attachALogo,
-  shippedWPack,
-  packagingBag,
-  cartoon,
-  attachAnInvoice,
-  placeALogo,
-  supplierShipping,
-  estimatedDuration,
-  shippingCompanyName,
-  locale,price,withInvoice
-}
-  const {OrderShipping} = useOrderDetailsShipping({...OrderShippingProps}) 
+
   return (
     <>
 
@@ -55,7 +39,6 @@ export default function OrderFetch({ translationMessages,locale }: OrderFetchPro
       
       
       {ProductDetails}
-      {OrderShipping}
       {OrderDataComponent}
     </div>
     </>

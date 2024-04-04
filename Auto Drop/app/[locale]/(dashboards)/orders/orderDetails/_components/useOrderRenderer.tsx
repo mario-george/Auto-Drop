@@ -2,31 +2,133 @@ import React, { useEffect, useState } from "react";
 import { Spinner } from "@chakra-ui/react";
 import useOrderDetailsNotes from "./ui/useOrderDetailsNotes";
 import useOrderDetailsPayment from "./ui/useOrderDetailsPayment";
+import useOrderCustomer from "./ui/useOrderCustomer";
+import useOrderDetailsShipping from "./ui/useOrderDetailsShipping";
 
 export default function useOrderRenderer({
   orderData,
-  translationMessages,locale,commentsText
+  translationMessages,
+  locale,
 }: {
   orderData: any;
   translationMessages: { [key: string]: string };
-  locale:string
-  commentsText:string
+  locale: string;
 }) {
-  const [successLoadedOrder,setSuccessLoadedOrder] = useState(false)
-  let merchantStore = orderData?.urls?.customer ?? ""
-  let { paymentProcess,cod,total,paymentFromWallet,payNow, } = translationMessages;
-  console.log("orderData",orderData)
-  const {OrderNotes} = useOrderDetailsNotes({commentsText,merchantStore:orderData?.customer?.urls?.customer ?? "",locale})
-  let OrderDetailsPaymentProps = {
-    paymentProcess,cod,total,paymentFromWallet,payNow, 
-  }
-   const {OrderPayment} = useOrderDetailsPayment({...OrderDetailsPaymentProps,locale,totalPrice:orderData?.totalPrice||0})
- useEffect(()=>{
-  if(!successLoadedOrder && typeof orderData == "object"){
+  const [successLoadedOrder, setSuccessLoadedOrder] = useState(false);
+  let merchantStore = orderData?.urls?.customer ?? "";
+  let {
+    paymentProcess,
+    cod,
+    total,
+    paymentFromWallet,
+    payNow,
+    firstName: firstNameText,
+    secondName: lastNameText,
 
-    setSuccessLoadedOrder(true)
+    email: emailText,
+    city: cityText,
+    country: countryText,
+    phone: phoneText,
+    district: districtText,
+    street: addressText,
+    postalCode: postalCodeText,
+    edit: editText,
+    region: regionText,
+    deliveryDetails,
+
+
+    shipping:shippingText,
+  shippingType,
+  withLogo,
+  attachALogo,
+  shippedWPack,
+  packagingBag,
+  cartoon,
+  attachAnInvoice,
+  placeALogo,
+  supplierShipping,
+  estimatedDuration,
+  shippingCompanyName, price,withInvoice,comments:commentsText
+  } = translationMessages;
+  console.log("orderData", orderData);
+  const { OrderNotes } = useOrderDetailsNotes({
+    commentsText,
+    merchantStore: orderData?.customer?.urls?.customer ?? "",
+    locale,
+  });
+  let OrderDetailsPaymentProps = {
+    paymentProcess,
+    cod,
+    total,
+    paymentFromWallet,
+    payNow,
+  };
+
+  let { customer } = orderData ?? {};
+  let {
+    first_name: firstName,
+    last_name: lastName,
+    mobile,
+    mobile_code,
+    country,
+    email,
+  } = customer ?? {};
+  // let phone = mobile_code ?? "" + " " + mobile?.toString() ?? "";
+
+  let phone = `${mobile_code ?? ''} ${mobile ?? ''}`
+  const { OrderPayment } = useOrderDetailsPayment({
+    ...OrderDetailsPaymentProps,
+    locale,
+    totalPrice: orderData?.totalPrice || 0,
+  });
+  let OrderCustomerProps = {
+    firstNameText,
+    lastNameText,
+    firstName,
+    lastName,
+    emailText,
+    email,
+    locale,
+    phoneText,
+    phone,
+    countryText,
+    country,
+    cityText,
+    city: "",
+    districtText,
+    district: "",
+    address: "",
+    addressText,
+    postalCode: "",
+    postalCodeText,
+    editCustomerHandler: () => {},
+    editText,
+    deliveryDetails,
+    region: "",
+    regionText,
+  };
+  const { OrderCustomer } = useOrderCustomer({ ...OrderCustomerProps });
+  let OrderShippingProps = {
+    shippingText,
+    shippingType,
+    withLogo,
+    attachALogo,
+    shippedWPack,
+    packagingBag,
+    cartoon,
+    attachAnInvoice,
+    placeALogo,
+    supplierShipping,
+    estimatedDuration,
+    shippingCompanyName,
+    locale,price,withInvoice
   }
- },[orderData])
+    const {OrderShipping} = useOrderDetailsShipping({...OrderShippingProps}) 
+  useEffect(() => {
+    if (!successLoadedOrder && typeof orderData == "object") {
+      setSuccessLoadedOrder(true);
+    }
+  }, [orderData]);
   let OrderDataComponent = <> </>;
   if (orderData == "fail") {
     OrderDataComponent = <>Order not found</>;
@@ -38,11 +140,16 @@ export default function useOrderRenderer({
       </div>
     );
   } else if (orderData) {
-   
-    OrderDataComponent = <>
-    {OrderNotes}
-    {OrderPayment}</>;
+    OrderDataComponent = (
+      <>
+        {OrderNotes}
+        {OrderCustomer}
+      {OrderShipping}
+
+        {OrderPayment}
+      </>
+    );
   }
 
-  return { OrderDataComponent ,successLoadedOrder};
+  return { OrderDataComponent, successLoadedOrder };
 }
