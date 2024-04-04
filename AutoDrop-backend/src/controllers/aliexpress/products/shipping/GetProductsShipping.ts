@@ -157,3 +157,55 @@ export async function GetProductShippingDetailsByID(
     next(error);
   }
 }
+export async function GetNewShipping(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { product_id } = req.body;
+    let user: any = await TokenUserExtractor(req);
+    if (!user) return res.status(401).json({ message: "token is invalid" });
+    let aliexpressToken = await AliExpressToken.findOne({ userId: user?._id });
+    let tokenInfo = {
+      aliExpressAccessToken: aliexpressToken?.accessToken,
+      aliExpressRefreshToken: aliexpressToken?.refreshToken,
+    };
+
+  let NewShippingResult
+    const skuid = await GetSKUId({ product_id, tokenInfo });
+    let queryDeliveryReq = {
+      quantity: 1,
+      shipToCountry: "SA",
+      productId: product_id,
+      language: "en_US",
+      // source: "CN",
+      source: "any",
+      locale: "en_US",
+      selectedSkuId: skuid,
+      currency: "SAR",
+    };
+    try {
+      NewShippingResult = await getNewProductShippingServices(
+        queryDeliveryReq,
+        tokenInfo
+      );
+
+    } catch (err: any) {
+
+      console.error(err);
+    
+    return res.json({shipping:[]})
+    }
+
+
+    // console.log("result",result);
+    if (!NewShippingResult) {
+      NewShippingResult = [];
+    }
+    return res.json({ shipping: NewShippingResult });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+}
