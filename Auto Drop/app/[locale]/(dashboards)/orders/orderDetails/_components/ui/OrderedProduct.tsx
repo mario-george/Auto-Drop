@@ -6,6 +6,7 @@ import { Button } from "@chakra-ui/react";
 import HeaderText from "../../../../wallet/_components/HeaderText";
 import VectorSVG from "../images/VectorSVG";
 import SendOrderSVG from "../images/SendOrderSVG";
+import HeaderTwoPartSection from "../../../../_components/shared/ui/HeaderTwoPartsSection";
 
 interface OrderedProductProps {
   image: string;
@@ -22,7 +23,7 @@ interface OrderedProductProps {
 }
 interface OrderDetailsHeaderProps {
   orderDetails: string;
-  order_id: string|number;
+  order_id: string | number;
   orderNumberText: string;
   locale: string;
 }
@@ -40,7 +41,7 @@ export default function OrderedProduct(props: OrderedProductProps) {
     quantity,
     options,
   } = props;
-  
+
   prodName = prodName.slice(0, 50).split(" ");
 
   prodName = prodName.slice(0, prodName.length - 1).join(" ");
@@ -107,37 +108,42 @@ export default function OrderedProduct(props: OrderedProductProps) {
 export function OrderDetailsHeader(props: OrderDetailsHeaderProps) {
   let { orderDetails, locale, orderNumberText, order_id } = props;
   let isAr = locale === "ar";
+  let secondElement = (
+    <div className="flex space-s-6 ">
+      <div className="bg-white shadow rounded-xl px-4 py-2">
+        <VectorSVG />
+      </div>
+      <div className="bg-white shadow rounded-xl flex space-s-4 px-4 py-2 items-center text-xs tab:text-sm">
+        <div>{orderNumberText}</div>
+        <div>#{order_id}</div>
+      </div>
+    </div>
+  );
   return (
     <>
-      <div className="flex flex-col tab:flex-row space-y-2 tab:space-y-0 tab:justify-between items-center !text-xs tab:!text-sm">
-        <HeaderText title={orderDetails} isAr={isAr} />
-        <div className="flex space-s-6 ">
-          <div className="bg-white shadow rounded-xl px-4 py-2">
-            <VectorSVG />
-          </div>
-          <div className="bg-white shadow rounded-xl flex space-s-4 px-4 py-2 items-center">
-            <div>{orderNumberText}</div>
-            <div>#{order_id}</div>
-          </div>
-        </div>
-      </div>
+      <HeaderTwoPartSection
+        isAr={locale == "ar"}
+        title={orderDetails}
+        secondElement={secondElement}
+      />
+
     </>
   );
 }
 
-export function SendOrderButton(props: { sendOrderText: string,isAr:boolean }) {
-  let { sendOrderText ,isAr} = props;
+export function SendOrderButton(props: {
+  sendOrderText: string;
+  isAr: boolean;
+}) {
+  let { sendOrderText, isAr } = props;
   return (
     <div className="my-3 flex justify-center">
       <Button className="flex space-s-2 !bg-[#253439] !text-white">
-       <p>
-
-        {sendOrderText}
-       </p>
-       <p>
-       <SendOrderSVG isAr={isAr || false}/>
-        </p> 
-        </Button>
+        <p>{sendOrderText}</p>
+        <p>
+          <SendOrderSVG isAr={isAr || false} />
+        </p>
+      </Button>
     </div>
   );
 }
