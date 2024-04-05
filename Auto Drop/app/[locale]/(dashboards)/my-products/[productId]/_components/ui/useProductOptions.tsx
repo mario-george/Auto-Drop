@@ -41,6 +41,13 @@ if(isDefault){
 
 return newImages
     })
+       setOptionChoosenValues((prevValues: any) => {
+                    let tempValues = [...prevValues];
+let elementFound = options?.[optIndex]?.values?.[0];
+let {property_id, name} = elementFound; 
+                    tempValues[optIndex] = {name,property_id};
+                    return tempValues;
+       })
   }
   const removeOptionHandler = (optIndex: number, element: any) => {
     // VariantExtractor()
