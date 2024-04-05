@@ -91,7 +91,7 @@ interface ProductSchema {
   shippingAvailable?: boolean;
   productValuesNumber?: number;
   shippingFee?: number;
-  defaultImage?:string
+  defaultImage?: string;
 }
 
 interface ProductDocument extends Document, ProductSchema {}
@@ -174,7 +174,7 @@ const options = {
   country_code: { type: String, default: "SA" },
   // productEditFormOrigin: { type: Boolean, default: false },
   shippingFee: { type: Number, default: 0 },
-  defaultImage: { type:String, default: null ,select:false},
+  defaultImage: { type: String, default: null, select: false },
 };
 
 const schema = new Schema<ProductSchema>(options, {
@@ -218,6 +218,13 @@ schema.pre("save", function (next) {
       Array.isArray(shipping) &&
       shipping?.length > 0
     ) {
+      this.shipping = this.shipping.map((shipping: any, index: number) => {
+        let checked = false;
+        if (index == shipIndex) {
+          checked = true;
+        }
+        return { ...shipping, checked };
+      });
       let fee: any = shipping?.[shipIndex]?.freight?.cent || 0;
       if (fee !== 0) {
         fee /= 100;
@@ -231,13 +238,11 @@ schema.pre("save", function (next) {
     this.shippingFee = 0;
   }
 
-  if(this.isModified("images")){
-if(Array.isArray(this.images) && this.images.length > 0){
-
-  const image = this.images[0] as ImageType;
-  this.defaultImage = image.original;
-
-}
+  if (this.isModified("images")) {
+    if (Array.isArray(this.images) && this.images.length > 0) {
+      const image = this.images[0] as ImageType;
+      this.defaultImage = image.original;
+    }
   }
   next();
 });

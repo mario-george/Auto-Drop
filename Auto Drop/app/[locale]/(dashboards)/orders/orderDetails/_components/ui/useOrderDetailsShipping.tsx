@@ -68,6 +68,14 @@ const [shippingCurrIndex,setShippingCurrIndex] = useState<any>([])
 useEffect(()=>{
   if(shippingInfo?.length){
     setShippingData(shippingInfo)
+    let shipIndexes = Array(shippingInfo?.length).fill('0')
+    for (let i =0  ; i<shippingInfo?.length;i++){
+      let currShipping = shippingInfo[i]
+      let checkedIndex = currShipping.findIndex((shipping:any)=>shipping.checked)
+      if(checkedIndex !== -1){
+        shipIndexes[i] = checkedIndex.toString()
+      }
+    }
     setShippingCurrIndex(Array(shippingInfo?.length).fill('0'))
   }
 },[shippingInfo])

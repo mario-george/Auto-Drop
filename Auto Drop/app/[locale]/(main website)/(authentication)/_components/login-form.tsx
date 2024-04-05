@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/form";
 import { Philosopher } from "next/font/google";
 import axiosInstance from "@/app/[locale]/(dashboards)/_components/shared/AxiosInstance";
+import { AxiosError } from "axios";
 
 export default function LoginForm({
   classes,
@@ -124,6 +125,8 @@ export default function LoginForm({
         else setErrorMsg("Something went wrong");
       }
     } catch (error: any) {
+      let errorMessage  : string = error?.response?.data?.message;
+      setErrorMsg(errorMessage ?? "Something went wrong")
       console.log(error);
     } finally {
       setIsLoading(false);

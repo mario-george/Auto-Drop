@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import catchAsync from "../../../../utils/catchAsync";
-import { Product, ProductDocument, ProductSchema } from "../../../../models/product.model";
+import {
+  Product,
+  ProductDocument,
+  ProductSchema,
+} from "../../../../models/product.model";
 import axios from "axios";
 import SallaToken from "../../../../models/SallaTokenModel";
 import { Types } from "mongoose";
@@ -8,7 +12,10 @@ interface ProductDocumentParameter extends ProductDocument {
   _id: Types.ObjectId; // Make _id required
   // ... other properties ...
 }
-const handleProductProperties = async(product:ProductDocumentParameter & {},reqBody:any)=>{
+const handleProductProperties = async (
+  product: ProductDocumentParameter & {},
+  reqBody: any
+) => {
   let {
     name,
     description,
@@ -26,60 +33,68 @@ const handleProductProperties = async(product:ProductDocumentParameter & {},reqB
     shippingIncludedChoiceIndex,
     variantsArr,
     options,
-    images,discountPrice,shipping,country_code,
+    images,
+    discountPrice,
+    shipping,
+    country_code,
     ...body
   } = reqBody;
-    if (options) {
-      product.options = options;
-    }
-    if (images) {
-      product.images = images;
-    }
-    if (shipping) {
-      product.shipping = shipping;
-    }
-    if (country_code) {
-      product.country_code = country_code;
-    }
-    if (discountPrice!==undefined) {
-      product.discountPrice = discountPrice;
-    }
-    if (variantsArr) {
-      product.variantsArr = variantsArr;
+  if (options) {
+    product.options = options;
+  }
+  if (images) {
+    product.images = images;
+  }
+  if (shipping) {
+    product.shipping = shipping;
+  }
+  if (country_code) {
+    product.country_code = country_code;
+  }
+  if (discountPrice !== undefined) {
+    product.discountPrice = discountPrice;
+  }
+  if (variantsArr) {
+    product.variantsArr = variantsArr;
 
-      let totalQ = 0
-      variantsArr.forEach((variant:any)=>{
-        totalQ+=Number(variant.sku_available_stock)
-      })
-      product.quantity= totalQ
-    }
+    let totalQ = 0;
+    variantsArr.forEach((variant: any) => {
+      totalQ += Number(variant.sku_available_stock);
+    });
+    product.quantity = totalQ;
+  }
 
-
-    if (shippingIncludedChoice && shippingIncludedChoiceIndex) {
-      product.shippingIncludedChoice = shippingIncludedChoice;
-      product.shippingIncludedChoiceIndex = shippingIncludedChoiceIndex;
-    }
-
+  if (shippingIncludedChoice && shippingIncludedChoiceIndex) {
+    product.shippingIncludedChoice = shippingIncludedChoice;
+    product.shippingIncludedChoiceIndex = shippingIncludedChoiceIndex;
+  }
+  if (metadata_description) {
     product.metadata_description = metadata_description;
+  }
+  if (description) {
     product.description = description;
+  }
+  if (metadata_title) {
     product.metadata_title = metadata_title;
+  }
+  if (name) {
     product.name = name;
-    product.commissionPercentage = commissionPercentage;
-    if (showDiscountPrice) {
-      product.showDiscountPrice = showDiscountPrice;
-    }
-    product.vendor_commission = vendor_commission;
-    product.commissionPercentage = commissionPercentage;
-    if (categoriesSalla) {
-      product.categoriesSalla = categoriesSalla;
-    }
+  }
+  product.commissionPercentage = commissionPercentage;
+  if (showDiscountPrice) {
+    product.showDiscountPrice = showDiscountPrice;
+  }
+  product.vendor_commission = vendor_commission;
+  product.commissionPercentage = commissionPercentage;
+  if (categoriesSalla) {
+    product.categoriesSalla = categoriesSalla;
+  }
 
-    if (require_shipping) {
-      product.require_shipping = require_shipping;
-    }
-return product
-
-}
+  if (require_shipping) {
+    product.require_shipping = require_shipping;
+  }
+  return product;
+};
 const tagsSallaHandler = async (
   sallaAccessToken: string,
   selectedTags: string[]
@@ -154,7 +169,10 @@ const PatchProduct = catchAsync(
       shippingIncludedChoiceIndex,
       variantsArr,
       options,
-      images,discountPrice,shipping,country_code,
+      images,
+      discountPrice,
+      shipping,
+      country_code,
       ...body
     } = req.body;
     let sallaTags;
@@ -171,28 +189,27 @@ const PatchProduct = catchAsync(
     if (country_code) {
       product.country_code = country_code;
     }
-    if (discountPrice!==undefined) {
+    if (discountPrice !== undefined) {
       product.discountPrice = discountPrice;
     }
     if (variantsArr) {
       product.variantsArr = variantsArr;
 
-      let totalQ = 0
-      variantsArr.forEach((variant:any)=>{
-        totalQ+=Number(variant.sku_available_stock)
-      })
-      product.quantity= totalQ
+      let totalQ = 0;
+      variantsArr.forEach((variant: any) => {
+        totalQ += Number(variant.sku_available_stock);
+      });
+      product.quantity = totalQ;
     }
 
     if (selectedTags && selectedTags.length > 0) {
       sallaTags = await tagsSallaHandler(sallaAccessToken, selectedTags);
     }
 
-
     if (shippingIncludedChoice && shippingIncludedChoiceIndex) {
       product.shippingIncludedChoice = shippingIncludedChoice;
       product.shippingIncludedChoiceIndex = shippingIncludedChoiceIndex;
-    } 
+    }
 
     // console.log("reached Patch 2 ");
 
@@ -217,14 +234,21 @@ const PatchProduct = catchAsync(
       }
       product.salla_product_id = undefined;
     }
-
-    product.metadata_description = metadata_description;
-    product.description = description;
-    product.metadata_title = metadata_title;
-    product.name = name;
-    product.commissionPercentage = commissionPercentage;
-
-    
+    if (metadata_description) {
+      product.metadata_description = metadata_description;
+    }
+    if (description) {
+      product.description = description;
+    }
+    if (metadata_title) {
+      product.metadata_title = metadata_title;
+    }
+    if (name) {
+      product.name = name;
+    }
+    if (commissionPercentage) {
+      product.commissionPercentage = commissionPercentage;
+    }
     if (typeof showDiscountPrice == "boolean") {
       product.showDiscountPrice = showDiscountPrice;
     }
@@ -237,16 +261,14 @@ const PatchProduct = catchAsync(
     if (require_shipping) {
       product.require_shipping = require_shipping;
     }
-    console.log("before save")
-    try{
+    console.log("before save");
+    try {
       await product.save();
-
-    }catch(err){
-      console.error(err)
+    } catch (err) {
+      console.error(err);
     }
-    console.log("after save")
+    console.log("after save");
 
-    
     const opt2 = {
       method: "POST",
       headers: {

@@ -40,7 +40,7 @@ export default function SearchProduct({
             placeholder={placeholder}
             // value={value}
             // onChange={onChange}
-            className="placeholder:text-xs px-14 w-[150px] lg:w-[350px] tab:h-[3rem] shadow-md rounded-lg !placeholder-opacity-1  placeholder:text-[#b0b0b0] bg-white dark:text-black"
+            className="placeholder:text-xs px-14  lg:w-[350px] tab:h-[3rem] shadow-md rounded-lg !placeholder-opacity-1  placeholder:text-[#b0b0b0] bg-white dark:text-black"
             ref={urlInputRef}
       />
 
@@ -64,7 +64,7 @@ export default function SearchProduct({
           <div
             className={cn(
               isAr ? ` right-[5%] ` : `left-[5%]`,
-              "absolute top-[35%] tab:top-[28%] lap:top-[20%]"
+              "absolute top-[20%] tab:top-[28%] lap:top-[20%]"
             )}
             onClick={updateImageHandler}
           >
