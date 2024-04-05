@@ -345,7 +345,7 @@ let sku_price = Number(product?.variantsArr?.[0]?.sku_price)
         if (!variant?.shippingChoice) {
           shippingChoice = "shippingIncluded";
         }
-        if (!variant?.profitType) {
+        if (!variant?.profitTypeValue) {
           profitTypeValue = "percentage";
         }
         if (!variant?.commission) {
@@ -588,7 +588,7 @@ return {...variant,relativeOptions}
     setOptionChoosenValues,
     optionChoosenValues,
     setProductOptions,
-    setVariantsDetails,
+    setVariantsDetails,setProductImages
   };
   const { ProductOptionsComponent } = useProductOptions({
     ...ProductOptionsProps,
@@ -681,7 +681,7 @@ return {...variant,relativeOptions}
     profitText: profit,
     setVariantsDetails,
     shippingTotalCost,
-    productOptions,shippingWithoutOrInclude,shipping:productShipping,choosenShippingIndex
+    productOptions,shippingWithoutOrInclude,shipping:productShipping,choosenShippingIndex,baseCommission:commissionVal
   };
   let SelectComponent = (
     <Select

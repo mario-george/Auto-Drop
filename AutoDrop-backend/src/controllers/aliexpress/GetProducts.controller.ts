@@ -3,7 +3,10 @@ import AppError from "../../utils/appError";
 import MakeRequest from "./features/Request";
 import TokenUserExtractor from "../../utils/handlers/tokenUserExtractor";
 import AliExpressToken from "../../models/AliExpressTokenModel";
-import { getProductShippingServices } from "./features/shipping";
+import {
+  getNewProductShippingServices,
+  getProductShippingServices,
+} from "./features/shipping";
 import { basename, extname } from "path";
 import { pick, map, uniqBy, filter, uniq } from "lodash";
 import slugify from "slugify";
@@ -11,6 +14,7 @@ import { ImageType, Product, ProductSchema } from "../../models/product.model";
 import { v4 as uuid } from "uuid";
 import fetchCategoryName from "./products/Category/FetchNameOfCategory";
 import catchAsync from "../../utils/catchAsync";
+import fs from "fs";
 
 function generateRandomNumber(start: any, end: any) {
   // Generate a random decimal between 0 and 1
@@ -141,7 +145,6 @@ export const GetRecommendedProductsPost = catchAsync(
     let respData = response;
 
     while (result.length < 20) {
-
       const randomPage = generateRandomNumber(
         0,
         respData.data.aliexpress_ds_feedname_get_response?.resp_result.result
@@ -228,93 +231,144 @@ async function GetProductOptions(SKUs: object[]) {
   collectOptions = uniq(map(concatValues, "sku_property_name"));
   let sku_image_1;
   options = await Promise.all(
-    collectOptions.map((option: string, index: number) => {
-      const uniqValues = uniqBy(
-        concatValues
-          ?.filter((val) => val?.sku_property_name === option)
-          .map((e: any) => ({
-            ...e,
-            property_value_definition_name:
-              e?.property_value_definition_name || e?.sku_property_value,
-          })),
-        "property_value_id"
-        // sku_property_value
-        // old property used for filtering
-      );
+    collectOptions
+      .map((option: string, index: number) => {
+        const uniqValues = uniqBy(
+          concatValues
+            ?.filter((val) => val?.sku_property_name === option)
+            .map((e: any) => ({
+              ...e,
+              property_value_definition_name:
+                e?.property_value_definition_name || e?.sku_property_value,
+            })),
+          "property_value_id"
+          // sku_property_value
+          // old property used for filtering
+        );
 
-      // console.log(uniqValues)
-      const values = uniqValues?.map((val: any, idx: number) => {
-        const isFirst = index == 0 && idx == 0;
-        const {
-          sku_image,
-          property_value_definition_name,
-          quantity,
-          property_value_id,
-          sku_property_id,
-          id,
-          sku_price,
-          offer_sale_price,
-        } = val;
-        const valuePrice = parseFloat(sku_price);
-        const offerPrice = parseFloat(offer_sale_price);
-        const valPrice = valuePrice === offerPrice ? valuePrice : offerPrice;
-        /*    const displayValue = slugify(property_value_definition_name, {
+        // console.log(uniqValues)
+        const values = uniqValues?.map((val: any, idx: number) => {
+          const isFirst = index == 0 && idx == 0;
+          const {
+            sku_image,
+            property_value_definition_name,
+            quantity,
+            property_value_id,
+            sku_property_id,
+            id,
+            sku_price,
+            offer_sale_price,
+          } = val;
+          const valuePrice = parseFloat(sku_price);
+          const offerPrice = parseFloat(offer_sale_price);
+          const valPrice = valuePrice === offerPrice ? valuePrice : offerPrice;
+          /*    const displayValue = slugify(property_value_definition_name, {
             lower: true,
           }); */
-        let displayValue;
+          let displayValue;
 
-        if (property_value_definition_name) {
-          displayValue = slugify(property_value_definition_name, {
-            lower: true,
-          });
-        }
-        sku_image_1 = sku_image;
+          if (property_value_definition_name) {
+            displayValue = slugify(property_value_definition_name, {
+              lower: true,
+            });
+          }
+          sku_image_1 = sku_image;
 
-        if (isFirst) {
-          price = valPrice;
-        }
+          if (isFirst) {
+            price = valPrice;
+          }
 
+          return {
+            name: property_value_definition_name,
+            price: valPrice,
+            original_price: valPrice,
+            quantity: quantity,
+            is_default: isFirst,
+            property_id: property_value_id,
+            sku_id: val.sku_id,
+            display_value: displayValue,
+            sku: [sku_property_id, property_value_id].join(":"),
+            id,
+            sku_image,
+          };
+        });
         return {
-          name: property_value_definition_name,
-          price: valPrice,
-          original_price: valPrice,
-          quantity: quantity,
-          is_default: isFirst,
-          property_id: property_value_id,
-          sku_id: val.sku_id,
-          display_value: displayValue,
-          sku: [sku_property_id, property_value_id].join(":"),
-          id,
-          sku_image,
+          name: option,
+          // display_type: sku_image_1 ? "image" : "text",
+          display_type: "text",
+          values,
         };
-      });
-      return {
-        name: option,
-        // display_type: sku_image_1 ? "image" : "text",
-        display_type: "text",
-        values,
-      };
-    })
-    .filter((e) => {
-      
-    return (e.name !== "Ships From"&&e.name!="السفن من")
-    })
+      })
+      .filter((e) => {
+        return e.name !== "Ships From" && e.name != "السفن من";
+      })
   );
 
   return { price, quantities, options };
 }
-
-async function GetProductImages(URLs: string) {
+interface SkuImage {
+  default: boolean;
+  original: string;
+  code: string;
+}
+async function GetProductImages(URLs: string, variantsArr: any) {
   // const splitImages = ae_multimedia_info_dto?.image_urls?.split(";");
+
   const splitImages = URLs?.split(";");
-  const images: ImageType[] = splitImages?.map((obj, index: number) => ({
+  let images: ImageType[] = splitImages?.map((obj, index: number) => ({
     original: obj,
     thumbnail: obj,
     alt: "image " + index,
     default: false,
   }));
+  // let tempImages = [...images]
+  let tempImages = images.slice(0, 1);
+  // let strippedImages = tempImages.map((im: any) => im.original);
+  let skuImages: SkuImage[] = [];
+  let alreadyAddedImages: any = [];
+  variantsArr?.forEach((variant: any) => {
+    let { relativeOptions: rP } = variant;
+    for (let i = 0; i < rP.length; i++) {
+      let rPEl = rP[i];
+      let { sku_image } = rPEl;
+      if (sku_image) {
+        let { sku_code } = rPEl;
+        let imageValues = {
+          original: sku_image,
+          code: sku_code,
+          default: false,
+        };
+      /*   if (strippedImages.includes(sku_image)) {
+          tempImages = tempImages.filter((im: any) => {
+            return im.original !== sku_image;
+          });
+        } */
 
-  return images;
+        if (!alreadyAddedImages.includes(sku_image)) {
+          skuImages.push(imageValues);
+          alreadyAddedImages.push(sku_image);
+        }
+      }
+    }
+  });
+
+  let productImages = [];
+  if (skuImages?.length + tempImages?.length <= 10) {
+    productImages = [...tempImages, ...skuImages];
+  } else {
+    productImages = [...images];
+  }
+
+  fs.appendFile(
+    "images.json",
+    JSON.stringify(
+      { finalImages: productImages, skuImages, images, tempImages },
+      null,
+      2
+    ),
+    function (err) {}
+  );
+  return productImages;
 }
 
 export async function GetDetails({
@@ -324,6 +378,7 @@ export async function GetDetails({
   second_level_category_name,
   target_sale_price,
   target_original_price,
+  lang,
 }: {
   product_id: string;
   tokenInfo?: any;
@@ -331,6 +386,7 @@ export async function GetDetails({
   second_level_category_name?: string;
   target_sale_price?: string;
   target_original_price?: string;
+  lang: "AR" | "EN";
 }): Promise<any> {
   return new Promise((resolve, reject) => {
     MakeRequest(
@@ -338,7 +394,7 @@ export async function GetDetails({
         ship_to_country: "SA",
         product_id: product_id,
         target_currency: "SAR",
-        target_language: "AR",
+        target_language: lang,
         method: "aliexpress.ds.product.get",
         sign_method: "sha256",
       },
@@ -404,7 +460,9 @@ export async function GetDetails({
           });
           if (
             variantsArr?.[0]?.relativeOptions?.some(
-              (option: any) => (option.sku_property_name === "Ships From" || option.sku_property_name=="السفن من")
+              (option: any) =>
+                option.sku_property_name === "Ships From" ||
+                option.sku_property_name == "السفن من"
             )
           ) {
             // remove 'ships from' variants
@@ -414,9 +472,10 @@ export async function GetDetails({
               let { relativeOptions } = variant;
               relativeOptions = relativeOptions.filter(
                 (element: any, index: number) =>
-                  element.sku_property_name !== "Ships From" && element.sku_property_name !== "السفن من"
+                  element.sku_property_name !== "Ships From" &&
+                  element.sku_property_name !== "السفن من"
               );
-    
+
               let variantIdentifier = relativeOptions
                 .map(
                   (element: any, index: number) =>
@@ -430,21 +489,29 @@ export async function GetDetails({
             });
             console.log("variantsIdsToKeep", variantsIdsToKeep);
             console.log("variantsIdsToKeep.length", variantsIdsToKeep.length);
-            const newVariantsWithoutShipsFrom = variantsArr.filter((variant:any,index:number)=>{
-           return variantsIdsToKeep.includes(index)
-            }).map((variant:any)=>{
-    let {relativeOptions} = variant
-    relativeOptions = relativeOptions.filter((rO:any)=>{
-      return rO.sku_property_name !=="Ships From" && rO.sku_property_name !=="السفن من"
-    })
-    return {...variant,relativeOptions}
-            })
-            console.log("newVariantsWithoutShipsFrom",newVariantsWithoutShipsFrom)
-            variantsArr = newVariantsWithoutShipsFrom
+            const newVariantsWithoutShipsFrom = variantsArr
+              .filter((variant: any, index: number) => {
+                return variantsIdsToKeep.includes(index);
+              })
+              .map((variant: any) => {
+                let { relativeOptions } = variant;
+                relativeOptions = relativeOptions.filter((rO: any) => {
+                  return (
+                    rO.sku_property_name !== "Ships From" &&
+                    rO.sku_property_name !== "السفن من"
+                  );
+                });
+                return { ...variant, relativeOptions };
+              });
+            console.log(
+              "newVariantsWithoutShipsFrom",
+              newVariantsWithoutShipsFrom
+            );
+            variantsArr = newVariantsWithoutShipsFrom;
           }
           const [{ price, options }, images] = await Promise.all([
             GetProductOptions(SKUs || []),
-            GetProductImages(ae_multimedia_info_dto?.image_urls),
+            GetProductImages(ae_multimedia_info_dto?.image_urls, variantsArr),
           ]);
 
           let targetSalePrice =
@@ -461,7 +528,7 @@ export async function GetDetails({
             sku: uuid(),
             images: images
               ?.slice(0, 10)
-              ?.map((img: ImageType, index: number) => ({
+              ?.map((img: ImageType | SkuImage, index: number) => ({
                 ...img,
                 default: index === 0,
               })),
@@ -554,7 +621,7 @@ export async function GetProductId(url: string) {
 } */
 
 export async function GetProductDetailsTest(
-  req: Request&any,
+  req: Request & any,
   res: Response,
   next: NextFunction
 ) {
@@ -565,6 +632,7 @@ export async function GetProductDetailsTest(
       second_level_category_name,
       target_sale_price,
       target_original_price,
+      lang,
     } = req.body;
     let user: any = await TokenUserExtractor(req);
     if (!user) return res.status(401).json({ message: "token is invalid" });
@@ -584,21 +652,58 @@ export async function GetProductDetailsTest(
       second_level_category_name,
       target_sale_price,
       target_original_price,
+      lang,
     });
-    
-    const result:any = await getProductShippingServices(
-      {
-        sku_id: productInfo.sku_id,
-        country_code: "SA",
-        product_id,
-        product_num: "1",
-        price_currency: "SAR",
-      },
-      tokenInfo
-    );
+    let result: any;
 
-    
-    // 
+    try {
+      result = await getProductShippingServices(
+        {
+          sku_id: productInfo.sku_id,
+          country_code: "SA",
+          product_id,
+          product_num: "1",
+          price_currency: "SAR",
+        },
+        tokenInfo
+      );
+    } catch (err: any) {
+      console.error(err);
+    }
+
+    //NEW SHIpping
+    let queryDeliveryReq = {
+      quantity: 1,
+      shipToCountry: "SA",
+      productId: +product_id,
+      language: "en_US",
+      // source: "CN",
+      source: "any",
+      locale: "en_US",
+      selectedSkuId: productInfo.sku_id,
+      currency: "SAR",
+    };
+    let newShipping = false;
+    let NewShippingResult: any;
+    try {
+      NewShippingResult = await getNewProductShippingServices(
+        queryDeliveryReq,
+        tokenInfo
+      );
+      if (NewShippingResult?.length > 0) {
+        newShipping = true;
+      }
+    } catch (err: any) {
+      console.error(err);
+    }
+
+    if (newShipping) {
+      console.log("newShipping is returned");
+
+      result = NewShippingResult;
+    }
+    //NEW SHIPPING
+    //
 
     let {
       merchant,
@@ -629,38 +734,45 @@ export async function GetProductDetailsTest(
       [price, main_price] = [main_price, price];
     }
     const { role, _id } = req.user;
-console.log("productInfo?.name",productInfo?.name)
-console.log("productInfo?.metadata_title",productInfo?.metadata_title)
-console.log("productInfo?.metadata_description",productInfo?.metadata_description)
-console.log("productInfo?.description.slice(0,12",productInfo?.description.slice(0,12))
+    console.log("productInfo?.name", productInfo?.name);
+    console.log("productInfo?.metadata_title", productInfo?.metadata_title);
+    console.log(
+      "productInfo?.metadata_description",
+      productInfo?.metadata_description
+    );
+    console.log(
+      "productInfo?.description.slice(0,12",
+      productInfo?.description.slice(0, 12)
+    );
     const product = new Product({
       name: name,
       ...body,
       price,
-      vendor_commission:0,
+      vendor_commission: 0,
       main_price,
       merchant: role === "client" ? _id : merchant,
-      sku_id: req.body.sku_id,
+      sku_id: productInfo.sku_id,
       vat: req.body?.vat && true,
       first_level_category_name,
       second_level_category_name,
       target_sale_price,
       target_original_price,
-      variantsArr:productInfo.variantsArr,
+      variantsArr: productInfo.variantsArr,
     });
-console.log("product?.name",product?.name)
-let metadataDescSliced =  productInfo.metadata_description
-if( productInfo?.metadata_description?.length > 70){
-  metadataDescSliced = productInfo.metadata_description.slice(0,70)
-
-}
-console.log("productInfo.description",productInfo.description.slice(0,20))
-if(!productInfo.description ){
-
-  console.log("NO DESCRIPTION")
-}
+    console.log("product?.name", product?.name);
+    let metadataDescSliced = productInfo.metadata_description;
+    if (productInfo?.metadata_description?.length > 70) {
+      metadataDescSliced = productInfo.metadata_description.slice(0, 70);
+    }
+    console.log(
+      "productInfo.description",
+      productInfo.description.slice(0, 20)
+    );
+    if (!productInfo.description) {
+      console.log("NO DESCRIPTION");
+    }
     product.metadata_title = productInfo.metadata_title;
-    product.metadata_description =metadataDescSliced;
+    product.metadata_description = metadataDescSliced;
     product.description = productInfo.description;
 
     const options = body?.options?.map((option: any) => {
@@ -687,36 +799,30 @@ if(!productInfo.description ){
     // product.category_name = category_name;
     // product.category_id = category_id;
 
-
-
     //@ts-ignore
     product.shipping = result;
     //@ts-ignore
-    if(result?.length==0){
-      product.shippingAvailable =false
-    }else if(result?.length>0){
-      product.shippingAvailable =true
-
+    if (result?.length == 0) {
+      product.shippingAvailable = false;
+    } else if (result?.length > 0) {
+      product.shippingAvailable = true;
     }
-    console.log("shippingAvailable",result?.length==0) 
-    console.log("result",result) 
-    
+    console.log("shippingAvailable", result?.length == 0);
+    console.log("result", result);
+
     const jsonProduct = product.toJSON();
-   
+
     await product.save();
-   return res.status(201).json({  success: true });
-/* 
+    return res.status(201).json({ success: true });
+    /* 
     attachShippingInfoToProuct(
       product._id.toString(),
       product.original_product_id,
       req
     ); */
-    // 
-
+    //
   } catch (error) {
     console.log(error);
     next(error);
   }
 }
-
-

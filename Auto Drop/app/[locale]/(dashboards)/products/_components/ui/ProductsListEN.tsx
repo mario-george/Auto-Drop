@@ -137,7 +137,7 @@ export default function ProductsListEN({
                         <div
                           className={` text-[#253439] dark:text-white text-xs `}
                         >
-                          {product.product_title.substring(0, 35)}
+                          {product.product_title?.substring(0, 35)}
                           ...
                         </div>
                         <div>

@@ -258,7 +258,7 @@ if((products.length ===0 && lang=="en" )||(productsAR.length ===0 && lang=="ar")
   const shoppingCartHandler = async (product_id: string, cancelToken: any) => {
     try {
       const resp = await axiosInstance.post(
-        "/aliexpress/getShippingDetails",
+        "/shipping/new",
         {
           product_id,
         },

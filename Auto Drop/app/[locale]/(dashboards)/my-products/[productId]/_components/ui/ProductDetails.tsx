@@ -58,7 +58,7 @@ export default function ProductDetails({
   setCurrentlySelectedVariant,
   currentlySelectedVariant,
   setVariantsDetails,
-  shippingTotalCost,productOptions,shippingWithoutOrInclude,shipping,choosenShippingIndex
+  shippingTotalCost,productOptions,shippingWithoutOrInclude,shipping,choosenShippingIndex,baseCommission
 }: any) {
   // console.log("shippingChoosenValue", shippingChoosenValue);
   // const [value, setValue] = React.useState(shippingChoosenValue);
@@ -74,6 +74,7 @@ export default function ProductDetails({
     profitTypeValue,
     commission,
   } = currentlySelectedVariant;
+  console.log("profitTypeValue",profitTypeValue)
   console.log("variantsDetails", variantsDetails);
   console.log("shippingChoice", shippingChoice);
 
@@ -270,6 +271,7 @@ if(!productOptions || productOptions?.length==0|| !productOptions?.[0]?.name){
                 {profitTypeValue == "percentage" ? <>%</> : <></>}
               </span>
             </div>
+            {commission==0 && <p className="text-xs tab:text-sm text-blue-500 col-span-full">If commission of the variant is not given it will take the commission of the product which is {baseCommission||0} and its profit type</p>}
           </div>
           <div className="col-span-full my-2">
             <Separator />

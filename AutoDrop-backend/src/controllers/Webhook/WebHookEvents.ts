@@ -290,12 +290,10 @@ export default class WebHookEvents {
               displayedPrice = offer_sale_price + commission;
             }
             if (product?.shippingIncludedChoice) {
-              let { shippingIncludedChoiceIndex, shipping } = product;
-              let shippingFee =
-                shipping?.[shippingIncludedChoiceIndex]?.frieght?.cent / 100;
-              if (shippingFee) {
+          
+              console.log("displayedPrice before shipping + ", displayedPrice);
                 displayedPrice += product.shippingFee;
-              }
+              console.log("displayedPrice after shipping + ", displayedPrice);
             }
 
             const OrderValue = {

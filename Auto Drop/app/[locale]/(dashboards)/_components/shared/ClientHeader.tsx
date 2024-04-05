@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 export default function ClientHeader({
   lang,
@@ -53,6 +54,12 @@ export default function ClientHeader({
   };
 
   const pathname = usePathname();
+  const searchParams = useSearchParams()
+  let query
+
+  if(searchParams.has('orderId')){
+query={orderId:searchParams.get('orderId')}
+  }
   const [scrolling, setScrolling] = useState(false);
   const isAr = locale === "ar";
   useEffect(() => {
@@ -91,8 +98,10 @@ export default function ClientHeader({
           {name}
           <Link
             locale={locale === "ar" ? "en" : "ar"}
-            href={pathname}
-            className={`text-sm md:text-[16px] font-medium ${
+            href={{
+              pathname: pathname,
+              query: query,
+            }}            className={`text-sm md:text-[16px] font-medium ${
               isAr ? `border-l-2` : `border-r-2`
             } px-2 py-2`}
           >
