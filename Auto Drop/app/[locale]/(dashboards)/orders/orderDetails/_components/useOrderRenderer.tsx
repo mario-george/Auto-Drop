@@ -79,10 +79,15 @@ export default function useOrderRenderer({
   // let phone = mobile_code ?? "" + " " + mobile?.toString() ?? "";
 
   let phone = `${mobile_code ?? ''} ${mobile ?? ''}`
+
+  let totalPrice = orderData?.totalPrice
+  if(!isNaN(orderData?.amounts?.total?.amount)){
+totalPrice =orderData?.amounts?.total?.amount 
+  }
   const { OrderPayment } = useOrderDetailsPayment({
     ...OrderDetailsPaymentProps,
     locale,
-    totalPrice: orderData?.totalPrice || 0,
+    totalPrice:totalPrice||0,
   });
   let OrderCustomerProps = {
     firstNameText,

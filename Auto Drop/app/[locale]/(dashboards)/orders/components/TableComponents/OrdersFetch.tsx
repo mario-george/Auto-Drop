@@ -48,7 +48,11 @@ if (day % 10 === 1 && day !== 11) {
           setNoOrders(true);
         } else {
           let orders = data.data.map((order: any) => {
-            let { updatedAt, order_id, paid, payment_method,customerName :sender,customer} = order;
+            let { updatedAt, order_id, paid, payment_method,customerName :sender,customer,totalPrice,amounts} = order;
+let amount = 0
+            if(!totalPrice){
+              amount = amounts?.total?.amount
+            }
             let senderName = `${ customer.first_name} ${customer.last_name}`
             let orderStatus="Created";
             if (paid) {
