@@ -409,10 +409,17 @@ export default class WebHookEvents {
       const { id } = pick(body.data, ["id"]);
       const order = await Order.findOne({ order_id: id }).exec();
 
-      if (!order) return console.log("selected order is invalid!");
+      if (!order){
+        console.log("selected order is invalid!")
+      return res.status(404).send("order not found");
+        
+        }
 
-      next();
-    } catch (error) {}
+      // next();
+    } catch (error) {
+      return res.status(404).json({error});
+
+    }
   }
 
   async makeSubscription(body: any, res: Response, next: NextFunction) {
