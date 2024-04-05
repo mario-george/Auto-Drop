@@ -209,7 +209,7 @@ export default class WebHookEvents {
         "items",
         "shipping",
         "customer",
-        "status",
+        "status","amounts"
       ]);
       // console.log(data.items[0])
       const orderExisted = await Order.findOne({ order_id: data.id }).exec();
@@ -368,15 +368,15 @@ export default class WebHookEvents {
  */
       const order = new Order({
         ...data,
-        amounts: {
+/*         amounts: {
           total: {
             amount: total,
           },
-          // app_commission: {
-          //   amount: commission,
-          //   percentage: parseInt(APP_COMMISSION as string, 10) || 0,
-          // },
-        },
+          app_commission: {
+            amount: commission,
+            percentage: parseInt(APP_COMMISSION as string, 10) || 0,
+          },
+        }, */
         meta,
         merchant,
         order_id: data.id,
