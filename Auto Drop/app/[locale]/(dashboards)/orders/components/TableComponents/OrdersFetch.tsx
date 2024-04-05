@@ -50,7 +50,7 @@ if (day % 10 === 1 && day !== 11) {
           let orders = data.data.map((order: any) => {
             let { updatedAt, order_id, paid, payment_method,customerName :sender,customer} = order;
             let senderName = `${ customer.first_name} ${customer.last_name}`
-            let orderStatus="Pending";
+            let orderStatus="Created";
             if (paid) {
               orderStatus="Completed";
             } else if (payment_method) {
