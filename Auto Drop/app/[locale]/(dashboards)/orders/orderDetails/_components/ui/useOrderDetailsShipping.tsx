@@ -1,7 +1,7 @@
 import RoundedCardWrapper from "@/app/[locale]/(dashboards)/_components/shared/ui/RoundedCardWrapper";
 import HeaderText from "@/app/[locale]/(dashboards)/wallet/_components/HeaderText";
 import { Radio, RadioGroup } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -13,6 +13,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import AttachSVG from "../images/AttachSVG";
 import './order-details.css'
+import ShippingGroup from './ShippingGroup';
 interface OrderDetailsShippingProps {
   shippingText: string;
   shippingType: string;
@@ -28,10 +29,12 @@ interface OrderDetailsShippingProps {
   shippingCompanyName: string;
   locale: string;
   withInvoice :string
+  shippingInfo:any
+  price:string
 }
 export const sectionHeader = (title: string) => {
   return (
-    <div className="text-xs dark:text-lg dark:text-white text-[#2e464f]">
+    <div className="text-xs tab:text-lg dark:text-lg dark:text-white text-[#2e464f]">
       {title}
     </div>
   );
@@ -49,7 +52,7 @@ export default function useOrderDetailsShipping({
   supplierShipping,
   estimatedDuration,
   shippingCompanyName,
-  locale,withInvoice
+  locale,withInvoice,shippingInfo,price
 }: OrderDetailsShippingProps) {
   const [shippingChoice, setShippingChoice] = useState<
     "cartoon" | "packagingBag"
@@ -60,7 +63,14 @@ export default function useOrderDetailsShipping({
 const [selectedLogoType, setSelectedLogoType] = useState<
 "withLogo"
 >("withLogo");
-
+const [shippingData,setShippingData] = useState([])
+const [shippingCurrIndex,setShippingCurrIndex] = useState<any>([])
+useEffect(()=>{
+  if(shippingInfo?.length){
+    setShippingData(shippingInfo)
+    setShippingCurrIndex(Array(shippingInfo?.length).fill('0'))
+  }
+},[shippingInfo])
   const [shippingSelectedType, setShippingSelectedType] =
     useState<string>("shippedWPack");
     
@@ -80,6 +90,18 @@ const [selectedLogoType, setSelectedLogoType] = useState<
       </div>
     );
   };
+  let changeShippingIndexHandler = (value:string,index:number)=>{
+    // [  "0","1"    ]
+
+    setShippingCurrIndex((prevShippingIndexs:string[])=>{
+let tempIndexs =  [...prevShippingIndexs]
+tempIndexs[index] = value
+ return tempIndexs
+    }
+
+    )
+
+  }
   let ShippingHeader = <HeaderText {...HeaderTextProps} />;
   let OrderShipping = (
     <>
@@ -182,6 +204,23 @@ const [selectedLogoType, setSelectedLogoType] = useState<
         <div>
           <div className="flex flex-col space-y-3">
             {sectionHeader(supplierShipping)}
+            {shippingData.map((shipping:any,ind:number)=>{
+let setValueHandler = (value:string)=>{
+  changeShippingIndexHandler(value,ind)
+}
+              let ShippingGroupProps = {
+                shipping,
+                nameOfShippingComp:shippingCompanyName,
+                durationToDeliver:estimatedDuration,
+              value:shippingCurrIndex[ind],
+              setValue:setValueHandler,price
+              }
+              let noSeparator = ind == shippingData?.length-1
+              return <>
+              <ShippingGroup {...ShippingGroupProps} />
+              {!noSeparator && <Separator />}
+              </>
+            })}
           </div>
         </div>
       </div>
