@@ -64,13 +64,16 @@ export default function useOrderRenderer({
     payNow,
   };
 
-  let { customer } = orderData ?? {};
+  let { customer,shipping } = orderData ?? {};
+  let {address} = shipping ?? {}
+  let {block , city,country,shipping_address,street_number,postal_code} = address ?? {}
+  console.log("postal_code",postal_code)
   let {
     first_name: firstName,
     last_name: lastName,
     mobile,
     mobile_code,
-    country,
+    // country,
     email,
   } = customer ?? {};
   // let phone = mobile_code ?? "" + " " + mobile?.toString() ?? "";
@@ -94,12 +97,12 @@ export default function useOrderRenderer({
     countryText,
     country,
     cityText,
-    city: "",
+    city,
     districtText,
-    district: "",
-    address: "",
+    district: block ?? "",
+    address: shipping_address ?? '',
     addressText,
-    postalCode: "",
+    postalCode: postal_code ?? "",
     postalCodeText,
     editCustomerHandler: () => {},
     editText,
