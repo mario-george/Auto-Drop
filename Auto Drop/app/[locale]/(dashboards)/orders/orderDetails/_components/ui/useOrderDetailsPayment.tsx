@@ -56,7 +56,7 @@ export default function useOrderDetailsPayment({
         </div>
       </RoundedCardWrapper>
       <div className="flex flex-col tab:flex-row space-y-3 tab:space-y-0 tab:gap-10 text-xs tab:text-sm my-3">
-        {paymentButtons.map((button: PaymentButtonProps) => {
+        {paymentButtons.map((button: PaymentButtonProps,ind:number) => {
           return (
             <Button
               className={
@@ -64,7 +64,8 @@ export default function useOrderDetailsPayment({
                 " flex-1 !text-xs tab:!text-sm !py-2 !mx-3 tab:py-0 tab:!mx-0 !whitespace-wrap"
               }
               onClick={button.onClick}
-            >
+           key={ind}
+           >
               {button.name}
             </Button>
           );

@@ -217,8 +217,11 @@ let setValueHandler = (value:string)=>{
               }
               let noSeparator = ind == shippingData?.length-1
               return <>
+              <div key={ind}>
               <ShippingGroup {...ShippingGroupProps} />
               {!noSeparator && <Separator />}
+              </div>
+
               </>
             })}
           </div>
