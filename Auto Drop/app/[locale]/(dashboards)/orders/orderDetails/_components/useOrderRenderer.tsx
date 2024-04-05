@@ -47,7 +47,7 @@ export default function useOrderRenderer({
   attachAnInvoice,
   placeALogo,
   supplierShipping,
-  estimatedDuration,
+  durationToDeliver:estimatedDuration,
   shippingCompanyName, price,withInvoice,comments:commentsText
   } = translationMessages;
   console.log("orderData", orderData);
@@ -108,6 +108,16 @@ export default function useOrderRenderer({
     regionText,
   };
   const { OrderCustomer } = useOrderCustomer({ ...OrderCustomerProps });
+
+  
+  let [shippingItems,setShippingItems ]= useState([])
+  useEffect(()=>{
+    if(typeof orderData == "object" ){
+  let shippingArray = orderData?.items?.map((item: any) => item.product.shipping);
+  setShippingItems(shippingArray)
+}
+
+  },[orderData])
   let OrderShippingProps = {
     shippingText,
     shippingType,
@@ -121,7 +131,7 @@ export default function useOrderRenderer({
     supplierShipping,
     estimatedDuration,
     shippingCompanyName,
-    locale,price,withInvoice
+    locale,price,withInvoice,shippingInfo:shippingItems??[],
   }
     const {OrderShipping} = useOrderDetailsShipping({...OrderShippingProps}) 
   useEffect(() => {
