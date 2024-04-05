@@ -243,7 +243,7 @@ export default class WebHookEvents {
           return options;
         }
       ); */
-      let totalPrice = 0;
+      // let totalPrice = 0;
       const mapItems = await Promise.all(
         filterItems.map((item: any, i: number) => {
           const productId = item?.product?.id;
@@ -308,8 +308,8 @@ export default class WebHookEvents {
               originalPriceVariant
             );
             let itemQuantity = item.quantity;
-            let displayedTotalPrice = itemQuantity * displayedPrice;
-            totalPrice += displayedTotalPrice;
+            // let displayedTotalPrice = itemQuantity * displayedPrice;
+            // totalPrice += displayedTotalPrice;
             /*       const result = {
               ...item.options[0],
               value: Object.assign({}, item.options[0]?.value || {}, value),
@@ -383,7 +383,7 @@ export default class WebHookEvents {
         items: mapItems,
         status: "created",
         status_track: [],
-        totalPrice,
+        // totalPrice,
       });
       console.log("order", order);
       const status_track = UpdateOrderTracking("created", order);
