@@ -184,7 +184,7 @@ let sku_price = Number(product?.variantsArr?.[0]?.sku_price)
   formRefs.prodName = useRef<HTMLInputElement>(null);
   formRefs.SEODescription = useRef<HTMLInputElement>(null);
   formRefs.SEOTitleText = useRef<HTMLInputElement>(null);
-  formRefs.description = useRef<any>(null);
+  // formRefs.description = useRef<any>(null);
   formRefs.commission = useRef<HTMLInputElement>(null);
 
   const [discountPrice, setDiscountPrice] = useState(
@@ -307,10 +307,9 @@ let sku_price = Number(product?.variantsArr?.[0]?.sku_price)
       if (formRefs.prodName.current) {
         formRefs.prodName.current.value = product?.name;
       }
-      if (formRefs.description?.current) {
+/*       if (formRefs.description?.current) {
         formRefs.description.current.value = product?.description;
-      }
-
+      } */
       if (product?.discountPrice == 0) {
         setDiscountPrice(sku_price);
       } else {
@@ -956,10 +955,10 @@ return {...variant,relativeOptions}
                 <div className="form-group">
                   <label className="form-label">Description</label>
                   <Editor
-                    // value={descriptionField}
-                    // onChange={(value) => setDescriptionField(value)}
-                    //@ts-ignore
-                    ref={formRefs.description}
+                    value={descriptionField}
+                    onChange={(value) => setDescriptionField(value)}
+         /*            //@ts-ignore
+                    ref={formRefs.description} */
                   />
                 </div>
               </div>
