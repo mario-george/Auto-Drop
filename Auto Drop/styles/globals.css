@@ -168,3 +168,27 @@ wallet page sttyles
 .twoPartSection{
   @apply flex flex-col space-y-3 tab:space-y-0 tab:flex-row tab:justify-between
 }
+/* shipping */
+
+.shippingCard {
+  @apply bg-[#edf5f9] text-[#253439] rounded-lg shadow text-sm md:text-base;
+}
+.shippingCardPrice {
+  @apply text-[#C1121F] rounded-lg text-sm md:text-base;
+}
+
+.shippingCardActive {
+  @apply bg-[#2b5563] text-white rounded-lg shadow text-sm md:text-base;
+}
+.shippingCardValue {
+    @apply  text-[#CCE0DB] text-sm md:text-base;
+  }
+  .shippingCardText {
+    @apply  text-[#CCE0DB] text-sm md:text-base;
+  }
+  .shippingCardTextActive {
+    @apply  text-[#CCE0DB] text-sm md:text-base;
+  }
+.shippingCardPriceActive {
+  @apply text-[#F4B1AC] rounded-lg text-sm md:text-base;
+}
