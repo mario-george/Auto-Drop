@@ -10,13 +10,13 @@ const GetUserOrders = catchAsync(async (req:Request&any, res:Response,next:NextF
     }
     let userOrders = await Order.find({merchant})
     // .select()
-    if(!userOrders || userOrders.length == 0){
+   /*  if(!userOrders || userOrders.length == 0){
 
-        return res.status(404).json({
+        return res.json({
             status: 'fail',
             message: 'No orders found'
         })
-    }
+    } */
     return res.status(200).json({
         status: 'success',
         data: userOrders

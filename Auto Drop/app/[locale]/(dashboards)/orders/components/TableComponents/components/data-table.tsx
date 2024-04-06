@@ -79,7 +79,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-
+console.log("noOrders",noOrders)
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const dispatch = useDispatch();
 /*   React.useEffect(() => {
