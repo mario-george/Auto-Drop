@@ -81,7 +81,8 @@ export default function useOrderRenderer({
   let phone = `${mobile_code ?? ''} ${mobile ?? ''}`
 
   let totalPrice = orderData?.totalPrice
-  if(!isNaN(orderData?.amounts?.total?.amount)){
+  console.log("orderData?.amounts?.total?.amount",orderData?.amounts?.total?.amount)
+  if(totalPrice==0){
 totalPrice =orderData?.amounts?.total?.amount 
   }
   const { OrderPayment } = useOrderDetailsPayment({

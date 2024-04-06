@@ -49,9 +49,10 @@ if (day % 10 === 1 && day !== 11) {
         } else {
           let orders = data.data.map((order: any) => {
             let { updatedAt, order_id, paid, payment_method,customerName :sender,customer,totalPrice,amounts} = order;
-let amount = 0
-            if(!totalPrice){
+let amount = totalPrice.toFixed(2)
+            if(totalPrice==0){
               amount = amounts?.total?.amount
+              // console.log("order_id",order_id)
             }
             let senderName = `${ customer.first_name} ${customer.last_name}`
             let orderStatus="Created";
@@ -61,7 +62,8 @@ let amount = 0
             }
             return {
               ...order,
-              amount: order.totalPrice.toFixed(2),
+              // amount: order.totalPrice.toFixed(2),
+              amount,
               date: dateExtractor(updatedAt),
               orderStatus,
               orderNumber: order_id,
