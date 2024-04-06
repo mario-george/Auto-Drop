@@ -122,11 +122,11 @@ export default function LoginForm({
         router.push(`/`);
       } else {
         if (responseData.message) setErrorMsg(responseData.message);
-        else setErrorMsg("Something went wrong");
+        else setErrorMsg("Invalid Email or Password!");
       }
     } catch (error: any) {
       let errorMessage  : string = error?.response?.data?.message;
-      setErrorMsg(errorMessage ?? "Something went wrong")
+      setErrorMsg(errorMessage ?? "Invalid Email or Password")
       console.log(error);
     } finally {
       setIsLoading(false);

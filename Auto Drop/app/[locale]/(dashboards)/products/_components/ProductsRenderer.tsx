@@ -125,6 +125,7 @@ let {SearchBarComponent,searchInfo,setSearchInfo} =useProductSearchBar({locale,s
   }
 let  {currentCategory,CategoriesRendererComponent} = useCategories(CategoriesProps)
   const pagesProducts = useSelector((state: RootState) => state.products.pages);
+  const aliExpressToken = useSelector((state: RootState) => state.user.aliExpressToken);
 useEffect(()=>{
 
   if(!searchInfo || searchInfo.type == "allProducts"){return } 
@@ -178,7 +179,9 @@ console.log("searchInfo",searchInfo)
     showShippingForProduct,
     showShippingHandler,
   };
-
+if(!aliExpressToken){
+  return <>Please Link your account with aliexpress and try again</>
+}
   return (
     <div className="dark:text-white">
       {SuccessComponent}
