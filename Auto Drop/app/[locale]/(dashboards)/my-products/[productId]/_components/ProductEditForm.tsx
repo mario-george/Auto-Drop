@@ -773,11 +773,11 @@ return {...variant,relativeOptions}
         options: productOptions,
         variantsArr: variantsDetails,
         images: productImages,
-        shipping: productShipping,
+        shipping: productShipping,description:descriptionField
       };
-      if (formRefs.description?.current) {
+/*       if (formRefs.description?.current) {
         data.description = formRefs.description.current.value;
-      }
+      } */
       /*     if(formRefs.discountPrice.current){
         data.discountPrice = formRefs.discountPrice.current.value
       } */
