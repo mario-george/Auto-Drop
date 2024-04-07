@@ -96,7 +96,8 @@ app.post("/webhooks/subscribe", async (req, res,next) => {
   const signatureMatches = requestHMAC === computedHMAC;
 
   if (!signatureMatches) {
-    res.sendStatus(401);
+    console.log("signatureMatches is ",signatureMatches)
+    return res.sendStatus(401);
   }
 
   WebHookHandler(req,res,next);
