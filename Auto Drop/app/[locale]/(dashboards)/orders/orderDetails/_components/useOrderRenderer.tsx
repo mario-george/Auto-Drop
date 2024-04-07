@@ -81,7 +81,8 @@ export default function useOrderRenderer({
   let phone = `${mobile_code ?? ''} ${mobile ?? ''}`
 
   let totalPrice = orderData?.totalPrice
-  console.log("orderData?.amounts?.total?.amount",orderData?.amounts?.total?.amount)
+  let shippingPrice = orderData?.amounts?.shipping_cost?.amount 
+  let subTotal = orderData?.amounts?.sub_total?.amount 
   if(totalPrice==0){
 totalPrice =orderData?.amounts?.total?.amount 
   }
