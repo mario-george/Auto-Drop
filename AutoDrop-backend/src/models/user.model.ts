@@ -11,6 +11,7 @@ export interface IUserSchema extends Document {
   country: string;
   merchantID: number;
   storeName: string;
+  storeLink: string;
   aliExpressToken: ObjectId;
   sallaToken: ObjectId;
   active: boolean;

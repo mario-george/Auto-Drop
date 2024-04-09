@@ -204,6 +204,7 @@ schema.pre("save", function (next) {
     }
   }
   if (Array.isArray(this.shipping) && this.shipping.length > 0) {
+    this.shippingAvailable = true;
     let [shipping, included, shipIndex] = [
       this.shipping,
       this.shippingIncludedChoice,
@@ -236,6 +237,7 @@ schema.pre("save", function (next) {
     }
   } else {
     this.shippingFee = 0;
+    this.shippingAvailable = false;
   }
 
   if (this.isModified("images")) {

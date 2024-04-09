@@ -24,6 +24,9 @@ import settingRoute from "./routes/settings.route";
 import { createHmac } from 'crypto';
 import WebHookHandler from "./controllers/Webhook/WebHookHandler";
 import orderRoutes from './routes/order.routes';
+import TokenRefreshHandler from "./cron/aliexpress/tokens/TokenRefreshHandler";
+import ProductUpToDate from "./cron/aliexpress";
+import DefaultDocChecker from './validate/DefaultDocChecker';
 const app = express();
 
 //Parse json bodies
@@ -96,7 +99,8 @@ app.post("/webhooks/subscribe", async (req, res,next) => {
   const signatureMatches = requestHMAC === computedHMAC;
 
   if (!signatureMatches) {
-    res.sendStatus(401);
+    console.log("signatureMatches is ",signatureMatches)
+    return res.sendStatus(401);
   }
 
   WebHookHandler(req,res,next);
@@ -115,4 +119,7 @@ app.use(globalErrorHandler);
 
 app.listen(10000, () => {
   console.log(`server is running `);
+  DefaultDocChecker()
+  TokenRefreshHandler.start()
+  ProductUpToDate.start()
 });

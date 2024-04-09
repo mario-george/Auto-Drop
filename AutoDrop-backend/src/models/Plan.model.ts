@@ -22,6 +22,7 @@ import {
     price: number;
     services: SchemaDefinitionProperty<any[]>;
     is_monthly: boolean;
+    is_yearly: boolean;
   }
   
   interface PlanDocument extends Document, PlanSchema {}
@@ -38,6 +39,7 @@ import {
     price: { type: Number, default: null, trim: true },
     services: { type: Array, default: null, trim: true },
     is_monthly: { type: Boolean, default: true },
+    is_yearly: { type: Boolean, default: false },
   };
   
   const schema = new Schema<PlanSchema>(options, { timestamps: true });
