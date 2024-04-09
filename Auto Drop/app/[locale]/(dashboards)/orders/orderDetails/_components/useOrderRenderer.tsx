@@ -15,7 +15,7 @@ export default function useOrderRenderer({
   locale: string;
 }) {
   const [successLoadedOrder, setSuccessLoadedOrder] = useState(false);
-  let merchantStore = orderData?.urls?.customer ?? "";
+  let merchantStore = orderData?.storeName ?? "";
   let {
     paymentProcess,
     cod,
@@ -53,7 +53,7 @@ export default function useOrderRenderer({
   console.log("orderData", orderData);
   const { OrderNotes } = useOrderDetailsNotes({
     commentsText,
-    merchantStore: orderData?.customer?.urls?.customer ?? "",
+    merchantStore: merchantStore,
     locale,
   });
   let OrderDetailsPaymentProps = {
@@ -107,7 +107,7 @@ totalPrice =orderData?.amounts?.total?.amount
     city,
     districtText,
     district: block ?? "",
-    address: shipping_address ?? '',
+    address: street_number ?? '',
     addressText,
     postalCode: postal_code ?? "",
     postalCodeText,
