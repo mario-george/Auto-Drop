@@ -209,7 +209,8 @@ export default class WebHookEvents {
         "items",
         "shipping",
         "customer",
-        "status","amounts"
+        "status",
+        "amounts",
       ]);
       // console.log(data.items[0])
       const orderExisted = await Order.findOne({ order_id: data.id }).exec();
@@ -290,9 +291,8 @@ export default class WebHookEvents {
               displayedPrice = offer_sale_price + commission;
             }
             if (product?.shippingIncludedChoice) {
-          
               console.log("displayedPrice before shipping + ", displayedPrice);
-                displayedPrice += product.shippingFee;
+              displayedPrice += product.shippingFee;
               console.log("displayedPrice after shipping + ", displayedPrice);
             }
 
@@ -357,6 +357,13 @@ export default class WebHookEvents {
       // total = +sub_total + commission;
       total = +sub_total;
       const merchant = products?.[0]?.merchant;
+      let storeName = "";
+      try {
+        let OrderUser = await User.findById(merchant).select("storeName -_id");
+        storeName = OrderUser?.storeName ?? "";
+      } catch (err: any) {
+        console.error(err);
+      }
       /* 
       const subscription: SubscriptionDocument | null = await CheckSubscription(
         merchant,
@@ -368,7 +375,7 @@ export default class WebHookEvents {
  */
       const order = new Order({
         ...data,
-/*         amounts: {
+        /*         amounts: {
           total: {
             amount: total,
           },
@@ -384,6 +391,7 @@ export default class WebHookEvents {
         status: "created",
         status_track: [],
         // totalPrice,
+        storeName,
       });
       console.log("order", order);
       const status_track = UpdateOrderTracking("created", order);
@@ -409,23 +417,22 @@ export default class WebHookEvents {
       const { id } = pick(body.data, ["id"]);
       const order = await Order.findOne({ order_id: id }).exec();
 
-      if (!order){
-        console.log("selected order is invalid!")
-      return res.status(404).send("order not found");
-        
-        }
+      if (!order) {
+        console.log("selected order is invalid!");
+        return res.status(404).send("order not found");
+      }
 
       // next();
     } catch (error) {
-      return res.status(404).json({error});
-
+      return res.status(404).json({ error });
     }
   }
 
   async makeSubscription(body: any, res: Response, next: NextFunction) {
     try {
-      const user = await User.findOne({ merchantId: body.merchant });
-      const plan = await Plan.findOne({ name: body.data.plan_name });
+      const user = await User.findOne({ merchantID: body.merchant });
+      // const plan = await Plan.findOne({ name: body.data.plan_name });
+      const plan = await Plan.findOne({ price: body.data.price });
       if (!user) return res.status(404).send("User Not Found");
       if (!plan) return res.status(404).send("Plan Not Found");
       await Subscription.deleteMany({ user: user.id });
@@ -450,9 +457,9 @@ export default class WebHookEvents {
         user: user?.id,
       });
 
-      await Promise.all([transaction.save(), subscription.save()]).then(() =>
-        res.status(201).send("order stored")
-      );
+      await Promise.all([transaction.save(), subscription.save()]).then(() => {
+        return res.status(201).send("subscription saved");
+      });
     } catch (error: any) {
       return res.status(500).json({ error: error.message });
     }
