@@ -430,6 +430,8 @@ export default class WebHookEvents {
 
   async makeSubscription(body: any, res: Response, next: NextFunction) {
     try {
+console.log("subscription started")
+
       const user = await User.findOne({ merchantID: body.merchant });
       // const plan = await Plan.findOne({ name: body.data.plan_name });
       const plan = await Plan.findOne({ price: body.data.price });
@@ -456,7 +458,8 @@ export default class WebHookEvents {
         amount: body.data.total,
         user: user?.id,
       });
-
+console.log("subscription completed")
+console.log("subscription",subscription)
       await Promise.all([transaction.save(), subscription.save()]).then(() => {
         return res.status(201).send("subscription saved");
       });
