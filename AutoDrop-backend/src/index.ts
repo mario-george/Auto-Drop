@@ -103,7 +103,7 @@ app.post("/webhooks/subscribe", async (req, res,next) => {
     return res.sendStatus(401);
   }
 
-  WebHookHandler(req,res,next);
+  await WebHookHandler(req,res,next);
 if(!res.headersSent){
 return res.sendStatus(200);
 }
