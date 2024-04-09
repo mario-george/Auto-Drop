@@ -22,9 +22,12 @@ export const saveTokenToUser = catchAsync(
     let token;
     if (tokenType === "AliExpress") {
       // Create a new AliExpressToken document
+      await AliExpressToken.deleteMany({ userId });
       token = new AliExpressToken({ accessToken, refreshToken, userId });
     } else if (tokenType === "Salla") {
       // Create a new SallaToken document
+      await SallaToken.deleteMany({ userId });
+
       token = new SallaToken({ accessToken, refreshToken, userId });
     } else {
       return next(new AppError("Invalid token type", 400));
