@@ -75,8 +75,8 @@ export default function useOrderDetails({
               } = option;
               let valueName = property_value_definition_name
                 ? property_value_definition_name
-                : sku_property_name;
-              let optionName = sku_property_value;
+                : sku_property_value;
+              let optionName = sku_property_name;
               return { valueName, optionName };
             });
             let OrderedProductProps = {
