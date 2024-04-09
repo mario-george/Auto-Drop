@@ -327,16 +327,16 @@ async function GetProductImages(URLs: string, variantsArr: any) {
   let skuImages: SkuImage[] = [];
   let alreadyAddedImages: any = [];
   variantsArr?.forEach((variant: any) => {
-    let { relativeOptions: rP } = variant;
+    let { relativeOptions: rP ,sku_code} = variant;
     for (let i = 0; i < rP.length; i++) {
       let rPEl = rP[i];
-      let { sku_image } = rPEl;
+      let { sku_image ,sku_property_name:optionName,property_value_definition_name:valueDefName} = rPEl;
       if (sku_image) {
-        let { sku_code } = rPEl;
+        // let { sku_code } = rPEl;
         let imageValues = {
           original: sku_image,
           code: sku_code,
-          default: false,
+          default: false,valueDefName,optionName
         };
       /*   if (strippedImages.includes(sku_image)) {
           tempImages = tempImages.filter((im: any) => {
