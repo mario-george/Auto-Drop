@@ -14,7 +14,7 @@ import { createAccessToken } from "../../utils/authHelperFunction";
 import fs from "fs";
 import { IsVariantsDifferent } from "./handlers/VariantsChecker";
 
-const time: string = "0 */4 * * *";
+const time: string = "0 */12 * * *";
 
 
 const ProductUpToDate = schedule(time, async function () {
