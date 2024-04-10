@@ -295,7 +295,12 @@ let sku_price = Number(product?.variantsArr?.[0]?.sku_price)
         SEOTitleText: metadata_title,
         SEODescription: metadata_description,
       };
+if(product?.shippingIncludedChoice==true) {
 
+  setShippingWithoutOrInclude("shippingIncluded")
+}else if(product?.shippingIncludedChoice==false){ 
+  setShippingWithoutOrInclude("withoutShipping")
+}
       // Use the setValue method to update the form fields
       Object.keys(newValues).forEach((key: any) => {
         form.setValue(key, newValues[key]);
