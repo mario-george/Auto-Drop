@@ -92,8 +92,29 @@ interface ProductSchema {
   productValuesNumber?: number;
   shippingFee?: number;
   defaultImage?: string;
+  highestOptionValue?:number
 }
-
+interface IRelativeOption{
+  property_value_definition_name: string;
+  property_value_id: number;
+  sku_image?: string;
+  sku_property_id: number;
+  sku_property_name: string;
+  sku_property_value: string;
+}
+interface IVariant{
+  id: string;
+  offer_bulk_sale_price: string;
+  offer_sale_price?: string;
+  profitTypeValue: null | string; 
+  relativeOptions: Array<IRelativeOption>;
+  sku_available_stock: number;
+  sku_code: string;
+  sku_id: string;
+  sku_price: string;
+  sku_stock: boolean;
+  commission?:number
+}
 interface ProductDocument extends Document, ProductSchema {}
 
 const options = {
@@ -175,6 +196,7 @@ const options = {
   // productEditFormOrigin: { type: Boolean, default: false },
   shippingFee: { type: Number, default: 0 },
   defaultImage: { type: String, default: null, select: false },
+  highestOptionValue: { type:Number, default: 0, select: false },
 };
 
 const schema = new Schema<ProductSchema>(options, {
@@ -245,6 +267,24 @@ schema.pre("save", function (next) {
       const image = this.images[0] as ImageType;
       this.defaultImage = image.original;
     }
+  }
+
+  if(this.isModified("options") || this.isModified("variantsArr")){
+    console.log("THIS variantsArr IS MODIFIEDDDDDD")
+    console.log("THIS variantsArr IS MODIFIEDDDDDD")
+    console.log("THIS variantsArr IS MODIFIEDDDDDD")
+    console.log("THIS variantsArr IS MODIFIEDDDDDD")
+    console.log("THIS variantsArr IS MODIFIEDDDDDD")
+    console.log("THIS variantsArr IS MODIFIEDDDDDD")
+    let highestValue:number = 0
+for (let i =0 ;i<this.variantsArr.length;i++){
+  let currVariant  :IVariant=this.variantsArr?.[0]
+  let price = Number(currVariant.offer_sale_price)
+  highestValue = Math.max(price, highestValue);
+}
+this.highestOptionValue = highestValue
+console.log("highestValue",highestValue)
+console.log("highestOptionValue",this.highestOptionValue)
   }
   next();
 });

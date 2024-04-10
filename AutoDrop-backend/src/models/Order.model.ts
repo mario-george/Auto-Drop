@@ -105,7 +105,7 @@ const options = {
 const schema = new Schema<OrderSchema>(options, { timestamps: true });
 schema.index({ "$**": "text" });
 schema.pre("save", function (next) {
-  if (this.customer) {
+  if (this.isModified("customer")) {
     let { first_name = '', last_name = '' } = this.customer;
     this.customerName = `${first_name} ${last_name}`;
     console.log("this.customer",this.customer);
