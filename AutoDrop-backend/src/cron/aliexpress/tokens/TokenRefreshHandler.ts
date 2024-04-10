@@ -9,7 +9,7 @@ import AliExpressToken from "../../../models/AliExpressTokenModel";
 import qs from "qs";
 import axios from "axios";
 
-const time: string = "* * */5 * *";
+const time: string = "0 0 */5 * *";
 const TokenRefreshHandler = schedule(time, async function () {
   try {
     console.log("cron job started to refresh users token");
