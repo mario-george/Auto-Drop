@@ -26,7 +26,6 @@ import WebHookHandler from "./controllers/Webhook/WebHookHandler";
 import orderRoutes from './routes/order.routes';
 import TokenRefreshHandler from "./cron/aliexpress/tokens/TokenRefreshHandler";
 import ProductUpToDate from "./cron/aliexpress";
-import DefaultDocChecker from './validate/DefaultDocChecker';
 const app = express();
 
 //Parse json bodies
@@ -119,7 +118,6 @@ app.use(globalErrorHandler);
 
 app.listen(10000, () => {
   console.log(`server is running `);
-  DefaultDocChecker()
   TokenRefreshHandler.start()
   ProductUpToDate.start()
 });
