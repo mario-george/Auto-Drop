@@ -101,13 +101,15 @@ export default function LoginForm({
         }
       ); */
       const responseData = response.data
-      
+      console.log("responseData",responseData)
       if (response.status >=200 && response.status < 300) {
         dispatch(
           userActions.login({
             token: responseData.data.accessToken,
             id: responseData.data.user._id,
             name: responseData.data.user.name,
+            storeName: responseData.data.user.storeName,
+            storeLink: responseData.data.user.storeLink,
             email: responseData.data.user.email,
             role: responseData.data.user.role,
             image: responseData.data.user.image,
