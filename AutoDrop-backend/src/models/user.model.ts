@@ -1,6 +1,7 @@
 import { hash, compare } from "bcrypt";
 import mongoose, { Document, ObjectId, PaginateModel } from "mongoose";
 import mongoosePaginateV2 from 'mongoose-paginate-v2' 
+import { Plan } from "./Plan.model";
 export interface IUserSchema extends Document {
   name: string;
   email: string;
@@ -20,6 +21,8 @@ export interface IUserSchema extends Document {
   comparePassword: (pw: string) => Promise<boolean>;
   setting:mongoose.Schema.Types.ObjectId
   tokens:any
+  plan:mongoose.Schema.Types.ObjectId
+  planName?:string
 }
 export interface IUserDocument extends Document ,IUserSchema{
 }
@@ -60,17 +63,25 @@ const userModel = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    setting:{type:mongoose.Schema.Types.ObjectId,ref:"Setting"}
+    setting:{type:mongoose.Schema.Types.ObjectId,ref:"Setting"},
+    plan:{type:mongoose.Schema.Types.ObjectId,ref:"Plan"}
+    
   },
   { timestamps: true }
 );
 
-userModel.pre(/^save$/, async function (next: (err?: Error) => void) {
+userModel.pre("save", async function (next: (err?: Error) => void) {
   let user = this as any;
   if (user.isModified("password")) {
     user.password = await hash(user.password, 12);
   }
+if(this.isNew){
+  let planId = await Plan.findOne({name:"Basic"})
 
+  if(planId){
+    this.plan = planId._id
+  }
+}
   next();
 });
 
