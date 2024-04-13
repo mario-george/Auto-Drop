@@ -16,7 +16,7 @@ const userSlice = createSlice({
     sallaToken: "",
     aliExpressToken: "",
     country: "",
-    createdAt: "",
+    createdAt: "",planName:""
   },
   reducers: {
     login(state, action) {
@@ -34,6 +34,8 @@ const userSlice = createSlice({
       state.aliExpressToken = action.payload.aliExpressToken;
       state.country = action.payload.country;
       state.createdAt = action.payload.createdAt;
+      state.planName = action.payload.planName;
+
       localStorage.setItem("token", action.payload.token);
     },
     logout(state) {
@@ -51,19 +53,19 @@ const userSlice = createSlice({
       state.aliExpressToken = "";
       state.country = "";
       state.createdAt = "";
+      state.planName = "";
     },
     updateToken(state, action) {
       const { tokenType, token } = action.payload;
-      console.log("here");
-      console.log(token);
-      console.log(tokenType);
+
       if (tokenType === "Salla") {
         state.sallaToken = token;
       } else if (tokenType === "AliExpress") {
         state.aliExpressToken = token;
       }
-      console.log(state.aliExpressToken);
-    },
+    },changeSubscription:(state,action)=>{
+      state.planName = action.payload.planName;
+    }
   },
 });
 

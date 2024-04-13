@@ -21,6 +21,7 @@ export default function ClientHeader({
   locale: string;
 }) {
   const image = useSelector((state: RootState) => state.user.image);
+  const user = useSelector((state: RootState) => state.user);
   const createdAt = useSelector((state: RootState) => state.user.createdAt);
   const name = useSelector((state: RootState) => state.user.name);
   console.log(createdAt);
@@ -167,7 +168,7 @@ query={orderId:searchParams.get('orderId')}
                   {planTitle}
                 </div>
                 <div className="absolute text-white dark:text-[#253439] top-[3px] text-xs lap:top-[1px]  lap:left-[6px]  tab:text-sm lap:text-md">
-                  {planValue}
+                  {user.planName}
                 </div>
               </div>
             </div>
