@@ -458,6 +458,27 @@
    
 
 },"ordersPagev2":{
-    "orderStatus":"حالة الطلب"
-  }
+    "orderStatus":"حالة الطلب",
+    "created":"تم الإنشاء",
+    "inReview":"قيد المراجعة",
+    "delivered":"تم التوصيل",
+    "InProgress":"قيد التنفيذ",
+    "deliveryInProgess":"جاري التوصيل",
+"shippingInfo":"معلومات الشحن",
+
+
+"contactShipCom":"تواصل مع شركة الشحن",
+"underwayNow":"جارية الان",
+"shipStatus":"حالة الشحن",
+"supplier":"المورد",
+"client":"العميل",
+"Warehouse":"المستودع",
+"localTracking":"تتبع محلي",
+"internationalTracking":"تتبع دولي",
+"aliexpress":"علي اكسبريس",
+"notYet":"ليس بعد",
+"shipComHomePage":"الصفحة الرئيسية لشركة الشحن",
+"expectedDuration":"المدة المتوقعة"
+
+}
 }
