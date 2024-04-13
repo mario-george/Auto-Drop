@@ -7,6 +7,8 @@ const userSlice = createSlice({
     token: "",
     id: "",
     name: "",
+    storeName: "",
+    storeLink: "",
     email: "",
     role: "",
     image: "",
@@ -20,6 +22,8 @@ const userSlice = createSlice({
     login(state, action) {
       state.isLoggedIn = true;
       state.name = action.payload.name;
+      state.storeName = action.payload.storeName;
+      state.storeLink = action.payload.storeLink;
       state.email = action.payload.email;
       state.role = action.payload.role;
       state.image = action.payload.image;
@@ -35,6 +39,8 @@ const userSlice = createSlice({
     logout(state) {
       state.isLoggedIn = false;
       state.name = "";
+      state.storeName = "";
+      state.storeLink= "";
       state.email = "";
       state.role = "";
       state.image = "";
