@@ -5,7 +5,7 @@ import speakeasy from "speakeasy";
 import sendMail from "../assits/sendMails";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/appError";
-import User from "../models/user.model";
+import User, { IUserSchema } from "../models/user.model";
 import {
   hashPassword,
   comparePassword,
@@ -102,17 +102,20 @@ export const signIn = catchAsync(
     if (!password) {
       return next(new AppError("please enter your password", 400));
     }
-    const user = await User.findOne({ email });
+    const user : IUserSchema & {plan:any}|null = await User.findOne({ email }).populate("plan");
+    
 
     if (!user || !(await comparePassword(password, user.password))) {
       return next(new AppError("Invalid email or password", 401));
     }
+    let  userJSON = user.toJSON();
+userJSON.planName= userJSON.plan.name
     if (!user.active) {
       return next(
         new AppError("please sign up instead and verify your email.", 401)
       );
     }
-    responseAndToken(user, res, 200, req);
+    responseAndToken(userJSON, res, 200, req);
   }
 );
 export const verify = catchAsync(
