@@ -6,6 +6,7 @@ export default function OrderDetails() {
   const locale = useLocale();
   const t = useTranslations("orderDetailsPage");
   const t2 = useTranslations("myProductsEdit");
+  const t3 = useTranslations("ordersPagev2");
 
   const translationMessages = {
     orderDetails: t("orderDetails"),
@@ -52,6 +53,15 @@ export default function OrderDetails() {
     durationToDeliver: t2("durationToDeliver"),
     shippingCompanyName: t2("nameOfShippingComp"),
     attachALogo: t("attachALogo"),
+
+
+    orderStatus: t3("orderStatus"),
+    inReview: t3("inReview"),
+    created: t3("created"),
+    delivered: t3("delivered"),
+    InProgress: t3("InProgress"),
+    deliveryInProgess: t3("deliveryInProgess"),
+
   };
   let OrderDetailsFetchProps = { translationMessages, locale };
   return (
