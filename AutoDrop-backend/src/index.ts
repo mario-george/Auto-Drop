@@ -109,7 +109,7 @@ wss.on('connection', (ws:any) => {
     });
   });
 });
-app.use((req, res, next) => {
+app.use((req:any, res, next) => {
   req.clients = clients;
   next();
 });
