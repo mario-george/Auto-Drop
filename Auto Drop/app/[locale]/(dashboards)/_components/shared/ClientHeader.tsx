@@ -28,10 +28,14 @@ export default function ClientHeader({
   // const name = useSelector((state: RootState) => state.user.name);
   const {createdAt , name , image} = useSelector((state: RootState) => state.user);
 
- 
+  let envType = process.env.NEXT_PUBLIC_ENVIRONMENT
+ let webSocketUrl  = process.env.NEXT_PUBLIC_BACK_WS
+ if(envType === "dev"){
+ webSocketUrl = "ws://localhost:7777"
+ }
 const  dispatch = useDispatch()
   useEffect(() => {
-    const socket = new WebSocket('ws://localhost:7777');
+    const socket = new WebSocket(webSocketUrl);
     socket.addEventListener('open', (event) => {
       socket.send(JSON.stringify({ id: user.id }));
     });

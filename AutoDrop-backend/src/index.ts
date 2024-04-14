@@ -77,30 +77,15 @@ if (process.env.NODE_ENV === "production") {
 
 conect();
 
-//Global resources
-app.use("/api/v1/auth", userRoutes);
-app.use("/api/v1/handler", handlerRoutes);
-app.use("/api/v1/token", tokenRoutes);
-app.use("/api/v1/aliexpress", productsRoutes);
-app.use("/api/v1/search", searchRoutes);
-app.use("/api/v1/salla", sallaRoutes);
-app.use("/api/v1/shipping", shippingRoutes);
-app.use("/api/v1/settings", settingRoute  );
-app.use("/api/v1/orders", orderRoutes  );
-
 // websocket
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 7778 });
+const wss = new WebSocket.Server({ port: 7777 });
 let clients:any = {};
 
 wss.on('connection', (ws:any) => {
   console.log('New client connected');
 
-  // This is where you would get your subscription data
-  const subscriptionData = {planName:"Test"};
 
-  // Send the subscription data to the client
-  // ws.send(JSON.stringify(subscriptionData));
   ws.on('message', (message:string) => {
     try {
       const { id } = JSON.parse(message);
@@ -124,8 +109,22 @@ wss.on('connection', (ws:any) => {
     });
   });
 });
-
+app.use((req, res, next) => {
+  req.clients = clients;
+  next();
+});
 // websocket
+//Global resources
+app.use("/api/v1/auth", userRoutes);
+app.use("/api/v1/handler", handlerRoutes);
+app.use("/api/v1/token", tokenRoutes);
+app.use("/api/v1/aliexpress", productsRoutes);
+app.use("/api/v1/search", searchRoutes);
+app.use("/api/v1/salla", sallaRoutes);
+app.use("/api/v1/shipping", shippingRoutes);
+app.use("/api/v1/settings", settingRoute  );
+app.use("/api/v1/orders", orderRoutes  );
+
 
 app.post("/webhooks/subscribe", async (req, res,next) => {
   const requestHMAC = req.header("x-salla-signature");
