@@ -31,7 +31,9 @@ export default function ClientHeader({
   let envType = process.env.NEXT_PUBLIC_ENVIRONMENT
  let webSocketUrl  = process.env.NEXT_PUBLIC_BACK_WS
  if(envType === "dev"){
- webSocketUrl = "ws://localhost:7777"
+ webSocketUrl = "ws://localhost:10000"
+//  webSocketUrl = "ws://auto-drop-rtxb.onrender:7777"
+//  webSocketUrl = "ws://auto-drop-rtxb.onrender:7777"
  }
 const  dispatch = useDispatch()
   useEffect(() => {

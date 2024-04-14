@@ -123,7 +123,7 @@ userJSON.subscriptionExpiry= userJSON.subscription.expiry_date
 userJSON.subscriptionOrdersLimit= userJSON.subscription.orders_limit
 userJSON.subscriptionProductsLimit= userJSON.subscription.products_limit
 
-
+userJSON.id = userJSON._id.toString()
 userJSON.totalOrdersLimit= userJSON.subscription.plan.orders_limit
 userJSON.totalProductsLimit= userJSON.subscription.plan.products_limit
     if (!user.active) {
