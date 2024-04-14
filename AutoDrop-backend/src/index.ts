@@ -78,10 +78,8 @@ if (process.env.NODE_ENV === "production") {
 conect();
 
 // websocket
-const server = require('http').createServer(app);
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ server });
-
+const wss = new WebSocket.Server({ port: 7777 });
 let clients:any = {};
 
 wss.on('connection', (ws:any) => {
@@ -157,7 +155,7 @@ app.all("*", (req, res, next) => {
 //Using global error handling middleware
 app.use(globalErrorHandler);
 
-server.listen(10000, () => {
+app.listen(10000, () => {
   console.log(`server is running `);
   TokenRefreshHandler.start()
   ProductUpToDate.start()
