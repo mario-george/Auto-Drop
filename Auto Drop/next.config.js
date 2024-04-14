@@ -8,6 +8,7 @@ const nextConfig = {
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_BACK_URL: process.env.NEXT_PUBLIC_BACK_URL,
     NEXT_PUBLIC_ENVIRONMENT: process.env.NEXT_PUBLIC_ENVIRONMENT,
+    NEXT_PUBLIC_BACK_WS : process.env.NEXT_PUBLIC_BACK_WS
   },
   images: {
     domains: ["www.shutterstock.com", "ae01.alicdn.com"],

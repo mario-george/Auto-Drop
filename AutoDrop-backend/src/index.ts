@@ -77,6 +77,43 @@ if (process.env.NODE_ENV === "production") {
 
 conect();
 
+// websocket
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 7777 });
+let clients:any = {};
+
+wss.on('connection', (ws:any) => {
+  console.log('New client connected');
+
+
+  ws.on('message', (message:string) => {
+    try {
+      const { id } = JSON.parse(message);
+      if (typeof id === 'string') {
+        clients[id] = ws;
+      } else {
+        console.error('Invalid ID:', id);
+      }
+    } catch (error) {
+      console.error('Failed to parse message:', message, error);
+    }
+  });
+
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    // Remove the WebSocket from the clients object when it's closed
+    Object.keys(clients).forEach((clientId:string) => {
+      if (clients[clientId] === ws) {
+        delete clients[clientId];
+      }
+    });
+  });
+});
+app.use((req, res, next) => {
+  req.clients = clients;
+  next();
+});
+// websocket
 //Global resources
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/handler", handlerRoutes);
@@ -87,6 +124,8 @@ app.use("/api/v1/salla", sallaRoutes);
 app.use("/api/v1/shipping", shippingRoutes);
 app.use("/api/v1/settings", settingRoute  );
 app.use("/api/v1/orders", orderRoutes  );
+
+
 app.post("/webhooks/subscribe", async (req, res,next) => {
   const requestHMAC = req.header("x-salla-signature");
   // const secret = await findSettingKey("SALLA_WEBHOOK_TOKEN");
@@ -102,7 +141,7 @@ app.post("/webhooks/subscribe", async (req, res,next) => {
     return res.sendStatus(401);
   }
 
-  await WebHookHandler(req,res,next);
+  await WebHookHandler(req,res,next,clients);
 if(!res.headersSent){
 return res.sendStatus(200);
 }

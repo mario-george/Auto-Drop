@@ -7,6 +7,8 @@ const userSlice = createSlice({
     token: "",
     id: "",
     name: "",
+    storeName: "",
+    storeLink: "",
     email: "",
     role: "",
     image: "",
@@ -15,11 +17,20 @@ const userSlice = createSlice({
     aliExpressToken: "",
     country: "",
     createdAt: "",
+    planName: "",
+    subscriptionStart: "",
+    subscriptionExpiry: "",
+    subscriptionOrdersLimit: 0,
+    subscriptionProductsLimit: 0,
+    totalOrdersLimit:0,
+    totalProductsLimit:0
   },
   reducers: {
     login(state, action) {
       state.isLoggedIn = true;
       state.name = action.payload.name;
+      state.storeName = action.payload.storeName;
+      state.storeLink = action.payload.storeLink;
       state.email = action.payload.email;
       state.role = action.payload.role;
       state.image = action.payload.image;
@@ -30,11 +41,23 @@ const userSlice = createSlice({
       state.aliExpressToken = action.payload.aliExpressToken;
       state.country = action.payload.country;
       state.createdAt = action.payload.createdAt;
+      state.planName = action.payload.planName;
+      state.subscriptionStart = action.payload.subscriptionStart;
+      state.subscriptionExpiry = action.payload.subscriptionExpiry;
+      state.subscriptionOrdersLimit = action.payload.subscriptionOrdersLimit;
+      state.subscriptionProductsLimit = action.payload.subscriptionProductsLimit;
+      state.totalOrdersLimit = action.payload.totalOrdersLimit;
+      state.totalProductsLimit = action.payload.totalProductsLimit;
+
+
+      
       localStorage.setItem("token", action.payload.token);
     },
     logout(state) {
       state.isLoggedIn = false;
       state.name = "";
+      state.storeName = "";
+      state.storeLink = "";
       state.email = "";
       state.role = "";
       state.image = "";
@@ -45,18 +68,33 @@ const userSlice = createSlice({
       state.aliExpressToken = "";
       state.country = "";
       state.createdAt = "";
+      state.planName = "";
+      state.subscriptionStart = "";
+      state.subscriptionExpiry = "";
+      state.subscriptionOrdersLimit = 0;
+      state.subscriptionProductsLimit = 0;
+      state.totalProductsLimit = 0
+      state.totalOrdersLimit = 0
+      
     },
     updateToken(state, action) {
       const { tokenType, token } = action.payload;
-      console.log("here");
-      console.log(token);
-      console.log(tokenType);
+
       if (tokenType === "Salla") {
         state.sallaToken = token;
       } else if (tokenType === "AliExpress") {
         state.aliExpressToken = token;
       }
-      console.log(state.aliExpressToken);
+    },
+    changeSubscription: (state, action) => {
+      const { planName ,subscriptionStart ,subscriptionExpiry ,subscriptionOrdersLimit ,subscriptionProductsLimit ,totalOrdersLimit ,totalProductsLimit } = action.payload;
+      state.planName = planName;
+      state.subscriptionStart = subscriptionStart;
+      state.subscriptionExpiry = subscriptionExpiry;
+      state.subscriptionOrdersLimit = subscriptionOrdersLimit;
+      state.subscriptionProductsLimit = subscriptionProductsLimit;
+      state.totalOrdersLimit = totalOrdersLimit;
+      state.totalProductsLimit = totalProductsLimit;
     },
   },
 });

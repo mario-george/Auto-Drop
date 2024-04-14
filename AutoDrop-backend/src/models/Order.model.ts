@@ -61,6 +61,7 @@ interface OrderSchema {
   totalPrice:number
   customerName:string|null
   storeName:string
+  order_memo:string
 }
 
 interface OrderDocument extends Document, OrderSchema {}
@@ -99,7 +100,9 @@ const options = {
   paid:{type:Boolean,default:false},
   totalPrice:{type:Number,default:0},
   customerName:{type:String,default:null},
-  storeName:{type:String,default:""}
+  storeName:{type:String,default:""},
+  order_memo:{type:String,default:""}
+  
 };
 
 const schema = new Schema<OrderSchema>(options, { timestamps: true });

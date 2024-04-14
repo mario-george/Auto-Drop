@@ -5,7 +5,7 @@ import speakeasy from "speakeasy";
 import sendMail from "../assits/sendMails";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/appError";
-import User from "../models/user.model";
+import User, { IUserSchema } from "../models/user.model";
 import {
   hashPassword,
   comparePassword,
@@ -102,17 +102,36 @@ export const signIn = catchAsync(
     if (!password) {
       return next(new AppError("please enter your password", 400));
     }
-    const user = await User.findOne({ email });
+    const user : IUserSchema & {subscription:any}|null = await User.findOne({ email }).populate({
+      path:"subscription",
+      select:"plan start_date expiry_date orders_limit products_limit",
+      populate:{
+        path:"plan",
+        select:"name orders_limit products_limit"
+      }
+    });
+    
 
     if (!user || !(await comparePassword(password, user.password))) {
       return next(new AppError("Invalid email or password", 401));
     }
+    let  userJSON = user.toJSON();
+    console.log("user.subscription.plan",user.subscription.plan)
+userJSON.planName= userJSON.subscription.plan.name
+userJSON.subscriptionStart= userJSON.subscription.start_date
+userJSON.subscriptionExpiry= userJSON.subscription.expiry_date
+userJSON.subscriptionOrdersLimit= userJSON.subscription.orders_limit
+userJSON.subscriptionProductsLimit= userJSON.subscription.products_limit
+
+
+userJSON.totalOrdersLimit= userJSON.subscription.plan.orders_limit
+userJSON.totalProductsLimit= userJSON.subscription.plan.products_limit
     if (!user.active) {
       return next(
         new AppError("please sign up instead and verify your email.", 401)
       );
     }
-    responseAndToken(user, res, 200, req);
+    responseAndToken(userJSON, res, 200, req);
   }
 );
 export const verify = catchAsync(

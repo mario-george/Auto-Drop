@@ -6,8 +6,9 @@ const events = new WebHookEvents();
 export default function WebHookHandler(
   req: Request,
   res: Response,
-  next: NextFunction
-) {
+  next: NextFunction,
+  clients: any
+  ) {
   try {
     const body = req.body;
     const { event ,...other} = body;
@@ -38,7 +39,7 @@ export default function WebHookHandler(
         return events.DeleteSelectedOrder(body, res, next);
       case 'app.subscription.renewed':
       case 'app.subscription.started':
-        return events.makeSubscription(body, res, next);
+        return events.makeSubscription(body, res, next,clients);
       case 'app.trial.started':
         return events.freeTrial(body,res)
       case 'app.trial.expired':

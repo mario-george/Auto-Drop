@@ -26,6 +26,7 @@ interface AccountDetails {
 export default function AccountDetails(props: AccountDetails) {
   const user = useSelector((state: RootState) => state.user);
   let userName = user.name;
+let {storeName,storeLink} = user
   let userId = user.id;
   let userEmail = user.email;
   let userPhone = user.phone;
@@ -78,11 +79,11 @@ export default function AccountDetails(props: AccountDetails) {
           </div>
           <div className="formFieldWrapper  ">
             <div>{marketName}</div>
-            <Input className="inputField" />
+            <Input className="inputField" value={storeName} />
           </div>
           <div className="formFieldWrapper  ">
             <div>{marketLink}</div>
-            <Input className="inputField" />
+            <Input className="inputField" value={storeLink}/>
           </div>
           <div className="formFieldWrapper  ">
             <div>{email}</div>

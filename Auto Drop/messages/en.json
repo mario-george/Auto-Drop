@@ -245,7 +245,9 @@
     "plansTitle": "Plans",
     "productsNumber": "Products Number",
     "ordersNumber": "Orders Number",
-    "tryForFree": "Try for free"
+    "tryForFree": "Try for free",
+    "upgradeOrRenew":"To upgrade or renew the package through the application installed on your store"
+
   },
   "clientSettings": {
     "settings": "Settings",
@@ -254,7 +256,7 @@
     "confirmPassword": "Confirm Password",
     "saveChanges": "Save Changes",
     "changePassword": "Change Password",
-    "changeAccountDetails": "Change Account Details",
+    "changeAccountDetails": "Account Details",
     "merchantID": "Merchant ID",
     "name": "Client Name",
     "marketName": "Store Name",
@@ -455,7 +457,26 @@
     "cartoon": "Cartoon",
     "supplierShipping": "Choose a shipping method from the supplier"
   },"ordersPagev2":{
-    "orderStatus":"Order Status"
+    "orderStatus":"Order Status",
+    "created":"Created",
+    "inReview":"In Review",
+    "InProgress":"In Progress",
+    "delivered":"Delivered",
+    "deliveryInProgess":"Delivery in progess",
+    "localTracking":"Local Tracking",
 
+
+"internationalTracking":"International Tracking",
+"shipComHomePage":"Shipping Company Homepage",
+"underwayNow":"Underway Now",
+"contactShipCom":"Contact Shipping Company",
+"expectedDuration":"Expected Duration",
+"aliexpress":"AliExpress",
+"shippingInfo":"Shipping Info",
+"notYet":"Not Yet",
+"shipStatus":"Shipping Status",
+"supplier":"Supplier",
+"Warehouse":"Warehouse",
+"client":"Client"
   }
 }

@@ -192,3 +192,7 @@ wallet page sttyles
 .shippingCardPriceActive {
   @apply text-[#F4B1AC] rounded-lg text-sm md:text-base;
 }
+/* dark theme */
+.bgWD{
+  @apply bg-white dark:bg-[#2e464f]
+}

@@ -1,12 +1,23 @@
 import Monthly from "../_components/plansComponents/Packages";
 import { useLocale, useTranslations } from "next-intl";
+import PlanInfoSection from './_components/PlanInfoSection';
+import PlanSection from "./_components/PlanSection";
 
 export default function PlansPage() {
   const t = useTranslations("packages");
   const t2 = useTranslations("clientPlans");
   const locale = useLocale();
+  let PlanSectionProps ={
+    remainingProductsText:t2("remainingProducts"),
+    remainingOrdersText:t2("remainingOrders"),
+    subscriptionDateText:t2("subscriptionDate"),
+    subscriptionExpirationDateText:t2("subscriptionExpirationDate"),locale
 
+  }
   return (<>
+    <PlanSection
+{...PlanSectionProps}
+    />
   <Monthly
     locale={locale}
 
@@ -27,6 +38,8 @@ export default function PlansPage() {
     tryForFree={t2("tryForFree")}
     
   />
+  <PlanInfoSection upgradeOrRenew={t2("upgradeOrRenew")} />
+
   </>
   );
 }

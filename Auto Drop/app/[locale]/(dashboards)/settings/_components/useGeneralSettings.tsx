@@ -174,7 +174,7 @@ export default function useGeneralSettings(props: GeneralSettingsProps) {
             />
             <div>{consolidatePricing}</div>
           </div>
-          <div className="generalSettingsLargeField  lap:!space-s-16 tab:!max-w-[70%] lap:!max-w-[35%]  ">
+          <div className="generalSettingsLargeField  lap:!space-s-16 tab:!max-w-[70%] lap:!max-w-[45%]  ">
             <div className="tab:whitespace-nowrap">{viewOriginal}</div>
             <RadioGroup
               // defaultValue="shippingIncluded"
