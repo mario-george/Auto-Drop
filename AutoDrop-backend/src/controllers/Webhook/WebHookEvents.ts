@@ -27,6 +27,7 @@ import AppError from "../../utils/appError";
 import { UpdateOrderTracking } from "./handlers/order";
 import { CheckTokenExpire } from "./handlers/data/authHandler";
 import { GenerateToken } from "./handlers/token";
+import { sendSubscription } from "./utils/sendSubscription";
 
 export default class WebHookEvents {
   async CreateNewApp(body: any, res: Response, next: NextFunction) {
@@ -428,7 +429,7 @@ export default class WebHookEvents {
     }
   }
 
-  async makeSubscription(body: any, res: Response, next: NextFunction) {
+  async makeSubscription(body: any, res: Response, next: NextFunction,clients:any) {
     try {
 console.log("subscription started")
 
@@ -460,9 +461,17 @@ console.log("subscription started")
       });
 console.log("subscription completed")
 console.log("subscription",subscription)
-      await Promise.all([transaction.save(), subscription.save()]).then(() => {
-        return res.status(201).send("subscription saved");
-      });
+
+await Promise.all([transaction.save(), subscription.save()]).then(() => {
+  res.status(201).send("subscription saved");
+});
+try{
+
+  sendSubscription(subscription,plan,user.id,clients)
+}catch(err:any){
+  console.error(err)
+  console.error("failed to send subscription to frontend")
+}
     } catch (error: any) {
       return res.status(500).json({ error: error.message });
     }

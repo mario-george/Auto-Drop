@@ -87,6 +87,46 @@ app.use("/api/v1/salla", sallaRoutes);
 app.use("/api/v1/shipping", shippingRoutes);
 app.use("/api/v1/settings", settingRoute  );
 app.use("/api/v1/orders", orderRoutes  );
+
+// websocket
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 7778 });
+let clients:any = {};
+
+wss.on('connection', (ws:any) => {
+  console.log('New client connected');
+
+  // This is where you would get your subscription data
+  const subscriptionData = {planName:"Test"};
+
+  // Send the subscription data to the client
+  // ws.send(JSON.stringify(subscriptionData));
+  ws.on('message', (message:string) => {
+    try {
+      const { id } = JSON.parse(message);
+      if (typeof id === 'string') {
+        clients[id] = ws;
+      } else {
+        console.error('Invalid ID:', id);
+      }
+    } catch (error) {
+      console.error('Failed to parse message:', message, error);
+    }
+  });
+
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    // Remove the WebSocket from the clients object when it's closed
+    Object.keys(clients).forEach((clientId:string) => {
+      if (clients[clientId] === ws) {
+        delete clients[clientId];
+      }
+    });
+  });
+});
+
+// websocket
+
 app.post("/webhooks/subscribe", async (req, res,next) => {
   const requestHMAC = req.header("x-salla-signature");
   // const secret = await findSettingKey("SALLA_WEBHOOK_TOKEN");
@@ -102,7 +142,7 @@ app.post("/webhooks/subscribe", async (req, res,next) => {
     return res.sendStatus(401);
   }
 
-  await WebHookHandler(req,res,next);
+  await WebHookHandler(req,res,next,clients);
 if(!res.headersSent){
 return res.sendStatus(200);
 }
