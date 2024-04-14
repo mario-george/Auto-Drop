@@ -461,8 +461,11 @@ console.log("subscription started")
       });
 console.log("subscription completed")
 console.log("subscription",subscription)
+user.subscription = subscription._id
+await Promise.all([transaction.save(), subscription.save()
 
-await Promise.all([transaction.save(), subscription.save()]).then(() => {
+,user.save()
+]).then(() => {
   res.status(201).send("subscription saved");
 });
 try{
