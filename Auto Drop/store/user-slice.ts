@@ -16,7 +16,14 @@ const userSlice = createSlice({
     sallaToken: "",
     aliExpressToken: "",
     country: "",
-    createdAt: "",planName:""
+    createdAt: "",
+    planName: "",
+    subscriptionStart: "",
+    subscriptionExpiry: "",
+    subscriptionOrdersLimit: "",
+    subscriptionProductsLimit: "",
+    totalOrdersLimit:"",
+    totalProductsLimit:""
   },
   reducers: {
     login(state, action) {
@@ -35,14 +42,22 @@ const userSlice = createSlice({
       state.country = action.payload.country;
       state.createdAt = action.payload.createdAt;
       state.planName = action.payload.planName;
+      state.subscriptionStart = action.payload.subscriptionStart;
+      state.subscriptionExpiry = action.payload.subscriptionExpiry;
+      state.subscriptionOrdersLimit = action.payload.subscriptionOrdersLimit;
+      state.subscriptionProductsLimit = action.payload.subscriptionProductsLimit;
+      state.totalOrdersLimit = action.payload.totalOrdersLimit;
+      state.totalProductsLimit = action.payload.totalProductsLimit;
 
+
+      
       localStorage.setItem("token", action.payload.token);
     },
     logout(state) {
       state.isLoggedIn = false;
       state.name = "";
       state.storeName = "";
-      state.storeLink= "";
+      state.storeLink = "";
       state.email = "";
       state.role = "";
       state.image = "";
@@ -54,6 +69,13 @@ const userSlice = createSlice({
       state.country = "";
       state.createdAt = "";
       state.planName = "";
+      state.subscriptionStart = "";
+      state.subscriptionExpiry = "";
+      state.subscriptionOrdersLimit = "";
+      state.subscriptionProductsLimit = "";
+      state.totalProductsLimit = ""
+      state.totalOrdersLimit = ""
+      
     },
     updateToken(state, action) {
       const { tokenType, token } = action.payload;
@@ -63,9 +85,17 @@ const userSlice = createSlice({
       } else if (tokenType === "AliExpress") {
         state.aliExpressToken = token;
       }
-    },changeSubscription:(state,action)=>{
-      state.planName = action.payload.planName;
-    }
+    },
+    changeSubscription: (state, action) => {
+      const { planName ,subscriptionStart ,subscriptionExpiry ,subscriptionOrdersLimit ,subscriptionProductsLimit ,totalOrdersLimit ,totalProductsLimit } = action.payload;
+      state.planName = planName;
+      state.subscriptionStart = subscriptionStart;
+      state.subscriptionExpiry = subscriptionExpiry;
+      state.subscriptionOrdersLimit = subscriptionOrdersLimit;
+      state.subscriptionProductsLimit = subscriptionProductsLimit;
+      state.totalOrdersLimit = totalOrdersLimit;
+      state.totalProductsLimit = totalProductsLimit;
+    },
   },
 });
 
