@@ -103,6 +103,9 @@ export default function LoginForm({
       const responseData = response.data
       console.log("responseData",responseData)
       if (response.status >=200 && response.status < 300) {
+        let {planName , subscriptionStart ,            subscriptionExpiry,
+          subscriptionOrdersLimit,
+          subscriptionProductsLimit,totalOrdersLimit,totalProductsLimit} =  responseData.data.user
         dispatch(
           userActions.login({
             token: responseData.data.accessToken,
@@ -118,6 +121,11 @@ export default function LoginForm({
             aliExpressToken: responseData.data.user.aliExpressToken,
             country: responseData.data.user.country,
             createdAt: responseData.data.user.createdAt,
+            planName,
+            subscriptionStart,
+            subscriptionExpiry,
+            subscriptionOrdersLimit,
+            subscriptionProductsLimit,totalProductsLimit,totalOrdersLimit,
             isLoggedin: true,
           })
         );

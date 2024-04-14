@@ -8,6 +8,8 @@ import { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+import { userActions } from "@/store/user-slice";
+import { useDispatch } from "react-redux";
 
 export default function ClientHeader({
   lang,
@@ -20,10 +22,38 @@ export default function ClientHeader({
   planValue: string;
   locale: string;
 }) {
-  const image = useSelector((state: RootState) => state.user.image);
+  // const image = useSelector((state: RootState) => state.user.image);
   const user = useSelector((state: RootState) => state.user);
-  const createdAt = useSelector((state: RootState) => state.user.createdAt);
-  const name = useSelector((state: RootState) => state.user.name);
+  // const createdAt = useSelector((state: RootState) => state.user.createdAt);
+  // const name = useSelector((state: RootState) => state.user.name);
+  const {createdAt , name , image} = useSelector((state: RootState) => state.user);
+
+ 
+const  dispatch = useDispatch()
+  useEffect(() => {
+    const socket = new WebSocket('ws://localhost:7777');
+    socket.addEventListener('open', (event) => {
+      socket.send(JSON.stringify({ id: user.id }));
+    });
+    socket.onmessage = (event) => {
+      console.log("RAW EVENT",event)
+      try {
+        // let data = JSON.parse(event.data);
+        let data = JSON.parse(event.data)
+        console.log("eventtt",data)
+        console.log("eventtt t",typeof data)
+        if(data.eventType === "subscription"){
+          dispatch(userActions.changeSubscription(data));
+        }
+      } catch (error) {
+        console.error('Failed to parse message:', event.data, error);
+      }
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, []);
   console.log(createdAt);
   const options = {
     weekday: "long",
@@ -167,7 +197,7 @@ query={orderId:searchParams.get('orderId')}
                 <div className="absolute text-black dark:text-white right-3 top-[3px] lap:top-[1px]   text-xs tab:text-sm lap:text-md">
                   {planTitle}
                 </div>
-                <div className="absolute text-white dark:text-[#253439] top-[3px] text-xs lap:top-[1px]  lap:left-[6px]  tab:text-sm lap:text-md">
+                <div className="absolute text-white dark:text-[#253439] top-[3px] text-xs lap:top-[1px]  lap:left-[6px]  tab:text-sm lap:text-md font-bold">
                   {user.planName}
                 </div>
               </div>
@@ -187,8 +217,8 @@ query={orderId:searchParams.get('orderId')}
               <div className="absolute text-black right-3 top-[3px] tab:top-[5px]   text-xs  lap:text-md dark:text-white">
                 {planTitle}
               </div>
-              <div className="absolute text-white top-[3px] text-xs  tab:top-[5px] tab:left-[6px] lap:text-md  dark:text-[#253439]">
-                {planValue}
+              <div className="absolute text-white top-[3px] text-xs  tab:top-[5px] tab:left-[6px] lap:text-md  dark:text-[#253439] font-bold">
+                {user.planName}
               </div>
             </div>
           </>
