@@ -35,7 +35,7 @@ export default function ClientHeader({
  }
 const  dispatch = useDispatch()
   useEffect(() => {
-    const socket = new WebSocket(webSocketUrl);
+    const socket = new WebSocket(webSocketUrl as string);
     socket.addEventListener('open', (event) => {
       socket.send(JSON.stringify({ id: user.id }));
     });
