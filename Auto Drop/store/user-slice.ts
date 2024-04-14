@@ -20,10 +20,10 @@ const userSlice = createSlice({
     planName: "",
     subscriptionStart: "",
     subscriptionExpiry: "",
-    subscriptionOrdersLimit: "",
-    subscriptionProductsLimit: "",
-    totalOrdersLimit:"",
-    totalProductsLimit:""
+    subscriptionOrdersLimit: 0,
+    subscriptionProductsLimit: 0,
+    totalOrdersLimit:0,
+    totalProductsLimit:0
   },
   reducers: {
     login(state, action) {
@@ -71,10 +71,10 @@ const userSlice = createSlice({
       state.planName = "";
       state.subscriptionStart = "";
       state.subscriptionExpiry = "";
-      state.subscriptionOrdersLimit = "";
-      state.subscriptionProductsLimit = "";
-      state.totalProductsLimit = ""
-      state.totalOrdersLimit = ""
+      state.subscriptionOrdersLimit = 0;
+      state.subscriptionProductsLimit = 0;
+      state.totalProductsLimit = 0
+      state.totalOrdersLimit = 0
       
     },
     updateToken(state, action) {
