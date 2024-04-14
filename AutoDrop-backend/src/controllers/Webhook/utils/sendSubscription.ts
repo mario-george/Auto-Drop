@@ -4,7 +4,7 @@ import { PlanDocument } from "../../../models/Plan.model";
 
 
 
-export const  sendSubscription = async(subscription:SubscriptionDocument,plan:PlanDocument,userId:string,clients:any)=>{
+export const  sendSubscription = async(subscription:SubscriptionDocument,plan:PlanDocument,userId:string,clients:any,WebSocket:any)=>{
     const subscriptionJSON = subscription.toJSON()
     subscriptionJSON.planName = plan.name
     subscriptionJSON.eventType = "subscription"

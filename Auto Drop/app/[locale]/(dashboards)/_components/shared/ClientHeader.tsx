@@ -31,8 +31,8 @@ export default function ClientHeader({
   let envType = process.env.NEXT_PUBLIC_ENVIRONMENT
  let webSocketUrl  = process.env.NEXT_PUBLIC_BACK_WS
  if(envType === "dev"){
- webSocketUrl = "ws://localhost:10000"
-//  webSocketUrl = "ws://auto-drop-rtxb.onrender:7777"
+//  webSocketUrl = "ws://localhost:10000"
+ webSocketUrl = "wss://auto-drop-rtxb.onrender.com"
 //  webSocketUrl = "ws://auto-drop-rtxb.onrender:7777"
  }
 const  dispatch = useDispatch()
@@ -59,7 +59,7 @@ const  dispatch = useDispatch()
     return () => {
       socket.close();
     };
-  }, []);
+  }, [webSocketUrl]);
   console.log(createdAt);
   const options = {
     weekday: "long",

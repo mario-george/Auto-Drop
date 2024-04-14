@@ -429,7 +429,7 @@ export default class WebHookEvents {
     }
   }
 
-  async makeSubscription(body: any, res: Response, next: NextFunction,clients:any) {
+  async makeSubscription(body: any, res: Response, next: NextFunction,clients:any,WebSocket:any) {
     try {
 console.log("subscription started")
 
@@ -470,7 +470,7 @@ await Promise.all([transaction.save(), subscription.save()
 });
 try{
 
-  sendSubscription(subscription,plan,user.id,clients)
+  sendSubscription(subscription,plan,user.id,clients,WebSocket)
 }catch(err:any){
   console.error(err)
   console.error("failed to send subscription to frontend")
