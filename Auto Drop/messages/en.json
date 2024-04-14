@@ -245,7 +245,9 @@
     "plansTitle": "Plans",
     "productsNumber": "Products Number",
     "ordersNumber": "Orders Number",
-    "tryForFree": "Try for free"
+    "tryForFree": "Try for free",
+    "upgradeOrRenew":"To upgrade or renew the package through the application installed on your store"
+
   },
   "clientSettings": {
     "settings": "Settings",
