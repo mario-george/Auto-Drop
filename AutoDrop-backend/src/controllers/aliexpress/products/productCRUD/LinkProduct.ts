@@ -477,9 +477,10 @@ for(let i =0 ; i<sallaValuesIds.length;i++){
       await updateVariantFinalOption2(product, access_token, tokenData))().then(
       async () => {
         if (subscription && subscription.products_limit) {
-          await Subscription.updateOne(
+           subscription = await Subscription.findOneAndUpdate(
             { _id: subscription._id },
-            { $inc: { products_limit: -1 } }
+            { $inc: { products_limit: -1 } },
+            { new: true }
           );
         }
 /*         await Promise.all([product?.save(), subscription?.save()]);
