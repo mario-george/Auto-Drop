@@ -155,6 +155,9 @@ return res.sendStatus(200);
 
 app.post("/api/v1/websocketHandler",catchAsync(async (req, res,next) => {
   let {subscription,plan,event} = req.body
+console.log("subscription is ",subscription)  
+console.log("req.body is ",req.body)  
+
   if(event == "app.subscription.renewed" ){
 
     if (!plan) {
