@@ -1,9 +1,18 @@
 import axios from "axios";
-import { SubscriptionDocument } from "../../../models/Subscription.model";
+import { SubscriptionDocument, SubscriptionSchema } from "../../../models/Subscription.model";
 import { Plan, PlanDocument } from "../../../models/Plan.model";
-
+interface ISubscriptionToBeSent extends SubscriptionSchema {
+  planName: string;
+  eventType: string;
+  subscriptionStart: Date;
+  subscriptionExpiry: Date;
+  subscriptionOrdersLimit: number;
+  subscriptionProductsLimit: number;
+  totalOrdersLimit: number;
+  totalProductsLimit: number;
+}
 export const sendSubscription = async (
-  subscription: SubscriptionDocument,
+  subscription: SubscriptionSchema,
   plan: PlanDocument,
   userId: string,
   clients: any,
@@ -14,22 +23,23 @@ export const sendSubscription = async (
     if(!plan) return console.error("Plan not found");
   } */
 console.log("subscription is ",subscription)  
-  const subscriptionJSON = subscription.toJSON();
-  subscriptionJSON.planName = plan.name;
-  subscriptionJSON.eventType = "subscription";
-  subscriptionJSON.subscriptionStart = subscriptionJSON.start_date;
-  subscriptionJSON.subscriptionExpiry = subscriptionJSON.expiry_date;
-  subscriptionJSON.subscriptionOrdersLimit = subscriptionJSON.orders_limit;
-  subscriptionJSON.subscriptionProductsLimit = subscriptionJSON.products_limit;
+  // const subscriptionJSON = subscription.toJSON();
+  let subscriptionToBeSent:Partial<ISubscriptionToBeSent> = subscription ;
+  subscriptionToBeSent.planName = plan.name;
+  subscriptionToBeSent.eventType = "subscription";
+  subscriptionToBeSent.subscriptionStart = subscription.start_date;
+  subscriptionToBeSent.subscriptionExpiry = subscription.expiry_date;
+  subscriptionToBeSent.subscriptionOrdersLimit = subscription.orders_limit;
+  subscriptionToBeSent.subscriptionProductsLimit = subscription.products_limit;
 
-  subscriptionJSON.totalOrdersLimit = plan.orders_limit;
-  subscriptionJSON.totalProductsLimit = plan.products_limit;
+  subscriptionToBeSent.totalOrdersLimit = plan.orders_limit;
+  subscriptionToBeSent.totalProductsLimit = plan.products_limit;
   // let dataToBeSent = subscriptionJSON
   // const subscriptionParam =JSON.stringify(subscriptionJSON)
   const client = clients[userId];
   const sendClient = () => {
     if (client && client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(subscriptionJSON));
+      client.send(JSON.stringify(subscriptionToBeSent));
       return true;
     } else {
       console.error("Failed to send message: client not connected");
