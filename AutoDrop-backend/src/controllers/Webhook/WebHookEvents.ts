@@ -375,11 +375,11 @@ export default class WebHookEvents {
       if (subscription && subscription.orders_limit)
         subscription.orders_limit = subscription.orders_limit - 1;
  */
-        const subscription = await CheckSubscription(merchant, "orders_limit");
-      
-        if (subscription &&subscription.orders_limit)
+      const subscription = await CheckSubscription(merchant, "orders_limit");
+
+      if (subscription && subscription.orders_limit)
         subscription.orders_limit = subscription.orders_limit - 1;
-      
+
       const order = new Order({
         ...data,
         /*         amounts: {
@@ -403,14 +403,22 @@ export default class WebHookEvents {
       console.log("order", order);
       const status_track = UpdateOrderTracking("created", order);
       order.status_track = status_track;
+await order.save(),
 
-      await Promise.all([
-        subscription?.save(),
+      subscription?.save().then(updatedSubscription => {
+        if(updatedSubscription)
+          WebSocketSender(updatedSubscription);
+      }).catch(err => {
+        // handle error
+        console.error(err);
+      });
+      // await Promise.all([
+        // subscription?.save(),
         /*    order.save(function (err, result) {
           if (err) return console.log(err);
         }), */
-        order.save(),
-      ]);
+        // order.save(),
+      // ]);
 
       return res.status(200).send("order stored");
     } catch (error) {
@@ -435,9 +443,15 @@ export default class WebHookEvents {
     }
   }
 
-  async makeSubscription(body: any, res: Response, next: NextFunction,clients:any,WebSocket:any) {
+  async makeSubscription(
+    body: any,
+    res: Response,
+    next: NextFunction,
+    clients: any,
+    WebSocket: any
+  ) {
     try {
-console.log("subscription started")
+      console.log("subscription started");
 
       const user = await User.findOne({ merchantID: body.merchant });
       // const plan = await Plan.findOne({ name: body.data.plan_name });
@@ -465,22 +479,32 @@ console.log("subscription started")
         amount: body.data.total,
         user: user?.id,
       });
-console.log("subscription completed")
-console.log("subscription",subscription)
-user.subscription = subscription._id
-await Promise.all([transaction.save(), subscription.save()
+      console.log("subscription completed");
+      console.log("subscription", subscription);
+      user.subscription = subscription._id;
+      subscription?.save().then(updatedSubscription => {
+        if(updatedSubscription)
+          WebSocketSender(updatedSubscription);
+      }).catch(err => {
+        // handle error
+        console.error(err);
+      });
+      await Promise.all([
+        transaction.save(),
+        // subscription.save(),
 
-,user.save()
-]).then(() => {
-  res.status(201).send("subscription saved");
-});
-try{
-WebSocketSender(subscription);
-  /* sendSubscription(subscription,plan,user.id,clients,WebSocket) */
-}catch(err:any){
-  console.error(err)
-  console.error("failed to send subscription to frontend")
-}
+        user.save(),
+      ]).then(() => {
+        // WebSocketSender(subscription);
+        res.status(201).send("subscription saved");
+      });
+      try {
+        // WebSocketSender(subscription);
+        /* sendSubscription(subscription,plan,user.id,clients,WebSocket) */
+      } catch (err: any) {
+        console.error(err);
+        console.error("failed to send subscription to frontend");
+      }
     } catch (error: any) {
       return res.status(500).json({ error: error.message });
     }
