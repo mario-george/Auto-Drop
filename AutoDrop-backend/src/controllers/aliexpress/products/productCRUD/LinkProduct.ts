@@ -23,6 +23,7 @@ import { RefreshTokenHandler } from "../../../salla/RefreshAccessToken";
 import { ProductSallaChecker } from "./features/AlreadyLinkedProduct";
 import VariantsPatcher from "./features/VariantsPatcher";
 import fs from 'fs';
+import { CheckSubscription } from "../../../../utils/handlers/CheckSubscription";
 
 export const updateVariantFinalOption2 = async (
   product: ProductDocument,
@@ -222,8 +223,11 @@ export async function LinkProductSalla2(
 ) {
   try {
     console.log("reached this 1 ");
-
     const { role, _id } = req.user;
+    let subscription = await CheckSubscription(
+       _id.toString(),
+       "products_limit"
+     );
     let { productId } = req.body;
     let product: ProductDocument | undefined | null = await Product.findById(
       productId
@@ -470,10 +474,10 @@ for(let i =0 ; i<sallaValuesIds.length;i++){
     (async () =>
       await updateVariantFinalOption2(product, access_token, tokenData))().then(
       async () => {
-        /*       if (subscription.products_limit)
-          subscription.products_limit = subscription.products_limit - 1; */
-        // await Promise.all([product.save(), subscription.save()]);
-        await Promise.all([product?.save()]);
+           if (subscription &&subscription.products_limit)
+          subscription.products_limit = subscription.products_limit - 1; 
+        await Promise.all([product?.save(), subscription?.save()]);
+        // await Promise.all([product?.save()]);
         return res.status(200).json({
           message: "Product created successfully",
           result: {
