@@ -24,6 +24,7 @@ import { ProductSallaChecker } from "./features/AlreadyLinkedProduct";
 import VariantsPatcher from "./features/VariantsPatcher";
 import fs from 'fs';
 import { CheckSubscription } from "../../../../utils/handlers/CheckSubscription";
+import { WebSocketSender } from "../../../../utils/handlers/WebSocketSender";
 
 export const updateVariantFinalOption2 = async (
   product: ProductDocument,
@@ -477,6 +478,8 @@ for(let i =0 ; i<sallaValuesIds.length;i++){
            if (subscription &&subscription.products_limit)
           subscription.products_limit = subscription.products_limit - 1; 
         await Promise.all([product?.save(), subscription?.save()]);
+        if(subscription)
+        WebSocketSender(subscription);
         // await Promise.all([product?.save()]);
         return res.status(200).json({
           message: "Product created successfully",
