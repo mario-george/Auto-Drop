@@ -26,6 +26,9 @@ import WebHookHandler from "./controllers/Webhook/WebHookHandler";
 import orderRoutes from './routes/order.routes';
 import TokenRefreshHandler from "./cron/aliexpress/tokens/TokenRefreshHandler";
 import ProductUpToDate from "./cron/aliexpress";
+import catchAsync from "./utils/catchAsync";
+import { sendSubscription } from "./controllers/Webhook/utils/sendSubscription";
+import { Plan } from "./models/Plan.model";
 const app = express();
 
 //Parse json bodies
@@ -149,6 +152,23 @@ return res.sendStatus(200);
 }
   // res.sendStatus(200);
 });
+
+app.post("/api/v1/websocketHandler",catchAsync(async (req, res,next) => {
+  let {subscription,plan,event} = req.body
+  if(event == "app.subscription.renewed" ){
+
+    if (!plan) {
+      plan = await Plan.findById(subscription.plan);
+      if(!plan) return console.error("Plan not found");
+    }
+    sendSubscription(req.body, plan, subscription.user, clients, WebSocket);
+    res.sendStatus(200);
+  }else{
+    res.sendStatus(404);
+  }
+}));
+
+
 // Handle requests from wrong urls
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

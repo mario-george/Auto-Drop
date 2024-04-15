@@ -13,7 +13,6 @@ import {
   ValueType,
 } from "../../models/product.model";
 import { Order } from "../../models/Order.model";
-import { CheckSubscription } from "./handlers/subscription";
 import { Plan } from "../../models/Plan.model";
 import {
   Subscription,
@@ -28,6 +27,8 @@ import { UpdateOrderTracking } from "./handlers/order";
 import { CheckTokenExpire } from "./handlers/data/authHandler";
 import { GenerateToken } from "./handlers/token";
 import { sendSubscription } from "./utils/sendSubscription";
+import { WebSocketSender } from "../../utils/handlers/WebSocketSender";
+import { CheckSubscription } from "../../utils/handlers/CheckSubscription";
 
 export default class WebHookEvents {
   async CreateNewApp(body: any, res: Response, next: NextFunction) {
@@ -374,6 +375,11 @@ export default class WebHookEvents {
       if (subscription && subscription.orders_limit)
         subscription.orders_limit = subscription.orders_limit - 1;
  */
+        const subscription = await CheckSubscription(merchant, "orders_limit");
+      
+        if (subscription &&subscription.orders_limit)
+        subscription.orders_limit = subscription.orders_limit - 1;
+      
       const order = new Order({
         ...data,
         /*         amounts: {
@@ -399,7 +405,7 @@ export default class WebHookEvents {
       order.status_track = status_track;
 
       await Promise.all([
-        // subscription?.save(),
+        subscription?.save(),
         /*    order.save(function (err, result) {
           if (err) return console.log(err);
         }), */
@@ -469,8 +475,8 @@ await Promise.all([transaction.save(), subscription.save()
   res.status(201).send("subscription saved");
 });
 try{
-
-  sendSubscription(subscription,plan,user.id,clients,WebSocket)
+WebSocketSender(subscription);
+  /* sendSubscription(subscription,plan,user.id,clients,WebSocket) */
 }catch(err:any){
   console.error(err)
   console.error("failed to send subscription to frontend")
