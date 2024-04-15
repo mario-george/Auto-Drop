@@ -13,7 +13,7 @@ export const sendSubscription = async (
     plan = await Plan.findById(subscription.plan);
     if(!plan) return console.error("Plan not found");
   } */
-
+console.log("subscription is ",subscription)  
   const subscriptionJSON = subscription.toJSON();
   subscriptionJSON.planName = plan.name;
   subscriptionJSON.eventType = "subscription";
