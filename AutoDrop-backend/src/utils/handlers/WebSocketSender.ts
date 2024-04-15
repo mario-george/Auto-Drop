@@ -1,7 +1,7 @@
 import axios from "axios";
-import { SubscriptionSchema } from "../../models/Subscription.model";
+import { SubscriptionDocument, SubscriptionSchema } from "../../models/Subscription.model";
 
-export const WebSocketSender = (subscription:SubscriptionSchema) => {
+export const WebSocketSender = (subscription:SubscriptionSchema | SubscriptionDocument) => {
     if(!subscription) return console.error("Subscription not found");
     let webSocketReq = {
         url: `${process.env.Backend_Link}websocketHandler`,
