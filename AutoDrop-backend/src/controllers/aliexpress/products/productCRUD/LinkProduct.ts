@@ -486,6 +486,7 @@ for(let i =0 ; i<sallaValuesIds.length;i++){
             WebSocketSender(updatedSubscription);
         }).catch(err => {
           // handle error
+          console.error(err);
         });
         // await Promise.all([product?.save()]);
         return res.status(200).json({
