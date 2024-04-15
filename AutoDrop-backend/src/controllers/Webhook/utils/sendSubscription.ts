@@ -4,15 +4,15 @@ import { Plan, PlanDocument } from "../../../models/Plan.model";
 
 export const sendSubscription = async (
   subscription: SubscriptionDocument,
-  plan: PlanDocument | null,
+  plan: PlanDocument,
   userId: string,
   clients: any,
   WebSocket: any
 ) => {
-  if (!plan) {
+  /* if (!plan) {
     plan = await Plan.findById(subscription.plan);
     if(!plan) return console.error("Plan not found");
-  }
+  } */
 
   const subscriptionJSON = subscription.toJSON();
   subscriptionJSON.planName = plan.name;

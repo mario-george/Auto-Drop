@@ -161,7 +161,7 @@ app.post("/api/v1/websocketHandler",catchAsync(async (req, res,next) => {
       plan = await Plan.findById(subscription.plan);
       if(!plan) return console.error("Plan not found");
     }
-    sendSubscription(req.body, plan, subscription.user, clients, WebSocket);
+    sendSubscription(subscription, plan, subscription.user, clients, WebSocket);
     res.sendStatus(200);
   }else{
     res.sendStatus(404);
