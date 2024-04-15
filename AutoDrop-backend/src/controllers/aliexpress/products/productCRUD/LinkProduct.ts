@@ -25,6 +25,7 @@ import VariantsPatcher from "./features/VariantsPatcher";
 import fs from 'fs';
 import { CheckSubscription } from "../../../../utils/handlers/CheckSubscription";
 import { WebSocketSender } from "../../../../utils/handlers/WebSocketSender";
+import { Subscription } from "../../../../models/Subscription.model";
 
 export const updateVariantFinalOption2 = async (
   product: ProductDocument,
@@ -475,8 +476,12 @@ for(let i =0 ; i<sallaValuesIds.length;i++){
     (async () =>
       await updateVariantFinalOption2(product, access_token, tokenData))().then(
       async () => {
-           if (subscription &&subscription.products_limit)
-          subscription.products_limit = subscription.products_limit - 1; 
+        if (subscription && subscription.products_limit) {
+          await Subscription.updateOne(
+            { _id: subscription._id },
+            { $inc: { products_limit: -1 } }
+          );
+        }
 /*         await Promise.all([product?.save(), subscription?.save()]);
         if(subscription)
         WebSocketSender(subscription); */
