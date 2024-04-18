@@ -66,7 +66,7 @@ export const getNewProductShippingServices = async (
           shipping_fee_cent,
           company: shipping_method,
           max_delivery_days,
-          min_delivery_days,delivery_date_desc
+          min_delivery_days,delivery_date_desc,code
         } = shipping;
         let cent;
         let days;
@@ -82,7 +82,7 @@ export const getNewProductShippingServices = async (
         if (free_shipping) {
           cent = 0;
         } else {
-          cent = Number(shipping_fee_cent) * 100;
+          cent =Number(shipping_fee_cent) * 100;
         }
         return {
           // ...shipping,
@@ -91,7 +91,7 @@ export const getNewProductShippingServices = async (
           },
 
           estimated_delivery_time: days,
-          shipping_method,
+          shipping_method,serviceName:code
         };
       });
       if (error) return reject(new AppError("UnprocessableEntity", 400));

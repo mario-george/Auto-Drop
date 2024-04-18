@@ -19,7 +19,7 @@ const GetProductInfo = catchAsync(
             _id:string
           };
         })
-      | null = await Product.findById(productId).select("highestOptionValue country_code shippingIncludedChoiceIndex shippingIncludedChoice sallaTags categoriesSalla discountPrice showDiscountPrice commissionPercentage variantsArr shipping merchant salla_product_id metadata_description metadata_title options images sku quantity vendor_commission name description sku_id price target_sale_price target_original_price").populate({
+      | null = await Product.findById(productId).select("highestOptionValue country_code shippingIncludedChoiceIndex shippingIncludedChoice sallaTags categoriesSalla discountPrice showDiscountPrice commissionPercentage variantsArr shipping merchant salla_product_id metadata_description metadata_title options images sku quantity vendor_commission name description sku_id price target_sale_price target_original_price original_product_id").populate({
       path: "merchant",
       select:"setting",
       populate: {
