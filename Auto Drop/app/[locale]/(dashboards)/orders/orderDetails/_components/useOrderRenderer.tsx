@@ -13,8 +13,10 @@ export default function useOrderRenderer({
   orderData: any;
   translationMessages: { [key: string]: string };
   locale: string;
+
 }) {
   const [successLoadedOrder, setSuccessLoadedOrder] = useState(false);
+
   let merchantStore = orderData?.storeName ?? "";
   let {
     paymentProcess,
@@ -51,11 +53,12 @@ export default function useOrderRenderer({
   shippingCompanyName, price,withInvoice,comments:commentsText
   } = translationMessages;
   console.log("orderData", orderData);
-  const { OrderNotes } = useOrderDetailsNotes({
+  const { OrderNotes,orderNotesRef } = useOrderDetailsNotes({
     commentsText,
     merchantStore: merchantStore,
     locale,
   });
+
   let OrderDetailsPaymentProps = {
     paymentProcess,
     cod,
@@ -171,5 +174,5 @@ totalPrice =orderData?.amounts?.total?.amount
     );
   }
 
-  return { OrderDataComponent, successLoadedOrder };
+  return { OrderDataComponent, successLoadedOrder,orderNotesRef ,orderMemo:orderNotesRef.current?.value};
 }

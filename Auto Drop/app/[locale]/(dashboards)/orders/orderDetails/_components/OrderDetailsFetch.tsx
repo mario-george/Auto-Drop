@@ -1,8 +1,7 @@
 "use client"
 import { useSearchParams } from "next/navigation";
-import useEffect from "react";
+import {useEffect,useState} from "react";
 import axiosInstance from "@/app/[locale]/(dashboards)/_components/shared/AxiosInstance";
-import useState from "react";
 import useOrderDetails from "./useOrderDetails";
 import useOrderRenderer from "./useOrderRenderer";
 import useOrderDetailsNotes from "./ui/useOrderDetailsNotes";
@@ -13,7 +12,8 @@ interface OrderFetchProps {
 export default function OrderFetch({ translationMessages,locale }: OrderFetchProps) {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId") as string;
-  const { orderData ,ProductDetails} = useOrderDetails({ orderId ,translationMessages,locale});
+  const [sendOrder,setSendOrder] = useState(false)
+  const { orderData ,ProductDetails} = useOrderDetails({ orderId ,translationMessages,locale,setSendOrder,sendOrder});
 
   let {   shipping:shippingText,
   shippingType,
@@ -27,11 +27,34 @@ export default function OrderFetch({ translationMessages,locale }: OrderFetchPro
   supplierShipping,
   estimatedDuration,
   shippingCompanyName, price,withInvoice,comments:commentsText} = translationMessages
-  const { OrderDataComponent } = useOrderRenderer({
+  const { OrderDataComponent,orderMemo } = useOrderRenderer({
     orderData,
     translationMessages,locale
   });
+useEffect(()=>{
+  const orderFetchHandler = async () => {
+    try{
 
+      const res = await axiosInstance.post("/orders/sendOrder", {
+        order_id: orderId,
+        order_memo:orderMemo
+      });
+      let { data } = res;
+      if (res.status >= 200 && res.status < 300) {
+        console.log(data);
+      } else {
+        console.log("Error");
+      }
+    }catch(err){
+      console.log(err)
+    }
+  }
+if(sendOrder){
+ 
+  orderFetchHandler()
+}
+
+},[sendOrder,setSendOrder])
   return (
     <>
 

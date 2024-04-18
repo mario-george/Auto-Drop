@@ -20,6 +20,6 @@ let OrderNotes= <>
 </Textarea>
 </div>
 </>
-return {OrderNotes}
+return {OrderNotes,orderNotesRef}
     
 }

@@ -134,11 +134,12 @@ export function OrderDetailsHeader(props: OrderDetailsHeaderProps) {
 export function SendOrderButton(props: {
   sendOrderText: string;
   isAr: boolean;
+  sendOrderHandler : ()=>void
 }) {
-  let { sendOrderText, isAr } = props;
+  let { sendOrderText, isAr ,sendOrderHandler} = props;
   return (
     <div className="my-3 flex justify-center">
-      <Button className="flex space-s-2 !bg-[#253439] !text-white">
+      <Button className="flex space-s-2 !bg-[#253439] !text-white" onClick={sendOrderHandler}>
         <p>{sendOrderText}</p>
         <p>
           <SendOrderSVG isAr={isAr || false} />
