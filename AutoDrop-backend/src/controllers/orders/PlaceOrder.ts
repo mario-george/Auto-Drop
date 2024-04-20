@@ -192,6 +192,7 @@ export async function PlaceOrder(order: OrderDocument, order_memo: string) {
             { new: true }
           ).then((e) => {
             console.log(result);
+            console.log(result?.order_list);
             return resolve(result);
           });
         } else {
@@ -221,3 +222,4 @@ export const SendOrder = catchAsync(
     return res.json({ data: placeOrderResult });
   }
 );
+
