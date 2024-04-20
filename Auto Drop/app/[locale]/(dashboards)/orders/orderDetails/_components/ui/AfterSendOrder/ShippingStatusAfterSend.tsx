@@ -66,9 +66,9 @@ export const ShippingStatusAfterSend = (
 export const OrderStatusAfterSend = (props: OrderStatusAfterSendProps) => {
   const {
     currStatus,
+    orderStatus,
     deliveryInProgess,
     delivered,
-    orderStatus,
     created,
     inReview,
     InProgress,

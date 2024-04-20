@@ -118,6 +118,7 @@ let { sender,orderStatus,orderSource,amount,date,orderNumber } =translationMessa
 
 <OrderStatusButton
 orderStatus={row.getValue("orderStatus")}
+translationMessages={translationMessages}
 />
             
           </div>
