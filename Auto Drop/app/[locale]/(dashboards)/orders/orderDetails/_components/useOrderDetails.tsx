@@ -60,7 +60,7 @@ export default function useOrderDetails({
   if (orderData && orderData !== "fail" && typeof orderData === "object") {
     let { items } = orderData;
     let OrderDetailsHeaderProps = {
-      orderDetails, locale, orderNumberText, order_id:orderId
+      orderDetails, locale, orderNumberText, order_id:orderId,orderAfterSendActive:false
     }
     ProductDetails = (
       <>

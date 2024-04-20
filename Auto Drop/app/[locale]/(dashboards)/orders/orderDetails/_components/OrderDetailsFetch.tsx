@@ -27,7 +27,7 @@ export default function OrderFetch({ translationMessages,locale }: OrderFetchPro
   supplierShipping,
   estimatedDuration,
   shippingCompanyName, price,withInvoice,comments:commentsText} = translationMessages
-  const { OrderDataComponent,orderMemo } = useOrderRenderer({
+  const { OrderDataComponent,orderMemo,shippingCurrIndex ,CustomerData} = useOrderRenderer({
     orderData,
     translationMessages,locale
   });
@@ -37,7 +37,7 @@ useEffect(()=>{
 
       const res = await axiosInstance.post("/orders/sendOrder", {
         order_id: orderId,
-        order_memo:orderMemo
+        order_memo:orderMemo,CustomerData,shippingCurrIndex
       });
       let { data } = res;
       if (res.status >= 200 && res.status < 300) {
