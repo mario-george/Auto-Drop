@@ -26,6 +26,14 @@ interface OrderDetailsHeaderProps {
   order_id: string | number;
   orderNumberText: string;
   locale: string;
+  orderAfterSendActive:boolean
+}
+interface StatusDetailsHeaderProps {
+  orderStatus: string;
+  order_id: string | number;
+  orderNumberText: string;
+  locale: string;
+
 }
 export default function OrderedProduct(props: OrderedProductProps) {
   let {
@@ -130,7 +138,31 @@ export function OrderDetailsHeader(props: OrderDetailsHeaderProps) {
     </>
   );
 }
+export function StatusDetailsHeader(props: StatusDetailsHeaderProps) {
+  let { orderStatus, locale, orderNumberText, order_id } = props;
+  let isAr = locale === "ar";
+  let secondElement = (
+    <div className="flex space-s-6 ">
+      <div className="bg-white shadow rounded-xl px-4 py-2">
+        <VectorSVG />
+      </div>
+      <div className="bg-white shadow rounded-xl flex space-s-4 px-4 py-2 items-center text-xs tab:text-sm">
+        <div>{orderNumberText}</div>
+        <div>#{order_id}</div>
+      </div>
+    </div>
+  );
+  return (
+    <>
+      <HeaderTwoPartSection
+        isAr={locale == "ar"}
+        title={orderStatus}
+        secondElement={secondElement}
+      />
 
+    </>
+  );
+}
 export function SendOrderButton(props: {
   sendOrderText: string;
   isAr: boolean;
