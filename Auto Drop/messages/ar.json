@@ -479,7 +479,8 @@
 "aliexpress":"علي اكسبريس",
 "notYet":"ليس بعد",
 "shipComHomePage":"الصفحة الرئيسية لشركة الشحن",
-"expectedDuration":"المدة المتوقعة"
+"expectedDuration":"المدة المتوقعة",
+"websiteOrderNumber":"رقم الطلب بالموقع"
 
 }
 }

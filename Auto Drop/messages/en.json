@@ -477,6 +477,7 @@
 "shipStatus":"Shipping Status",
 "supplier":"Supplier",
 "Warehouse":"Warehouse",
-"client":"Client"
+"client":"Client",
+"websiteOrderNumber":"Website order number"
   }
 }
