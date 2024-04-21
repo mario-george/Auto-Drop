@@ -1,4 +1,5 @@
 import React from 'react'
+import { ShippingStatusAfterSend } from './ShippingStatusAfterSend';
 
 interface ShippingAfterSendProps {
   translationMessages : {[key:string]:string}

@@ -7,17 +7,27 @@ import AliExpressToken from "../../models/AliExpressTokenModel";
 import catchAsync from "../../utils/catchAsync";
 import { NextFunction, Response } from "express";
 import * as translateModule from "@vitalets/google-translate-api";
-import countries from "i18n-iso-countries";
 
 // You need to register the languages you are going to use
-countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 
 /* translateModule.translate('الرياض', {from: 'ar', to: 'en'}).then((res:any) => {
     console.log(res.text);
 }).catch((err:any) => {
     console.error(err);
 }); */
-export async function PlaceOrder(order: OrderDocument, order_memo: string) {
+interface CustomerDataType {
+  firstName: string | undefined;
+  lastName: string | undefined;
+  email: string | undefined;
+  phone: string | undefined;
+  country: string | undefined;
+  region: string | undefined;
+  city: string | undefined;
+  postalCode: string | undefined;
+  district: string | undefined;
+  address: string | undefined;
+}
+export async function PlaceOrder(order: OrderDocument, order_memo: string,CustomerData:CustomerDataType,shippingCurrIndex:number[]) {
   return new Promise(async (resolve, reject) => {
     let logistics_address: object, product_items: any[];
     const { items, shipping } = order.toJSON();
@@ -37,7 +47,7 @@ export async function PlaceOrder(order: OrderDocument, order_memo: string) {
     }
     product_items = await Promise.all(
       (items as any[])
-        ?.map(async (item: any) => {
+        ?.map(async (item: any,itemIndex:number) => {
           const product = await Product.findById(item?.product?._id).exec();
           if (!product) return;
 
@@ -56,31 +66,14 @@ export async function PlaceOrder(order: OrderDocument, order_memo: string) {
           // console.log("sku_attr",sku_attr)
 
           const sku_attr = item.choosenVariant;
-          console.log("order_memo", order_memo);
-          console.log(
-            "item?.product?.shipping?.[0]?.shipping_method",
-            item?.product?.shipping?.[0]?.shipping_method
-          );
+       
           if (sku_attr) {
-            console.log("item?.quantity", item?.quantity);
-            console.log("typeof item?.quantity", typeof item?.quantity);
-            console.log(
-              " Number(product.original_product_id)",
-              Number(product.original_product_id)
-            );
-            console.log(
-              "typeof  Number(product.original_product_id)",
-              typeof Number(product.original_product_id)
-            );
-            console.log(
-              "item?.product?.shipping?.[0]?.serviceName",
-              item?.product?.shipping?.[0]?.serviceName
-            );
+         console.log("[shippingCurrIndex?.[itemIndex]",item?.product?.shipping?.[shippingCurrIndex?.[itemIndex]??0])
             return {
               product_id: Number(product.original_product_id),
               sku_attr: sku_attr.sku_code,
 
-              logistics_service_name: item?.product?.shipping?.[0]?.serviceName,
+              logistics_service_name: item?.product?.shipping?.[shippingCurrIndex?.[itemIndex]??0]?.serviceName,
               
               order_memo:
                 order_memo ??
@@ -88,7 +81,6 @@ export async function PlaceOrder(order: OrderDocument, order_memo: string) {
               product_count: item?.quantity,
             };
           } else {
-            // console.log(item.sku , productSkus)
             return reject(
               new AppError(
                 "Error Happend While Send Order Contact Support",
@@ -99,13 +91,11 @@ export async function PlaceOrder(order: OrderDocument, order_memo: string) {
         })
         .filter((e: any) => e)
     );
-    console.log("product_items", product_items);
     const full_name = "test account" ?? `${orderData?.customer?.first_name} ${orderData?.customer?.last_name}`;
     const addresss = shipping?.address;
 
     // let cityEn = await translateModule.translate(addresss.city, {from: 'ar', to: 'en'}).then((res:any) => {return res.text}).catch((err:any) => {
 
-    let countryNameEn = countries.getName(addresss.country, "en");
     /*    translateModule.translate(addresss.city, {from: 'ar', to: 'en'}).then((res:any) => {
       cityEn= res.text
       console.log(res.text);
@@ -159,13 +149,13 @@ export async function PlaceOrder(order: OrderDocument, order_memo: string) {
     const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
     const data = JSON.stringify({
       logistics_address,
-      // out_order_id: randomNumber,
-      out_order_id:"123456789",
+      out_order_id: randomNumber,
+      // out_order_id:"123456789",
 
       
       product_items,
     });
-
+console.log("randomNumber",randomNumber)
     const method = "aliexpress.trade.buy.placeorder";
     const option = {
       method,
@@ -209,7 +199,7 @@ export async function PlaceOrder(order: OrderDocument, order_memo: string) {
 }
 export const SendOrder = catchAsync(
   async (req: any, res: Response, next: NextFunction) => {
-    let { order_id, order_memo } = req.body;
+    let { order_id, order_memo,CustomerData,shippingCurrIndex } = req.body;
     const order = await Order.findOne({ order_id });
     if (!order) {
       return next(new AppError("Order Not Found", 404));
@@ -218,7 +208,7 @@ export const SendOrder = catchAsync(
       order.order_memo = order_memo;
       await order.save();
     }
-    const placeOrderResult = await PlaceOrder(order, order_memo);
+    const placeOrderResult = await PlaceOrder(order, order_memo,CustomerData,shippingCurrIndex);
     return res.json({ data: placeOrderResult });
   }
 );

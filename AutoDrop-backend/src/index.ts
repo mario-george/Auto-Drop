@@ -29,6 +29,7 @@ import ProductUpToDate from "./cron/aliexpress";
 import catchAsync from "./utils/catchAsync";
 import { sendSubscription } from "./controllers/Webhook/utils/sendSubscription";
 import { Plan } from "./models/Plan.model";
+import { updateOrderStatusUpdated } from "./cron/orders";
 const app = express();
 
 //Parse json bodies
@@ -184,4 +185,5 @@ server.listen(10000, () => {
   console.log(`server is running `);
   TokenRefreshHandler.start()
   ProductUpToDate.start()
+  updateOrderStatusUpdated.start()
 });
