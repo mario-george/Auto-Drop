@@ -6,7 +6,7 @@ import {
 } from "../../models/Subscription.model";
 import { sendSubscription } from "../../controllers/Webhook/utils/sendSubscription";
 import axios from "axios";
-import { WebSocketSender } from "./WebSocketSender";
+import { WebSocketSendError, WebSocketSender } from "./WebSocketSender";
 interface PopulatedSubscription extends SubscriptionDocument {
   plan: {
     products_limit: number;
@@ -40,19 +40,33 @@ export async function CheckSubscription(
       );
 
       // throw error when current subscription expired
-      if (!remainingFromExpire)
+      if (!remainingFromExpire){
+
+        WebSocketSendError("subscription-expired",user)
+
         throw new AppError(
           "Your subscription has been ended, please upgrade it then try again later",
           400
         );
+      }
 
       // throw error when current subscription limit ended
 
-      if (requiredSearchKey === 0)
+      if (requiredSearchKey === 0){
+        if(key =="products_limit"){
+
+          WebSocketSendError("subscription-products-limit-reached",user)
+        }else{
+        
+          WebSocketSendError("subscription-orders-limit-reached",user)
+        }
+
+
         throw new AppError(
           "You cannot do this process at that moment, upgrade your subscription first.",
           400
         );
+      }
 
  /*      let webSocketReq = {
         url: `${process.env.Backend_Link}websocketHandler`,

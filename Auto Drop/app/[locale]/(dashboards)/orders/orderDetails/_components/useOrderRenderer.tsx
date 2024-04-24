@@ -70,7 +70,7 @@ export default function useOrderRenderer({
     payNow,
   };
 
-  let { customer,shipping ,status,order_id} = orderData ?? {};
+  let { customer,shipping ,status,order_id,tracking_order_id} = orderData ?? {};
   let {address} = shipping ?? {}
   let {block , city,country,shipping_address,street_number,postal_code} = address ?? {}
   console.log("postal_code",postal_code)
@@ -130,7 +130,7 @@ totalPrice =orderData?.amounts?.total?.amount
     regionText,
   };
   const { OrderCustomer ,CustomerData} = useOrderCustomer({ ...OrderCustomerProps });
-let ShippingAfterSendProps = { translationMessages}
+let ShippingAfterSendProps = { translationMessages,tracking_order_id:tracking_order_id??0}
   let { ShippingAfterSendComponent } = useShippingAfterSend(ShippingAfterSendProps)
   let [shippingItems,setShippingItems ]= useState([])
   useEffect(()=>{

@@ -27,7 +27,7 @@ import orderRoutes from './routes/order.routes';
 import TokenRefreshHandler from "./cron/aliexpress/tokens/TokenRefreshHandler";
 import ProductUpToDate from "./cron/aliexpress";
 import catchAsync from "./utils/catchAsync";
-import { sendSubscription } from "./controllers/Webhook/utils/sendSubscription";
+import { sendSubscription, sendSubscriptionError } from "./controllers/Webhook/utils/sendSubscription";
 import { Plan } from "./models/Plan.model";
 import { updateOrderStatusUpdated } from "./cron/orders";
 const app = express();
@@ -167,6 +167,8 @@ console.log("req.body is ",req.body)
     }
     sendSubscription(subscription, plan, subscription.user, clients, WebSocket);
     res.sendStatus(200);
+  }else if (event =="subscription-expired" || "subscription-orders-limit-reached"|| "subscription-products-limit-reached"){
+    sendSubscriptionError(event,req.body.userId,clients,WebSocket)
   }else{
     res.sendStatus(404);
   }

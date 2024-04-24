@@ -10,6 +10,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { userActions } from "@/store/user-slice";
 import { useDispatch } from "react-redux";
+import { useToast } from "@chakra-ui/react";
 
 export default function ClientHeader({
   lang,
@@ -26,33 +27,61 @@ export default function ClientHeader({
   const user = useSelector((state: RootState) => state.user);
   // const createdAt = useSelector((state: RootState) => state.user.createdAt);
   // const name = useSelector((state: RootState) => state.user.name);
-  const {createdAt , name , image} = useSelector((state: RootState) => state.user);
+  const { createdAt, name, image } = useSelector(
+    (state: RootState) => state.user
+  );
 
-  let envType = process.env.NEXT_PUBLIC_ENVIRONMENT
- let webSocketUrl  = process.env.NEXT_PUBLIC_BACK_WS
- if(envType === "dev"){
- webSocketUrl = "ws://localhost:10000"
-//  webSocketUrl = "wss://auto-drop-rtxb.onrender.com"
-//  webSocketUrl = "ws://auto-drop-rtxb.onrender:7777"
- }
-const  dispatch = useDispatch()
+  let envType = process.env.NEXT_PUBLIC_ENVIRONMENT;
+  let webSocketUrl = process.env.NEXT_PUBLIC_BACK_WS;
+  if (envType === "dev") {
+    webSocketUrl = "ws://localhost:10000";
+    //  webSocketUrl = "wss://auto-drop-rtxb.onrender.com"
+    //  webSocketUrl = "ws://auto-drop-rtxb.onrender:7777"
+  }
+  const toast = useToast();
+  let subscriptionErrorHandler = (title: string, description: string) => {
+    toast({
+      title,
+      description,
+      status: "error",
+      duration: 6000,
+      isClosable: true,
+      position: "bottom-right",
+    });
+  };
+  const dispatch = useDispatch();
   useEffect(() => {
     const socket = new WebSocket(webSocketUrl as string);
-    socket.addEventListener('open', (event) => {
+    socket.addEventListener("open", (event) => {
       socket.send(JSON.stringify({ id: user.id }));
     });
     socket.onmessage = (event) => {
-      console.log("RAW EVENT",event)
+      console.log("RAW EVENT", event);
       try {
         // let data = JSON.parse(event.data);
-        let data = JSON.parse(event.data)
-        console.log("eventtt",data)
-        console.log("eventtt t",typeof data)
-        if(data.eventType === "subscription"){
+        let data = JSON.parse(event.data);
+        console.log("eventtt", data);
+        console.log("eventtt t", typeof data);
+        if (data.eventType === "subscription") {
           dispatch(userActions.changeSubscription(data));
+        } else if (data.eventType === "subscription-expired") {
+          subscriptionErrorHandler(
+            "Subscription Expired",
+            "Please renew your subscription to continue using the service"
+          );
+        } else if (data.eventType === "subscription-products-limit-reached") {
+          subscriptionErrorHandler(
+            "Subscription Products Limit Reached",
+            "Please upgrade your subscription to add more products"
+          );
+        } else if (data.eventType === "subscription-orders-limit-reached") {
+          subscriptionErrorHandler(
+            "Subscription Orders Limit Reached",
+            "Please upgrade your subscription to add more orders"
+          );
         }
       } catch (error) {
-        console.error('Failed to parse message:', event.data, error);
+        console.error("Failed to parse message:", event.data, error);
       }
     };
 
@@ -91,11 +120,11 @@ const  dispatch = useDispatch()
   };
 
   const pathname = usePathname();
-  const searchParams = useSearchParams()
-  let query
+  const searchParams = useSearchParams();
+  let query;
 
-  if(searchParams.has('orderId')){
-query={orderId:searchParams.get('orderId')}
+  if (searchParams.has("orderId")) {
+    query = { orderId: searchParams.get("orderId") };
   }
   const [scrolling, setScrolling] = useState(false);
   const isAr = locale === "ar";
@@ -138,7 +167,8 @@ query={orderId:searchParams.get('orderId')}
             href={{
               pathname: pathname,
               query: query,
-            }}            className={`text-sm md:text-[16px] font-medium ${
+            }}
+            className={`text-sm md:text-[16px] font-medium ${
               isAr ? `border-l-2` : `border-r-2`
             } px-2 py-2`}
           >
