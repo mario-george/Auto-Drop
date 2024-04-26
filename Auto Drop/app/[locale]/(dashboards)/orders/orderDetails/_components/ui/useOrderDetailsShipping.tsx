@@ -31,6 +31,7 @@ interface OrderDetailsShippingProps {
   withInvoice :string
   shippingInfo:any
   price:string
+  DatabaseshippingCurrIndex:string[]|undefined
 }
 export const sectionHeader = (title: string) => {
   return (
@@ -52,7 +53,7 @@ export default function useOrderDetailsShipping({
   supplierShipping,
   estimatedDuration,
   shippingCompanyName,
-  locale,withInvoice,shippingInfo,price
+  locale,withInvoice,shippingInfo,price,DatabaseshippingCurrIndex
 }: OrderDetailsShippingProps) {
   const [shippingChoice, setShippingChoice] = useState<
     "cartoon" | "packagingBag"
@@ -65,18 +66,24 @@ const [selectedLogoType, setSelectedLogoType] = useState<
 >("withLogo");
 const [shippingData,setShippingData] = useState([])
 const [shippingCurrIndex,setShippingCurrIndex] = useState<any>([])
+
+console.log("shippingData",shippingData)
+console.log("shippingCurrIndex",shippingCurrIndex)
 useEffect(()=>{
   if(shippingInfo?.length){
     setShippingData(shippingInfo)
     let shipIndexes = Array(shippingInfo?.length).fill('0')
     for (let i =0  ; i<shippingInfo?.length;i++){
-      let currShipping = shippingInfo[i]
-      let checkedIndex = currShipping.findIndex((shipping:any)=>shipping.checked)
+      let currShipping = shippingInfo?.[i]
+      let checkedIndex = currShipping?.findIndex((shipping:any)=>shipping.checked)
       if(checkedIndex !== -1){
-        shipIndexes[i] = checkedIndex.toString()
+        shipIndexes[i] = checkedIndex?.toString()
       }
     }
     setShippingCurrIndex(Array(shippingInfo?.length).fill('0'))
+  }
+  if( DatabaseshippingCurrIndex && shippingInfo.length === DatabaseshippingCurrIndex?.length){
+    setShippingCurrIndex(DatabaseshippingCurrIndex)
   }
 },[shippingInfo])
   const [shippingSelectedType, setShippingSelectedType] =
@@ -89,7 +96,7 @@ useEffect(()=>{
 
   let AttachButton = (title: string, handler: () => void) => {
     return (
-      <div className="flex items-center space-s-3 bg-[#edf5f9] p-2 rounded-md lap:max-w-[50%]">
+      <div className="flex items-center space-s-3 bg-[#edf5f9] p-2 rounded-md lap:max-w-[50%] dark:text-[#253439]">
         <AttachSVG />
         <p>
 
@@ -238,5 +245,5 @@ let setValueHandler = (value:string)=>{
       </RoundedCardWrapper>
     </>
   );
-  return { OrderShipping };
+  return { OrderShipping ,shippingCurrIndex};
 }

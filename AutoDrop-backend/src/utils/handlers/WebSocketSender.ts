@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { SubscriptionDocument, SubscriptionSchema } from "../../models/Subscription.model";
 
 export const WebSocketSender = (subscription:SubscriptionSchema | SubscriptionDocument) => {
@@ -15,4 +15,35 @@ export const WebSocketSender = (subscription:SubscriptionSchema | SubscriptionDo
         method: "POST",
       };
       axios.request(webSocketReq);
+}
+type IWebSocketError="subscription-expired" | "subscription-orders-limit-reached"| "subscription-products-limit-reached"
+export const WebSocketSendError = (webSocketError:IWebSocketError,userId:any) => {
+  let webSocketReq :AxiosRequestConfig= {
+    url: `${process.env.Backend_Link}websocketHandler`,
+/*     data: {
+      event: "app.subscription.renewed",
+    }, */
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+  };
+  if(!webSocketError ) return console.error("webSocketError not found");
+  if( webSocketError === "subscription-expired"){
+    webSocketReq.data = {
+      event : "subscription-expired"
+    }
+  }else if(webSocketError === "subscription-orders-limit-reached"){
+    webSocketReq.data = {
+      event : "subscription-orders-limit-reached"
+    }
+  }
+  else if(webSocketError === "subscription-products-limit-reached"){
+    webSocketReq.data = {
+      event : "subscription-products-limit-reached"
+    }
+  }
+  webSocketReq.data.userId=userId
+    axios.request(webSocketReq);
+    return
 }

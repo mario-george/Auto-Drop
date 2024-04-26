@@ -477,6 +477,15 @@
 "shipStatus":"Shipping Status",
 "supplier":"Supplier",
 "Warehouse":"Warehouse",
-"client":"Client"
+"client":"Client",
+"websiteOrderNumber":"Website order number",
+"leavingClassCenter":"Leaving the classification center in the country/region of arrival",
+"delByLocal":"Delivery by the local delivery company",
+"leavingCustoms":"Leaving customs",
+"customClIm":"Customs clearance for import",
+"comCustomsCl":"Complete customs clearance for import",
+"access":"Access to the transfer office",
+"leave":"Leaving the country/area of departure",
+"days":"Days"
   }
 }

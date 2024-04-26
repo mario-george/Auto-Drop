@@ -50,3 +50,27 @@ console.log("subscription is ",subscription)
   sendClient();
   return;
 };
+
+export const sendSubscriptionError = async (
+event:string,
+  userId: string,
+  clients: any,
+  WebSocket: any
+) => {
+ 
+  const client = clients[userId];
+  const sendClient = () => {
+ let  subscriptionToBeSent = {eventType : event};
+
+    if (client && client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(subscriptionToBeSent));
+      return true;
+    } else {
+      console.error("Failed to send message: client not connected");
+      return false;
+    }
+  };
+
+  sendClient();
+  return;
+};

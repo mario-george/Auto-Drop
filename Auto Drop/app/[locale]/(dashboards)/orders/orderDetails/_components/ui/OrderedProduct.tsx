@@ -26,6 +26,14 @@ interface OrderDetailsHeaderProps {
   order_id: string | number;
   orderNumberText: string;
   locale: string;
+  orderAfterSendActive:boolean
+}
+interface StatusDetailsHeaderProps {
+  orderStatus: string;
+  order_id: string | number;
+  orderNumberText: string;
+  locale: string;
+
 }
 export default function OrderedProduct(props: OrderedProductProps) {
   let {
@@ -81,7 +89,7 @@ export default function OrderedProduct(props: OrderedProductProps) {
             <Separator />
             <div className="twoPartSection">
               <div className="flex space-s-5">
-                {options.map(
+                {options?.map(
                   (option: { optionName: string; valueName: string },ind:number) => {
                     return (
                       <div className="flex space-s-2" key={ind}>
@@ -113,7 +121,7 @@ export function OrderDetailsHeader(props: OrderDetailsHeaderProps) {
       <div className="bg-white shadow rounded-xl px-4 py-2">
         <VectorSVG />
       </div>
-      <div className="bg-white shadow rounded-xl flex space-s-4 px-4 py-2 items-center text-xs tab:text-sm">
+      <div className="bg-white shadow rounded-xl flex space-s-4 px-4 py-2 items-center text-xs tab:text-sm dark:text-[#253439]">
         <div>{orderNumberText}</div>
         <div>#{order_id}</div>
       </div>
@@ -130,15 +138,40 @@ export function OrderDetailsHeader(props: OrderDetailsHeaderProps) {
     </>
   );
 }
+export function StatusDetailsHeader(props: StatusDetailsHeaderProps) {
+  let { orderStatus, locale, orderNumberText, order_id } = props;
+  let isAr = locale === "ar";
+  let secondElement = (
+    <div className="flex space-s-6 ">
+      <div className="bg-white shadow rounded-xl px-4 py-2">
+        <VectorSVG />
+      </div>
+      <div className="bg-white shadow rounded-xl flex space-s-4 px-4 py-2 items-center text-xs tab:text-sm">
+        <div>{orderNumberText}</div>
+        <div>#{order_id}</div>
+      </div>
+    </div>
+  );
+  return (
+    <>
+      <HeaderTwoPartSection
+        isAr={locale == "ar"}
+        title={orderStatus}
+        secondElement={secondElement}
+      />
 
+    </>
+  );
+}
 export function SendOrderButton(props: {
   sendOrderText: string;
   isAr: boolean;
+  sendOrderHandler : ()=>void
 }) {
-  let { sendOrderText, isAr } = props;
+  let { sendOrderText, isAr ,sendOrderHandler} = props;
   return (
-    <div className="my-3 flex justify-center">
-      <Button className="flex space-s-2 !bg-[#253439] !text-white">
+    <div className="my-3 flex justify-center ">
+      <Button className="flex space-s-2 !bg-[#253439] !text-white dark:!bg-white dark:!text-[#253439]" onClick={sendOrderHandler}>
         <p>{sendOrderText}</p>
         <p>
           <SendOrderSVG isAr={isAr || false} />

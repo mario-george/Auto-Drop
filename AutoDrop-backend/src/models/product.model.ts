@@ -43,6 +43,7 @@ interface ShippingAttributes {
   price: number;
   shipping_method?: string;
   service_name?: string;
+  serviceName?: string;
   estimated_delivery_time?: string;
   tracking_available?: boolean;
   freight?: { cent?: string; currency?: any; currency_code?: any };
@@ -168,6 +169,8 @@ const options = {
         cent: { type: String },
         currency: Object,
         currency_code: { type: String, default: "SAR" },
+      },  serviceName: {
+        type: String,
       },
     },
   ],
@@ -207,6 +210,7 @@ schema.index({ "$**": "text" });
 schema.plugin(mongoosePaginate);
 
 schema.pre("save", function (next) {
+  console.log("SHIPPINGGGGGGGGGGGGGGGGGGGGGGGG",this.shipping)
   if (this.isModified("options")) {
     let options: any = this.options;
 

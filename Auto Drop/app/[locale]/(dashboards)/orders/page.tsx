@@ -6,6 +6,7 @@ import "./components/styles/styles.css";
 
 export default function Orders() {
   const t = useTranslations("ordersPage");
+  const t3 = useTranslations("ordersPagev2");
   const locale = useLocale();
   const translationMessages = {
     orders: t("orders"),
@@ -15,6 +16,11 @@ export default function Orders() {
     date: t("date"),
     orderSource: t("orderSource"),
     amount: t("amount"),
+    inReview: t3("inReview"),
+    created: t3("created"),
+    delivered: t3("delivered"),
+    InProgress: t3("InProgress"),
+    deliveryInProgess: t3("deliveryInProgess"),
   };
   let HeaderProps = {
     translationMessages,

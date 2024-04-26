@@ -6,6 +6,8 @@ interface OrderDetailsProps {
   orderId: string | number;
   translationMessages: { [key: string]: string };
   locale:string
+  setSendOrder:(val:boolean)=>void
+sendOrder:boolean
 }
 interface OrderData {
   items: any;
@@ -13,7 +15,7 @@ interface OrderData {
 
 export default function useOrderDetails({
   orderId,
-  translationMessages,locale
+  translationMessages,locale,setSendOrder,sendOrder
 }: OrderDetailsProps) {
   const [orderData, setOrderData] = useState<OrderData | null | string>(null);
   let {
@@ -23,6 +25,15 @@ export default function useOrderDetails({
     sku: skuText,
     quantity: quantityText,orderNumber:orderNumberText,sendOrder:sendOrderText
   } = translationMessages;
+  const sendOrderHandler = async () => {
+    if (orderId) {
+      setSendOrder(true)
+      setTimeout(()=>{
+        setSendOrder(false)
+      },3000)
+    
+    }
+  }
   let isAr = locale == "ar";
   let ProductDetails = <></>;
   useEffect(() => {
@@ -49,7 +60,7 @@ export default function useOrderDetails({
   if (orderData && orderData !== "fail" && typeof orderData === "object") {
     let { items } = orderData;
     let OrderDetailsHeaderProps = {
-      orderDetails, locale, orderNumberText, order_id:orderId
+      orderDetails, locale, orderNumberText, order_id:orderId,orderAfterSendActive:false
     }
     ProductDetails = (
       <>
@@ -64,10 +75,10 @@ export default function useOrderDetails({
               product,
             } = item;
             let { name: prodName } = product;
-            let { relativeOptions:options, offer_sale_price, price } = choosenVariant;
+            let { relativeOptions:options, offer_sale_price, price } = choosenVariant??{};
             let originalPrice = +offer_sale_price;
-            let displayedPrice = price.amount;
-            options = options.map((option: any) => {
+            let displayedPrice = price?.amount;
+            options = options?.map((option: any) => {
               let {
                 property_value_definition_name,
                 sku_property_name,
@@ -89,7 +100,7 @@ export default function useOrderDetails({
               sku,
               skuText,
               quantityText,
-              quantity,options
+              quantity,options,
             };
             return <>
             
@@ -97,7 +108,7 @@ export default function useOrderDetails({
             </>
             
           })}
-          <SendOrderButton isAr={isAr} sendOrderText={sendOrderText}/>
+          <SendOrderButton isAr={isAr} sendOrderText={sendOrderText} sendOrderHandler={sendOrderHandler}/>
         </div>
       </>
     );

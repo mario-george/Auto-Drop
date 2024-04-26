@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Spinner } from "@chakra-ui/react";
+import { Spinner, useToast } from "@chakra-ui/react";
 import useOrderDetailsNotes from "./ui/useOrderDetailsNotes";
 import useOrderDetailsPayment from "./ui/useOrderDetailsPayment";
-import useOrderCustomer from "./ui/useOrderCustomer";
+import useOrderCustomer, { CustomerDataType } from "./ui/useOrderCustomer";
 import useOrderDetailsShipping from "./ui/useOrderDetailsShipping";
-
+import { OrderStatusAfterSend } from './ui/AfterSendOrder/ShippingStatusAfterSend';
+import axiosInstance from "../../../_components/shared/AxiosInstance";
+import useShippingAfterSend from "./ui/AfterSendOrder/useShippingAfterSend";
 export default function useOrderRenderer({
   orderData,
   translationMessages,
@@ -13,8 +15,11 @@ export default function useOrderRenderer({
   orderData: any;
   translationMessages: { [key: string]: string };
   locale: string;
+
 }) {
   const [successLoadedOrder, setSuccessLoadedOrder] = useState(false);
+  const [CustomerData, setCustomerData] = useState({});
+const toast = useToast()
   let merchantStore = orderData?.storeName ?? "";
   let {
     paymentProcess,
@@ -48,14 +53,16 @@ export default function useOrderRenderer({
   placeALogo,
   supplierShipping,
   durationToDeliver:estimatedDuration,
-  shippingCompanyName, price,withInvoice,comments:commentsText
+  shippingCompanyName, price,withInvoice,comments:commentsText,orderStatus,created,inReview,InProgress,deliveryInProgess,delivered,orderNumber:orderNumberText,shipStatus,supplier,Warehouse,client
+  , localTracking, internationalTracking, shipComHomePage, underwayNow, contactShipCom, expectedDuration, shippingInfo, websiteOrderNumber, notYet
   } = translationMessages;
   console.log("orderData", orderData);
-  const { OrderNotes } = useOrderDetailsNotes({
+  const { OrderNotes,orderNotesRef } = useOrderDetailsNotes({
     commentsText,
     merchantStore: merchantStore,
     locale,
   });
+
   let OrderDetailsPaymentProps = {
     paymentProcess,
     cod,
@@ -64,22 +71,21 @@ export default function useOrderRenderer({
     payNow,
   };
 
-  let { customer,shipping } = orderData ?? {};
+  let { customer,shipping ,status,order_id,tracking_order_id,DatabaseshippingCurrIndex} = orderData ?? {};
   let {address} = shipping ?? {}
   let {block , city,country,shipping_address,street_number,postal_code} = address ?? {}
-  console.log("postal_code",postal_code)
   let {
     first_name: firstName,
     last_name: lastName,
     mobile,
     mobile_code,
     // country,
-    email,
+    region,
+    email
   } = customer ?? {};
   // let phone = mobile_code ?? "" + " " + mobile?.toString() ?? "";
-
-  let phone = `${mobile_code ?? ''} ${mobile ?? ''}`
-
+console.log("mobile",mobile)
+console.log("mobile_code",mobile_code)
   let totalPrice = orderData?.totalPrice
   let shippingPrice = orderData?.amounts?.shipping_cost?.amount 
   let subTotal = orderData?.amounts?.sub_total?.amount 
@@ -91,6 +97,18 @@ totalPrice =orderData?.amounts?.total?.amount
     locale,
     totalPrice:totalPrice||0,
   });
+
+  let editCustomerHandler = async(data:CustomerDataType)=>{
+    setCustomerData(data)
+    let resPromise =  axiosInstance.patch("/orders/editCustomer",{...data,order_id})
+    let res  = await resPromise
+    toast.promise(resPromise, {
+      success: { title: `Success`, description: `Customer Details has been edited successfully` },
+      error: { title: 'Fail', description: 'Something went wrong while updating Customer Details' },
+      loading: { title: 'Updating Customer Details', description: 'Please wait' ,position:"bottom-right"},
+    }) 
+  
+  }
   let OrderCustomerProps = {
     firstNameText,
     lastNameText,
@@ -100,7 +118,7 @@ totalPrice =orderData?.amounts?.total?.amount
     email,
     locale,
     phoneText,
-    phone,
+    mobile,mobile_code,
     countryText,
     country,
     cityText,
@@ -111,15 +129,15 @@ totalPrice =orderData?.amounts?.total?.amount
     addressText,
     postalCode: postal_code ?? "",
     postalCodeText,
-    editCustomerHandler: () => {},
+    editCustomerHandler,
     editText,
     deliveryDetails,
-    region: "",
+    region,
     regionText,
   };
-  const { OrderCustomer } = useOrderCustomer({ ...OrderCustomerProps });
-
-  
+  const { OrderCustomer,getCustomerData } = useOrderCustomer({ ...OrderCustomerProps });
+let ShippingAfterSendProps = { translationMessages,tracking_order_id:tracking_order_id??0,currStatus:status}
+  let { ShippingAfterSendComponent } = useShippingAfterSend(ShippingAfterSendProps)
   let [shippingItems,setShippingItems ]= useState([])
   useEffect(()=>{
     if(typeof orderData == "object" ){
@@ -141,9 +159,13 @@ totalPrice =orderData?.amounts?.total?.amount
     supplierShipping,
     estimatedDuration,
     shippingCompanyName,
-    locale,price,withInvoice,shippingInfo:shippingItems??[],
+    locale,price,withInvoice,shippingInfo:shippingItems??[],DatabaseshippingCurrIndex
   }
-    const {OrderShipping} = useOrderDetailsShipping({...OrderShippingProps}) 
+    const {OrderShipping,shippingCurrIndex} = useOrderDetailsShipping({...OrderShippingProps}) 
+    let OrderStatusAfterSendProps = {
+      orderStatus,created,inReview,InProgress,deliveryInProgess,delivered,currStatus:  status,locale,order_id,orderNumberText
+    }
+  
   useEffect(() => {
     if (!successLoadedOrder && typeof orderData == "object") {
       setSuccessLoadedOrder(true);
@@ -162,14 +184,19 @@ totalPrice =orderData?.amounts?.total?.amount
   } else if (orderData) {
     OrderDataComponent = (
       <>
+      <OrderStatusAfterSend { 
+        ...OrderStatusAfterSendProps  
+      }/>
         {OrderNotes}
         {OrderCustomer}
       {OrderShipping}
 
         {OrderPayment}
+      
+        {ShippingAfterSendComponent}
       </>
     );
   }
 
-  return { OrderDataComponent, successLoadedOrder };
+  return { OrderDataComponent, successLoadedOrder,orderNotesRef ,orderMemo:orderNotesRef.current?.value,shippingCurrIndex:shippingCurrIndex?.map((el:string)=>+el),getCustomerData};
 }

@@ -27,8 +27,9 @@ import orderRoutes from './routes/order.routes';
 import TokenRefreshHandler from "./cron/aliexpress/tokens/TokenRefreshHandler";
 import ProductUpToDate from "./cron/aliexpress";
 import catchAsync from "./utils/catchAsync";
-import { sendSubscription } from "./controllers/Webhook/utils/sendSubscription";
+import { sendSubscription, sendSubscriptionError } from "./controllers/Webhook/utils/sendSubscription";
 import { Plan } from "./models/Plan.model";
+import { updateOrderStatusUpdated } from "./cron/orders";
 const app = express();
 
 //Parse json bodies
@@ -157,6 +158,7 @@ app.post("/api/v1/websocketHandler",catchAsync(async (req, res,next) => {
   let {subscription,plan,event} = req.body
 console.log("subscription is ",subscription)  
 console.log("req.body is ",req.body)  
+console.log("event is ",event)  
 
   if(event == "app.subscription.renewed" ){
 
@@ -165,9 +167,12 @@ console.log("req.body is ",req.body)
       if(!plan) return console.error("Plan not found");
     }
     sendSubscription(subscription, plan, subscription.user, clients, WebSocket);
-    res.sendStatus(200);
+    return res.sendStatus(200);
+  }else if (event =="subscription-expired" || event=="subscription-orders-limit-reached"|| event=="subscription-products-limit-reached"){
+    sendSubscriptionError(event,req.body.userId,clients,WebSocket)
+    return res.sendStatus(200);
   }else{
-    res.sendStatus(404);
+    return res.sendStatus(404);
   }
 }));
 
@@ -184,4 +189,5 @@ server.listen(10000, () => {
   console.log(`server is running `);
   TokenRefreshHandler.start()
   ProductUpToDate.start()
+  updateOrderStatusUpdated.start()
 });

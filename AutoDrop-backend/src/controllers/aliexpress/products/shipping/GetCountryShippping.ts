@@ -66,16 +66,22 @@ export async function GetShippingProductIdCountryCode(
         await CheckSubscription(user_id, "products_limit"); */
 
     const skuid = await GetSKUId({ product_id, tokenInfo });
-    let result = await getProductShippingServices(
-      {
-        sku_id: skuid,
-        country_code,
-        product_id,
-        product_num: "1",
-        price_currency: "SAR",
-      },
-      tokenInfo
-    );
+    let result
+    try{
+
+      result = await getProductShippingServices(
+       {
+         sku_id: skuid,
+         country_code,
+         product_id,
+         product_num: "1",
+         price_currency: "SAR",
+       },
+       tokenInfo
+     );
+    }catch(err){
+      console.error(err)
+    }
     let queryDeliveryReq = {
       quantity: 1,
       shipToCountry: country_code,

@@ -61,7 +61,32 @@ export default function OrderDetails() {
     delivered: t3("delivered"),
     InProgress: t3("InProgress"),
     deliveryInProgess: t3("deliveryInProgess"),
+    Warehouse : t3("Warehouse"),
+    client : t3("client"),
+    supplier : t3("supplier"),
 
+    shipStatus: t3("shipStatus"),
+    websiteOrderNumber : t3("websiteOrderNumber"),
+    contactShipCom : t3("contactShipCom"),
+    shipComHomePage : t3("shipComHomePage"),
+    internationalTracking : t3("internationalTracking"),
+    localTracking : t3("localTracking"),
+    notYet : t3("notYet"),
+    expectedDuration : t3("expectedDuration"),
+    underwayNow : t3("underwayNow"),
+    shippingInfo : t3("shippingInfo"),
+    leavingClassCenter : t3("leavingClassCenter"),  
+         delByLocal       : t3("delByLocal"),
+         comCustomsCl    : t3("comCustomsCl"),
+         customClIm     : t3("customClIm"),
+         access     : t3("access"),
+         leave    : t3("leave"),
+         leavingCustoms  : t3("leavingCustoms"),
+         aliexpress  : t3("aliexpress"),
+
+         days : t3("days"),
+  
+      
   };
   let OrderDetailsFetchProps = { translationMessages, locale };
   return (
