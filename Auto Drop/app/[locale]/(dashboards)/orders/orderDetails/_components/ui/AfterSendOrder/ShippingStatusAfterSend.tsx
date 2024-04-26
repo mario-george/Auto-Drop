@@ -138,7 +138,7 @@ export const OrderStatusAfterSend = (props: OrderStatusAfterSendProps) => {
     <>
       <StatusDetailsHeader {...StatusDetailsHeaderProps} />
       <div className="p-3 bg-white  flex lap:space-s-6 flex-col lap:flex-row space-y-3">
-        {statusButtonList.map((buttonEL: IStatusButton) => {
+        {statusButtonList.map((buttonEL: IStatusButton,index:number) => {
           let { status, text, active } = buttonEL;
 
           return (
@@ -146,6 +146,7 @@ export const OrderStatusAfterSend = (props: OrderStatusAfterSendProps) => {
               className={`flex-1 hover:cursor-auto  ${buttonClasses} ${
                 currStatus == status ? `${active} !text-white`:`!text-gray-500 hover:!bg-[#EDF2F7]`
               }`}
+              key={index}
             >
               {text}
             </Button>
