@@ -207,7 +207,7 @@ const CountrySelect = ({ name, value, onChange, options }:any) => {
   };
 
   return (
-    <Select name={name} value={value} onChange={handleChange} className="!bg-[#EDF5F9]">
+    <Select name={name} value={value} onChange={handleChange} className="!bg-[#EDF5F9] dark:!text-[#253439]">
       {options.map(({ value, label }:any) => (
         <option key={value} value={value}>
           {label}
@@ -234,7 +234,7 @@ const CountrySelect = ({ name, value, onChange, options }:any) => {
 
             if(countryText==title){
               return  <div            className={`flex space-s-3 items-center px-3 ${
-                skyIndex.includes(index) && `dark:bg-black  bg-[#F4F6F7]`
+                skyIndex.includes(index) && `dark:bg-[#2E464F]  bg-[#F4F6F7]`
               }`}>
                     <p className="font-bold text-xs tab:text-sm">{title}</p>
 
@@ -274,7 +274,7 @@ const CountrySelect = ({ name, value, onChange, options }:any) => {
                 <>
                   <div
                     className={`flex space-s-3 items-center px-3 ${
-                      skyIndex.includes(index) && `dark:bg-black  bg-[#F4F6F7]`
+                      skyIndex.includes(index) && `dark:bg-[#2E464F]  bg-[#F4F6F7]`
                     }`}
                   >
                     <p className="font-bold text-xs tab:text-sm">{title}</p>
@@ -296,7 +296,7 @@ const CountrySelect = ({ name, value, onChange, options }:any) => {
               <>
                 <div
                   className={`flex space-s-3 items-center px-3 ${
-                    skyIndex.includes(index) && `dark:bg-black  bg-[#F4F6F7]`
+                    skyIndex.includes(index) && `dark:bg-[#2E464F]  bg-[#F4F6F7]`
                   }`}
                 >
                   <p className="font-bold text-xs tab:text-sm">{title}</p>

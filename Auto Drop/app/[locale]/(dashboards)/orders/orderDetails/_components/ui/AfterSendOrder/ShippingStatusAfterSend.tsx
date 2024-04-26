@@ -37,14 +37,14 @@ export const ShippingStatusAfterSend = (
   const { shipStatus, supplier, Warehouse, client } = props;
 
   return (
-    <div className="p-3">
-      <p className="text-sm text-gray-500">{shipStatus}</p>
+    <div className="p-3 ">
+      <p className="text-lg text-gray-500 dark:text-white">{shipStatus}</p>
 
-      <div className="grid grid-cols-3 border rounded-xl border-gray-500 p-3">
-        <div className="flex flex-col justify-between space-y-6">
-          <p className="text-sm text-gray-500">{supplier}</p>
-          <p className="text-sm text-gray-500">{Warehouse}</p>
-          <p className="text-sm text-gray-500">{client}</p>
+      <div className="grid grid-cols-3 border rounded-xl border-gray-500 p-3 dark:text-white">
+        <div className="flex flex-col justify-between space-y-6 ">
+          <p className="text-sm text-gray-500 dark:text-white">{supplier}</p>
+          <p className="text-sm text-gray-500 dark:text-white">{Warehouse}</p>
+          <p className="text-sm text-gray-500 dark:text-white">{client}</p>
         </div>
         <div className="flex flex-col justify-between space-y-3">
           <DoneCircleSVG />

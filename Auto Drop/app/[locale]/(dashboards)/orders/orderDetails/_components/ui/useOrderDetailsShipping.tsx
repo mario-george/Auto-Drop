@@ -96,7 +96,7 @@ useEffect(()=>{
 
   let AttachButton = (title: string, handler: () => void) => {
     return (
-      <div className="flex items-center space-s-3 bg-[#edf5f9] p-2 rounded-md lap:max-w-[50%]">
+      <div className="flex items-center space-s-3 bg-[#edf5f9] p-2 rounded-md lap:max-w-[50%] dark:text-[#253439]">
         <AttachSVG />
         <p>
 

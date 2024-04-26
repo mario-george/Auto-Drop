@@ -83,8 +83,8 @@ let optionsArray = [leavingClassCenter
   let dummyDate = "2023-12-18 02:25 [GMT+3] "
   let ShippingAfterSendTable = (
     <div>
-      <div className="flex flex-col ">
-        <div className="flex space-s-4 font-semibold text-sm">
+      <div className="flex flex-col dark:text-white">
+        <div className="flex space-s-4 font-semibold text-sm dark:text-white">
           <p>
             {websiteOrderNumber} {props.tracking_order_id ?? 0}
           </p>
@@ -98,7 +98,7 @@ let optionsArray = [leavingClassCenter
 
       {optionsArrived.map((underway:boolean,index:number)=>{
         
-        return <div className="grid grid-cols-8 col-span-full gap-2 p-3" key={index}>
+        return <div className="grid grid-cols-8 col-span-full gap-2 p-3 dark:text-white" key={index}>
 <span className="col-span-4 flex space-s-2 items-center">
 
   <span>
@@ -111,7 +111,7 @@ let optionsArray = [leavingClassCenter
 {optionsArray?.[index]}
   </span>
 </span>
-<span className="col-span-2 text-[#2534397A]/50">
+<span className="col-span-2 text-[#2534397A]/50 dark:text-white">
 
 {dummyDate}
 
@@ -130,7 +130,7 @@ let optionsArray = [leavingClassCenter
     </div>
   );
   let ShippingAfterSendComponent = (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-2 dark:text-white">
       <p>{shippingInfo}</p>
       <div className="flex flex-col space-y-3 lap:space-y-0 lap:flex-row lap:space-s-3">
         

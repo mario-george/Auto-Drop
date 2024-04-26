@@ -121,7 +121,7 @@ export function OrderDetailsHeader(props: OrderDetailsHeaderProps) {
       <div className="bg-white shadow rounded-xl px-4 py-2">
         <VectorSVG />
       </div>
-      <div className="bg-white shadow rounded-xl flex space-s-4 px-4 py-2 items-center text-xs tab:text-sm">
+      <div className="bg-white shadow rounded-xl flex space-s-4 px-4 py-2 items-center text-xs tab:text-sm dark:text-[#253439]">
         <div>{orderNumberText}</div>
         <div>#{order_id}</div>
       </div>
@@ -170,8 +170,8 @@ export function SendOrderButton(props: {
 }) {
   let { sendOrderText, isAr ,sendOrderHandler} = props;
   return (
-    <div className="my-3 flex justify-center">
-      <Button className="flex space-s-2 !bg-[#253439] !text-white" onClick={sendOrderHandler}>
+    <div className="my-3 flex justify-center ">
+      <Button className="flex space-s-2 !bg-[#253439] !text-white dark:!bg-white dark:!text-[#253439]" onClick={sendOrderHandler}>
         <p>{sendOrderText}</p>
         <p>
           <SendOrderSVG isAr={isAr || false} />
