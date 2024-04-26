@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Spinner } from "@chakra-ui/react";
+import { Spinner, useToast } from "@chakra-ui/react";
 import useOrderDetailsNotes from "./ui/useOrderDetailsNotes";
 import useOrderDetailsPayment from "./ui/useOrderDetailsPayment";
 import useOrderCustomer, { CustomerDataType } from "./ui/useOrderCustomer";
@@ -18,7 +18,8 @@ export default function useOrderRenderer({
 
 }) {
   const [successLoadedOrder, setSuccessLoadedOrder] = useState(false);
-
+  const [CustomerData, setCustomerData] = useState({});
+const toast = useToast()
   let merchantStore = orderData?.storeName ?? "";
   let {
     paymentProcess,
@@ -70,22 +71,21 @@ export default function useOrderRenderer({
     payNow,
   };
 
-  let { customer,shipping ,status,order_id,tracking_order_id} = orderData ?? {};
+  let { customer,shipping ,status,order_id,tracking_order_id,DatabaseshippingCurrIndex} = orderData ?? {};
   let {address} = shipping ?? {}
   let {block , city,country,shipping_address,street_number,postal_code} = address ?? {}
-  console.log("postal_code",postal_code)
   let {
     first_name: firstName,
     last_name: lastName,
     mobile,
     mobile_code,
     // country,
-    email,
+    region,
+    email
   } = customer ?? {};
   // let phone = mobile_code ?? "" + " " + mobile?.toString() ?? "";
-
-  let phone = mobile ?? ''
-let phoneCode = mobile_code ?? ''
+console.log("mobile",mobile)
+console.log("mobile_code",mobile_code)
   let totalPrice = orderData?.totalPrice
   let shippingPrice = orderData?.amounts?.shipping_cost?.amount 
   let subTotal = orderData?.amounts?.sub_total?.amount 
@@ -99,8 +99,14 @@ totalPrice =orderData?.amounts?.total?.amount
   });
 
   let editCustomerHandler = async(data:CustomerDataType)=>{
-    let res = await axiosInstance.patch("/orders/editCustomer",{...data,order_id})
-  
+    setCustomerData(data)
+    let resPromise =  axiosInstance.patch("/orders/editCustomer",{...data,order_id})
+    let res  = await resPromise
+    toast.promise(resPromise, {
+      success: { title: `Success`, description: `Customer Details has been edited successfully` },
+      error: { title: 'Fail', description: 'Something went wrong while updating Customer Details' },
+      loading: { title: 'Updating Customer Details', description: 'Please wait' ,position:"bottom-right"},
+    }) 
   
   }
   let OrderCustomerProps = {
@@ -112,7 +118,7 @@ totalPrice =orderData?.amounts?.total?.amount
     email,
     locale,
     phoneText,
-    phone,phoneCode,
+    mobile,mobile_code,
     countryText,
     country,
     cityText,
@@ -126,11 +132,11 @@ totalPrice =orderData?.amounts?.total?.amount
     editCustomerHandler,
     editText,
     deliveryDetails,
-    region: "",
+    region,
     regionText,
   };
-  const { OrderCustomer ,CustomerData} = useOrderCustomer({ ...OrderCustomerProps });
-let ShippingAfterSendProps = { translationMessages,tracking_order_id:tracking_order_id??0}
+  const { OrderCustomer,getCustomerData } = useOrderCustomer({ ...OrderCustomerProps });
+let ShippingAfterSendProps = { translationMessages,tracking_order_id:tracking_order_id??0,currStatus:status}
   let { ShippingAfterSendComponent } = useShippingAfterSend(ShippingAfterSendProps)
   let [shippingItems,setShippingItems ]= useState([])
   useEffect(()=>{
@@ -153,7 +159,7 @@ let ShippingAfterSendProps = { translationMessages,tracking_order_id:tracking_or
     supplierShipping,
     estimatedDuration,
     shippingCompanyName,
-    locale,price,withInvoice,shippingInfo:shippingItems??[],
+    locale,price,withInvoice,shippingInfo:shippingItems??[],DatabaseshippingCurrIndex
   }
     const {OrderShipping,shippingCurrIndex} = useOrderDetailsShipping({...OrderShippingProps}) 
     let OrderStatusAfterSendProps = {
@@ -192,5 +198,5 @@ let ShippingAfterSendProps = { translationMessages,tracking_order_id:tracking_or
     );
   }
 
-  return { OrderDataComponent, successLoadedOrder,orderNotesRef ,orderMemo:orderNotesRef.current?.value,shippingCurrIndex:shippingCurrIndex?.map((el:string)=>+el),CustomerData};
+  return { OrderDataComponent, successLoadedOrder,orderNotesRef ,orderMemo:orderNotesRef.current?.value,shippingCurrIndex:shippingCurrIndex?.map((el:string)=>+el),getCustomerData};
 }

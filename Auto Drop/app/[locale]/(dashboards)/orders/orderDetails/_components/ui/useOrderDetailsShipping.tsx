@@ -31,6 +31,7 @@ interface OrderDetailsShippingProps {
   withInvoice :string
   shippingInfo:any
   price:string
+  DatabaseshippingCurrIndex:string[]|undefined
 }
 export const sectionHeader = (title: string) => {
   return (
@@ -52,7 +53,7 @@ export default function useOrderDetailsShipping({
   supplierShipping,
   estimatedDuration,
   shippingCompanyName,
-  locale,withInvoice,shippingInfo,price
+  locale,withInvoice,shippingInfo,price,DatabaseshippingCurrIndex
 }: OrderDetailsShippingProps) {
   const [shippingChoice, setShippingChoice] = useState<
     "cartoon" | "packagingBag"
@@ -80,6 +81,9 @@ useEffect(()=>{
       }
     }
     setShippingCurrIndex(Array(shippingInfo?.length).fill('0'))
+  }
+  if( DatabaseshippingCurrIndex && shippingInfo.length === DatabaseshippingCurrIndex?.length){
+    setShippingCurrIndex(DatabaseshippingCurrIndex)
   }
 },[shippingInfo])
   const [shippingSelectedType, setShippingSelectedType] =

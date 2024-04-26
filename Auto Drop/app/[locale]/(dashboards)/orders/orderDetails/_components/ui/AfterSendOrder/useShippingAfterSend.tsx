@@ -5,6 +5,7 @@ import TableCircleSVG from '../../images/TableCircleSVG';
 interface ShippingAfterSendProps {
   translationMessages: { [key: string]: string };
   tracking_order_id?:number
+  currStatus?:string
 }
 
 interface ShippingTableHeaderProps{
@@ -37,6 +38,7 @@ const ShippingTableHeader = ({aliexpressText,number,expectedDurationText,expecte
         </>
 } 
 export default function useShippingAfterSend(props: ShippingAfterSendProps) {
+  let { currStatus} = props
   let {
     localTracking,
     internationalTracking,
@@ -130,7 +132,7 @@ let optionsArray = [leavingClassCenter
   let ShippingAfterSendComponent = (
     <div className="flex flex-col space-y-2">
       <p>{shippingInfo}</p>
-      <div className="flex space-s-3">
+      <div className="flex flex-col space-y-3 lap:space-y-0 lap:flex-row lap:space-s-3">
         
 
         {ShippingAfterSendTable}
@@ -138,5 +140,8 @@ let optionsArray = [leavingClassCenter
       </div>
     </div>
   );
+  if(currStatus==="created" || !props.tracking_order_id){
+    ShippingAfterSendComponent = <></>
+  }
   return { ShippingAfterSendComponent };
 }

@@ -89,7 +89,7 @@ export default function OrderedProduct(props: OrderedProductProps) {
             <Separator />
             <div className="twoPartSection">
               <div className="flex space-s-5">
-                {options.map(
+                {options?.map(
                   (option: { optionName: string; valueName: string },ind:number) => {
                     return (
                       <div className="flex space-s-2" key={ind}>

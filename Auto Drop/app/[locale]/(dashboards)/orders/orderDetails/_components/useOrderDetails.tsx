@@ -75,10 +75,10 @@ export default function useOrderDetails({
               product,
             } = item;
             let { name: prodName } = product;
-            let { relativeOptions:options, offer_sale_price, price } = choosenVariant;
+            let { relativeOptions:options, offer_sale_price, price } = choosenVariant??{};
             let originalPrice = +offer_sale_price;
-            let displayedPrice = price.amount;
-            options = options.map((option: any) => {
+            let displayedPrice = price?.amount;
+            options = options?.map((option: any) => {
               let {
                 property_value_definition_name,
                 sku_property_name,

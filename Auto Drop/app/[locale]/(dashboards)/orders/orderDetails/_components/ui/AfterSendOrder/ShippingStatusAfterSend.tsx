@@ -77,9 +77,9 @@ export const OrderStatusAfterSend = (props: OrderStatusAfterSendProps) => {
     locale,
   } = props;
 
-  /*   if(!currStatus || currStatus == "created"){
+   if(!currStatus || currStatus == "created"){
     return <></>
-  } */
+  } 
 
   let buttonC = " rounded-lg px-3 h-8 dark:text-black text-white px-6 ";
   let buttonClasses = " rounded-lg px-3 h-8 dark:text-black text-white px-6 ";
@@ -137,14 +137,14 @@ export const OrderStatusAfterSend = (props: OrderStatusAfterSendProps) => {
   return (
     <>
       <StatusDetailsHeader {...StatusDetailsHeaderProps} />
-      <div className="p-3 bg-white flex space-s-6">
+      <div className="p-3 bg-white  flex lap:space-s-6 flex-col lap:flex-row space-y-3">
         {statusButtonList.map((buttonEL: IStatusButton) => {
           let { status, text, active } = buttonEL;
 
           return (
             <Button
               className={`flex-1 hover:cursor-auto  ${buttonClasses} ${
-                currStatus == status && `${active} !text-white`
+                currStatus == status ? `${active} !text-white`:`!text-gray-500 hover:!bg-[#EDF2F7]`
               }`}
             >
               {text}
