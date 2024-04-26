@@ -235,7 +235,8 @@ const CountrySelect = ({ name, value, onChange, options }:any) => {
             if(countryText==title){
               return  <div            className={`flex space-s-3 items-center px-3 ${
                 skyIndex.includes(index) && `dark:bg-[#2E464F]  bg-[#F4F6F7]`
-              }`}>
+              }`} 
+              key ={index}>
                     <p className="font-bold text-xs tab:text-sm">{title}</p>
 
 <PhoneInput
@@ -275,7 +276,7 @@ const CountrySelect = ({ name, value, onChange, options }:any) => {
                   <div
                     className={`flex space-s-3 items-center px-3 ${
                       skyIndex.includes(index) && `dark:bg-[#2E464F]  bg-[#F4F6F7]`
-                    }`}
+                    }`}  key ={index}
                   >
                     <p className="font-bold text-xs tab:text-sm">{title}</p>
                   
@@ -297,7 +298,7 @@ const CountrySelect = ({ name, value, onChange, options }:any) => {
                 <div
                   className={`flex space-s-3 items-center px-3 ${
                     skyIndex.includes(index) && `dark:bg-[#2E464F]  bg-[#F4F6F7]`
-                  }`}
+                  }`}   key ={index}
                 >
                   <p className="font-bold text-xs tab:text-sm">{title}</p>
                   <Input

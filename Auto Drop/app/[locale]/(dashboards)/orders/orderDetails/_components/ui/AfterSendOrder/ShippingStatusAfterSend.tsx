@@ -86,10 +86,10 @@ export const OrderStatusAfterSend = (props: OrderStatusAfterSendProps) => {
 
   let currStatusText = created;
   switch (currStatus) {
-    case "created":
+ /*    case "created":
       currStatusText = created;
       buttonC += " text-[#253439] bg-[#FACC15] ";
-      break;
+      break; */
     case "in_review":
       currStatusText = inReview;
       buttonC += " text-[#008767] bg-[#916F16] px-5 ";
