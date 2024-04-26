@@ -63,9 +63,12 @@ let translateText = async (text: string) => {
         targetLang: 'en'
       }
     };
+   
     const response = await axios.request(options);
     console.log("response.status",response.status)
-    
+    if(response?.status !=200){
+      throw new AppError("Please type the data in arabic and try again",400)
+    }
     if(response?.status !== 200) return text
     console.log("response",response)
       return response?.data?.translatedText;
@@ -75,7 +78,7 @@ let translateText = async (text: string) => {
   }
  
 }
-export async function PlaceOrder(order: OrderDocument, order_memo: string,CustomerData:CustomerDataType,shippingCurrIndex:number[]) {
+export async function PlaceOrder(order: OrderDocument, order_memo: string,CustomerData:CustomerDataType,shippingCurrIndex:number[],res:Response) {
   console.log("CustomerData",CustomerData)
   return new Promise(async (resolve, reject) => {
     let logistics_address: object, product_items: any[];
@@ -147,10 +150,15 @@ let isCityEnglish = isAllEnglish(city as string)
 let isAddressEnglish = isAllEnglish(address as string)   
 let isDistrictEnglish = isAllEnglish(district as string)   
 let isRegionEnglish = isAllEnglish(region as string)   
-if(!isCityEnglish) city = (await translateText(city as string))
- if(!isAddressEnglish) address = (await translateText(address as string))
-  if(!isDistrictEnglish) district = (await translateText(district as string))
-  if(!isRegionEnglish) region = (await translateText(region as string))
+try{
+
+  if(!isCityEnglish) city = (await translateText(city as string))
+   if(!isAddressEnglish) address = (await translateText(address as string))
+    if(!isDistrictEnglish) district = (await translateText(district as string))
+    if(!isRegionEnglish) region = (await translateText(region as string))
+}catch(err:any){
+  return res.status(400).json({message:"Please type the data in arabic and try again"})
+}
 
     // let toBeTranslated = [ city, address, district, region] 
     // console.log("toBeTranslated",toBeTranslated)
@@ -314,7 +322,7 @@ export const SendOrder = catchAsync(
       order.DatabaseshippingCurrIndex = shippingCurrIndex;
       await order.save();
     }
-    const placeOrderResult = await PlaceOrder(order, order_memo,CustomerData,shippingCurrIndex);
+    const placeOrderResult = await PlaceOrder(order, order_memo,CustomerData,shippingCurrIndex,res);
     return res.json({ data: placeOrderResult });
   }
 );
