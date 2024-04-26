@@ -67,7 +67,7 @@ let translateText = async (text: string) => {
     const response = await axios.request(options);
     console.log("response.status",response.status)
     if(response?.status !=200){
-      throw new AppError("Please type the data in arabic and try again",400)
+      throw new AppError("Please type the data in English and try again",400)
     }
     if(response?.status !== 200) return text
     console.log("response",response)
@@ -157,7 +157,7 @@ try{
     if(!isDistrictEnglish) district = (await translateText(district as string))
     if(!isRegionEnglish) region = (await translateText(region as string))
 }catch(err:any){
-  return res.status(400).json({message:"Please type the data in arabic and try again"})
+  return res.status(400).json({message:"Please type the data in English and try again"})
 }
 
     // let toBeTranslated = [ city, address, district, region] 
