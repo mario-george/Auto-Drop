@@ -62,6 +62,7 @@ interface OrderSchema {
   customerName:string|null
   storeName:string
   order_memo:string
+  DatabaseshippingCurrIndex?:string[]
 }
 
 interface OrderDocument extends Document, OrderSchema {}
@@ -101,7 +102,7 @@ const options = {
   totalPrice:{type:Number,default:0},
   customerName:{type:String,default:null},
   storeName:{type:String,default:""},
-  order_memo:{type:String,default:""}
+  order_memo:{type:String,default:""},DatabaseshippingCurrIndex:{type:Array,default:null}
   
 };
 

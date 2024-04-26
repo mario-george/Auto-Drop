@@ -7,6 +7,8 @@ import AliExpressToken from "../../models/AliExpressTokenModel";
 import catchAsync from "../../utils/catchAsync";
 import { NextFunction, Response } from "express";
 import * as translateModule from "@vitalets/google-translate-api";
+import axios from "axios";
+import { detect } from 'langdetect';
 
 // You need to register the languages you are going to use
 
@@ -15,11 +17,12 @@ import * as translateModule from "@vitalets/google-translate-api";
 }).catch((err:any) => {
     console.error(err);
 }); */
-interface CustomerDataType {
+export interface CustomerDataType {
   firstName: string | undefined;
   lastName: string | undefined;
   email: string | undefined;
-  phone: string | undefined;
+  mobile: string | undefined;
+  mobile_code: string | undefined;
   country: string | undefined;
   region: string | undefined;
   city: string | undefined;
@@ -27,7 +30,53 @@ interface CustomerDataType {
   district: string | undefined;
   address: string | undefined;
 }
+
+function isAllEnglish(text: string) {
+  if (!text) return true;
+  const words = text.split(' ');
+
+  for (let word of words) {
+    const languages = detect(word);
+    console.log("languages",languages)
+    if (languages?.length === 0 ||( languages?.[0]?.lang === 'ar' && languages?.[0]?.prob > 0.5)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+let translateText = async (text: string) => {
+  
+  try{
+    const options = {
+      method: 'POST',
+      url: process.env.translationURL,
+      headers: {
+        'content-type': 'application/json',
+        'X-RapidAPI-Key': process.env.translationKey,
+        'X-RapidAPI-Host': process.env.translationHost
+      },
+      data: {
+        text,
+        sourceLang: 'ar',
+        targetLang: 'en'
+      }
+    };
+    const response = await axios.request(options);
+    console.log("response.status",response.status)
+    
+    if(response?.status !== 200) return text
+    console.log("response",response)
+      return response?.data?.translatedText;
+  }catch(err:any){
+    console.error(err)
+    throw new AppError("Error Happend While Translate Text",400)
+  }
+ 
+}
 export async function PlaceOrder(order: OrderDocument, order_memo: string,CustomerData:CustomerDataType,shippingCurrIndex:number[]) {
+  console.log("CustomerData",CustomerData)
   return new Promise(async (resolve, reject) => {
     let logistics_address: object, product_items: any[];
     const { items, shipping } = order.toJSON();
@@ -51,14 +100,14 @@ export async function PlaceOrder(order: OrderDocument, order_memo: string,Custom
           const product = await Product.findById(item?.product?._id).exec();
           if (!product) return;
 
-          const { data: aliProduct } = await MakeRequest(
+         /*  const { data: aliProduct } = await MakeRequest(
             {
               method: "aliexpress.ds.product.get",
               product_id: product.original_product_id,
               sign_method: "sha256",
             },
             tokenData
-          );
+          ); */
           // const productSkus = await getProductSkus(product.original_product_id)
 
           // console.log("productSkus",productSkus)
@@ -91,10 +140,45 @@ export async function PlaceOrder(order: OrderDocument, order_memo: string,Custom
         })
         .filter((e: any) => e)
     );
-    const full_name = "test account" ?? `${orderData?.customer?.first_name} ${orderData?.customer?.last_name}`;
     const addresss = shipping?.address;
+    let {firstName,lastName,email,mobile,mobile_code,country,region,city,postalCode,district,address} = CustomerData ??{}
+    const full_name = `${firstName} ${lastName}`;
+let isCityEnglish = isAllEnglish(city as string)   
+let isAddressEnglish = isAllEnglish(address as string)   
+let isDistrictEnglish = isAllEnglish(district as string)   
+let isRegionEnglish = isAllEnglish(region as string)   
+if(!isCityEnglish) city = (await translateText(city as string))
+ if(!isAddressEnglish) address = (await translateText(address as string))
+  if(!isDistrictEnglish) district = (await translateText(district as string))
+  if(!isRegionEnglish) region = (await translateText(region as string))
 
-    // let cityEn = await translateModule.translate(addresss.city, {from: 'ar', to: 'en'}).then((res:any) => {return res.text}).catch((err:any) => {
+    // let toBeTranslated = [ city, address, district, region] 
+    // console.log("toBeTranslated",toBeTranslated)
+// let indexesToBeTranslated = []
+/* if(!isCityEnglish) indexesToBeTranslated.push(0)
+if(!isAddressEnglish) indexesToBeTranslated.push(1)
+if(!isDistrictEnglish) indexesToBeTranslated.push(2)
+if(!isRegionEnglish) indexesToBeTranslated.push(3) */
+  // console.log("indexesToBeTranslated",indexesToBeTranslated)
+
+  // let text :any= indexesToBeTranslated.map((index)=>toBeTranslated[index])
+  // console.log("text",text)
+  
+//  text = text.join('/////')
+//  let translatedText =   (await translateText(text as string)).split("/////")
+/*  indexesToBeTranslated.forEach((index, i) => {
+  const reverseIndex = translatedText.length - 1 - i;
+  toBeTranslated[index] = translatedText[reverseIndex];
+}); */
+// console.log("translatedText",translatedText)
+// console.log("toBeTranslated",toBeTranslated)
+
+/* city = toBeTranslated[0]
+address = toBeTranslated[1]
+district = toBeTranslated[2]
+region = toBeTranslated[3] */
+
+// let cityEn = await translateModule.translate(addresss.city, {from: 'ar', to: 'en'}).then((res:any) => {return res.text}).catch((err:any) => {
 
     /*    translateModule.translate(addresss.city, {from: 'ar', to: 'en'}).then((res:any) => {
       cityEn= res.text
@@ -102,30 +186,32 @@ export async function PlaceOrder(order: OrderDocument, order_memo: string,Custom
   }).catch((err:any) => {
       console.error(err);
   }); */
-    let cityEn =
+/*     let cityEn =
       (
         await translateModule
           .translate(addresss.city, { from: "ar", to: "en" })
           .catch((err) => {})
-      )?.text ?? "Riyadh";
+      )?.text ?? "Riyadh"; */
     // let cityEn = translateRes.text
-    let addressEn =
+/*     let addressEn =
       (
         await translateModule
           .translate(addresss.shipping_address, { from: "ar", to: "en" })
           .catch(() => {})
       )?.text ??
-      "Airport Road, King Khalid International Airport, Riyadh , Saudi Arabia";
-    console.log("addressEn", addressEn);
+      "Airport Road, King Khalid International Airport, Riyadh , Saudi Arabia"; */
+    // console.log("addressEn", addressEn);
     /* 
   translateModule.translate('الرياض', {from: 'ar', to: 'en'}).then((res:any) => {
     console.log(res.text);
 }).catch((err:any) => {
     console.error(err);
 }); */
-    logistics_address = {
+
+//old logisticsAddress
+   let logistics_addressOld = {
       country: "SA",
-      city: cityEn,
+      // city: cityEn,
       zip: addresss?.postal_code,
       // address:  `Airport Road, King Khalid International Airport, Riyadh , Saudi Arabia` ?? `${addresss?.street_en} ${addresss?.district_en}`,
       // address:  `${addresss?.shipping_address}`,
@@ -139,11 +225,30 @@ export async function PlaceOrder(order: OrderDocument, order_memo: string,Custom
       mobile_no: "563754267" ?? `${orderData.customer?.mobile}`,
       contact_person: full_name,
       // province:addresss?.province_en??"Eastern"
-      province: cityEn+ " Province",
-      // location_tree_address_id: "903200190000000000-903200190137000000",
+      // province: cityEn+ " Province",
+    };
+    //
+
+    logistics_address = {
+      country,
+      city,
+      zip: postalCode,
+      // address:  `Airport Road, King Khalid International Airport, Riyadh , Saudi Arabia` ?? `${addresss?.street_en} ${addresss?.district_en}`,
+      // address:  `${addresss?.shipping_address}`,
+      // address: 'Qasr Al Khaleej'?? addressEn,
+      address ,
+
+      locale: "ar_SA",
+      phone_country: mobile_code,
+      full_name,
+      is_foreigner: "false",
+      mobile_no:mobile ?? `${orderData.customer?.mobile}`,
+      contact_person: full_name,
+      // province:addresss?.province_en??"Eastern"
+      province: city+ " Province",
     };
     console.log("logistics_address", logistics_address);
-
+    
     const min = 100000000;
     const max = 999999999;
     const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -206,6 +311,7 @@ export const SendOrder = catchAsync(
     }
     if (order_memo) {
       order.order_memo = order_memo;
+      order.DatabaseshippingCurrIndex = shippingCurrIndex;
       await order.save();
     }
     const placeOrderResult = await PlaceOrder(order, order_memo,CustomerData,shippingCurrIndex);

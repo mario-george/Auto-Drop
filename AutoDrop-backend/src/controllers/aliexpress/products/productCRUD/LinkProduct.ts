@@ -225,6 +225,7 @@ export async function LinkProductSalla2(
 ) {
   try {
     console.log("reached this 1 ");
+    
     const { role, _id } = req.user;
     let subscription = await CheckSubscription(
        _id.toString(),

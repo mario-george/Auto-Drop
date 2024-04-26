@@ -158,6 +158,7 @@ app.post("/api/v1/websocketHandler",catchAsync(async (req, res,next) => {
   let {subscription,plan,event} = req.body
 console.log("subscription is ",subscription)  
 console.log("req.body is ",req.body)  
+console.log("event is ",event)  
 
   if(event == "app.subscription.renewed" ){
 
@@ -166,11 +167,12 @@ console.log("req.body is ",req.body)
       if(!plan) return console.error("Plan not found");
     }
     sendSubscription(subscription, plan, subscription.user, clients, WebSocket);
-    res.sendStatus(200);
-  }else if (event =="subscription-expired" || "subscription-orders-limit-reached"|| "subscription-products-limit-reached"){
+    return res.sendStatus(200);
+  }else if (event =="subscription-expired" || event=="subscription-orders-limit-reached"|| event=="subscription-products-limit-reached"){
     sendSubscriptionError(event,req.body.userId,clients,WebSocket)
+    return res.sendStatus(200);
   }else{
-    res.sendStatus(404);
+    return res.sendStatus(404);
   }
 }));
 
