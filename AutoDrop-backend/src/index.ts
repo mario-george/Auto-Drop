@@ -31,6 +31,7 @@ import { sendSubscription, sendSubscriptionError } from "./controllers/Webhook/u
 import { Plan } from "./models/Plan.model";
 import { updateOrderStatusUpdated } from "./cron/orders";
 import RequestSenderToHost from "./cron/host";
+import homeRouter from "./routes/home.routes";
 const app = express();
 
 //Parse json bodies
@@ -122,6 +123,7 @@ app.use((req:any, res, next) => {
 });
 // websocket
 //Global resources
+app.use('/',homeRouter)
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/handler", handlerRoutes);
 app.use("/api/v1/token", tokenRoutes);
