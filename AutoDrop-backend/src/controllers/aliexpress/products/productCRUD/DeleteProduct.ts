@@ -17,23 +17,32 @@ export const DeleteProductById = catchAsync(
     }
     //@ts-ignore
     let { productId }: { productId: string } = req.params;
-
+console.log("productId",productId)
     let product: ProductDocument | null = await Product.findOne({
       //@ts-ignore
       merchant: req.user._id as any,
       _id: productId,
     });
-    const sallaTokenDocument = await SallaToken.findOne({
-      _id: req.user.sallaToken,
-    });
-    if (!sallaTokenDocument || !req.user.sallaToken ) {
-      return res.status(404).json({ message: "SallaToken Not Found." });
-    }
+console.log("product",product)
+
+ 
     if (!product) {
       console.log("No product found");
       return res.status(404).json({ message: "Product Not Found." });
     }
     if (product?.salla_product_id) {
+      try{
+        const sallaTokenDocument = await SallaToken.findOne({
+          _id: req.user.sallaToken,
+        });
+    
+        if (!sallaTokenDocument || !req.user.sallaToken ) {
+          return res.status(404).json({ message: "SallaToken Not Found." });
+        }
+      }catch(e:any){
+        console.log(e)
+      }
+ 
       let axiosOptions = {
         method: "DELETE",
         headers: {
@@ -42,12 +51,17 @@ export const DeleteProductById = catchAsync(
         },
         url: `  ${process.env.Backend_Link}salla/deleteProduct/${product.salla_product_id}`,
       };
-      let { data: deleteResp } = await axios.request(axiosOptions);
+      try{
 
-      if (!res.headersSent && deleteResp.status !== "success") {
-        return res.status(400).json({
-          status: "failed",
-        });
+        let { data: deleteResp } = await axios.request(axiosOptions);
+  
+        if (!res.headersSent && deleteResp.status !== "success") {
+          return res.status(400).json({
+            status: "failed",
+          });
+        }
+      } catch(e:any){
+
       }
       product.salla_product_id = undefined;
     }

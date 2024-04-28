@@ -9,6 +9,7 @@ import { NextFunction, Response } from "express";
 import * as translateModule from "@vitalets/google-translate-api";
 import axios from "axios";
 import { detect } from 'langdetect';
+import { getProvince, translateCity } from "./const/City";
 
 // You need to register the languages you are going to use
 
@@ -145,17 +146,30 @@ export async function PlaceOrder(order: OrderDocument, order_memo: string,Custom
     );
     const addresss = shipping?.address;
     let {firstName,lastName,email,mobile,mobile_code,country,region,city,postalCode,district,address} = CustomerData ??{}
-    const full_name = `${firstName} ${lastName}`;
-let isCityEnglish = isAllEnglish(city as string)   
+    let full_name = `${firstName} ${lastName}`; 
+    // let isCityEnglish = isAllEnglish(city as string)  
+
 let isAddressEnglish = isAllEnglish(address as string)   
 let isDistrictEnglish = isAllEnglish(district as string)   
 let isRegionEnglish = isAllEnglish(region as string)   
-try{
+let isFullNameEnglish = isAllEnglish(full_name as string)   
+city = translateCity(city as string)
+let province = getProvince(city as string)+ " Province"
 
-  if(!isCityEnglish) city = (await translateText(city as string))
+try{
+  
+/*   if(!isCityEnglish && translateCity(city as string)){
+    city = translateCity(city as string)
+     province = getProvince(city as string)+ " Province"
+  }else{
+
+    // if(!isCityEnglish) city = (await translateText(city as string))
+  } */
    if(!isAddressEnglish) address = (await translateText(address as string))
     if(!isDistrictEnglish) district = (await translateText(district as string))
     if(!isRegionEnglish) region = (await translateText(region as string))
+      if(!isFullNameEnglish) full_name = (await translateText(full_name as string))
+
 }catch(err:any){
   return res.status(400).json({message:"Please type the data in English and try again"})
 }
@@ -253,7 +267,7 @@ region = toBeTranslated[3] */
       mobile_no:mobile ?? `${orderData.customer?.mobile}`,
       contact_person: full_name,
       // province:addresss?.province_en??"Eastern"
-      province: city+ " Province",
+      province,
     };
     console.log("logistics_address", logistics_address);
     
