@@ -27,8 +27,7 @@ export const deleteSallaToken = catchAsync(
     // Delete the AliExpressToken document
     await SallaToken.findByIdAndDelete(id);
     // Remove the reference from the User document
-    await User.updateOne({ sallaToken: id }, { $unset: { sallaToken: "" } });
-
+    await User.updateOne({ sallaToken: id }, { $unset: { sallaToken: "", merchantID: "" } });
     res.status(200).json({ message: "AliExpressToken deleted successfully" });
   }
 );
