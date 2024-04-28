@@ -30,6 +30,7 @@ import catchAsync from "./utils/catchAsync";
 import { sendSubscription, sendSubscriptionError } from "./controllers/Webhook/utils/sendSubscription";
 import { Plan } from "./models/Plan.model";
 import { updateOrderStatusUpdated } from "./cron/orders";
+import RequestSenderToHost from "./cron/host";
 const app = express();
 
 //Parse json bodies
@@ -190,4 +191,5 @@ server.listen(10000, () => {
   TokenRefreshHandler.start()
   ProductUpToDate.start()
   updateOrderStatusUpdated.start()
+  RequestSenderToHost.start()
 });
