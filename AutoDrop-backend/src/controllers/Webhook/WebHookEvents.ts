@@ -32,7 +32,11 @@ import { CheckSubscription } from "../../utils/handlers/CheckSubscription";
 
 export default class WebHookEvents {
   async CreateNewApp(body: any, res: Response, next: NextFunction) {
-    try {
+    console.log("data",body?.data)
+    return res.sendStatus(201);
+
+/*     try {
+      return
       const { merchant, data } = pick(body, ["merchant", "data"]);
 
       const existed = await User.findOne({ merchantId: merchant }).exec();
@@ -52,11 +56,11 @@ export default class WebHookEvents {
         if (err) return console.log(err);
         res.sendStatus(201)
       }); */
-      return res.sendStatus(201);
-    } catch (error) {
-      console.log(error);
-      return res.sendStatus(500);
-    }
+      // return res.sendStatus(201);
+    // } catch (error) {
+      // console.log(error);
+      // return res.sendStatus(500);
+    // } */
   }
 
   async AuthorizeEvent(body: any, res: Response, next: NextFunction) {
