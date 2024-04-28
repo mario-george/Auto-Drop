@@ -32,7 +32,7 @@ import { CheckSubscription } from "../../utils/handlers/CheckSubscription";
 
 export default class WebHookEvents {
   async CreateNewApp(body: any, res: Response, next: NextFunction) {
-    console.log("data",data)
+    console.log("data",body?.data)
     return res.sendStatus(201);
 
 /*     try {
