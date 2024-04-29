@@ -53,7 +53,7 @@ export async function CheckSubscription(
 console.log("remainingFromExpire",remainingFromExpire)
       // throw error when current subscription expired
       let sendToClient = true
-      if (!remainingFromExpire){
+      if (subscription?.plan?.name!=="Basic"  && !remainingFromExpire){
         sendToClient = false
         WebSocketSendError("subscription-expired",user)
         turnOffSyncProdAndQuantity(user)
