@@ -5,6 +5,7 @@ import ProductsRenderer from "./_components/ProductsRenderer";
 import MotionWrapper from "../_components/shared/MotionWrapper";
 
 import './_components/styles/styles.css'
+import ProductsProtector from './_components/ProductsProtector';
 export default function Page() {
   const t = useTranslations("productsPage");
   const locale = useLocale();
@@ -30,8 +31,13 @@ let ProductsRendererProps = {
     <>
       <MotionWrapper locale={locale}>
         <div className="px-3 productsContainer">
-          <ProductsRenderer
+       {/*    <ProductsRenderer
            {...ProductsRendererProps}
+          /> */}
+          
+          <ProductsProtector
+           {...ProductsRendererProps}
+          
           />
         </div>
       </MotionWrapper>
