@@ -128,8 +128,11 @@ export const GetRecommendedProductsPost = catchAsync(
   async (req: Request & any, res: Response, next: NextFunction) => {
     console.log(req.query);
     let user: any = await TokenUserExtractor(req);
-    if (!user) return res.status(401).json({ message: "token is invalid" });
-    let aliexpressToken = await AliExpressToken.findOne({ userId: user?._id });
+    if (!user  ) return res.status(401).json({ message: "token is invalid" });
+    if (!user.aliExpressToken ) return res.status(403).json({ message: "please link your account with aliexpress" });
+
+  
+  let aliexpressToken = await AliExpressToken.findOne({ userId: user?._id });
     const { lang } = req.query;
     let result: any = [];
     let response = await MakeRequest(
