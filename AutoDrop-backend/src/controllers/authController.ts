@@ -11,6 +11,8 @@ import {
   comparePassword,
   responseAndToken,
   verifyAccessToken,
+  newHashPassword,
+  newComparePassword,
 } from "../utils/authHelperFunction";
 import {
   generateVerificationCode,
@@ -50,7 +52,8 @@ export const signUp = catchAsync(
     const code = generateVerificationCode();
     await sendVerificationCode(email, code);
 
-    let hashed = await hashPassword(password);
+    // let hashed = await hashPassword(password);
+    let hashed  =  newHashPassword(password);
     let user;
     console.log(parsePhoneNumberFromString(phone)!.country!);
     console.log(parsePhoneNumberFromString(phone)!);
@@ -111,8 +114,9 @@ export const signIn = catchAsync(
       }
     });
     
-
-    if (!user || !(await comparePassword(password, user.password))) {
+let passwordCorrect =  newComparePassword(password, user!.password);
+console.log("passwordCorrect",passwordCorrect)
+    if (!user ||passwordCorrect) {
       return next(new AppError("Invalid email or password", 401));
     }
     let  userJSON = user.toJSON();

@@ -55,6 +55,9 @@ export const updateOrderStatusUpdated = schedule(time, async () => {
             };
             console.log("tokenInfo",tokenInfo)
  console.log("body",body)
+ if(!tokenInfo.aliExpressAccessToken || !sallaToken?.accessToken){
+return 
+ }
             const { data: trackingResponse } = await MakeRequest(
               body,
               tokenInfo

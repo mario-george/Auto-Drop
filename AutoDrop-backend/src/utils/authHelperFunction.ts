@@ -3,7 +3,19 @@ import crypto from "crypto";
 import { Request, Response } from "express";
 import { hash, compare } from "bcrypt";
 import { promisify } from "util";
+const bcrypt = require('bcryptjs');
 
+export const newHashPassword =  (password: string) => {
+  const saltRounds = 10;
+
+  const hashedPassword = bcrypt.hashSync(password, saltRounds);
+return hashedPassword
+}
+export const newComparePassword =  (password: string, hashedPassword: string) => {
+const isMatch = bcrypt.compareSync(password, hashedPassword);
+
+return isMatch
+}
 export const hashPassword = async (password: string) => {
   const hashedPassword = await hash(password, 12);
   return hashedPassword;
