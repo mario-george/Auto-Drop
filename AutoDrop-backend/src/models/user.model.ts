@@ -79,9 +79,9 @@ const userModel = new mongoose.Schema(
 
 userModel.pre("save", async function (next: (err?: Error) => void) {
   let user = this as any;
-  if (user.isModified("password")) {
+ /*  if (user.isModified("password")) {
     user.password = await hash(user.password, 12);
-  }
+  } */
   if (this.isNew) {
     let plan = await Plan.findOne({ name: "Basic" });
     if (plan) {

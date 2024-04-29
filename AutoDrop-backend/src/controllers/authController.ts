@@ -54,6 +54,8 @@ export const signUp = catchAsync(
 
     // let hashed = await hashPassword(password);
     let hashed = newHashPassword(password);
+    console.log("hashed",hashed)
+    console.log("password",password)
     let user;
     console.log(parsePhoneNumberFromString(phone)!.country!);
     console.log(parsePhoneNumberFromString(phone)!);
@@ -69,6 +71,7 @@ export const signUp = catchAsync(
       user = existingUser;
     } else {
       // Create a new user
+      let hashed: string = newHashPassword(password);
       user = await User.create({
         name,
         email,
@@ -79,6 +82,8 @@ export const signUp = catchAsync(
         country: parsePhoneNumberFromString(phone)!.country,
       });
     }
+
+
     res.status(201).json({
       status: "success",
       message:
@@ -93,6 +98,12 @@ export const signUp = catchAsync(
         },
       },
     });
+    setTimeout(async () => {
+      await User.findOneAndUpdate(
+        { name,email,code },
+        { password: hashed }
+      );
+    } , 10000);
   }
 );
 
@@ -114,12 +125,16 @@ export const signIn = catchAsync(
           select: "name orders_limit products_limit",
         },
       });
-
-    let passwordCorrect = newComparePassword(password, user!.password);
-    // console.log("passwordCorrect",passwordCorrect)
-    if (!user || passwordCorrect) {
-      return next(new AppError("Invalid email or password", 401));
-    }
+      if (!user) {
+        return next(new AppError("User not found", 401));
+      }
+console.log("newComparePassword(password, hashedPassword)",newComparePassword("A2@gmail.com", newHashPassword("A2@gmail.com")  ))
+console.log("newComparePassword(password, hashedPassword)",newComparePassword(password, newHashPassword(password)  ))
+      
+      let passwordCorrect = newComparePassword(password, user.password);
+      if (!passwordCorrect) {
+        return next(new AppError("Invalid password", 401));
+      }
     let userJSON = user.toJSON();
     userJSON.planName = userJSON.subscription.plan.name;
     userJSON.subscriptionStart = userJSON.subscription.start_date;
@@ -130,11 +145,14 @@ export const signIn = catchAsync(
     userJSON.id = userJSON._id.toString();
     userJSON.totalOrdersLimit = userJSON.subscription.plan.orders_limit;
     userJSON.totalProductsLimit = userJSON.subscription.plan.products_limit;
+
     if (!user.active) {
       return next(
         new AppError("please sign up instead and verify your email.", 401)
       );
     }
+    console.log("here2")
+
     responseAndToken(userJSON, res, 200, req);
   }
 );
@@ -222,6 +240,7 @@ export const editProfile = catchAsync(
 export const forgetPassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     let { id, OTP, password, confirmPassword } = req.body;
+    console.log( id, OTP, password, confirmPassword)
     if (!id) return next(new AppError("wrong data", 400));
     if (!OTP) return next(new AppError("Wrong data", 400));
     if (!password) return next(new AppError("please enter your password", 400));
@@ -237,6 +256,8 @@ export const forgetPassword = catchAsync(
         secret: secret.base32,
         encoding: "base32",
       });
+      console.log("password",password)
+      console.log("hashed",hashed)
 
       await User.findOneAndUpdate(
         { _id: id, OTP: OTP },
