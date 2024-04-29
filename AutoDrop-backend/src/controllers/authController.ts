@@ -11,6 +11,8 @@ import {
   comparePassword,
   responseAndToken,
   verifyAccessToken,
+  newHashPassword,
+  newComparePassword,
 } from "../utils/authHelperFunction";
 import {
   generateVerificationCode,
@@ -50,7 +52,8 @@ export const signUp = catchAsync(
     const code = generateVerificationCode();
     await sendVerificationCode(email, code);
 
-    let hashed = await hashPassword(password);
+    // let hashed = await hashPassword(password);
+    let hashed = newHashPassword(password);
     let user;
     console.log(parsePhoneNumberFromString(phone)!.country!);
     console.log(parsePhoneNumberFromString(phone)!);
@@ -102,30 +105,31 @@ export const signIn = catchAsync(
     if (!password) {
       return next(new AppError("please enter your password", 400));
     }
-    const user : IUserSchema & {subscription:any}|null = await User.findOne({ email }).populate({
-      path:"subscription",
-      select:"plan start_date expiry_date orders_limit products_limit",
-      populate:{
-        path:"plan",
-        select:"name orders_limit products_limit"
-      }
-    });
-    
+    const user: (IUserSchema & { subscription: any }) | null =
+      await User.findOne({ email }).populate({
+        path: "subscription",
+        select: "plan start_date expiry_date orders_limit products_limit",
+        populate: {
+          path: "plan",
+          select: "name orders_limit products_limit",
+        },
+      });
 
-    if (!user || !(await comparePassword(password, user.password))) {
+    let passwordCorrect = newComparePassword(password, user!.password);
+    // console.log("passwordCorrect",passwordCorrect)
+    if (!user || passwordCorrect) {
       return next(new AppError("Invalid email or password", 401));
     }
-    let  userJSON = user.toJSON();
-    console.log("user.subscription.plan",user.subscription.plan)
-userJSON.planName= userJSON.subscription.plan.name
-userJSON.subscriptionStart= userJSON.subscription.start_date
-userJSON.subscriptionExpiry= userJSON.subscription.expiry_date
-userJSON.subscriptionOrdersLimit= userJSON.subscription.orders_limit
-userJSON.subscriptionProductsLimit= userJSON.subscription.products_limit
+    let userJSON = user.toJSON();
+    userJSON.planName = userJSON.subscription.plan.name;
+    userJSON.subscriptionStart = userJSON.subscription.start_date;
+    userJSON.subscriptionExpiry = userJSON.subscription.expiry_date;
+    userJSON.subscriptionOrdersLimit = userJSON.subscription.orders_limit;
+    userJSON.subscriptionProductsLimit = userJSON.subscription.products_limit;
 
-userJSON.id = userJSON._id.toString()
-userJSON.totalOrdersLimit= userJSON.subscription.plan.orders_limit
-userJSON.totalProductsLimit= userJSON.subscription.plan.products_limit
+    userJSON.id = userJSON._id.toString();
+    userJSON.totalOrdersLimit = userJSON.subscription.plan.orders_limit;
+    userJSON.totalProductsLimit = userJSON.subscription.plan.products_limit;
     if (!user.active) {
       return next(
         new AppError("please sign up instead and verify your email.", 401)
@@ -139,8 +143,16 @@ export const verify = catchAsync(
     const { email, code } = req.body;
     console.log("here");
     // Find the user with the provided email
-    let user = await User.findOne({ email: email });
-    //@ts-ignore
+    const user: (IUserSchema & { subscription: any }) | null =
+    await User.findOne({ email }).populate({
+      path: "subscription",
+      select: "plan start_date expiry_date orders_limit products_limit",
+      populate: {
+        path: "plan",
+        select: "name orders_limit products_limit",
+      },
+    });
+  //@ts-ignore
     console.log(user.code);
     console.log(code);
     if (!user) {
@@ -155,8 +167,17 @@ export const verify = catchAsync(
     // If the codes match, activate the user's account
     user.active = true;
     await user.save();
+    let userJSON = user.toJSON();
+    userJSON.planName = userJSON.subscription.plan.name;
+    userJSON.subscriptionStart = userJSON.subscription.start_date;
+    userJSON.subscriptionExpiry = userJSON.subscription.expiry_date;
+    userJSON.subscriptionOrdersLimit = userJSON.subscription.orders_limit;
+    userJSON.subscriptionProductsLimit = userJSON.subscription.products_limit;
 
-    responseAndToken(user, res, 200, req);
+    userJSON.id = userJSON._id.toString();
+    userJSON.totalOrdersLimit = userJSON.subscription.plan.orders_limit;
+    userJSON.totalProductsLimit = userJSON.subscription.plan.products_limit;
+    responseAndToken(userJSON, res, 200, req);
   }
 );
 export const editProfile = catchAsync(

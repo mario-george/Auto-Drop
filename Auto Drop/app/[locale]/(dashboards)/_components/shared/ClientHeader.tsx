@@ -51,44 +51,59 @@ export default function ClientHeader({
   };
   const dispatch = useDispatch();
   useEffect(() => {
-    const socket = new WebSocket(webSocketUrl as string);
-    socket.addEventListener("open", (event) => {
-      socket.send(JSON.stringify({ id: user.id }));
-    });
-    socket.onmessage = (event) => {
-      console.log("RAW EVENT", event);
-      try {
-        // let data = JSON.parse(event.data);
-        let data = JSON.parse(event.data);
-        console.log("eventtt", data);
-        console.log("eventtt t", typeof data);
-        if (data.eventType === "subscription") {
-          dispatch(userActions.changeSubscription(data));
-        } else if (data.eventType === "subscription-expired") {
-          subscriptionErrorHandler(
-            "Subscription Expired",
-            "Please renew your subscription to continue using the service"
-          );
-        } else if (data.eventType === "subscription-products-limit-reached") {
-          subscriptionErrorHandler(
-            "Subscription Products Limit Reached",
-            "Please upgrade your subscription to add more products"
-          );
-        } else if (data.eventType === "subscription-orders-limit-reached") {
-          subscriptionErrorHandler(
-            "Subscription Orders Limit Reached",
-            "Please upgrade your subscription to add more orders"
-          );
+    let socket: WebSocket;
+    const maxRetries = 5000;
+    let retries = 0;
+    const retryInterval = 60000;
+  
+    const connect = () => {
+      if (socket) {
+        socket.close(); // close the existing connection if it exists
+      }
+  
+      socket = new WebSocket(webSocketUrl as string);
+  
+      socket.addEventListener("open", (event) => {
+        retries = 0; // reset retries count on successful connection
+        socket.send(JSON.stringify({ id: user.id }));
+      });
+  
+      socket.onmessage = (event) => {
+        console.log("RAW EVENT", event);
+        try {
+          let data = JSON.parse(event.data);
+          console.log("eventtt", data);
+        } catch (error) {
+          console.error("Error parsing event data:", error);
         }
-      } catch (error) {
-        console.error("Failed to parse message:", event.data, error);
+      };
+  
+      socket.onerror = (event) => {
+        console.log("Socket encountered an error", event);
+        if (retries < maxRetries) {
+          retries++;
+          setTimeout(connect, retryInterval); // try to reconnect after a delay
+        }
+      };
+  
+      socket.onclose = (event: CloseEvent) => {
+        console.log("Socket closed", event);
+        if (retries < maxRetries) {
+          retries++;
+          setTimeout(connect, retryInterval); // try to reconnect after a delay
+        }
+      };
+    };
+  
+    connect(); // initial connection attempt
+  
+    // Clean up function to close the socket when the component unmounts
+    return () => {
+      if (socket) {
+        socket.close();
       }
     };
-
-    return () => {
-      socket.close();
-    };
-  }, [webSocketUrl]);
+  }, []);
   console.log(createdAt);
   const options = {
     weekday: "long",
@@ -129,16 +144,63 @@ export default function ClientHeader({
   const [scrolling, setScrolling] = useState(false);
   const isAr = locale === "ar";
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const isScrolling = scrollPosition > 0;
-      setScrolling(isScrolling);
+    if (!user.id) {
+      return; // exit early if user.id is not defined
+    }
+
+    let socket: WebSocket;
+    const maxRetries = 5000;
+    let retries = 0;
+    const retryInterval = 60000;
+  
+    const connect = () => {
+      if (socket) {
+        socket.close(); // close the existing connection if it exists
+      }
+  
+      socket = new WebSocket(webSocketUrl as string);
+  
+      socket.addEventListener("open", (event) => {
+        retries = 0; // reset retries count on successful connection
+        socket.send(JSON.stringify({ id: user.id }));
+      });
+  
+      socket.onmessage = (event) => {
+        console.log("RAW EVENT", event);
+        try {
+          let data = JSON.parse(event.data);
+          console.log("eventtt", data);
+        } catch (error) {
+          console.error("Error parsing event data:", error);
+        }
+      };
+  
+      socket.onerror = (event) => {
+        console.log("Socket encountered an error", event);
+        if (retries < maxRetries) {
+          retries++;
+          setTimeout(connect, retryInterval); // try to reconnect after a delay
+        }
+      };
+  
+      socket.onclose = (event: CloseEvent) => {
+        console.log("Socket closed", event);
+        if (retries < maxRetries) {
+          retries++;
+          setTimeout(connect, retryInterval); // try to reconnect after a delay
+        }
+      };
     };
-    window.addEventListener("scroll", handleScroll);
+  
+    connect(); // initial connection attempt
+  
+    // Clean up function to close the socket when the component unmounts
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      if (socket) {
+        socket.close();
+      }
     };
-  }, []);
+  }, [user.id]);
   let splittedButtonsClasses =
     locale === "ar"
       ? "rotate-45 right-0 left-[10%]"
