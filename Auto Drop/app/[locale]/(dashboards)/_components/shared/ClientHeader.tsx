@@ -170,6 +170,24 @@ export default function ClientHeader({
         try {
           let data = JSON.parse(event.data);
           console.log("eventtt", data);
+          if (data.eventType === "subscription") {
+            dispatch(userActions.changeSubscription(data));
+          } else if (data.eventType === "subscription-expired") {
+            subscriptionErrorHandler(
+              "Subscription Expired",
+              "Please renew your subscription to continue using the service"
+            );
+          } else if (data.eventType === "subscription-products-limit-reached") {
+            subscriptionErrorHandler(
+              "Subscription Products Limit Reached",
+              "Please upgrade your subscription to add more products"
+            );
+          } else if (data.eventType === "subscription-orders-limit-reached") {
+            subscriptionErrorHandler(
+              "Subscription Orders Limit Reached",
+              "Please upgrade your subscription to add more orders"
+            );
+          }
         } catch (error) {
           console.error("Error parsing event data:", error);
         }
