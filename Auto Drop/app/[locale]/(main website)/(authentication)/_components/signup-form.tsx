@@ -181,24 +181,33 @@ export default function SignupForm({
       }),
     });
     if (resp.ok) {
-      let data = await resp.json();
-      dispatch(
-        userActions.login({
-          token: data.data.accessToken,
-          isLoggedin: true,
-          name: data.data.user.name,
-          email: data.data.user.email,
-          id: data.data.user._id,
-          image: data.data.user.image,
-          role: data.data.user.role,
-          phone: data.data.user.phone,
-          sallaToken: data.data.user.sallaToken,
-          aliExpressToken: data.data.user.aliExpressToken,
-          country: data.data.user.country,
-          createdAt: data.data.user.createdAt,
-
-        })
-      );
+      let responseData = await resp.json();
+      let {planName , subscriptionStart ,            subscriptionExpiry,
+        subscriptionOrdersLimit,
+        subscriptionProductsLimit,totalOrdersLimit,totalProductsLimit} =  responseData.data.user
+        dispatch(
+          userActions.login({
+            token: responseData.data.accessToken,
+            id: responseData.data.user._id,
+            name: responseData.data.user.name,
+            storeName: responseData.data.user.storeName,
+            storeLink: responseData.data.user.storeLink,
+            email: responseData.data.user.email,
+            role: responseData.data.user.role,
+            image: responseData.data.user.image,
+            phone: responseData.data.user.phone,
+            sallaToken: responseData.data.user.sallaToken,
+            aliExpressToken: responseData.data.user.aliExpressToken,
+            country: responseData.data.user.country,
+            createdAt: responseData.data.user.createdAt,
+            planName,
+            subscriptionStart,
+            subscriptionExpiry,
+            subscriptionOrdersLimit,
+            subscriptionProductsLimit,totalProductsLimit,totalOrdersLimit,
+            isLoggedin: true,
+          })
+        );
       router.push(`/`);
     } else {
       const data = await resp.json();
