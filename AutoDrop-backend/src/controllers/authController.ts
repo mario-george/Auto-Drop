@@ -231,7 +231,8 @@ export const forgetPassword = catchAsync(
     if (!user) {
       return next(new AppError("wrong data", 400));
     } else {
-      let hashed: string = await bcrypt.hash(password, 10);
+      // let hashed: string = await bcrypt.hash(password, 10);
+      let hashed: string = newHashPassword(password);
       const code = speakeasy.totp({
         secret: secret.base32,
         encoding: "base32",
