@@ -50,56 +50,7 @@ export default function ClientHeader({
     });
   };
   const dispatch = useDispatch();
-  useEffect(() => {
-    
-    let socket: WebSocket;
-    const maxRetries = 5;
-    let retries = 0;
-    const retryInterval = 60000;
   
-    const connect = () => {
-      if (socket) {
-        socket.close(); // close the existing connection if it exists
-      }
-  
-      socket = new WebSocket(webSocketUrl as string);
-  
-      socket.addEventListener("open", (event) => {
-        retries = 0; // reset retries count on successful connection
-        socket.send(JSON.stringify({ id: user.id }));
-      });
-  
-      socket.onmessage = (event) => {
-        try {
-          let data = JSON.parse(event.data);
-          console.log("eventtt", data);
-        } catch (error) {
-          console.error("Error parsing event data:", error);
-        }
-      };
-  
-      socket.onerror = (event) => {
-        console.log("Socket encountered an error", event);
-      };
-  
-      socket.onclose = (event: CloseEvent) => {
-        console.log("Socket closed", event);
-        if (!event.wasClean && retries < maxRetries) {
-          retries++;
-          setTimeout(connect, retryInterval); // try to reconnect after a delay
-        }
-      };
-    };
-  
-    connect(); // initial connection attempt
-  
-    // Clean up function to close the socket when the component unmounts
-    return () => {
-      if (socket) {
-        socket.close();
-      }
-    };
-  }, []);
   console.log(createdAt);
   const options = {
     weekday: "long",
@@ -145,13 +96,16 @@ export default function ClientHeader({
     }
 
     let socket: WebSocket;
-    const maxRetries = 5000;
+    const maxRetries = 500;
     let retries = 0;
-    const retryInterval = 10000;
+    const retryInterval = 60000;
   
     const connect = () => {
       if (socket) {
-        socket.close(); // close the existing connection if it exists
+        socket.close()
+        
+        
+        ; // close the existing connection if it exists
       }
   
       socket = new WebSocket(webSocketUrl as string);
@@ -188,14 +142,14 @@ export default function ClientHeader({
           console.error("Error parsing event data:", error);
         }
       };
-  
+  /* 
       socket.onerror = (event) => {
         console.log("Socket encountered an error", event);
         if (retries < maxRetries) {
           retries++;
           setTimeout(connect, retryInterval); // try to reconnect after a delay
         }
-      };
+      }; */
   
       socket.onclose = (event: CloseEvent) => {
         console.log("Socket closed", event);

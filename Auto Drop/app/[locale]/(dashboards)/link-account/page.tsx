@@ -3,6 +3,7 @@ import { useLocale, useTranslations } from "next-intl";
 import Platforms from "@/components/icons/clientPages/Platforms";
 import CartSVG from "@/components/icons/clientPages/CartSVG";
 import AvailablePlatforms from "./_components/AvailblePlatforms";
+import CheckMerchantElement from "./_components/CheckMerchantElement";
 export default function LinkAccount() {
   const locale = useLocale();
   const t = useTranslations("home");
@@ -35,6 +36,7 @@ export default function LinkAccount() {
 
   return (
     <>
+    <CheckMerchantElement/>
       <HeaderContainer
         IconComponent={Platforms}
         title={t2("availablePlatforms")}
