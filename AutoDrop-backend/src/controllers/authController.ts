@@ -419,17 +419,17 @@ if (merchantID) {
     merchantID,
   });
   if (merchantExist) {
-    let sendWebSocketError = async () => {
+ /*    let sendWebSocketError = async () => {
       setTimeout(() => {
         WebSocketSendError(
           "merchant-already-connected",
           merchantExist?.id
         );
       }, 10000);
-    };
-    sendWebSocketError();
+    }; */
+    // sendWebSocketError();
     const frontendLink = new URL(
-      (process.env.Frontend_Link + "/en/") as string
+      (process.env.Frontend_Link + "/en/link-account?merchantAlreadyConnected=true") as string
     );
 
     return res.redirect(frontendLink.toString());
