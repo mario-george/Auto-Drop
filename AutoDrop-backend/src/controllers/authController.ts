@@ -416,7 +416,7 @@ console.log("merchantIDSALLA",merchantID )
 
 if (merchantID) {
   let merchantExist = await User.findOne({
-    merchantID: responseJson.merchant.id,
+    merchantID,
   });
   if (merchantExist) {
     let sendWebSocketError = async () => {
