@@ -125,7 +125,7 @@
     "toastMessage": "Your password has been reset successfully",
     "otp": "OTP",
     "otpPlaceholder": "Enter your OTP",
-    "invalidOTP": "Invalid OTP"
+    "invalidOtp": "Invalid OTP"
   },
   "packages": {
     "packages": "Packages",

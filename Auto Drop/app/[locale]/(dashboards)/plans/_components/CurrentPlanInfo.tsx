@@ -40,7 +40,7 @@ return formattedDate
 }
   return   <div className='px-6 my-6'>
 
-  <div className="hidden bg-white lap:flex flex-col font-bold text-[20px] rounded-lg shadow  ">
+  <div className=" flex bg-white lap:flex flex-col font-bold text-[20px] rounded-lg shadow  ">
       {/*     <span>"totalProductsLimit" {totalProductsLimit}</span>
           <span>"totalOrdersLimit" {totalOrdersLimit}</span>
           <span>"remainingOrders" {remainingOrders}</span>
@@ -75,7 +75,7 @@ return formattedDate
  {hasDateDesc && 
  
  
-      <div className="bg-[#eaebec] flex justify-between font-normal text-[20px] px-4 rounded-lg py-4 ">
+      <div className="bg-[#eaebec]  flex flex-col text-[15px] tab:flex-row justify-between font-normal tab:text-[20px] px-4 rounded-lg py-4 ">
         <div>{subscriptionDateText} {formatDate(subscriptionStart )}</div>
         <div>{subscriptionExpirationDateText}  {formatDate(subscriptionExpiry )}</div>
       </div>

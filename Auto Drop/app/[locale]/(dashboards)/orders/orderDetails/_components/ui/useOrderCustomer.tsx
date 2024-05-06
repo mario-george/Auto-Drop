@@ -17,299 +17,90 @@ import React, {
   useState,
 } from "react";
 import { getCountryCallingCode } from "react-phone-number-input";
-export type CountryCode =
-  | "AC"
-  | "AD"
-  | "AE"
-  | "AF"
-  | "AG"
-  | "AI"
-  | "AL"
-  | "AM"
-  | "AO"
-  | "AR"
-  | "AS"
-  | "AT"
-  | "AU"
-  | "AW"
-  | "AX"
-  | "AZ"
-  | "BA"
-  | "BB"
-  | "BD"
-  | "BE"
-  | "BF"
-  | "BG"
-  | "BH"
-  | "BI"
-  | "BJ"
-  | "BL"
-  | "BM"
-  | "BN"
-  | "BO"
-  | "BQ"
-  | "BR"
-  | "BS"
-  | "BT"
-  | "BW"
-  | "BY"
-  | "BZ"
-  | "CA"
-  | "CC"
-  | "CD"
-  | "CF"
-  | "CG"
-  | "CH"
-  | "CI"
-  | "CK"
-  | "CL"
-  | "CM"
-  | "CN"
-  | "CO"
-  | "CR"
-  | "CU"
-  | "CV"
-  | "CW"
-  | "CX"
-  | "CY"
-  | "CZ"
-  | "DE"
-  | "DJ"
-  | "DK"
-  | "DM"
-  | "DO"
-  | "DZ"
-  | "EC"
-  | "EE"
-  | "EG"
-  | "EH"
-  | "ER"
-  | "ES"
-  | "ET"
-  | "FI"
-  | "FJ"
-  | "FK"
-  | "FM"
-  | "FO"
-  | "FR"
-  | "GA"
-  | "GB"
-  | "GD"
-  | "GE"
-  | "GF"
-  | "GG"
-  | "GH"
-  | "GI"
-  | "GL"
-  | "GM"
-  | "GN"
-  | "GP"
-  | "GQ"
-  | "GR"
-  | "GT"
-  | "GU"
-  | "GW"
-  | "GY"
-  | "HK"
-  | "HN"
-  | "HR"
-  | "HT"
-  | "HU"
-  | "ID"
-  | "IE"
-  | "IL"
-  | "IM"
-  | "IN"
-  | "IO"
-  | "IQ"
-  | "IR"
-  | "IS"
-  | "IT"
-  | "JE"
-  | "JM"
-  | "JO"
-  | "JP"
-  | "KE"
-  | "KG"
-  | "KH"
-  | "KI"
-  | "KM"
-  | "KN"
-  | "KP"
-  | "KR"
-  | "KW"
-  | "KY"
-  | "KZ"
-  | "LA"
-  | "LB"
-  | "LC"
-  | "LI"
-  | "LK"
-  | "LR"
-  | "LS"
-  | "LT"
-  | "LU"
-  | "LV"
-  | "LY"
-  | "MA"
-  | "MC"
-  | "MD"
-  | "ME"
-  | "MF"
-  | "MG"
-  | "MH"
-  | "MK"
-  | "ML"
-  | "MM"
-  | "MN"
-  | "MO"
-  | "MP"
-  | "MQ"
-  | "MR"
-  | "MS"
-  | "MT"
-  | "MU"
-  | "MV"
-  | "MW"
-  | "MX"
-  | "MY"
-  | "MZ"
-  | "NA"
-  | "NC"
-  | "NE"
-  | "NF"
-  | "NG"
-  | "NI"
-  | "NL"
-  | "NO"
-  | "NP"
-  | "NR"
-  | "NU"
-  | "NZ"
-  | "OM"
-  | "PA"
-  | "PE"
-  | "PF"
-  | "PG"
-  | "PH"
-  | "PK"
-  | "PL"
-  | "PM"
-  | "PR"
-  | "PS"
-  | "PT"
-  | "PW"
-  | "PY"
-  | "QA"
-  | "RE"
-  | "RO"
-  | "RS"
-  | "RU"
-  | "RW"
-  | "SA"
-  | "SB"
-  | "SC"
-  | "SD"
-  | "SE"
-  | "SG"
-  | "SH"
-  | "SI"
-  | "SJ"
-  | "SK"
-  | "SL"
-  | "SM"
-  | "SN"
-  | "SO"
-  | "SR"
-  | "SS"
-  | "ST"
-  | "SV"
-  | "SX"
-  | "SY"
-  | "SZ"
-  | "TA"
-  | "TC"
-  | "TD"
-  | "TG"
-  | "TH"
-  | "TJ"
-  | "TK"
-  | "TL"
-  | "TM"
-  | "TN"
-  | "TO"
-  | "TR"
-  | "TT"
-  | "TV"
-  | "TW"
-  | "TZ"
-  | "UA"
-  | "UG"
-  | "US"
-  | "UY"
-  | "UZ"
-  | "VA"
-  | "VC"
-  | "VE"
-  | "VG"
-  | "VI"
-  | "VN"
-  | "VU"
-  | "WF"
-  | "WS"
-  | "XK"
-  | "YE"
-  | "YT"
-  | "ZA"
-  | "ZM"
-  | "ZW";
-export interface CustomerDataType {
-  firstName: string | undefined;
-  lastName: string | undefined;
-  email: string | undefined;
-  mobile: string | undefined;
-  mobile_code: string | undefined;
-  country: string | undefined;
-  region: string | undefined;
-  city: string | undefined;
-  postalCode: string | undefined;
-  district: string | undefined;
-  address: string | undefined;
-}
-interface OrderCustomerProps {
-  firstNameText: string;
-  lastNameText: string;
-  firstName: string;
-  lastName: string;
-  emailText: string;
-  email: string;
-  locale: string;
-  phoneText: string;
-  mobile: string;
-  mobile_code: string;
-  countryText: string;
-  country: string;
-  cityText: string;
-  city: string;
-  districtText: string;
-  district: string;
-  address: string;
-  addressText: string;
-  postalCode: string;
-  postalCodeText: string;
-  region: string;
-  regionText: string;
-  editCustomerHandler: (data: CustomerDataType) => void;
-  editText: string;
-  deliveryDetails: string;
-}
+import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 
-interface GridItem {
-  title: string | undefined;
-  value: string | undefined;
-  ref: React.RefObject<HTMLInputElement> | undefined;
-  secondRef?: React.RefObject<HTMLInputElement> | undefined;
-  secondValue?: string | undefined;
+import { CountryCode } from "./const/types/Country";
+import {
+  OrderCustomerProps,
+  GridItem,
+  CustomerDataType,
+} from "./const/types/CustomerProps";
+import { cities, getProvince } from "./const/City";
+
+interface CitySelectorProps {
+  locale: string;
+  defaultCity: string;
+  // cityRef: React.RefObject<HTMLInputElement>;
+  // regionRef: React.RefObject<HTMLInputElement>;
+  setCityValue:(val:string|null)=>void;
+  setRegionValue:(val:string|null)=>void;
+  cityValue?:string |null
+  regionValue?:string|null
+}
+function CitySelector(props: CitySelectorProps) {
+  let { locale, defaultCity ,setCityValue,setRegionValue,cityValue,regionValue} = props;
+  let citiesObj = cities as { [key: string]: string };
+
+  let citiesEntries = Object.entries(citiesObj).map(
+    ([key, value]: [string, string], index: number) => {
+      let currCity = value;
+      if (locale == "ar") {
+        currCity = key;
+      }
+
+      return {
+        label: currCity,
+        value:index,
+        valueEN: value,
+        valueAR: key,
+      };
+    }
+  );
+let choosenCity = citiesEntries.find((city:{
+  valueAR:string,
+  valueEN:string
+
+}) => (city.valueAR== defaultCity || city.valueEN== defaultCity ));
+ console.log("choosenCity",choosenCity)
+if(!choosenCity){
+  choosenCity = citiesEntries[0];
+}
+let choosenCityKey = choosenCity.value;
+if(cityValue == null || regionValue == null){
+
+  setCityValue(choosenCity.valueEN)
+  setRegionValue(getProvince(choosenCity.valueEN))
+}
+  return (
+    <Autocomplete
+      isRequired
+      // label="City"
+      defaultItems={citiesEntries}
+      placeholder="Search a city"
+      defaultSelectedKey={choosenCityKey.toString()}
+      // className="max-w-xs"
+      // className="!text-black"
+      variant={"bordered"}
+
+      color = "primary"
+      onSelectionChange={(key: any) => {
+        console.log("key", key);
+let cityName = citiesEntries?.[key as number]?.valueEN
+        console.log("cityName",cityName)
+        console.log("getProvince(cityName)",getProvince(cityName))
+setCityValue(cityName)
+setRegionValue(getProvince(cityName))
+
+
+      }}
+    >
+      {(item: any) => (
+        <AutocompleteItem
+        key={item.value}
+        className="text-black">{item.label}</AutocompleteItem>
+      )}
+    </Autocomplete>
+  );
 }
 export default function useOrderCustomer(props: Partial<OrderCustomerProps>) {
   const firstNameRef = useRef<HTMLInputElement>(null);
@@ -323,7 +114,10 @@ export default function useOrderCustomer(props: Partial<OrderCustomerProps>) {
   const emailRef = useRef<HTMLInputElement>(null);
   const mobileNumberRef = useRef<HTMLInputElement>(null);
   const mobileNumberCodeRef = useRef<HTMLInputElement>(null);
-
+const [regionValue,setRegionValue] = useState<string | null>(null)
+const [cityValue, setCityValue] = useState<string | null>(null);
+console.log("regionValue",regionValue)
+console.log("cityValue",cityValue)
   let {
     firstNameText,
     lastNameText,
@@ -409,6 +203,8 @@ export default function useOrderCustomer(props: Partial<OrderCustomerProps>) {
   );
   console.log("firstNameRef.current.value", firstNameRef?.current?.value);
   console.log("lastNameRef.current.value", lastNameRef?.current?.value);
+  console.log("cityRef.current.value",regionRef?.current?.value)
+
   const SmallFlag = ({ country, ...rest }: any) => {
     return (
       <>
@@ -497,12 +293,50 @@ export default function useOrderCustomer(props: Partial<OrderCustomerProps>) {
         secondElement={EditButton}
       />
       <RoundedCardWrapper>
-        <div className="grid grid-cols-1 tab:grid-cols-2 items-center gap-1 tab:gap-3 py-3">
+        <div className="grid grid-cols-1 tab:grid-cols-2 items-center gap-2 tab:gap-3 py-3">
           {gridItems.map((gridEl: GridItem, index: number) => {
             let { title, value, ref } = gridEl;
             if (!title) title = "";
             if (!value) value = "";
+            if(cityText == title){
+  console.log(locale,"locale")
+  console.log(value,"value")
+  let CitySelectorProps = {
+    cityValue,regionValue,setCityValue,defaultCity:value,setRegionValue,locale:locale as string
+  }
+  return<>
+    <div
+                  className={`flex space-s-3 items-center px-3 ${
+                    skyIndex.includes(index) &&
+                    `dark:bg-[#2E464F]  bg-[#F4F6F7]`
+                  }`}
+                  key={index}
+                >
+                  <p className="orderFieldTitleComponent">{title}</p>
 
+                  <CitySelector {...CitySelectorProps} />
+                </div>
+  </>
+}
+if(regionText==title){
+      return (
+              <>
+                <div
+                  className={`flex space-s-3 items-center px-3 ${
+                    skyIndex.includes(index) &&
+                    `dark:bg-[#2E464F]  bg-[#F4F6F7]`
+                  }`}
+                  key={index}
+                >
+                  <p className="orderFieldTitleComponent">{title}</p>
+                  <Input
+                    className="text-xs tab:text-sm"
+                    value = {regionValue ??"Riyadh"}
+                  />
+                </div>
+              </>
+            );
+}
             if (countryText == title) {
               return (
                 <div
@@ -512,7 +346,7 @@ export default function useOrderCustomer(props: Partial<OrderCustomerProps>) {
                   }`}
                   key={index}
                 >
-                  <p className="font-bold text-xs tab:text-sm">{title}</p>
+                  <p className="orderFieldTitleComponent">{title}</p>
 
                   <PhoneInput
                     international={false}
@@ -524,7 +358,7 @@ export default function useOrderCustomer(props: Partial<OrderCustomerProps>) {
                     defaultCountry={countryCode}
                     // placeholder={""}
                     id="phone"
-                    className=" md:text-base flex rounded-md border border-input px-3 py-2"
+                    className=" md:text-base flex rounded-md border border-input px-3 py-2 !mx-0 "
                     onChange={(value) => {
                       console.log("value", value);
                     }}
@@ -550,13 +384,14 @@ export default function useOrderCustomer(props: Partial<OrderCustomerProps>) {
               return (
                 <>
                   <div
-                    className={`flex space-s-3 items-center px-3 ${
+                    className={`flex space-s-7 items-center px-3 ${
                       skyIndex.includes(index) &&
                       `dark:bg-[#2E464F]  bg-[#F4F6F7]`
                     }`}
                     key={index}
                   >
-                    <p className="font-bold text-xs tab:text-sm">{title}</p>
+                    <p className="orderFieldTitleComponent">{title}</p>
+{/* <div className="flex space-s-3 items-center justify-between"> */}
 
                     <Input
                       {...InputElement2Props}
@@ -567,6 +402,7 @@ export default function useOrderCustomer(props: Partial<OrderCustomerProps>) {
                       className="text-xs tab:text-sm !flex-6"
                       type="number"
                     />
+{/* </div> */}
                   </div>
                 </>
               );
@@ -580,7 +416,7 @@ export default function useOrderCustomer(props: Partial<OrderCustomerProps>) {
                   }`}
                   key={index}
                 >
-                  <p className="font-bold text-xs tab:text-sm">{title}</p>
+                  <p className="orderFieldTitleComponent">{title}</p>
                   <Input
                     {...InputElementProps}
                     className="text-xs tab:text-sm"
@@ -604,8 +440,10 @@ export default function useOrderCustomer(props: Partial<OrderCustomerProps>) {
 
       // country: countryRef?.current?.value,
       country: countryCode,
-      region: regionRef?.current?.value,
-      city: cityRef?.current?.value,
+      // region: regionRef?.current?.value,
+      region: regionValue,
+      // city: cityRef?.current?.value,
+      city: cityValue,
       postalCode: postalCodeRef?.current?.value,
       district: districtRef?.current?.value,
       address: streetRef?.current?.value,

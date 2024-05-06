@@ -19,6 +19,7 @@ import {
   sendVerificationCode,
 } from "../utils/verifyEmail";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { WebSocketSendError } from "../utils/handlers/WebSocketSender";
 
 const secret = speakeasy.generateSecret({ length: 20 });
 
@@ -54,8 +55,8 @@ export const signUp = catchAsync(
 
     // let hashed = await hashPassword(password);
     let hashed = newHashPassword(password);
-    console.log("hashed",hashed)
-    console.log("password",password)
+    console.log("hashed", hashed);
+    console.log("password", password);
     let user;
     console.log(parsePhoneNumberFromString(phone)!.country!);
     console.log(parsePhoneNumberFromString(phone)!);
@@ -83,7 +84,6 @@ export const signUp = catchAsync(
       });
     }
 
-
     res.status(201).json({
       status: "success",
       message:
@@ -99,11 +99,8 @@ export const signUp = catchAsync(
       },
     });
     setTimeout(async () => {
-      await User.findOneAndUpdate(
-        { name,email,code },
-        { password: hashed }
-      );
-    } , 10000);
+      await User.findOneAndUpdate({ name, email, code }, { password: hashed });
+    }, 10000);
   }
 );
 
@@ -125,16 +122,22 @@ export const signIn = catchAsync(
           select: "name orders_limit products_limit",
         },
       });
-      if (!user) {
-        return next(new AppError("User not found", 401));
-      }
-console.log("newComparePassword(password, hashedPassword)",newComparePassword("A2@gmail.com", newHashPassword("A2@gmail.com")  ))
-console.log("newComparePassword(password, hashedPassword)",newComparePassword(password, newHashPassword(password)  ))
-      
-      let passwordCorrect = newComparePassword(password, user.password);
-      if (!passwordCorrect) {
-        return next(new AppError("Invalid password", 401));
-      }
+    if (!user) {
+      return next(new AppError("User not found", 401));
+    }
+    console.log(
+      "newComparePassword(password, hashedPassword)",
+      newComparePassword("A2@gmail.com", newHashPassword("A2@gmail.com"))
+    );
+    console.log(
+      "newComparePassword(password, hashedPassword)",
+      newComparePassword(password, newHashPassword(password))
+    );
+
+    let passwordCorrect = newComparePassword(password, user.password);
+    if (!passwordCorrect) {
+      return next(new AppError("Invalid password", 401));
+    }
     let userJSON = user.toJSON();
     userJSON.planName = userJSON.subscription.plan.name;
     userJSON.subscriptionStart = userJSON.subscription.start_date;
@@ -151,7 +154,7 @@ console.log("newComparePassword(password, hashedPassword)",newComparePassword(pa
         new AppError("please sign up instead and verify your email.", 401)
       );
     }
-    console.log("here2")
+    console.log("here2");
 
     responseAndToken(userJSON, res, 200, req);
   }
@@ -162,15 +165,15 @@ export const verify = catchAsync(
     console.log("here");
     // Find the user with the provided email
     const user: (IUserSchema & { subscription: any }) | null =
-    await User.findOne({ email }).populate({
-      path: "subscription",
-      select: "plan start_date expiry_date orders_limit products_limit",
-      populate: {
-        path: "plan",
-        select: "name orders_limit products_limit",
-      },
-    });
-  //@ts-ignore
+      await User.findOne({ email }).populate({
+        path: "subscription",
+        select: "plan start_date expiry_date orders_limit products_limit",
+        populate: {
+          path: "plan",
+          select: "name orders_limit products_limit",
+        },
+      });
+    //@ts-ignore
     console.log(user.code);
     console.log(code);
     if (!user) {
@@ -240,7 +243,7 @@ export const editProfile = catchAsync(
 export const forgetPassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     let { id, OTP, password, confirmPassword } = req.body;
-    console.log( id, OTP, password, confirmPassword)
+    console.log(id, OTP, password, confirmPassword);
     if (!id) return next(new AppError("wrong data", 400));
     if (!OTP) return next(new AppError("Wrong data", 400));
     if (!password) return next(new AppError("please enter your password", 400));
@@ -256,8 +259,8 @@ export const forgetPassword = catchAsync(
         secret: secret.base32,
         encoding: "base32",
       });
-      console.log("password",password)
-      console.log("hashed",hashed)
+      console.log("password", password);
+      console.log("hashed", hashed);
 
       await User.findOneAndUpdate(
         { _id: id, OTP: OTP },
@@ -395,6 +398,28 @@ export const sallaCallback = catchAsync(
       });
 
       if (response.ok) {
+        console.log("SALLA responseJson", responseJson);
+        if (responseJson.merchant) {
+          let merchantExist = await User.findOne({
+            merchantID: responseJson.merchant.id,
+          });
+          if (merchantExist) {
+            let sendWebSocketError = async () => {
+              setTimeout(() => {
+                WebSocketSendError(
+                  "merchant-already-connected",
+                  merchantExist?.id
+                );
+              }, 10000);
+            };
+            sendWebSocketError();
+            const frontendLink = new URL(
+              (process.env.Frontend_Link + "/en/") as string
+            );
+
+            return res.redirect(frontendLink.toString());
+          }
+        }
         const accessToken = responseJson.access_token;
         const refreshToken = responseJson.refresh_token;
 

@@ -3,6 +3,8 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 
 import { ChakraProvider } from "@chakra-ui/react";
 import { Toaster } from "@/components/ui/toaster"
+import {NextUIProvider} from "@nextui-org/system";
+
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ChakraProvider>
@@ -13,7 +15,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
         disableTransitionOnChange
       >
         <Toaster/>
+        <NextUIProvider>
         {children}
+        </NextUIProvider>
+
       </ThemeProvider>
     </ChakraProvider>
   );

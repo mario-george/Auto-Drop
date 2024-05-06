@@ -1,3 +1,4 @@
+const {nextui} = require('@nextui-org/theme');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -6,7 +7,8 @@ module.exports = {
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
-    "./public/**/*.svg",
+    "./node_modules/@nextui-org/theme/dist/components/(autocomplete|button|ripple|spinner|input|listbox|divider|popover|scroll-shadow).js"
+
   ],
   prefix: "",
   theme: {
@@ -96,5 +98,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("tailwindcss-rtl")],
+  plugins: [require("tailwindcss-animate"), require("tailwindcss-rtl") ,nextui()],
 };

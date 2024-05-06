@@ -20,8 +20,26 @@ import { useDispatch } from "react-redux";
 import { setKeyValue } from "@/store/productsSlice";
 import { useLocale } from "next-intl";
 import useMultiSelectCategories from "./ui/useMultiSelectCategories";
+import { useToast } from "@chakra-ui/react";
+
+
+let toastErrorToggle = (toast :any, title:string,description:string,status:string="error")=>{
+ 
+  toast({
+    title,
+    description,
+    status,
+    duration: 9000,
+    isClosable: true,
+    // position: "bottom",
+  });
+  return
+}
+
 export default function useProfitTypeHandler(props: any) {
   // const { toast } = useToast();
+  const toast = useToast();
+
   const dispatch = useDispatch();
   /*   const reloadProducts = useSelector(
     (state: any) => state.products.reloadProducts
@@ -94,7 +112,56 @@ return
       return
     } */
 
-    let promisesArr = selectedProds?.map((product: any) => {
+
+// get remaining products and pass no check because we will handle it in the frontend
+let limitReached = false
+let remainingProducts = -1
+try{
+
+
+   remainingProducts =( await axiosInstance.get("subscription/getRemainingProducts"))?.data?.remainingProducts
+console.log("remainingProducts",remainingProducts)
+  let prodsToBeSelected = selectedProds?.length
+   if(remainingProducts==0){
+
+    let message = `You have ${remainingProducts} remaining products to link.`
+let description = `Please subscribe and try again.`
+    if(locale=="ar"){
+  message =   `ليس لديك منتجات متبقية للربط.`
+  description = `يرجى الاشتراك والمحاولة مرة أخرى.`
+    }
+    toastErrorToggle (toast,message,description,'error')
+    return
+   }
+  else if(remainingProducts<prodsToBeSelected){
+    console.log("condition reached")
+    limitReached = true
+    let message = `You have ${remainingProducts} remaining products and you are trying to link ${prodsToBeSelected} products`
+let description = `Only the first ${remainingProducts} will be linked.`
+    if(locale=="ar"){
+  message = `لديك ${remainingProducts} منتجات متبقية وأنت تحاول ربط ${prodsToBeSelected} منتجات`
+  description = `سيتم ربط فقط أول ${remainingProducts} منتجات.`
+    }
+    toastErrorToggle (toast,message,description,'error')
+}
+
+    
+  }
+catch(err:any){
+  console.error(err)
+
+}
+
+
+
+
+
+let selectedProdsChecked = selectedProds
+if(remainingProducts>0 && limitReached){
+  selectedProdsChecked = selectedProds.slice(0,remainingProducts)
+}
+
+    let promisesArr = selectedProdsChecked?.map((product: any) => {
       let { salla_product_id, _id: id } = product;
       /*       if (salla_product_id) {
         toast({
@@ -142,6 +209,7 @@ return
       let promisesSettled = await Promise.allSettled(promisesArr);
       console.log("promisesSettled", promisesSettled);
       let success = true
+      
       promisesSettled.forEach((promise: any) => {
         let { status, value } = promise;
         if (status === "rejected") {
