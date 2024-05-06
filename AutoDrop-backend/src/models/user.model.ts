@@ -12,9 +12,9 @@ export interface IUserSchema extends Document {
   image: string;
   phone: string;
   country: string;
-  merchantID: number;
-  storeName: string;
-  storeLink: string;
+  merchantID?: number|null;
+  storeName?: string|null;
+  storeLink?: string|null;
   aliExpressToken: ObjectId;
   sallaToken: ObjectId;
   active: boolean;
