@@ -20,8 +20,22 @@ import { useDispatch } from "react-redux";
 import { setKeyValue } from "@/store/productsSlice";
 import { useLocale } from "next-intl";
 import useMultiSelectCategories from "./ui/useMultiSelectCategories";
+import { useToast } from "@chakra-ui/react";
+
+
+let toastErrorToggle = (toast :any, message:string,description:string,variant:string="error")=>{
+  toast({
+    variant: variant,
+    title: message,
+    description
+  });
+  return
+}
+
 export default function useProfitTypeHandler(props: any) {
   // const { toast } = useToast();
+  const toast = useToast();
+
   const dispatch = useDispatch();
   /*   const reloadProducts = useSelector(
     (state: any) => state.products.reloadProducts
@@ -94,7 +108,44 @@ return
       return
     } */
 
-    let promisesArr = selectedProds?.map((product: any) => {
+
+// get remaining products and pass no check because we will handle it in the frontend
+let limitReached = false
+let remainingProducts = -1
+try{
+
+
+   remainingProducts =( await axiosInstance.get("subscription/getRemainingProducts"))?.data?.remainingProducts
+
+  let prodsToBeSelected = selectedProds?.length
+   
+  if(remainingProducts<prodsToBeSelected){
+    limitReached = true
+    let message = `You have ${remainingProducts} remaining products and you are trying to link ${prodsToBeSelected} products`
+let description = `Only the first ${remainingProducts} will be connected.`
+    if(locale=="ar"){
+  message = `لديك ${remainingProducts} منتجات متبقية وأنت تحاول ربط ${prodsToBeSelected} منتجات`
+  description = `سيتم ربط فقط ${remainingProducts} منتجات.`
+    }
+}
+
+    
+  }
+catch(err:any){
+  console.error(err)
+
+}
+
+
+
+
+
+let selectedProdsChecked = selectedProds
+if(remainingProducts>0 && limitReached){
+  selectedProdsChecked = selectedProds.slice(0,remainingProducts)
+}
+
+    let promisesArr = selectedProdsChecked?.map((product: any) => {
       let { salla_product_id, _id: id } = product;
       /*       if (salla_product_id) {
         toast({
@@ -142,6 +193,7 @@ return
       let promisesSettled = await Promise.allSettled(promisesArr);
       console.log("promisesSettled", promisesSettled);
       let success = true
+      
       promisesSettled.forEach((promise: any) => {
         let { status, value } = promise;
         if (status === "rejected") {
