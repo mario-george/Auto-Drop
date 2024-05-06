@@ -151,10 +151,10 @@ export async function PlaceOrder(order: OrderDocument, order_memo: string,Custom
 
 let isAddressEnglish = isAllEnglish(address as string)   
 let isDistrictEnglish = isAllEnglish(district as string)   
-let isRegionEnglish = isAllEnglish(region as string)   
+// let isRegionEnglish = isAllEnglish(region as string)   
 let isFullNameEnglish = isAllEnglish(full_name as string)   
-city = translateCity(city as string)
-let province = getProvince(city as string)+ " Province"
+// city = translateCity(city as string)
+let province = region+ " Province"
 
 try{
   
@@ -167,7 +167,7 @@ try{
   } */
    if(!isAddressEnglish) address = (await translateText(address as string))
     if(!isDistrictEnglish) district = (await translateText(district as string))
-    if(!isRegionEnglish) region = (await translateText(region as string))
+    // if(!isRegionEnglish) region = (await translateText(region as string))
       if(!isFullNameEnglish) full_name = (await translateText(full_name as string))
 
 }catch(err:any){
