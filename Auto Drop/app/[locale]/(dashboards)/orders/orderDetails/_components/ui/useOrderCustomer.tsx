@@ -74,14 +74,18 @@ if(cityValue == null || regionValue == null){
   return (
     <Autocomplete
       isRequired
-      label="City"
+      // label="City"
       defaultItems={citiesEntries}
       placeholder="Search a city"
       defaultSelectedKey={choosenCityKey.toString()}
-      className="max-w-xs"
+      // className="max-w-xs"
+      // className="!text-black"
+      variant={"bordered"}
+
+      color = "primary"
       onSelectionChange={(key: any) => {
         console.log("key", key);
-let cityName = citiesEntries?.[key as number].valueEN
+let cityName = citiesEntries?.[key as number]?.valueEN
         console.log("cityName",cityName)
         console.log("getProvince(cityName)",getProvince(cityName))
 setCityValue(cityName)
@@ -91,7 +95,9 @@ setRegionValue(getProvince(cityName))
       }}
     >
       {(item: any) => (
-        <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
+        <AutocompleteItem
+        key={item.value}
+        className="text-black">{item.label}</AutocompleteItem>
       )}
     </Autocomplete>
   );
@@ -287,7 +293,7 @@ console.log("cityValue",cityValue)
         secondElement={EditButton}
       />
       <RoundedCardWrapper>
-        <div className="grid grid-cols-1 tab:grid-cols-2 items-center gap-1 tab:gap-3 py-3">
+        <div className="grid grid-cols-1 tab:grid-cols-2 items-center gap-2 tab:gap-3 py-3">
           {gridItems.map((gridEl: GridItem, index: number) => {
             let { title, value, ref } = gridEl;
             if (!title) title = "";
@@ -306,7 +312,7 @@ console.log("cityValue",cityValue)
                   }`}
                   key={index}
                 >
-                  <p className="font-bold text-xs tab:text-sm">{title}</p>
+                  <p className="orderFieldTitleComponent">{title}</p>
 
                   <CitySelector {...CitySelectorProps} />
                 </div>
@@ -322,7 +328,7 @@ if(regionText==title){
                   }`}
                   key={index}
                 >
-                  <p className="font-bold text-xs tab:text-sm">{title}</p>
+                  <p className="orderFieldTitleComponent">{title}</p>
                   <Input
                     className="text-xs tab:text-sm"
                     value = {regionValue ??"Riyadh"}
@@ -340,7 +346,7 @@ if(regionText==title){
                   }`}
                   key={index}
                 >
-                  <p className="font-bold text-xs tab:text-sm">{title}</p>
+                  <p className="orderFieldTitleComponent">{title}</p>
 
                   <PhoneInput
                     international={false}
@@ -352,7 +358,7 @@ if(regionText==title){
                     defaultCountry={countryCode}
                     // placeholder={""}
                     id="phone"
-                    className=" md:text-base flex rounded-md border border-input px-3 py-2"
+                    className=" md:text-base flex rounded-md border border-input px-3 py-2 !mx-0 "
                     onChange={(value) => {
                       console.log("value", value);
                     }}
@@ -378,13 +384,14 @@ if(regionText==title){
               return (
                 <>
                   <div
-                    className={`flex space-s-3 items-center px-3 ${
+                    className={`flex space-s-7 items-center px-3 ${
                       skyIndex.includes(index) &&
                       `dark:bg-[#2E464F]  bg-[#F4F6F7]`
                     }`}
                     key={index}
                   >
-                    <p className="font-bold text-xs tab:text-sm">{title}</p>
+                    <p className="orderFieldTitleComponent">{title}</p>
+{/* <div className="flex space-s-3 items-center justify-between"> */}
 
                     <Input
                       {...InputElement2Props}
@@ -395,6 +402,7 @@ if(regionText==title){
                       className="text-xs tab:text-sm !flex-6"
                       type="number"
                     />
+{/* </div> */}
                   </div>
                 </>
               );
@@ -408,7 +416,7 @@ if(regionText==title){
                   }`}
                   key={index}
                 >
-                  <p className="font-bold text-xs tab:text-sm">{title}</p>
+                  <p className="orderFieldTitleComponent">{title}</p>
                   <Input
                     {...InputElementProps}
                     className="text-xs tab:text-sm"

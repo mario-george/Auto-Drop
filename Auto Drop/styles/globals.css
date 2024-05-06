@@ -196,3 +196,15 @@ wallet page sttyles
 .bgWD{
   @apply bg-white dark:bg-[#2e464f]
 }
+
+/* order info fields container */
+
+.orderField {
+  @apply grid grid-cols-6 gap-2 
+}
+.orderFieldInputComponent {
+  @apply col-span-5
+}
+.orderFieldTitleComponent {
+  @apply col-span-1 font-bold text-xs tab:text-sm w-[6rem]
+}
