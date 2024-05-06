@@ -51,8 +51,9 @@ export default function ClientHeader({
   };
   const dispatch = useDispatch();
   useEffect(() => {
+    
     let socket: WebSocket;
-    const maxRetries = 5000;
+    const maxRetries = 5;
     let retries = 0;
     const retryInterval = 60000;
   
@@ -69,7 +70,6 @@ export default function ClientHeader({
       });
   
       socket.onmessage = (event) => {
-        // console.log("RAW EVENT", event);
         try {
           let data = JSON.parse(event.data);
           console.log("eventtt", data);
@@ -79,16 +79,12 @@ export default function ClientHeader({
       };
   
       socket.onerror = (event) => {
-        // console.log("Socket encountered an error", event);
-        if (retries < maxRetries) {
-          retries++;
-          setTimeout(connect, retryInterval); // try to reconnect after a delay
-        }
+        console.log("Socket encountered an error", event);
       };
   
       socket.onclose = (event: CloseEvent) => {
-        // console.log("Socket closed", event);
-        if (retries < maxRetries) {
+        console.log("Socket closed", event);
+        if (!event.wasClean && retries < maxRetries) {
           retries++;
           setTimeout(connect, retryInterval); // try to reconnect after a delay
         }

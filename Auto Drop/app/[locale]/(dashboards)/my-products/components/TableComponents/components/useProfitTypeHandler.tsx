@@ -23,11 +23,15 @@ import useMultiSelectCategories from "./ui/useMultiSelectCategories";
 import { useToast } from "@chakra-ui/react";
 
 
-let toastErrorToggle = (toast :any, message:string,description:string,variant:string="error")=>{
+let toastErrorToggle = (toast :any, title:string,description:string,status:string="error")=>{
+ 
   toast({
-    variant: variant,
-    title: message,
-    description
+    title,
+    description,
+    status,
+    duration: 9000,
+    isClosable: true,
+    // position: "bottom",
   });
   return
 }
@@ -116,17 +120,29 @@ try{
 
 
    remainingProducts =( await axiosInstance.get("subscription/getRemainingProducts"))?.data?.remainingProducts
-
+console.log("remainingProducts",remainingProducts)
   let prodsToBeSelected = selectedProds?.length
-   
-  if(remainingProducts<prodsToBeSelected){
+   if(remainingProducts==0){
+
+    let message = `You have ${remainingProducts} remaining products to link.`
+let description = `Please subscribe and try again.`
+    if(locale=="ar"){
+  message =   `ليس لديك منتجات متبقية للربط.`
+  description = `يرجى الاشتراك والمحاولة مرة أخرى.`
+    }
+    toastErrorToggle (toast,message,description,'error')
+    return
+   }
+  else if(remainingProducts<prodsToBeSelected){
+    console.log("condition reached")
     limitReached = true
     let message = `You have ${remainingProducts} remaining products and you are trying to link ${prodsToBeSelected} products`
-let description = `Only the first ${remainingProducts} will be connected.`
+let description = `Only the first ${remainingProducts} will be linked.`
     if(locale=="ar"){
   message = `لديك ${remainingProducts} منتجات متبقية وأنت تحاول ربط ${prodsToBeSelected} منتجات`
-  description = `سيتم ربط فقط ${remainingProducts} منتجات.`
+  description = `سيتم ربط فقط أول ${remainingProducts} منتجات.`
     }
+    toastErrorToggle (toast,message,description,'error')
 }
 
     
