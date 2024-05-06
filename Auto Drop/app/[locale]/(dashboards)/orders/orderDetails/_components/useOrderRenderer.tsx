@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Spinner, useToast } from "@chakra-ui/react";
 import useOrderDetailsNotes from "./ui/useOrderDetailsNotes";
 import useOrderDetailsPayment from "./ui/useOrderDetailsPayment";
-import useOrderCustomer, { CustomerDataType } from "./ui/useOrderCustomer";
+import useOrderCustomer from "./ui/useOrderCustomer";
 import useOrderDetailsShipping from "./ui/useOrderDetailsShipping";
 import { OrderStatusAfterSend } from './ui/AfterSendOrder/ShippingStatusAfterSend';
 import axiosInstance from "../../../_components/shared/AxiosInstance";
 import useShippingAfterSend from "./ui/AfterSendOrder/useShippingAfterSend";
+import { CustomerDataType } from "./ui/const/types/CustomerProps";
+
 export default function useOrderRenderer({
   orderData,
   translationMessages,
