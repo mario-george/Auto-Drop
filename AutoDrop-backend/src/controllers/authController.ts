@@ -20,6 +20,7 @@ import {
 } from "../utils/verifyEmail";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { WebSocketSendError } from "../utils/handlers/WebSocketSender";
+import SallaRequest from "../utils/handlers/SallaRequest";
 
 const secret = speakeasy.generateSecret({ length: 20 });
 
@@ -398,28 +399,47 @@ export const sallaCallback = catchAsync(
       });
 
       if (response.ok) {
-        console.log("SALLA responseJson", responseJson);
-        if (responseJson.merchant) {
-          let merchantExist = await User.findOne({
-            merchantID: responseJson.merchant.id,
-          });
-          if (merchantExist) {
-            let sendWebSocketError = async () => {
-              setTimeout(() => {
-                WebSocketSendError(
-                  "merchant-already-connected",
-                  merchantExist?.id
-                );
-              }, 10000);
-            };
-            sendWebSocketError();
-            const frontendLink = new URL(
-              (process.env.Frontend_Link + "/en/") as string
-            );
-
-            return res.redirect(frontendLink.toString());
+        // console.log("SALLA responseJson", responseJson);
+        
+        try{
+          let sallaReqOptUser = {
+            method:"GET",
+            url:"/oauth2/user/info",
+            token:responseJson.access_token,
+          
           }
+let userSallaInfo  =await SallaRequest(sallaReqOptUser)
+let {data } = userSallaInfo
+let merchantID = data.data.merchant.id
+
+if (merchantID) {
+  let merchantExist = await User.findOne({
+    merchantID: responseJson.merchant.id,
+  });
+  if (merchantExist) {
+    let sendWebSocketError = async () => {
+      setTimeout(() => {
+        WebSocketSendError(
+          "merchant-already-connected",
+          merchantExist?.id
+        );
+      }, 10000);
+    };
+    sendWebSocketError();
+    const frontendLink = new URL(
+      (process.env.Frontend_Link + "/en/") as string
+    );
+
+    return res.redirect(frontendLink.toString());
+  }
+}
+
+        }catch(err:any){
+          console.error(err)
         }
+    
+
+ 
         const accessToken = responseJson.access_token;
         const refreshToken = responseJson.refresh_token;
 
