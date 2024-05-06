@@ -10,7 +10,7 @@ export const GetRemainingProducts = catchAsync(
         if(!subscription){ return next(new AppError("Subscription Not Found", 404));}
      let {products_limit} = subscription;
      
-      return res.json({ message: "user subscription found" ,remaining:products_limit});
+      return res.json({ message: "user subscription found" ,remainingProducts:products_limit});
     }
   );
   

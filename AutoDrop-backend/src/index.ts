@@ -32,6 +32,7 @@ import { Plan } from "./models/Plan.model";
 import { updateOrderStatusUpdated } from "./cron/orders";
 import RequestSenderToHost from "./cron/host";
 import homeRouter from "./routes/home.routes";
+import subscriptionRoutes from "./routes/subscription.routes";
 const app = express();
 
 //Parse json bodies
@@ -133,6 +134,7 @@ app.use("/api/v1/salla", sallaRoutes);
 app.use("/api/v1/shipping", shippingRoutes);
 app.use("/api/v1/settings", settingRoute  );
 app.use("/api/v1/orders", orderRoutes  );
+app.use("/api/v1/subscription", subscriptionRoutes  );
 
 
 app.post("/webhooks/subscribe", async (req, res,next) => {

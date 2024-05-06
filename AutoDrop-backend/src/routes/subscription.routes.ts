@@ -4,7 +4,7 @@ import { GetRemainingProducts } from "../controllers/subscriptionInquiry";
 const Router = require("express").Router;
 
 const subscriptionRoutes = Router();
-subscriptionRoutes.get("/getOrder", [Authentication()], GetRemainingProducts);
+subscriptionRoutes.get("/getRemainingProducts", [Authentication()], GetRemainingProducts);
 
 
 
