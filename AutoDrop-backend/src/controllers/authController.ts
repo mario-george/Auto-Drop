@@ -399,7 +399,7 @@ export const sallaCallback = catchAsync(
       });
 
       if (response.ok) {
-        // console.log("SALLA responseJson", responseJson);
+        console.log("SALLA resStore", resStore);
         
         try{
           let sallaReqOptUser = {
@@ -410,7 +410,9 @@ export const sallaCallback = catchAsync(
           }
 let userSallaInfo  =await SallaRequest(sallaReqOptUser)
 let {data } = userSallaInfo
+console.log("datauserSallaInfo",userSallaInfo )
 let merchantID = data.data.merchant.id
+console.log("merchantIDSALLA",merchantIDSALLA )
 
 if (merchantID) {
   let merchantExist = await User.findOne({
