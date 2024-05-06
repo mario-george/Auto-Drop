@@ -412,7 +412,7 @@ let userSallaInfo  =await SallaRequest(sallaReqOptUser)
 let {data } = userSallaInfo
 console.log("datauserSallaInfo",userSallaInfo )
 let merchantID = data.data.merchant.id
-console.log("merchantIDSALLA",merchantIDSALLA )
+console.log("merchantIDSALLA",merchantID )
 
 if (merchantID) {
   let merchantExist = await User.findOne({
