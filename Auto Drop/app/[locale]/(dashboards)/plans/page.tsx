@@ -15,10 +15,17 @@ export default function PlansPage() {
 
   }
   return (<>
+    <span
+          dir={`${locale == "ar" ? "rtl" : "ltr"}`}
+          className="text-md py-2 lap:text-3xl  mb-5 mt-3 px-6"
+        >
+          {t2("plansTitle")}
+        </span>
+
     <PlanSection
 {...PlanSectionProps}
     />
-  <Monthly
+ {/*  <Monthly
     locale={locale}
 
     monthly={t("monthly")}
@@ -37,7 +44,7 @@ export default function PlansPage() {
     ordersNumber={t2("ordersNumber")}
     tryForFree={t2("tryForFree")}
     
-  />
+  /> */}
   <PlanInfoSection upgradeOrRenew={t2("upgradeOrRenew")} />
 
   </>
