@@ -1,12 +1,12 @@
 "use client"
 
 import { useToast } from "@chakra-ui/react"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams ,usePathname} from "next/navigation"
 import { useEffect } from "react"
-
 export default function useCheckMerchant(){
 let params = useSearchParams()
 let merchantAlreadyConnected=params.get("merchantAlreadyConnected")
+const pathName= usePathname()
 let error = false
 console.log(merchantAlreadyConnected)
 if( merchantAlreadyConnected=='true'){
@@ -15,8 +15,9 @@ if( merchantAlreadyConnected=='true'){
 const toast = useToast()
 let title="Error"
 let description="Merchant already connected"
-useEffect(()=>{
-    if(error){
+const router = useRouter();
+useEffect(() => {
+    if (error) {
         toast({
             title,
             description,
@@ -24,9 +25,18 @@ useEffect(()=>{
             duration: 9000,
             isClosable: true,
             position: "bottom-right",
-          });
+        });
+        router.replace(pathName);
+
+        // Clear the search parameters
+        /* router.replace({
+            pathname: pathName,
+            query: {},
+        }, undefined, 
+        // { scroll: false }
+    ); */
     }
-},[error])
+}, [error, router, toast]);
 
 return {error}
 
