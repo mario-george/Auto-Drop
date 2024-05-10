@@ -144,8 +144,9 @@ export default class WebHookEvents {
 
   async RemoveApp(body: any, res: Response, next: NextFunction) {
     try {
+      console.log("REMOVE APP EVENT TRIGGERED",body)
       const { merchant } = pick(body, ["merchant"]);
-      const user = await User.findOne({ merchantId: merchant });
+      const user = await User.findOne({ merchantID: merchant });
       if(user){
 
         user.merchantID = undefined;
