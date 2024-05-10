@@ -296,12 +296,21 @@ console.log("randomNumber",randomNumber)
         if (error) return reject(new AppError(error.msg, 400));
         const result =
           data?.aliexpress_trade_buy_placeorder_response?.result?.order_list;
-        if (result?.number[0]) {
+          let orderNumbersArray = result?.number
+        if (orderNumbersArray?.[0]) {
+          let allOrderNumbers =orderNumbersArray?.[0]
+          
+         
+          if(orderNumbersArray?.length >0){
+allOrderNumbers = orderNumbersArray?.join(",");
+          }
           await Order.findByIdAndUpdate(
             order.id,
             {
               $set: {
-                tracking_order_id: result.number[0],
+                // tracking_order_id: result.number[0],
+                tracking_order_id: allOrderNumbers,
+                
                 paid: true,
                 status: "in_review",
               },
