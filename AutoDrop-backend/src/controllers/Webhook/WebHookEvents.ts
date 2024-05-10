@@ -27,7 +27,7 @@ import { UpdateOrderTracking } from "./handlers/order";
 import { CheckTokenExpire } from "./handlers/data/authHandler";
 import { GenerateToken } from "./handlers/token";
 import { sendSubscription } from "./utils/sendSubscription";
-import { WebSocketSender } from "../../utils/handlers/WebSocketSender";
+import { WebSocketSendError, WebSocketSender } from "../../utils/handlers/WebSocketSender";
 import { CheckSubscription } from "../../utils/handlers/CheckSubscription";
 import { use } from "passport";
 import SallaToken from "../../models/SallaTokenModel";
@@ -157,6 +157,7 @@ export default class WebHookEvents {
       await Subscription.deleteMany({ user: user.id });
       await SallaToken.deleteMany({ userId: user.id });
       res.sendStatus(200);
+      WebSocketSendError('resetSalla',user.id)
       // User.findOneAndDelete(
       //   {
       //     merchantId: merchant,

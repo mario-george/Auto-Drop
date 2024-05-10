@@ -16,7 +16,7 @@ export const WebSocketSender = (subscription:SubscriptionSchema | SubscriptionDo
       };
       axios.request(webSocketReq);
 }
-type IWebSocketError="subscription-expired" | "subscription-orders-limit-reached"| "subscription-products-limit-reached" | "merchant-already-connected"
+type IWebSocketError="subscription-expired" | "subscription-orders-limit-reached"| "subscription-products-limit-reached" | "merchant-already-connected"|"resetSalla"
 export const WebSocketSendError = (webSocketError:IWebSocketError,userId:any) => {
   let webSocketReq :AxiosRequestConfig= {
     url: `${process.env.Backend_Link}websocketHandler`,
@@ -45,6 +45,10 @@ export const WebSocketSendError = (webSocketError:IWebSocketError,userId:any) =>
   }else if(webSocketError === "merchant-already-connected"){
     webSocketReq.data = {
       event : "merchant-already-connected"
+    }
+  }else{
+    webSocketReq.data = {
+      event
     }
   }
   webSocketReq.data.userId=userId

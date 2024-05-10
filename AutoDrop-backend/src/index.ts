@@ -173,7 +173,7 @@ console.log("event is ",event)
     }
     sendSubscription(subscription, plan, subscription.user, clients, WebSocket);
     return res.sendStatus(200);
-  }else if (event =="subscription-expired" || event=="subscription-orders-limit-reached"|| event=="subscription-products-limit-reached"){
+  }else if (event =="subscription-expired" || event=="subscription-orders-limit-reached"|| event=="subscription-products-limit-reached" || event=="resetSalla"){
     sendSubscriptionError(event,req.body.userId,clients,WebSocket)
     return res.sendStatus(200);
   }else{
