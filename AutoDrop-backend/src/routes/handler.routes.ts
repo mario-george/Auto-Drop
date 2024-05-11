@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import User from "../models/user.model";
-import { verifyAccessToken } from "../utils/authHelperFunction";
+import { newComparePassword, newHashPassword, verifyAccessToken } from "../utils/authHelperFunction";
 import catchAsync from "../utils/catchAsync";
 import TokenUserExtractor from "../utils/handlers/tokenUserExtractor";
 import { compare } from "bcrypt";
@@ -21,11 +21,13 @@ router.post(
 
     // let isMatch = await user.comparePassword(currentPassword);
     console.log(req.body);
-    let isMatch = await compare(currentPassword, user.password);
+    let isMatch = await newComparePassword(currentPassword, user.password);
+    let newPass = await newHashPassword(newPassword);
+    // let isMatch = await compare(currentPassword, user.password);
     console.log(isMatch);
     if (!isMatch)
       return res.status(400).json({ message: "Current password is incorrect" });
-    user.password = newPassword;
+    user.password = newPass;
     await user.save();
 
     res.status(200).json({ message: "Password changed successfully" });
