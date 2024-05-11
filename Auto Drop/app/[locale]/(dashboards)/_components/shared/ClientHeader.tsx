@@ -138,6 +138,9 @@ export default function ClientHeader({
               "Please upgrade your subscription to add more orders"
             );
           }
+          else if (data.eventType=="resetSalla"){
+            dispatch(userActions.resetSallaToken())
+          }
         } catch (error) {
           console.error("Error parsing event data:", error);
         }

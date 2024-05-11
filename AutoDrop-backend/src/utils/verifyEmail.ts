@@ -3,6 +3,7 @@ export function generateVerificationCode() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 export async function sendVerificationCode(email: string, code: string) {
+  // Create a transporter object using the default SMTP transport
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {

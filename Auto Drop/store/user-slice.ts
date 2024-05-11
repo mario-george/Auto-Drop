@@ -95,7 +95,10 @@ const userSlice = createSlice({
       state.subscriptionProductsLimit = subscriptionProductsLimit;
       state.totalOrdersLimit = totalOrdersLimit;
       state.totalProductsLimit = totalProductsLimit;
-    },
+    },resetSallaToken : (state) => {
+      state.sallaToken = ""
+      
+    }
   },
 });
 

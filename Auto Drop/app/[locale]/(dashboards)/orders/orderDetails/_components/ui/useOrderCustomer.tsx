@@ -358,7 +358,7 @@ if(regionText==title){
                     defaultCountry={countryCode}
                     // placeholder={""}
                     id="phone"
-                    className=" md:text-base flex rounded-md border border-input px-3 py-2 !mx-0 "
+                    className=" md:text-base flex rounded-md px-3 !w-full "
                     onChange={(value) => {
                       console.log("value", value);
                     }}
@@ -435,14 +435,10 @@ if(regionText==title){
       lastName: lastNameRef?.current?.value,
       email: emailRef?.current?.value,
       mobile: mobileNumberRef?.current?.value,
-      // mobile_code: mobileNumberCodeRef?.current?.value,
       mobile_code: countryCodeNumber,
 
-      // country: countryRef?.current?.value,
       country: countryCode,
-      // region: regionRef?.current?.value,
       region: regionValue,
-      // city: cityRef?.current?.value,
       city: cityValue,
       postalCode: postalCodeRef?.current?.value,
       district: districtRef?.current?.value,

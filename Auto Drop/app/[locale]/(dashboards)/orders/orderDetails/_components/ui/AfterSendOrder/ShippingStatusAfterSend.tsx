@@ -137,7 +137,7 @@ export const OrderStatusAfterSend = (props: OrderStatusAfterSendProps) => {
   return (
     <>
       <StatusDetailsHeader {...StatusDetailsHeaderProps} />
-      <div className="p-3 bg-white  flex lap:space-s-6 flex-col lap:flex-row space-y-3">
+      <div className="p-3 bg-white  flex lap:space-s-6 flex-col lap:flex-row lap:space-y-0 space-y-3">
         {statusButtonList.map((buttonEL: IStatusButton,index:number) => {
           let { status, text, active } = buttonEL;
 
